@@ -1,4 +1,5 @@
 # Import
+import os.path
 import argparse
 
 # Import enum
@@ -16,12 +17,34 @@ def main(args):
     pass  # TODO main
 
 
-def input_file_path(path: str) -> str:
-    pass  # TODO input_file_path
+def check_input_file_path(path: str) -> str:
+    """
+    Check if the input file exists. In case the file does not exist returns an exception (argparse.ArgumentTypeError).
+    :param path: the path of the input file
+    :return: the path
+    """
+    if os.path.isfile(path):
+        return path
+
+    raise argparse.ArgumentTypeError(f"The input file ({path}) doesn't exist!")
 
 
-def output_file_path(path: str) -> str:
-    pass  # TODO output_file_path
+def check_output_file_path(path: str) -> str:
+    """
+    Try creating an empty output file. In case the file creation fails, or the file already exists returns an exception (argparse.ArgumentTypeError).
+    :param path: the path of the output file
+    :return: the path
+    """
+    if os.path.isfile(path):
+        raise argparse.ArgumentTypeError(f"The output file ({path}) already exists, please delete it or choose another name of the file!")
+
+    with open(path, "w") as _:
+        pass
+
+    if os.path.isfile(path):
+        return path
+
+    raise argparse.ArgumentTypeError(f"An error occurred while trying to create the output file ({path}).")
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -35,11 +58,11 @@ def create_parser() -> argparse.ArgumentParser:
     # Add the arguments
     parser.add_argument("input_file",
                         action="store",
-                        type=input_file_path,
+                        type=check_input_file_path,
                         help="The path of the input file which is in the DIMACS CNF format.")
     parser.add_argument("output_file",
                         action="store",
-                        type=output_file_path,
+                        type=check_output_file_path,
                         help="The path of the output file where the circuit will be saved.")
     parser.add_argument("-ct",
                         "--circuit_type",
