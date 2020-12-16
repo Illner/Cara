@@ -5,7 +5,8 @@
 Python 3.9.1
 
 ## Arguments
-Cara [-h] [-ct {D_BDMC,SD_BDMC}] [-ss {MiniSAT,Glucose,Lingeling,CaDiCal}] [-cc {C2D,NONE}] [-il {BCP,IMPLICIT_BCP,BACKBONE,NONE}] [-dd | -sd] [-v] input_file output_file
+**Cara [-h] [-ct {D_BDMC,SD_BDMC}] [-ss {MiniSAT,Glucose,Lingeling,CaDiCal}] [-cc {C2D,NONE}] [-il {BCP,IMPLICIT_BCP,BACKBONE,NONE}] [-bc {LITERAL,QUADRATIC,MATCHED,HORN,HIDDEN_HORN,Q_HORN}] [-dd | -sd] [-v]
+            input_file output_file**
 
 positional arguments:
 * **input_file**
@@ -24,6 +25,8 @@ optional arguments:
   + Which component caching will be used for compiling the circuit. (default: C2D)
 * **-il {BCP,IMPLICIT_BCP,BACKBONE,NONE}, --implied_literals {BCP,IMPLICIT_BCP,BACKBONE,NONE}**
   + Which method will be used for deriving implied literals at every decision node. (default: BCP)
+* **-bc {LITERAL,QUADRATIC,MATCHED,HORN,HIDDEN_HORN,Q_HORN}, --base_class {LITERAL,QUADRATIC,MATCHED,HORN,HIDDEN_HORN,Q_HORN}**
+  + Which base class will appear in the leaves of the circuit. (default: LITERAL)
 * **-dd, --dynamic_decomposition**
   + A dynamic decomposition approach will be used for compiling. (default: True)
 * **-sd, --static_decomposition**
