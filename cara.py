@@ -2,6 +2,7 @@
 import argparse
 
 # Import enum
+import compiler.base_class_enum as bc_enum
 import circuit.circuit_type_enum as ct_enum
 import compiler.implied_literals_enum as il_enum
 import external.sat_solver.sat_solver_enum as ss_enum
@@ -68,6 +69,13 @@ def create_parser() -> argparse.ArgumentParser:
                         type=str,
                         choices=il_enum.implied_literals_enum_names,
                         help="Which method will be used for deriving implied literals at every decision node.")
+    parser.add_argument("-bc",
+                        "--base_class",
+                        action="store",
+                        default=bc_enum.base_class_enum_names[0],
+                        type=str,
+                        choices=bc_enum.base_class_enum_names,
+                        help="Which base class will appear in the leaves of the circuit.")
 
     decomposition_approach_group = parser.add_mutually_exclusive_group()
     decomposition_approach_group.add_argument("-dd",
