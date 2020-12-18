@@ -2,6 +2,9 @@
 import os.path
 import argparse
 
+# Import exception
+import exception.cara_exception as c_exception
+
 # Import enum
 import compiler.base_class_enum as bc_enum
 import circuit.circuit_type_enum as ct_enum
