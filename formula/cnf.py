@@ -13,6 +13,7 @@ class Cnf:
     """
     private str comments
     private int number_of_clauses
+    private int real_number_of_clauses
     private int number_of_variables
     private int number_of_literals                      # 2 * number_of_variables
     private List<Set<int>> cnf
@@ -24,14 +25,14 @@ class Cnf:
     private Dict<int, Set<int>> adjacency_dictionary    # key: literal, value: a set of clauses where the literal appears
     private Set<int> unit_clause_set                    # a set which contains all unit clauses
     private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
-    private List<Set<int>> clause_size_list             # key: 1..|variables|, value: a set contains all clauses with size k
+    private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with size k
     """
 
     def __init__(self, dimacs_cnf_file_path: str):
-        # Initialization
-        # region
+        # region Initialization
         self.__comments = ""
         self.__number_of_clauses = 0
+        self.__real_number_of_clauses = 0
         self.__number_of_variables = 0
         self.__number_of_literals = 0
         self.__cnf = []
@@ -40,7 +41,7 @@ class Cnf:
         self.__literal_list = []
         self.__literal_set = set()
 
-        self.__adjacency_dictionary = {}
+        self.__adjacency_dictionary = dict()
         self.__unit_clause_set = set()
         self.__unused_variable_set = set()
         self.__clause_size_list = []
@@ -48,22 +49,26 @@ class Cnf:
 
         self.__create_cnf(dimacs_cnf_file_path)
 
-    # Private methods
-    # region
+    # region Private methods
     def __create_cnf(self, dimacs_cnf_file_path: str):
         """
-        Convert the formula from the file into our structure.
+        Convert the formula from the file into our structure
         :param dimacs_cnf_file_path: the file which is in the DIMACS CNF format
         """
 
         with open(dimacs_cnf_file_path, "r") as file:
             clause_id = 0
+            is_p_line_defined = False
 
             for line_id, line in enumerate(file.readlines()):
+                # The line is empty
+                if not line.strip():
+                    continue
+
                 # Comment line
                 if line.startswith("c"):
-                    if not self.__comments:
-                        self.__comments = "".join((self.__comments, line[1:].strip()))
+                    if not self.__comments:     # First comment
+                        self.__comments = "".join((line[1:].strip()))
                     else:
                         self.__comments = "\n".join((self.__comments, line[1:].strip()))
                     continue
@@ -74,6 +79,7 @@ class Cnf:
 
                 # P line
                 if line.startswith("p"):
+                    is_p_line_defined = True
                     line_array_temp = line.split()
                     # P line has an invalid format
                     if len(line_array_temp) != 4:   # p cnf number_of_variables number_of_clauses
@@ -97,16 +103,20 @@ class Cnf:
                     for lit in self.__literal_list:
                         self.__adjacency_dictionary[lit] = set()
 
-                    for v in range(self.__number_of_variables + 1):
+                    for _ in range(self.__number_of_variables + 1):
                         self.__clause_size_list.append(set())   # initialization
 
                     continue
+
+                # P line has not been mentioned
+                if not is_p_line_defined:
+                    raise f_exception.PLineIsNotMentionedException()
 
                 # Clause line
                 line_array_temp = line.split()
                 # Invalid line
                 if not line_array_temp or line_array_temp.pop() != "0":
-                    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined on line {line_id} doesn't end with 0")
+                    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined on line {line_id + 1} doesn't end with 0")
 
                 clause_set_temp = set()
                 try:
@@ -114,28 +124,43 @@ class Cnf:
                         lit = int(lit)
                         v = abs(lit)
 
+                        # Variable does not exist
+                        if v not in self.__variable_list:
+                            raise f_exception.VariableDoesNotExistException(v)
+
                         # (lit v lit) in the clause
                         if lit in clause_set_temp:
                             continue
 
                         # (lit v -lit) in the clause
                         if -lit in clause_set_temp:
-                            raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined on line {line_id} contains opposite literals")
+                            clause_set_temp = set()
+                            break
 
                         clause_set_temp.add(lit)
-                        self.__adjacency_dictionary[lit].add(clause_id)
-
-                        # Remove the variable from the unused_variable_set
-                        if v in self.__unused_variable_set:
-                            self.__unused_variable_set.remove(v)
                 except ValueError:
-                    raise f_exception.InvalidDimacsCnfFormatException(f"invalid clause ({line}) defined on line {line_id}")
+                    raise f_exception.InvalidDimacsCnfFormatException(f"invalid clause ({line}) defined on line {line_id + 1}")
 
-                # Check if the clause is unit
+                # The clause is empty or contains two opposite literals
+                if not clause_set_temp:
+                    continue
+
+                for lit in clause_set_temp:
+                    self.__adjacency_dictionary[lit].add(clause_id)
+
+                    # Remove the variable from the unused_variable_set
+                    v = abs(lit)
+                    if v in self.__unused_variable_set:
+                        self.__unused_variable_set.remove(v)
+
                 self.__clause_size_list[len(clause_set_temp)].add(clause_id)
-
                 self.__cnf.append(clause_set_temp)
+                self.__real_number_of_clauses += 1
                 clause_id += 1
+
+        # The file does not contain any clause
+        if not len(self.__cnf):
+            raise f_exception.InvalidDimacsCnfFormatException("file does not contain any clause")
 
         self.__unit_clause_set = self.__clause_size_list[1].copy()  # get unit clauses
 
@@ -147,14 +172,13 @@ class Cnf:
         """
 
         # The clause doesn't exist
-        if clause_id >= self.__number_of_clauses:
+        if clause_id >= self.__real_number_of_clauses:
             raise f_exception.ClauseDoesNotExistException(clause_id)
 
         return self.__cnf[clause_id]
     # endregion
 
-    # Public methods
-    # region
+    # region Public methods
     def get_clause(self, clause_id: int) -> set:
         """
         Return a clause with the given identifier. If the clause does not exist, raise an exception (ClauseDoesNotExistException).
@@ -168,7 +192,8 @@ class Cnf:
     def __str__(self):
         string_temp = ""
 
-        string_temp = "".join((string_temp, f"Number of clauses: {self.__number_of_clauses}"))
+        string_temp = "".join(f"Number of clauses: {self.__number_of_clauses}")
+        string_temp = "\n".join((string_temp, f"Real number of clauses: {self.__real_number_of_clauses}"))
         string_temp = "\n".join((string_temp, f"Number of variables: {self.__number_of_variables}"))
         string_temp = "\n".join((string_temp, f"Unit clauses: {self.__unit_clause_set}"))
         string_temp = "\n".join((string_temp, f"Unused variables: {self.__unused_variable_set}"))
@@ -177,11 +202,10 @@ class Cnf:
         return string_temp
     # endregion
 
-    # Properties
-    # region
+    # region Properties
     @property
-    def number_of_clauses(self) -> int:
-        return self.__number_of_clauses
+    def real_number_of_clauses(self) -> int:
+        return self.__real_number_of_clauses
 
     @property
     def number_of_variables(self) -> int:

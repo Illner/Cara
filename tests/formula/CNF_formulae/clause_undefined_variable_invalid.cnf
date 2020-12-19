@@ -1,0 +1,13 @@
+c root: 1
+c original variables: x0_y0-6 y0_x1-7 x0_z0-8 z0_x1-9 x0_x1-10 
+c fresh variables: 1 2 3 4 5 
+p cnf 10 9
+1 0
+-1 11 0
+-1 3 0
+-2 4 5 0
+-4 6 0
+-4 7 0
+-5 8 0
+-5 9 0
+-3 -10 0

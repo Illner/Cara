@@ -23,9 +23,11 @@ def main(args):
 def check_input_file_path(path: str) -> str:
     """
     Check if the input file exists. In case the file does not exist returns an exception (argparse.ArgumentTypeError).
+    Parser
     :param path: the path of the input file
     :return: the path
     """
+
     if os.path.isfile(path):
         return path
 
@@ -34,20 +36,47 @@ def check_input_file_path(path: str) -> str:
 
 def check_output_file_path(path: str) -> str:
     """
-    Try creating an empty output file. In case the file creation fails, or the file already exists returns an exception (argparse.ArgumentTypeError).
+    Try to create an empty output file. In case the file creation fails, or the file already exists returns an exception (argparse.ArgumentTypeError).
+    Parser
     :param path: the path of the output file
     :return: the path
     """
+
+    # The output file already exists
     if os.path.isfile(path):
-        raise argparse.ArgumentTypeError(f"The output file ({path}) already exists, please delete it or choose another name of the file!")
+        raise argparse.ArgumentTypeError(
+            f"The output file ({path}) already exists, please delete it or choose another name of the file!")
 
-    with open(path, "w") as _:
-        pass
+    try:
+        with open(path, "w") as _:
+            pass
+    except PermissionError as err:
+        raise argparse.ArgumentTypeError(f"An error occurred while trying to create the output file. {str(err)}")
 
+    # Check if the output file has been created
     if os.path.isfile(path):
         return path
 
     raise argparse.ArgumentTypeError(f"An error occurred while trying to create the output file ({path}).")
+
+
+def str2bool(v):
+    """
+    Convert string to boolean. If the string cannot be converted to boolean returns an exception (ArgumentTypeError).
+    Parser
+    :param v: the string which will be converted to boolean
+    :return: boolean
+    """
+
+    if isinstance(v, bool):
+        return v
+
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -56,14 +85,17 @@ def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="Cara",
                                      description="Backdoor Decomposable Monotone Circuits (BDMC) compiler",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter
+                                     # Default values are shown in help
                                      )
 
     # Add the arguments
-    parser.add_argument("input_file",
+    parser.add_argument("if",
+                        "input_file",
                         action="store",
                         type=check_input_file_path,
                         help="The path of the input file which is in the DIMACS CNF format.")
-    parser.add_argument("output_file",
+    parser.add_argument("of",
+                        "output_file",
                         action="store",
                         type=check_output_file_path,
                         help="The path of the output file where the circuit will be saved.")
