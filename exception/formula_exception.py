@@ -12,9 +12,6 @@ class InvalidDimacsCnfFormatException(FormulaException):
         self.message = f"DIMACS CNF format is invalid in the file! ({message_extension})"
         super().__init__(self.message)
 
-    def __str__(self):
-        return self.message
-
 
 class ClauseDoesNotExistException(FormulaException):
     """
@@ -24,9 +21,6 @@ class ClauseDoesNotExistException(FormulaException):
     def __init__(self, id_clause: int):
         self.message = f"The clause with id ({id_clause}) doesn't exist in the formula!"
         super().__init__(self.message)
-
-    def __str__(self):
-        return self.message
 
 
 class VariableDoesNotExistException(FormulaException):
@@ -38,9 +32,6 @@ class VariableDoesNotExistException(FormulaException):
         self.message = f"The variable ({variable}) was not defined on p line but is used in a clause!"
         super().__init__(self.message)
 
-    def __str__(self):
-        return self.message
-
 
 class PLineIsNotMentionedException(FormulaException):
     """
@@ -50,6 +41,3 @@ class PLineIsNotMentionedException(FormulaException):
     def __init__(self):
         self.message = "P line is not mentioned at all or is mentioned after the clauses!"
         super().__init__(self.message)
-
-    def __str__(self):
-        return self.message

@@ -11,6 +11,3 @@ class OriginalResultDoesNotExistException(TestException):
     def __init__(self, test_name: str, file_path: str):
         self.message = f"The file ({file_path}) with the original result is missing. Test: {test_name}!"
         super().__init__(self.message)
-
-    def __str__(self):
-        return self.message

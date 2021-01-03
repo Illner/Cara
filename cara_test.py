@@ -1,9 +1,10 @@
 # Import
 import cara
 import argparse
-
-# Import
 import tests.formula.formula_test as f_test
+import tests.circuit.circuit_test as c_test
+import tests.circuit.node_test as n_test
+from tests.test_abstract import TestAbstract
 
 # Import exception
 import exception.test_exception as t_exception
@@ -15,11 +16,17 @@ def main(args):
     # Formula test
     if args.formula_test:
         formula_test = f_test.FormulaTest()
-        try:
-            (result_bool, result_str) = formula_test.test()
-            result = "\n".join((result, "", formula_test.test_name, str(result_bool), result_str))
-        except t_exception.TestException as err:
-            result = "\n".join((result, "", formula_test.test_name, str(err)))
+        result = "\n".join((result, "", test(formula_test)))
+
+    # Node test
+    if args.node_test:
+        node_test = n_test.NodeTest()
+        result = "\n".join((result, "", test(node_test)))
+
+    # Circuit test
+    if args.circuit_test:
+        circuit_test = c_test.CircuitTest()
+        result = "\n".join((result, "", test(circuit_test)))
 
     # Print the result
     if args.output_file is None:
@@ -28,6 +35,28 @@ def main(args):
     else:
         with open(args.output_file, "w") as file_output:
             file_output.write(result)
+
+
+def test(test_instantiation: TestAbstract) -> str:
+    """
+    Run a test on the test's instantiation (test_instantiation)
+    :param test_instantiation: the test's instantiation
+    :return: the result of the test
+    """
+
+    result = ""
+    try:
+        (result_bool, result_tuple) = test_instantiation.test()
+        if result_bool:  # Test passed
+            result = "\n".join((test_instantiation.test_name, str(result_bool)))
+        else:   # Test failed
+            result = "\n".join((test_instantiation.test_name, str(result_bool),
+                                "Original result", result_tuple[0],
+                                "Actual result", result_tuple[1]))
+    except t_exception.TestException as err:
+        result = "\n".join((test_instantiation.test_name, str(err)))
+
+    return result
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -50,6 +79,18 @@ def create_parser() -> argparse.ArgumentParser:
                         default=True,
                         type=cara.str2bool,
                         help="Test automation for formulae.")
+    parser.add_argument("-ct",
+                        "--circuit_test",
+                        action="store",
+                        default=True,
+                        type=cara.str2bool,
+                        help="Test automation for circuits.")
+    parser.add_argument("-nt",
+                        "--node_test",
+                        action="store",
+                        default=True,
+                        type=cara.str2bool,
+                        help="Test automation for nodes.")
 
     return parser
 

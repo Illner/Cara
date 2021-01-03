@@ -60,7 +60,7 @@ def check_output_file_path(path: str) -> str:
     raise argparse.ArgumentTypeError(f"An error occurred while trying to create the output file ({path}).")
 
 
-def str2bool(v):
+def str2bool(v) -> bool:
     """
     Convert string to boolean. If the string cannot be converted to boolean returns an exception (ArgumentTypeError).
     Parser

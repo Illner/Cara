@@ -30,27 +30,27 @@ class Cnf:
 
     def __init__(self, dimacs_cnf_file_path: str):
         # region Initialization
-        self.__comments = ""
-        self.__number_of_clauses = 0
-        self.__real_number_of_clauses = 0
-        self.__number_of_variables = 0
-        self.__number_of_literals = 0
-        self.__cnf = []
-        self.__variable_list = []
-        self.__variable_set = set()
-        self.__literal_list = []
-        self.__literal_set = set()
+        self.__comments: str = ""
+        self.__number_of_clauses: int = 0
+        self.__real_number_of_clauses: int = 0
+        self.__number_of_variables: int = 0
+        self.__number_of_literals: int = 0
+        self.__cnf: list[set[int]] = []
+        self.__variable_list: list[int] = []
+        self.__variable_set: set[int] = set()
+        self.__literal_list: list[int] = []
+        self.__literal_set: set[int] = set()
 
-        self.__adjacency_dictionary = dict()
-        self.__unit_clause_set = set()
-        self.__unused_variable_set = set()
-        self.__clause_size_list = []
+        self.__adjacency_dictionary: dict[int, set[int]] = dict()
+        self.__unit_clause_set: set[int] = set()
+        self.__unused_variable_set: set[int] = set()
+        self.__clause_size_list: list[set[int]] = []
         # endregion
 
         self.__create_cnf(dimacs_cnf_file_path)
 
     # region Private methods
-    def __create_cnf(self, dimacs_cnf_file_path: str):
+    def __create_cnf(self, dimacs_cnf_file_path: str) -> None:
         """
         Convert the formula from the file into our structure
         :param dimacs_cnf_file_path: the file which is in the DIMACS CNF format
@@ -164,7 +164,7 @@ class Cnf:
 
         self.__unit_clause_set = self.__clause_size_list[1].copy()  # get unit clauses
 
-    def __get_clause(self, clause_id: int) -> set:
+    def __get_clause(self, clause_id: int) -> set[int]:
         """
         Return a clause with the given identifier. If the clause does not exist, raise an exception (ClauseDoesNotExistException).
         :param clause_id: the identifier of the clause
@@ -179,7 +179,7 @@ class Cnf:
     # endregion
 
     # region Public methods
-    def get_clause(self, clause_id: int) -> set:
+    def get_clause(self, clause_id: int) -> set[int]:
         """
         Return a clause with the given identifier. If the clause does not exist, raise an exception (ClauseDoesNotExistException).
         Copy is used!
@@ -188,7 +188,9 @@ class Cnf:
         """
 
         return self.__get_clause(clause_id).copy()
+    # endregion
 
+    # region Magic method
     def __str__(self):
         string_temp = ""
 
@@ -212,7 +214,7 @@ class Cnf:
         return self.__number_of_variables
 
     @property
-    def unused_variable_set(self) -> set:
+    def unused_variable_set(self) -> set[int]:
         """
         Copy is used!
         """
@@ -220,7 +222,7 @@ class Cnf:
         return self.__unused_variable_set.copy()
 
     @property
-    def unit_clause_set(self) -> set:
+    def unit_clause_set(self) -> set[int]:
         """
         Copy is used!
         """

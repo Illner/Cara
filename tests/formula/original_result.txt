@@ -1,4 +1,3 @@
-Formula test
 
 clause_not_number_invalid.cnf
 DIMACS CNF format is invalid in the file! (invalid clause (-4 a 0

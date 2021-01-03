@@ -1,8 +1,13 @@
 # Cara
 **Backdoor Decomposable Monotone Circuits (BDMC) compiler**
 
-## Language and packages
+## Language
 Python 3.9.1
+
+## Packages
+* sortedcontainers 2.3.0
+
+You can install all required packages to central user packages repository using **pip3 install --user sortedcontainers==2.3.0**
 
 ## Arguments
 **Cara [-h] [-ct {D_BDMC,SD_BDMC}] [-ss {MiniSAT,Glucose,Lingeling,CaDiCal}] [-cc {C2D,NONE}] [-il {BCP,IMPLICIT_BCP,BACKBONE,NONE}] [-bc {LITERAL,QUADRATIC,MATCHED,HORN,HIDDEN_HORN,Q_HORN}] [-dd | -sd] [-v]
