@@ -70,7 +70,7 @@ class NodeAbstract(ABC):
 
         # The size after the update is negative
         if self.__size + addend < 0:
-            raise c_exception.SizeCannotBeLessThanZeroException(str(self.id))
+            raise c_exception.SizeCannotBeLessThanZeroException(str(self))
 
         self.__size += addend
 
@@ -315,4 +315,12 @@ class NodeAbstract(ABC):
     @property
     def id(self):
         return self.__id
+
+    @property
+    def number_of_variables(self):
+        return len(self.__variable_in_circuit_set)
+
+    @property
+    def number_of_nodes(self):
+        return len(self.__node_in_circuit_set)
     # endregion

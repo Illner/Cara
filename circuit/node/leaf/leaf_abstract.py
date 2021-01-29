@@ -42,7 +42,7 @@ class LeafAbstract(NodeAbstract, ABC):
 
         # The parent does not exist in the set
         if parent_to_delete not in self.__parent_set:
-            raise c_exception.ParentDoesNotExistException(str(self.id), str(parent_to_delete.id))
+            raise c_exception.ParentDoesNotExistException(str(self), str(parent_to_delete))
 
         self.__parent_set.remove(parent_to_delete)
     # endregion

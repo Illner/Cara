@@ -85,3 +85,65 @@ class CycleWasDetectedException(CircuitException):
     def __init__(self):
         self.message = "A cycle was detected!"
         super().__init__(self.message)
+
+
+class InvalidDimacsNnfFormatException(CircuitException):
+    """
+    Invalid DIMACS NNF format
+    """
+
+    def __init__(self, message_extension: str = "no detailed information is given"):
+        self.message = f"DIMACS NNF format is invalid in the file! ({message_extension})"
+        super().__init__(self.message)
+
+
+class NLineIsNotMentionedException(CircuitException):
+    """
+    N line is not mentioned at all or is mentioned after the nodes
+    """
+
+    def __init__(self):
+        self.message = "NNF line is not mentioned at all or is mentioned after the nodes!"
+        super().__init__(self.message)
+
+
+class NodeWithSameIDAlreadyExistsInCircuitException(CircuitException):
+    """
+    A node with the same ID already exists in the circuit
+    """
+
+    def __init__(self, node_to_add: str):
+        self.message = f"The node ({node_to_add}) cannot be added to the circuit because a node with the same ID already exists there!"
+        super().__init__(self.message)
+
+
+class NodeWithIDDoesNotExistInCircuitException(CircuitException):
+    """
+    The node with the ID does not exist in the circuit
+    """
+
+    def __init__(self, node: str, message_extension: str = "no detailed information is given"):
+        self.message = f"The node ({node}) does not exist in the circuit! ({message_extension})"
+        super().__init__(self.message)
+
+
+class SomethingWrongException(CircuitException):
+    """
+    Something wrong
+    """
+
+    def __init__(self, message_extension: str = ""):
+        self.message = "Something wrong"
+        if not message_extension:
+            self.message += f" ({message_extension})"
+        super().__init__(self.message)
+
+
+class VariableDoesNotExistInCircuitException(CircuitException):
+    """
+    The variable does not exist in the circuit
+    """
+
+    def __init__(self, variable: int, root_node: str):
+        self.message = f"The variable ({str(variable)}) does not occur in the circuit ({root_node})!"
+        super().__init__(self.message)

@@ -1,4 +1,6 @@
 # Import
+import warnings
+from typing import Union
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
@@ -14,15 +16,25 @@ class OrInnerNode(InnerNodeAbstract):
     Circuit OR inner node representation
     """
 
-    def __init__(self, child_set: set[NodeAbstract], id: int = 0, part_of_decision_node: bool = True):
-        if part_of_decision_node:
-            deterministic_temp = True
-        else:
+    """
+    private int decision_variable
+    """
+
+    def __init__(self, child_set: set[NodeAbstract], id: int = 0,
+                 decision_variable: Union[int, None] = None):
+        if decision_variable is None:
             deterministic_temp = self.__is_deterministic_set(child_set)
+        else:
+            deterministic_temp = True
 
         smooth_temp = self.__is_smooth_set(child_set)
 
         super().__init__(id, nt_enum.NodeTypeEnum.OR_NODE, child_set, deterministic=deterministic_temp, smoothness=smooth_temp)
+
+        # Check if the decision variable does not exist in the circuit
+        if (decision_variable is not None) and (not self._exist_variable_in_circuit_set(decision_variable)):
+            raise c_exception.VariableDoesNotExistInCircuitException(decision_variable, str(self))
+        self.__decision_variable = decision_variable
 
     # region Static method
     @staticmethod
@@ -37,7 +49,8 @@ class OrInnerNode(InnerNodeAbstract):
         if not len(child_set) or len(child_set) == 1:
             return True
 
-        return True  # TODO __is_deterministic
+        warnings.warn("Warning: __is_deterministic_set is not implemented. Deterministic was set to True!")
+        return True
 
     @staticmethod
     def __is_smooth_set(child_set: set[NodeAbstract]) -> bool:
@@ -161,4 +174,10 @@ class OrInnerNode(InnerNodeAbstract):
 
         # Update the circuit properties etc.
         self._update()
+    # endregion
+
+    # region Property
+    @property
+    def decision_variable(self):
+        return self.__decision_variable
     # endregion

@@ -270,7 +270,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         # The parent does not exist in the set
         if parent_to_delete not in self._parent_set:
-            raise c_exception.ParentDoesNotExistException(str(self.id), str(parent_to_delete.id))
+            raise c_exception.ParentDoesNotExistException(str(self), str(parent_to_delete))
 
         self._parent_set.remove(parent_to_delete)
 
@@ -298,7 +298,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         # The child does not exist in the list
         if child_to_delete not in self._child_set:
-            raise c_exception.ChildDoesNotExistException(str(self.id), str(child_to_delete.id))
+            raise c_exception.ChildDoesNotExistException(str(self), str(child_to_delete))
 
         self._child_set.remove(child_to_delete)
 

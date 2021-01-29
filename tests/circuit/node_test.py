@@ -1,4 +1,5 @@
 # Import
+import warnings
 from typing import Union
 from tests.test_abstract import TestAbstract
 from circuit.node.node_abstract import NodeAbstract
@@ -11,6 +12,9 @@ from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
 # Import exception
 import exception.circuit_exception as c_exception
+
+# Warning
+warnings.simplefilter('ignore')
 
 
 class NodeTest(TestAbstract):

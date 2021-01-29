@@ -68,7 +68,7 @@ class Cnf:
                 # Comment line
                 if line.startswith("c"):
                     if not self.__comments:     # First comment
-                        self.__comments = "".join((line[1:].strip()))
+                        self.__comments = line[1:].strip()
                     else:
                         self.__comments = "\n".join((self.__comments, line[1:].strip()))
                     continue
@@ -192,8 +192,6 @@ class Cnf:
 
     # region Magic method
     def __str__(self):
-        string_temp = ""
-
         string_temp = "".join(f"Number of clauses: {self.__number_of_clauses}")
         string_temp = "\n".join((string_temp, f"Real number of clauses: {self.__real_number_of_clauses}"))
         string_temp = "\n".join((string_temp, f"Number of variables: {self.__number_of_variables}"))
