@@ -17,7 +17,7 @@ VERSION = "0.0.1"
 
 
 def main(args):
-    pass  # TODO main
+    pass
 
 
 def check_input_file_path(path: str) -> str:

@@ -19,9 +19,10 @@ class LeafAbstract(NodeAbstract, ABC):
     Private Set<InnerNodeAbstract> parent_set
     """
 
-    def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum, variable_in_circuit_set: set[int], size: int = 0):
+    def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
+                 variable_in_circuit_set: set[int], literal_in_circuit_set: set[int], size: int = 0):
         self.__parent_set: set[NodeAbstract] = set()
-        super().__init__(id, node_type, variable_in_circuit_set, {self}, size)
+        super().__init__(id, node_type, variable_in_circuit_set, literal_in_circuit_set, {self}, size)
 
     # region Protected method
     def _add_parent(self, new_parent: NodeAbstract) -> None:

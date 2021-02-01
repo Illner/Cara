@@ -4,8 +4,12 @@ from enum import IntEnum, unique
 
 @unique
 class CircuitTypeEnum(IntEnum):
-    D_BDMC = 1
-    SD_BDMC = 2
+    NNF = 1
+    BDMC = 2
+    D_BDMC = 3
+    S_NNF = 4
+    S_BDMC = 5
+    SD_BDMC = 6
 
 
 circuit_type_enum_names = [ct.name for ct in CircuitTypeEnum]

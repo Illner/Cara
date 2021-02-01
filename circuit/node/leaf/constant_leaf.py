@@ -1,4 +1,5 @@
 # Import
+import math
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import enum
@@ -16,7 +17,7 @@ class ConstantLeaf(LeafAbstract):
 
     def __init__(self, constant: bool, id: int = 0):
         self.__constant: bool = constant
-        super().__init__(id, nt_enum.NodeTypeEnum.CONSTANT, set(), 0)
+        super().__init__(id, nt_enum.NodeTypeEnum.CONSTANT, set(), set(), 0)
 
     # region Override method
     def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
@@ -31,12 +32,14 @@ class ConstantLeaf(LeafAbstract):
         else:
             return 0
 
-    def smooth(self, variable_need_to_be_added_set: set[int]) -> None:
-        # The set is empty
-        if not len(variable_need_to_be_added_set):
-            return
+    def minimum_default_cardinality(self, default_set: set[int], use_caches: bool = True) -> float:
+        if self.__constant:
+            return 0
+        else:
+            return math.inf
 
-        # TODO smooth
+    def smooth(self, smooth_create_and_node_function) -> None:
+        return
     # endregion
 
     # region Magic method

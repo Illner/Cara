@@ -4,6 +4,7 @@ from sortedcontainers import SortedDict
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.leaf.literal_leaf import LiteralLeaf
 from circuit.node.leaf.constant_leaf import ConstantLeaf
+from circuit.node.leaf.leaf_abstract import LeafAbstract
 from circuit.node.inner_node.or_inner_node import OrInnerNode
 from circuit.node.inner_node.and_inner_node import AndInnerNode
 
@@ -12,13 +13,10 @@ import exception.circuit_exception as c_exception
 
 # Import enum
 import circuit.circuit_type_enum as ct_enum
+import circuit.node.node_type_enum as nt_enum
 
 # TODO NNF parser (save / load)
 # TODO circuit test - files (read, circuit)
-# TODO is_satisfiable
-# TODO root
-# TODO set comments
-# TODO connectivity
 
 
 class Circuit:
@@ -27,23 +25,29 @@ class Circuit:
     """
 
     """
-    private int id_counter
-    private str comments
-    private Dict<int, NodeAbstract> id_node_dictionary      # key: id, value: node
-    private Dict<int, NodeAbstract> literal_node_dictionary # key: literal, value: node
-    private List<NodeAbstract> constant_node_list           # [False: node, True: node]
+    Private str circuit_name
+    Private int id_counter
+    Private str comments
+    Private CircuitTypeEnum circuit_type
+    Private Dict<int, NodeAbstract> id_node_dictionary              # key: id, value: node
+    Private Dict<int, NodeAbstract> literal_node_dictionary         # key: literal, value: node
+    Private List<NodeAbstract> constant_node_list                   # [False: node, True: node]
+    Private Dict<int, NodeAbstract> variable_id_smooth_dictionary   # key: variable, value: id
     
     private NodeAbstract root
     """
 
-    def __init__(self, dimacs_nnf_file_path: str = None):
+    def __init__(self, dimacs_nnf_file_path: str = None, circuit_name: str = "Circuit"):
         # region Initialization
         self.__id_counter: int = 0
         self.__comments: str = ""
+        self.__circuit_name: str = circuit_name
+        self.__circuit_type: Union[ct_enum.CircuitTypeEnum, None] = None
 
         self.__id_node_dictionary: dict[int, NodeAbstract] = dict()                 # initialization
         self.__literal_node_dictionary: dict[int, NodeAbstract] = dict()            # initialization
         self.__constant_node_list: list[Union[NodeAbstract, None]] = [None, None]   # initialization
+        self.__variable_id_smooth_dictionary: dict[int, int] = dict()               # initialization
 
         self.__root: Union[NodeAbstract, None] = None
         # endregion
@@ -176,6 +180,8 @@ class Circuit:
                         j_temp = int(line_array_temp[1])
                         c_temp = int(line_array_temp[2])
 
+                        j_temp = None if j_temp == 0 else j_temp
+
                         for i in range(3, len(line_array_temp)):
                             id_temp = int(line_array_temp[i])
 
@@ -202,7 +208,7 @@ class Circuit:
         if root_id is None:
             raise c_exception.SomethingWrongException("root was not set")
 
-        self.__root = self.get_node(root_id)
+        self.set_root(root_id)
 
         # Check v, e, n
         if v != self.number_of_nodes:
@@ -236,6 +242,81 @@ class Circuit:
             c_exception.NodeWithSameIDAlreadyExistsInCircuitException(str(node))
 
         self.__id_node_dictionary[id_temp] = node
+
+    def __smooth_create_and_node(self, id_node: int, variable_set: set[int]) -> NodeAbstract:
+        """
+        This function is used for smoothing.
+        id_node --> AND (id_node, (v_1 OR -v_1), (v_2 OR -v_2), ...)
+        If the node's ID does not exist in the circuit, raise an exception (NodeWithIDDoesNotExistInCircuitException).
+        :param id_node: the node's ID
+        :param variable_set: the set of variables
+        :return: the new AND node
+        """
+
+        node = self.get_node(id_node)
+        # The node does not exist in the circuit
+        if node is None:
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(id_node))
+
+        child_id_set = {id_node}
+        for variable in variable_set:
+            v_id = self.create_literal_leaf(variable)
+            non_v_id = self.create_literal_leaf(-variable)
+
+            or_node_id = self.create_or_node({v_id, non_v_id}, variable)
+            child_id_set.add(or_node_id)
+
+        and_node_id = self.create_and_node(child_id_set)
+        return self.get_node(and_node_id)
+    # endregion
+
+    # region Static method
+    @staticmethod
+    def __check_assumption_set_and_exist_quantification_set(assumption_set: set[int], exist_quantification_set: set[int],
+                                                            error: bool = True) -> bool:
+        """
+        Check if the assumption set and existential quantification set are valid.
+        The assumption set and existential quantification set must be disjoint (respect to variables).
+        No complementary literals can appear in the assumption set.
+        If the sets are not valid, raise an exception (AssumptionSetAndExistentialQuantificationSetAreNotDisjointException,
+        AssumptionSetContainsComplementLiteralsException, SetContainsLiteralsButOnlyVariablesAreAllowedException)
+        if the error is set to True, otherwise False is returned.
+        :param assumption_set: the assumption set
+        :param exist_quantification_set: the existential quantification set
+        :param error: the error
+        :return: if the error is set to False, True is returned if the sets are valid, otherwise False is returned
+        """
+
+        # Check if the sets are disjoint
+        intersection_set_temp = set()
+        for variable in exist_quantification_set:
+            if (variable in assumption_set) or (-variable in assumption_set):
+                intersection_set_temp.add(variable)
+
+        if intersection_set_temp:
+            if error:
+                raise c_exception.AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(intersection_set_temp)
+            else:
+                return False
+
+        # Check if the existential quantification set contains only variables
+        for var in exist_quantification_set:
+            if var <= 0:
+                raise c_exception.SetContainsLiteralsButOnlyVariablesAreAllowedException("exist_quantification_set", exist_quantification_set)
+
+        # Check complementary literals in the assumption set
+        complementary_literals_set_temp = set()
+        for lit in assumption_set:
+            if -lit in assumption_set:
+                complementary_literals_set_temp.add(lit)
+
+        if complementary_literals_set_temp:
+            if error:
+                raise c_exception.AssumptionSetContainsComplementLiteralsException(complementary_literals_set_temp)
+            else:
+                return False
+
+        return True
     # endregion
 
     # region Public method
@@ -356,8 +437,28 @@ class Circuit:
 
             child_node_set.add(child_temp)
 
+        # Smooth - (l) v (-l)
+        smooth_variable_temp = None
+        if len(child_node_set) == 2:
+            child_node_iterator_temp = iter(child_node_set)
+            node_1_temp = next(child_node_iterator_temp)
+            node_2_temp = next(child_node_iterator_temp)
+
+            if (node_1_temp.node_type == nt_enum.NodeTypeEnum.LITERAL) and \
+               (node_2_temp.node_type == nt_enum.NodeTypeEnum.LITERAL) and \
+               (node_1_temp.literal == -node_2_temp.literal):
+                smooth_variable_temp = abs(node_1_temp.literal)
+
+        # Smooth dictionary
+        if (smooth_variable_temp is not None) and (smooth_variable_temp in self.__variable_id_smooth_dictionary):
+            return self.__variable_id_smooth_dictionary[smooth_variable_temp]
+
         node = OrInnerNode(child_node_set, self.__get_new_id(), decision_variable=decision_variable)
         self.__add_new_node(node)
+
+        # Smooth dictionary
+        if smooth_variable_temp is not None:
+            self.__variable_id_smooth_dictionary[smooth_variable_temp] = node.id
 
         return node.id
 
@@ -388,19 +489,202 @@ class Circuit:
         or_node_id = self.create_or_node({true_and_node_id, false_and_node_id}, variable)
 
         return or_node_id
+
+    def is_circuit_connected(self) -> bool:
+        """
+        Check if the circuit is connected.
+        If the root of the circuit is not set, raise an exception (RootOfCircuitIsNotSetUpException).
+        :return: True if the circuit is connected, otherwise False is returned
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            c_exception.RootOfCircuitIsNotSetException()
+
+        if self.real_number_of_nodes == self.number_of_nodes:
+            return True
+
+        return False
+
+    def clear_comments(self) -> None:
+        """
+        Clear the comments of the circuit
+        """
+
+        self.set_comments("")
+
+    def set_comments(self, new_comment: str) -> None:
+        """
+        Set the comments of the circuit
+        :param new_comment: the new comment
+        """
+
+        self.__comments = new_comment
+
+    def set_root(self, node_id: int) -> None:
+        """
+        Set the root of the circuit.
+        If the node's ID does not exist in the circuit, raise an exception (NodeWithIDDoesNotExistInCircuitException).
+        :param node_id: the node's ID
+        """
+
+        self.__root = self.get_node(node_id)
+
+        # Recheck the type of the circuit
+        self.check_circuit_type()
+
+        # The node's id does not exist in the circuit
+        if self.__root is None:
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(node_id))
+
+    def check_circuit_type(self) -> None:
+        """
+        Recheck the circuit type.
+        If the root of the circuit is not set, None is set.
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            self.__circuit_type = None
+            return
+
+        # The circuit is only a list
+        if type(self.__root) is LeafAbstract:
+            self.__circuit_type = ct_enum.CircuitTypeEnum.SD_BDMC
+            return
+
+        # The root of the circuit is an inner node
+        decomposable_temp = self.__root.decomposable_in_circuit
+        deterministic_temp = self.__root.deterministic_in_circuit
+        smoothness_temp = self.__root.smoothness_in_circuit
+
+        if smoothness_temp:
+            if decomposable_temp and deterministic_temp:
+                self.__circuit_type = ct_enum.CircuitTypeEnum.SD_BDMC
+            elif decomposable_temp and (not deterministic_temp):
+                self.__circuit_type = ct_enum.CircuitTypeEnum.S_BDMC
+            else:
+                self.__circuit_type = ct_enum.CircuitTypeEnum.S_NNF
+        else:
+            if decomposable_temp and deterministic_temp:
+                self.__circuit_type = ct_enum.CircuitTypeEnum.D_BDMC
+            elif decomposable_temp and (not deterministic_temp):
+                self.__circuit_type = ct_enum.CircuitTypeEnum.BDMC
+            else:
+                self.__circuit_type = ct_enum.CircuitTypeEnum.NNF
+
+    def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
+        """
+        Check if the circuit is satisfiable with the assumption set and existential quantification set
+        If the assumption set and existential quantification set are not disjoint, raise an exception (AssumptionSetAndExistentialQuantificationSetAreNotDisjointException).
+        If the root of the circuit is not set, raise an exception (RootOfCircuitIsNotSetUpException).
+        If the existential quantification set contains a literal instead of variables, raise an exception
+        (SetContainsLiteralsButOnlyVariablesAreAllowedException).
+        Requirement: decomposability
+        :param assumption_set: the assumption set
+        :param exist_quantification_set: the existential quantification set
+        :param use_caches: True if satisfiability can use the caches
+        :return: True if the circuit is satisfiable with the assumption set and existential quantification set, otherwise False is returned
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            c_exception.RootOfCircuitIsNotSetException()
+
+        self.__check_assumption_set_and_exist_quantification_set(assumption_set, exist_quantification_set)
+
+        return self.__root.is_satisfiable(assumption_set, exist_quantification_set, use_caches)
+
+    def clause_entailment(self, clause: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
+        """
+        Clause entailment
+        Check if the clause is implied by the circuit
+        Requirement: decomposability
+        :param clause: the clause
+        :param exist_quantification_set: the existential quantification set
+        :param use_caches: True if clause entailment can use the caches
+        :return:
+        """
+
+        assumption_set = set()
+        for lit in clause:
+            assumption_set.add(-lit)
+
+        return not self.is_satisfiable(assumption_set, exist_quantification_set, use_caches)
+
+    def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> int:
+        """
+        Count the number of models with the assumption set and existential quantification set
+        If the assumption set or existential quantification set is not valid, raise an exception
+        (AssumptionSetAndExistentialQuantificationSetAreNotDisjointException, AssumptionSetContainsComplementLiteralsException).
+        If the root of the circuit is not set, raise an exception (RootOfCircuitIsNotSetUpException).
+        If the existential quantification set contains a literal instead of variables, raise an exception
+        (SetContainsLiteralsButOnlyVariablesAreAllowedException).
+        Requirement: decomposability, determinism, smooth
+        :param assumption_set: the assumption set
+        :param exist_quantification_set: the existential quantification set
+        :param use_caches: True if model counting can use the caches
+        :return: The number of models
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            c_exception.RootOfCircuitIsNotSetException()
+
+        self.__check_assumption_set_and_exist_quantification_set(assumption_set, exist_quantification_set)
+
+        self.smooth()
+        return self.__root.model_counting(assumption_set, exist_quantification_set, use_caches)
+
+    def minimum_default_cardinality(self, default_set: set[int], use_caches: bool = True) -> float:
+        """
+        Compute minimum default-cardinality of the circuit.
+        If the root of the circuit is not set, raise an exception (RootOfCircuitIsNotSetUpException).
+        Return infinity in case the circuit is unsatisfiable.
+        If the default set contains a literal instead of variables, raise an exception
+        (SetContainsLiteralsButOnlyVariablesAreAllowedException).
+        Requirement: decomposability
+        :param default_set: the set of variables representing defaults (we assume that all of these defaults are true)
+        :param use_caches: True if minimum default-cardinality can use the caches
+        :return: minimum default-cardinality
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            c_exception.RootOfCircuitIsNotSetException()
+
+        # Check if the default set contains only variables
+        for var in default_set:
+            if var <= 0:
+                raise c_exception.SetContainsLiteralsButOnlyVariablesAreAllowedException("default_set", default_set)
+
+        return self.__root.minimum_default_cardinality(default_set, use_caches)
+
+    def smooth(self) -> None:
+        """
+        Smooth the circuit
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            return
+
+        self.__root.smooth(self.__smooth_create_and_node)
     # endregion
 
     # region Magic method
     def __repr__(self):
-        string_temp = " ".join((f"Number of nodes: {str(self.number_of_nodes)}",
-                                f"Comments: {self.__comments}"))
+        string_temp = " ".join((f"Name: {self.circuit_name}",
+                                f"Number of nodes: {str(self.number_of_nodes)}",
+                                f"Comments: {self.comments}"))
 
         if self.__root is not None:
             string_temp = " ".join((string_temp,
                                     f"Root: {self.__root}",
                                     f"Number of variables: {str(self.number_of_variables)}",
                                     f"Real number of nodes: {str(self.real_number_of_nodes)}",
-                                    f"Size: {str(self.size)}"))
+                                    f"Size: {str(self.size)}",
+                                    f"Connected: {str(self.is_circuit_connected())}"))
 
         # The nodes in the circuit
         id_node_sorted_dictionary_temp = SortedDict(self.__id_node_dictionary)
@@ -411,6 +695,10 @@ class Circuit:
     # endregion
 
     # region Property
+    @property
+    def circuit_name(self):
+        return self.__circuit_name
+
     @property
     def number_of_nodes(self):
         return len(self.__id_node_dictionary)
@@ -435,4 +723,12 @@ class Circuit:
             return 0
 
         return self.__root.size
+
+    @property
+    def comments(self):
+        return self.__comments
+
+    @property
+    def circuit_type(self):
+        return self.__circuit_type
     # endregion

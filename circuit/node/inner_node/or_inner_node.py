@@ -1,4 +1,5 @@
 # Import
+import math
 import warnings
 from typing import Union
 from circuit.node.node_abstract import NodeAbstract
@@ -17,7 +18,7 @@ class OrInnerNode(InnerNodeAbstract):
     """
 
     """
-    private int decision_variable
+    Private int decision_variable
     """
 
     def __init__(self, child_set: set[NodeAbstract], id: int = 0,
@@ -103,20 +104,20 @@ class OrInnerNode(InnerNodeAbstract):
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Satisfiability is not supported if the circuit is not decomposable.")
 
-        assumption_restriction_set_temp = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
-        exist_quantification_restriction_set_temp = exist_quantification_set.intersection(self._get_variable_in_circuit_set())
+        assumption_restricted_set_temp = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
+        exist_quantification_restricted_set_temp = exist_quantification_set.intersection(self._get_variable_in_circuit_set())
 
         # Cache
         key = ""    # initialization
         if use_caches:
-            key = self._generate_key_cache(assumption_restriction_set_temp, exist_quantification_restriction_set_temp)
+            key = self._generate_key_cache(assumption_restricted_set_temp, exist_quantification_restricted_set_temp)
             value = self._get_satisfiable_cache(key)
             if value is not None:
                 return value
 
         result = False
         for child in self._child_set:
-            result_temp = child.is_satisfiable(assumption_restriction_set_temp, exist_quantification_restriction_set_temp)
+            result_temp = child.is_satisfiable(assumption_restricted_set_temp, exist_quantification_restricted_set_temp)
             # The child is satisfied => this node is satisfied
             if result_temp:
                 result = True
@@ -139,23 +140,22 @@ class OrInnerNode(InnerNodeAbstract):
 
         # The circuit is not smooth
         if not self.smoothness_in_circuit:
-            for child in self._child_set:
-                child.smooth(set())
+            raise c_exception.CircuitIsNotSmoothException("Model counting is not supported if the circuit is not smooth.")
 
-        assumption_restriction_set_temp = assumption_set.intersection(self._get_variable_in_circuit_set())
-        exist_quantification_restriction_set_temp = exist_quantification_set.intersection(self._get_variable_in_circuit_set())
+        assumption_restricted_set_temp = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
+        exist_quantification_restricted_set_temp = exist_quantification_set.intersection(self._get_variable_in_circuit_set())
 
         # Cache
         key = ""    # initialization
         if use_caches:
-            key = self._generate_key_cache(assumption_restriction_set_temp, exist_quantification_restriction_set_temp)
+            key = self._generate_key_cache(assumption_restricted_set_temp, exist_quantification_restricted_set_temp)
             value = self._get_model_counting_cache(key)
             if value is not None:
                 return value
 
         number_of_models = 0
         for child in self._child_set:
-            number_of_models += child.model_counting(assumption_restriction_set_temp, exist_quantification_restriction_set_temp)
+            number_of_models += child.model_counting(assumption_restricted_set_temp, exist_quantification_restricted_set_temp)
 
         # Cache
         if use_caches:
@@ -163,17 +163,63 @@ class OrInnerNode(InnerNodeAbstract):
 
         return number_of_models
 
-    def smooth(self, variable_need_to_be_added_set: set[int]) -> None:
-        # The circuit is smooth, and no variable needs to be added.
-        if not len(variable_need_to_be_added_set) and self.smoothness_in_circuit:
+    def minimum_default_cardinality(self, default_set: set[int], use_caches: bool = True) -> float:
+        # The circuit is not decomposable
+        if not self.decomposable_in_circuit:
+            raise c_exception.CircuitIsNotDecomposableException("Minimum default-cardinality is not supported if the circuit is not decomposable.")
+
+        default_restricted_set_temp = default_set.intersection(self._get_variable_in_circuit_set())
+
+        # Cache
+        key = ""  # initialization
+        if use_caches:
+            key = self._generate_key_minimal_default_cardinality_cache(default_restricted_set_temp)
+            value = self._get_minimal_default_cardinality_cache(key)
+            if value is not None:
+                return value
+
+        default_cardinality = math.inf
+        for child in self._child_set:
+            temp = child.minimum_default_cardinality(default_set)
+            if temp < default_cardinality:
+                default_cardinality = temp
+
+            if default_cardinality == 0:
+                break
+
+        # Cache
+        if use_caches:
+            self._add_minimal_default_cardinality_cache(key, default_cardinality)
+
+        return default_cardinality
+
+    def smooth(self, smooth_create_and_node_function) -> None:
+        # The circuit is already smooth
+        if self.smoothness_in_circuit:
             return
 
-        union_variable_set = variable_need_to_be_added_set.union(self._get_variable_in_circuit_set())
-        for child in self._child_set:
-            child.smooth(union_variable_set.difference(child._get_variable_in_circuit_set()))
+        # This node is smooth, but the circuit is not
+        if self.smoothness:
+            for child in self._child_set:
+                child.smooth(smooth_create_and_node_function)
 
-        # Update the circuit properties etc.
-        self._update()
+            return
+
+        union_variable_set = self._get_variable_in_circuit_set()
+        for child in self._child_set:
+            difference_set = union_variable_set.difference(child._get_variable_in_circuit_set())
+
+            if difference_set:
+                and_node = smooth_create_and_node_function(child.id, difference_set)
+
+                child._remove_parent(self)
+                self._remove_child(child)
+
+                and_node._add_parent(self)
+                self._add_child(and_node)
+
+        for child in self._child_set:
+            child.smooth(smooth_create_and_node_function)
     # endregion
 
     # region Property

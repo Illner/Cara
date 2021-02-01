@@ -40,7 +40,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._parent_set: set[TInnerNodeAbstract] = set()                                                       # initialization
         self.__node_type_in_circuit_counter_dict: Union[dict[nt_enum.NodeTypeEnum.value, int], None] = None     # initialization
 
-        variable_in_circuit_set_temp = self._union_variable_in_circuit_set_over_all_children()
+        variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
 
         self._leaf_set: set[LeafAbstract] = set()   # initialization
         node_in_circuit_set_temp = {self}           # initialization
@@ -58,7 +58,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self.__smoothness_in_circuit = None     # initialization
         self._check_properties_decomposable_deterministic_smoothness_in_circuit()
 
-        super().__init__(id, node_type, variable_in_circuit_set_temp, node_in_circuit_set_temp)
+        super().__init__(id, node_type, variable_in_circuit_set_temp, literal_in_circuit_set_temp, node_in_circuit_set_temp)
 
         # Set the size
         self._update_size_based_on_children(self._child_set)
@@ -86,18 +86,21 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             assert False
 
     @staticmethod
-    def _union_variable_in_circuit_set_over_list(child_set: set[NodeAbstract]) -> set[int]:
+    def _union_variable_and_literal_in_circuit_set_over_set(child_set: set[NodeAbstract]) -> (set[int], set[int]):
         """
-        Return a set which contains all variables that appear in the nodes in the child_set
+        Return a tuple of two sets, where the first set contains all variables that appear in the child_set and
+        the second set contains all literals that appear in the child_set
         :param child_set: the children set
-        :return: a set of variables that appear in the child_set
+        :return: (variable_set, literal_set)
         """
 
         union_variable_set = set()
+        union_literal_set = set()
         for child in child_set:
             union_variable_set = union_variable_set.union(child._get_variable_in_circuit_set())
+            union_literal_set = union_literal_set.union(child._get_literal_in_circuit_set())
 
-        return union_variable_set
+        return union_variable_set, union_literal_set
     # endregion
 
     # region Abstract method
@@ -113,8 +116,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         Called when something changes in the circuit and properties (size, nodes in the circuit, ...) need to be recomputed.
         """
 
-        variable_in_circuit_set_temp = self._union_variable_in_circuit_set_over_all_children()
+        variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
         self._set_variable_in_circuit_set(variable_in_circuit_set_temp)
+        self._set_literal_in_circuit_set(literal_in_circuit_set_temp)
 
         self._leaf_set: set[LeafAbstract] = set()
         node_in_circuit_set_temp = {self}
@@ -134,8 +138,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             parent._update()
 
         # Clear caches
-        self._clear_satisfiable_cache()
-        self._clear_model_counting_cache()
+        self._clear_cache()
 
     def _check_properties_decomposable_deterministic_smoothness_in_circuit(self) -> None:
         """
@@ -239,13 +242,14 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         return self.__node_type_in_circuit_counter_dict
 
-    def _union_variable_in_circuit_set_over_all_children(self) -> set[int]:
+    def _union_variable_and_literal_in_circuit_set_over_all_children(self) -> (set[int], set[int]):
         """
-        Return a set which contains all variables in the circuit
-        :return: a set of variables in the circuit
+        Return a tuple of two sets, where the first set contains all variables in the circuit and
+        the second set contains all literals in the circuit
+        :return: (variable_set, literal_set)
         """
 
-        return self._union_variable_in_circuit_set_over_list(self._child_set)
+        return self._union_variable_and_literal_in_circuit_set_over_set(self._child_set)
 
     def _add_parent(self, new_parent: TInnerNodeAbstract) -> None:
         """

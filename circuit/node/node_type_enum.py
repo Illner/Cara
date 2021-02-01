@@ -8,7 +8,6 @@ class NodeTypeEnum(IntEnum):
     OR_NODE = 2     # Inner node
     CONSTANT = 3    # Leaf
     LITERAL = 4     # Leaf
-    # TODO NodeTypeEnum
 
 
 node_type_enum_names = [nt.name for nt in NodeTypeEnum]

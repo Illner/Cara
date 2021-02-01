@@ -77,6 +77,16 @@ class CircuitIsNotDeterministicException(CircuitException):
         super().__init__(self.message)
 
 
+class CircuitIsNotSmoothException(CircuitException):
+    """
+    The circuit is not smooth
+    """
+
+    def __init__(self, message_extension: str = ""):
+        self.message = f"The circuit is not smooth! {message_extension}"
+        super().__init__(self.message)
+
+
 class CycleWasDetectedException(CircuitException):
     """
     A cycle was detected
@@ -146,4 +156,44 @@ class VariableDoesNotExistInCircuitException(CircuitException):
 
     def __init__(self, variable: int, root_node: str):
         self.message = f"The variable ({str(variable)}) does not occur in the circuit ({root_node})!"
+        super().__init__(self.message)
+
+
+class RootOfCircuitIsNotSetException(CircuitException):
+    """
+    The root of the circuit is not set
+    """
+
+    def __init__(self):
+        self.message = "The root of the circuit is not set!"
+        super().__init__(self.message)
+
+
+class AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(CircuitException):
+    """
+    The assumption set and existential quantification set are not disjoint
+    """
+
+    def __init__(self, variable_union_set: set[int]):
+        self.message = f"The assumption set and existential quantification set are not disjoint ({variable_union_set})!"
+        super().__init__(self.message)
+
+
+class AssumptionSetContainsComplementLiteralsException(CircuitException):
+    """
+    The assumption set contains complement literals
+    """
+
+    def __init__(self, complement_literals_set: set[int]):
+        self.message = f"The assumption set contains complement literals ({complement_literals_set})!"
+        super().__init__(self.message)
+
+
+class SetContainsLiteralsButOnlyVariablesAreAllowedException(CircuitException):
+    """
+    The set contains literals, but only variables are allowed
+    """
+
+    def __init__(self, set_name: str, variable_set: set[int]):
+        self.message = f"The set ({set_name}) contains literals, but only variables are allowed ({variable_set}!)"
         super().__init__(self.message)
