@@ -16,6 +16,8 @@ import exception.circuit_exception as c_exception
 # Warning
 warnings.simplefilter('ignore')
 
+# TODO 32 vs 64
+
 
 class NodeTest(TestAbstract):
     __FOLDER: str = "circuit"

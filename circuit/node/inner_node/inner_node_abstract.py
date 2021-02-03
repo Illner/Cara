@@ -334,6 +334,19 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         return self._child_set.copy()
+
+    def get_child_id_list(self) -> list[int]:
+        """
+        Return a list which contains children's ID
+        :return: a children's ID list
+        """
+
+        child_id_list = []
+
+        for child in self._child_set:
+            child_id_list.append(child.id)
+
+        return child_id_list
     # endregion
 
     # region Magic method

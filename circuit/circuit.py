@@ -17,6 +17,7 @@ import circuit.node.node_type_enum as nt_enum
 
 # TODO NNF parser (save / load)
 # TODO circuit test - files (read, circuit)
+# TODO is_decomposable, is_deterministic, is_smooth
 
 
 class Circuit:
@@ -268,6 +269,33 @@ class Circuit:
 
         and_node_id = self.create_and_node(child_id_set)
         return self.get_node(and_node_id)
+
+    def __topological_ordering_recursion(self, node_id: int, topological_ordering_list: list[int]) -> list[int]:
+        node = self.get_node(node_id)
+
+        # The node does not exist in the circuit
+        if node is None:
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(node_id))
+
+        # Base case - the node is a leaf
+        if isinstance(node, LeafAbstract):
+            if node_id not in topological_ordering_list:
+                topological_ordering_list.append(node_id)
+
+            return topological_ordering_list
+
+        # Recursion - the node is an inner node
+        child_id_list = node.get_child_id_list()
+        child_id_list.sort()
+        for child_id in child_id_list:
+            # The child has been already explored
+            if child_id in topological_ordering_list:
+                continue
+
+            self.__topological_ordering_recursion(child_id, topological_ordering_list)
+
+        topological_ordering_list.append(node_id)
+        return topological_ordering_list
     # endregion
 
     # region Static method
@@ -553,7 +581,7 @@ class Circuit:
             return
 
         # The circuit is only a list
-        if type(self.__root) is LeafAbstract:
+        if isinstance(self.__root, LeafAbstract):
             self.__circuit_type = ct_enum.CircuitTypeEnum.SD_BDMC
             return
 
@@ -681,9 +709,25 @@ class Circuit:
             return
 
         self.__root.smooth(self.__smooth_create_and_node)
+
+    def topological_ordering(self) -> list[int]:
+        """
+        Return a topological ordering of the circuit.
+        If the root of the circuit is not set, raise an exception (RootOfCircuitIsNotSetUpException).
+        :return: a list (of identifiers) which corresponds to a topological ordering
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            c_exception.RootOfCircuitIsNotSetException()
+
+        return self.__topological_ordering_recursion(self.__root.id, [])
     # endregion
 
     # region Magic method
+    def __str__(self):
+        pass
+
     def __repr__(self):
         string_temp = " ".join((f"Name: {self.circuit_name}",
                                 f"Number of nodes: {str(self.number_of_nodes)}",
@@ -691,7 +735,7 @@ class Circuit:
 
         if self.__root is not None:
             string_temp = " ".join((string_temp,
-                                    f"Root: {self.__root}",
+                                    f"Root: {self.root_id}",
                                     f"Number of variables: {str(self.number_of_variables)}",
                                     f"Real number of nodes: {str(self.real_number_of_nodes)}",
                                     f"Size: {str(self.size)}",
@@ -742,4 +786,11 @@ class Circuit:
     @property
     def circuit_type(self):
         return self.__circuit_type
+
+    @property
+    def root_id(self):
+        if self.__root is None:
+            return None
+
+        return self.__root.id
     # endregion
