@@ -1,4 +1,5 @@
 # Import
+import math
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import enum
@@ -49,16 +50,23 @@ class LiteralLeaf(LeafAbstract):
 
         return 1
 
-    def minimum_default_cardinality(self, default_set: set[int], use_caches: bool = True) -> float:
-        # The default set does not contain this variable
-        if self.variable not in default_set:
-            return 0
+    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
+        # The default set contains this variable
+        if self.variable in default_set:
+            if self.is_positive:
+                return 0
 
-        if self.is_positive:
-            return 0
+            # Negative literal
+            return 1
 
-        # Negative literal
-        return 1
+        # The observation set contains this literal
+        if self.literal in observation_set:
+            return 0    # True
+
+        if -self.literal in observation_set:
+            return math.inf  # False
+
+        return 0
 
     def smooth(self, smooth_create_and_node_function) -> None:
         return

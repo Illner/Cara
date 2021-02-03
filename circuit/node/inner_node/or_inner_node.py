@@ -163,24 +163,25 @@ class OrInnerNode(InnerNodeAbstract):
 
         return number_of_models
 
-    def minimum_default_cardinality(self, default_set: set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Minimum default-cardinality is not supported if the circuit is not decomposable.")
 
+        observation_restricted_set_temp = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), observation_set))
         default_restricted_set_temp = default_set.intersection(self._get_variable_in_circuit_set())
 
         # Cache
         key = ""  # initialization
         if use_caches:
-            key = self._generate_key_minimal_default_cardinality_cache(default_restricted_set_temp)
+            key = self._generate_key_cache(observation_restricted_set_temp, default_restricted_set_temp)
             value = self._get_minimal_default_cardinality_cache(key)
             if value is not None:
                 return value
 
         default_cardinality = math.inf
         for child in self._child_set:
-            temp = child.minimum_default_cardinality(default_set)
+            temp = child.minimum_default_cardinality(observation_set, default_set)
             if temp < default_cardinality:
                 default_cardinality = temp
 
@@ -222,7 +223,15 @@ class OrInnerNode(InnerNodeAbstract):
             child.smooth(smooth_create_and_node_function)
     # endregion
 
-    # region Property
+    # region Magic method
+    def __repr__(self):
+        string_temp = super().__repr__()
+
+        string_temp = " ".join((string_temp, f"Decision variable: {self.decision_variable}"))
+
+        return string_temp
+    # endregion
+
     @property
     def decision_variable(self):
         return self.__decision_variable

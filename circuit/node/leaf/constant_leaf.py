@@ -21,19 +21,19 @@ class ConstantLeaf(LeafAbstract):
 
     # region Override method
     def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
-        if self.__constant:
+        if self.constant:
             return True
         else:
             return False
 
     def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> int:
-        if self.__constant:
+        if self.constant:
             return 1
         else:
             return 0
 
-    def minimum_default_cardinality(self, default_set: set[int], use_caches: bool = True) -> float:
-        if self.__constant:
+    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
+        if self.constant:
             return 0
         else:
             return math.inf
@@ -46,7 +46,7 @@ class ConstantLeaf(LeafAbstract):
     def __repr__(self):
         string_temp = super().__repr__()
 
-        string_temp = " ".join((string_temp, f"Constant: {self.__constant}"))
+        string_temp = " ".join((string_temp, f"Constant: {self.constant}"))
 
         return string_temp
     # endregion

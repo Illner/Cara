@@ -171,21 +171,28 @@ class RootOfCircuitIsNotSetException(CircuitException):
 
 class AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(CircuitException):
     """
-    The assumption set and existential quantification set are not disjoint
+    The assumption set and existential quantification set are not disjoint.
+    Can be used for an observation set and default set as well (assumption_and_exist_set = False).
     """
 
-    def __init__(self, variable_union_set: set[int]):
-        self.message = f"The assumption set and existential quantification set are not disjoint ({variable_union_set})!"
+    def __init__(self, variable_union_set: set[int], assumption_and_exist_set: bool = True):
+        assumption_set_name_temp = "assumption set" if assumption_and_exist_set else "observation set"
+        exist_quantification_set_name_temp = "existential quantification set" if assumption_and_exist_set else "default set"
+
+        self.message = f"The {assumption_set_name_temp} and {exist_quantification_set_name_temp} are not disjoint ({variable_union_set})!"
         super().__init__(self.message)
 
 
 class AssumptionSetContainsComplementLiteralsException(CircuitException):
     """
-    The assumption set contains complement literals
+    The assumption set contains complement literals.
+    Can be used for an observation set as well (assumption_set = False).
     """
 
-    def __init__(self, complement_literals_set: set[int]):
-        self.message = f"The assumption set contains complement literals ({complement_literals_set})!"
+    def __init__(self, complement_literals_set: set[int], assumption_set: bool = True):
+        assumption_set_name_temp = "assumption set" if assumption_set else "observation set"
+
+        self.message = f"The {assumption_set_name_temp} contains complement literals ({complement_literals_set})!"
         super().__init__(self.message)
 
 

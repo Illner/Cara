@@ -273,7 +273,7 @@ class Circuit:
     # region Static method
     @staticmethod
     def __check_assumption_set_and_exist_quantification_set(assumption_set: set[int], exist_quantification_set: set[int],
-                                                            error: bool = True) -> bool:
+                                                            assumption_and_exist_set: bool = True, error: bool = True) -> bool:
         """
         Check if the assumption set and existential quantification set are valid.
         The assumption set and existential quantification set must be disjoint (respect to variables).
@@ -281,8 +281,11 @@ class Circuit:
         If the sets are not valid, raise an exception (AssumptionSetAndExistentialQuantificationSetAreNotDisjointException,
         AssumptionSetContainsComplementLiteralsException, SetContainsLiteralsButOnlyVariablesAreAllowedException)
         if the error is set to True, otherwise False is returned.
-        :param assumption_set: the assumption set
-        :param exist_quantification_set: the existential quantification set
+        Can be used for a default set and an observation set as well.
+        :param assumption_set: the assumption set / observation set
+        :param exist_quantification_set: the existential quantification set / default set
+        :param assumption_and_exist_set: True for an assumption and existential quantification set. False for an observation
+        and default set.
         :param error: the error
         :return: if the error is set to False, True is returned if the sets are valid, otherwise False is returned
         """
@@ -295,14 +298,15 @@ class Circuit:
 
         if intersection_set_temp:
             if error:
-                raise c_exception.AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(intersection_set_temp)
+                raise c_exception.AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(intersection_set_temp, assumption_and_exist_set)
             else:
                 return False
 
         # Check if the existential quantification set contains only variables
         for var in exist_quantification_set:
             if var <= 0:
-                raise c_exception.SetContainsLiteralsButOnlyVariablesAreAllowedException("exist_quantification_set", exist_quantification_set)
+                set_name_temp = "existential quantification set" if assumption_and_exist_set else "default set"
+                raise c_exception.SetContainsLiteralsButOnlyVariablesAreAllowedException(set_name_temp, exist_quantification_set)
 
         # Check complementary literals in the assumption set
         complementary_literals_set_temp = set()
@@ -312,7 +316,7 @@ class Circuit:
 
         if complementary_literals_set_temp:
             if error:
-                raise c_exception.AssumptionSetContainsComplementLiteralsException(complementary_literals_set_temp)
+                raise c_exception.AssumptionSetContainsComplementLiteralsException(complementary_literals_set_temp, assumption_and_exist_set)
             else:
                 return False
 
@@ -636,14 +640,16 @@ class Circuit:
         self.smooth()
         return self.__root.model_counting(assumption_set, exist_quantification_set, use_caches)
 
-    def minimum_default_cardinality(self, default_set: set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
         """
         Compute minimum default-cardinality of the circuit.
         If the root of the circuit is not set, raise an exception (RootOfCircuitIsNotSetUpException).
         Return infinity in case the circuit is unsatisfiable.
-        If the default set contains a literal instead of variables, raise an exception
-        (SetContainsLiteralsButOnlyVariablesAreAllowedException).
+        If the observation set or default set is not valid, raise an exception
+        (AssumptionSetAndExistentialQuantificationSetAreNotDisjointException, AssumptionSetContainsComplementLiteralsException).
+        An empty default set corresponds to all variables except ones that appear in the observation set.
         Requirement: decomposability
+        :param observation_set: the set of literals representing observations
         :param default_set: the set of variables representing defaults (we assume that all of these defaults are true)
         :param use_caches: True if minimum default-cardinality can use the caches
         :return: minimum default-cardinality
@@ -653,12 +659,17 @@ class Circuit:
         if self.__root is None:
             c_exception.RootOfCircuitIsNotSetException()
 
-        # Check if the default set contains only variables
-        for var in default_set:
-            if var <= 0:
-                raise c_exception.SetContainsLiteralsButOnlyVariablesAreAllowedException("default_set", default_set)
+        # The default set is empty
+        if not default_set:
+            default_set = set()
+            variable_set_temp = self.__root._get_variable_in_circuit_set()
+            for variable in variable_set_temp:
+                if (variable not in observation_set) and (-variable not in observation_set):
+                    default_set.add(variable)
 
-        return self.__root.minimum_default_cardinality(default_set, use_caches)
+        self.__check_assumption_set_and_exist_quantification_set(observation_set, default_set, False)
+
+        return self.__root.minimum_default_cardinality(observation_set, default_set, use_caches)
 
     def smooth(self) -> None:
         """

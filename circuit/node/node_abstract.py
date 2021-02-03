@@ -12,8 +12,6 @@ import circuit.node.node_type_enum as nt_enum
 # Type
 TNodeAbstract = TypeVar("TNodeAbstract", bound="NodeAbstract")
 
-# TODO Literal list
-
 
 class NodeAbstract(ABC):
     """
@@ -64,7 +62,7 @@ class NodeAbstract(ABC):
         pass
 
     @abstractmethod
-    def minimum_default_cardinality(self, default_set: set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
         pass
 
     @abstractmethod
@@ -347,9 +345,9 @@ class NodeAbstract(ABC):
     def _generate_key_cache(self, assumption_set: set[int], exist_quantification_set: set[int]) -> str:
         """
         Generate a key for caching.
-        Cache: satisfiable_cache, model_counting_cache
-        :param assumption_set: the assumption set (can be empty)
-        :param exist_quantification_set: the exist quantification set (can be empty)
+        Cache: satisfiable_cache, model_counting_cache, minimal_default_cardinality_cache
+        :param assumption_set: the assumption set / observation set (can be empty)
+        :param exist_quantification_set: the exist quantification set / default set (can be empty)
         :return: the generated key based on the assumption_set, exist_quantification_set and variable_in_circuit_set
         """
 
@@ -379,26 +377,6 @@ class NodeAbstract(ABC):
         str_temp = ''.join((assumption_str_temp, exist_quantification_str_temp))
 
         return str_temp
-
-    def _generate_key_minimal_default_cardinality_cache(self, default_set: set[int]) -> str:
-        """
-        Generate a key for the minimal_default_cardinality_cache
-        :param default_set: the default set (can be empty)
-        :return: the generated key based on the default_set and variable_in_circuit_set
-        """
-
-        default_list_temp = []
-
-        it = self.__variable_in_circuit_sorted_list.irange()
-        for v in it:
-            if v in default_set:
-                default_list_temp.append("1")
-            else:
-                default_list_temp.append("-")
-
-        str_temp = ''.join(default_list_temp)
-
-        return str_temp
     # endregion
 
     # region Magic method
@@ -406,10 +384,13 @@ class NodeAbstract(ABC):
         return str(self.__id)
 
     def __repr__(self):
+        literal_in_circuit_sorted_list_temp = SortedList(self.__literal_in_circuit_set)
+
         string_temp = " ".join((f"ID: {str(self.__id)}",
                                 f"Node type: {self.__node_type.name}",
                                 f"Size: {str(self.__size)}",
-                                f"Variables in the circuit: {self.__variable_in_circuit_sorted_list}"))
+                                f"Variables in the circuit: {self.__variable_in_circuit_sorted_list}",
+                                f"Literals in the circuit: {literal_in_circuit_sorted_list_temp}"))
 
         # Nodes in the circuit
         string_temp = " ".join((string_temp, "Nodes in the circuit:"))
