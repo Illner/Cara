@@ -16,9 +16,13 @@ path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\
 
 c = Circuit(path)
 
-print(repr(c))
+# print(repr(c))
 
-print(c.topological_ordering())
+# print(c.topological_ordering())
+# c.smooth()
+# print(repr(c))
+# print(c.topological_ordering())
+
 c.smooth()
-print(repr(c))
-print(c.topological_ordering())
+
+print(c)

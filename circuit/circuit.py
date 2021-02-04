@@ -1,4 +1,5 @@
 # Import
+import warnings
 from typing import Union
 from sortedcontainers import SortedDict
 from circuit.node.node_abstract import NodeAbstract
@@ -7,6 +8,7 @@ from circuit.node.leaf.constant_leaf import ConstantLeaf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 from circuit.node.inner_node.or_inner_node import OrInnerNode
 from circuit.node.inner_node.and_inner_node import AndInnerNode
+from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
 # Import exception
 import exception.circuit_exception as c_exception
@@ -14,10 +16,6 @@ import exception.circuit_exception as c_exception
 # Import enum
 import circuit.circuit_type_enum as ct_enum
 import circuit.node.node_type_enum as nt_enum
-
-# TODO NNF parser (save / load)
-# TODO circuit test - files (read, circuit)
-# TODO is_decomposable, is_deterministic, is_smooth
 
 
 class Circuit:
@@ -232,7 +230,8 @@ class Circuit:
 
     def __add_new_node(self, node: NodeAbstract) -> None:
         """
-        Add the node to the circuit. If some node already exists in the circuit with the same ID, raise an exception (NodeWithSameIDAlreadyExistsInCircuitException).
+        Add the node to the circuit.
+        If some node already exists in the circuit with the same ID, raise an exception (NodeWithSameIDAlreadyExistsInCircuitException).
         :param node: the node
         """
 
@@ -710,6 +709,9 @@ class Circuit:
 
         self.__root.smooth(self.__smooth_create_and_node)
 
+        # Recheck the type of the circuit
+        self.check_circuit_type()
+
     def topological_ordering(self) -> list[int]:
         """
         Return a topological ordering of the circuit.
@@ -722,11 +724,168 @@ class Circuit:
             c_exception.RootOfCircuitIsNotSetException()
 
         return self.__topological_ordering_recursion(self.__root.id, [])
+
+    def is_decomposable(self) -> Union[bool, None]:
+        """
+        Is the circuit decomposable?
+        If the root of the circuit is not set, None is returned.
+        :return: true if the circuit is decomposable, otherwise False is returned
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            return None
+
+        # Root of the circuit is a leaf
+        if isinstance(self.__root, LeafAbstract):
+            return True
+
+        return self.__root.decomposable_in_circuit
+
+    def is_deterministic(self) -> Union[bool, None]:
+        """
+        Is the circuit deterministic?
+        If the root of the circuit is not set, None is returned.
+        :return: true if the circuit is deterministic, otherwise False is returned
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            return None
+
+        # Root of the circuit is a leaf
+        if isinstance(self.__root, LeafAbstract):
+            return True
+
+        return self.__root.deterministic_in_circuit
+
+    def is_smooth(self) -> Union[bool, None]:
+        """
+        Is the circuit smooth?
+        If the root of the circuit is not set, None is returned.
+        :return: true if the circuit is smooth, otherwise False is returned
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            return None
+
+        # Root of the circuit is a leaf
+        if isinstance(self.__root, LeafAbstract):
+            return True
+
+        return self.__root.smoothness_in_circuit
+
+    def add_edge(self, from_id_node: int, to_id_node: int) -> None:
+        """
+        Add an oriented edge (from_id_node -> to_id_node) in the circuit.
+        If the oriented edge already exists in the circuit, nothing happens.
+        If the from_id_node is not an inner node, raise an exception (SomethingWrongException).
+        If one of the nodes does not exist in the circuit, raise an exception (NodeWithIDDoesNotExistInCircuitException).
+        If a cycle is detected, raise an exception (CycleWasDetectedException).
+        :param from_id_node: new to_id_node's parent
+        :param to_id_node: new from_id_node's child
+        """
+
+        # One of the nodes does not exist in the circuit
+        from_node = self.get_node(from_id_node)
+        to_node = self.get_node(to_id_node)
+        if from_node is None:
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(from_id_node), message_extension="add_edge (from_id_node)")
+        if to_node is None:
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(to_id_node), message_extension="add_edge (to_id_node)")
+
+        # from_node is not an inner node
+        if not isinstance(from_node, InnerNodeAbstract):
+            raise c_exception.SomethingWrongException(f"trying to add an edge from the node ({from_id_node}) which is not an inner node")
+
+        # The edge already exists
+        if to_id_node in from_node.get_child_id_list():
+            return
+
+        to_node._add_parent(from_node)
+        from_node._add_child(to_node)
+
+        # Recheck the type of the circuit
+        self.check_circuit_type()
     # endregion
 
     # region Magic method
     def __str__(self):
-        pass
+        try:
+            topological_ordering = self.topological_ordering()
+            id_to_dictionary = dict()
+            for to, id in enumerate(topological_ordering):
+                id_to_dictionary[id] = to
+
+            # Comment line
+            string = "\n".join((f"C Name: {self.circuit_name}",
+                                f"C Type: {str(self.circuit_type.name)}",
+                                f"C Decomposability: {self.is_decomposable()}",
+                                f"C Determinism: {self.is_deterministic()}",
+                                f"C Smoothness: {self.is_smooth()}",
+                                "C",
+                                f"C {self.comments}"))
+
+            # N line
+            string = "\n".join((string, f"nnf {str(self.real_number_of_nodes)} {str(self.size)} {str(self.number_of_variables)}"))
+
+            # Node line
+            for node_id in topological_ordering:
+                node = self.get_node(node_id)
+
+                # Constant leaf
+                if isinstance(node, ConstantLeaf):
+                    # True
+                    if node.constant:
+                        string = "\n".join((string, "A 0"))
+                    # False
+                    else:
+                        string = "\n".join((string, "O 0 0"))
+
+                    continue
+
+                # Literal leaf
+                if isinstance(node, LiteralLeaf):
+                    string = "\n".join((string, f"L {node.literal}"))
+                    continue
+
+                # AND node
+                if isinstance(node, AndInnerNode):
+                    child_id_list = node.get_child_id_list()
+                    child_to_list = []
+
+                    for child_id in child_id_list:
+                        child_to_list.append(id_to_dictionary[child_id])
+
+                    child_to_list.sort()
+
+                    string_temp = " ".join(map(str, child_to_list))
+                    string = "\n".join((string, f"A {len(child_to_list)} {string_temp}"))
+                    continue
+
+                # OR node
+                if isinstance(node, OrInnerNode):
+                    child_id_list = node.get_child_id_list()
+                    child_to_list = []
+
+                    for child_id in child_id_list:
+                        child_to_list.append(id_to_dictionary[child_id])
+
+                    child_to_list.sort()
+
+                    j = 0 if node.decision_variable is None else node.decision_variable
+
+                    string_temp = " ".join(map(str, child_to_list))
+                    string = "\n".join((string, f"O {j} {len(child_to_list)} {string_temp}"))
+                    continue
+
+                raise c_exception.SomethingWrongException(f"this type of node ({type(node)}) is not implemented in ToString (circuit)")
+
+            return string
+        except c_exception.RootOfCircuitIsNotSetException:
+            warnings.warn("ToString (circuit) returned an empty string because the root of the circuit is not set!")
+            return ""
 
     def __repr__(self):
         string_temp = " ".join((f"Name: {self.circuit_name}",

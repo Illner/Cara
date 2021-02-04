@@ -142,17 +142,17 @@ Node: 5, cache: False, sat: True
 Node: 6, cache: False, sat: True
 Node: 7, cache: False, sat: True
 Node: 8, cache: False, sat: True
-Assumption: {3}, cache: False, sat: False
-Assumption: {-3, -1}, cache: False, sat: True
-Assumption: {-2, -1}, cache: False, sat: False
-Assumption: {-3}, cache: False, sat: True
-Exist quantification: {3}, cache: False, sat: True
-Exist quantification: {1, 3}, cache: False, sat: True
-Exist quantification: {1, 2}, cache: False, sat: True
-Exist quantification: {1, 2, 3}, cache: False, sat: True
-Assumption: {3}, exist quantification: {1, 2}, cache: False, sat: False
-Assumption: {3}, exist quantification: {1}, cache: False, sat: False
-Assumption: {-1}, exist quantification: {3}, cache: False, sat: True
+Assumption: 3, cache: False, sat: False
+Assumption: -3 -1, cache: False, sat: True
+Assumption: -2 -1, cache: False, sat: False
+Assumption: -3, cache: False, sat: True
+Exist quantification: 3, cache: False, sat: True
+Exist quantification: 1 3, cache: False, sat: True
+Exist quantification: 1 2, cache: False, sat: True
+Exist quantification: 1 2 3, cache: False, sat: True
+Assumption: 3, exist quantification: 1 2, cache: False, sat: False
+Assumption: 3, exist quantification: 1, cache: False, sat: False
+Assumption: -1, exist quantification: 3, cache: False, sat: True
 Node: 0, cache: True, sat: True
 Node: 1, cache: True, sat: True
 Node: 2, cache: True, sat: True
@@ -162,17 +162,17 @@ Node: 5, cache: True, sat: True
 Node: 6, cache: True, sat: True
 Node: 7, cache: True, sat: True
 Node: 8, cache: True, sat: True
-Assumption: {3}, cache: True, sat: False
-Assumption: {-3, -1}, cache: True, sat: True
-Assumption: {-2, -1}, cache: True, sat: False
-Assumption: {-3}, cache: True, sat: True
-Exist quantification: {3}, cache: True, sat: True
-Exist quantification: {1, 3}, cache: True, sat: True
-Exist quantification: {1, 2}, cache: True, sat: True
-Exist quantification: {1, 2, 3}, cache: True, sat: True
-Assumption: {3}, exist quantification: {1, 2}, cache: True, sat: False
-Assumption: {3}, exist quantification: {1}, cache: True, sat: False
-Assumption: {-1}, exist quantification: {3}, cache: True, sat: True
+Assumption: 3, cache: True, sat: False
+Assumption: -3 -1, cache: True, sat: True
+Assumption: -2 -1, cache: True, sat: False
+Assumption: -3, cache: True, sat: True
+Exist quantification: 3, cache: True, sat: True
+Exist quantification: 1 3, cache: True, sat: True
+Exist quantification: 1 2, cache: True, sat: True
+Exist quantification: 1 2 3, cache: True, sat: True
+Assumption: 3, exist quantification: 1 2, cache: True, sat: False
+Assumption: 3, exist quantification: 1, cache: True, sat: False
+Assumption: -1, exist quantification: 3, cache: True, sat: True
 
 Satisfiability (negative)
 
@@ -205,16 +205,16 @@ Node: 21, cache: False, count of models: 4
 Node: 22, cache: False, count of models: 0
 Node: 23, cache: False, count of models: 1
 Node: 24, cache: False, count of models: 8
-Assumption: {-1}, cache: False, count of models: 4
-Assumption: {1}, cache: False, count of models: 4
-Assumption: {-2, -1}, cache: False, count of models: 2
-Assumption: {1, 2}, cache: False, count of models: 2
-Exist quantification: {1}, cache: False, count of models: 8
-Exist quantification: {1, 2}, cache: False, count of models: 8
-Exist quantification: {1, 2, 3}, cache: False, count of models: 8
-Assumption: {-1}, exist quantification: {2, 3}, cache: False, count of models: 4
-Assumption: {1}, exist quantification: {2, 3}, cache: False, count of models: 4
-Assumption: {1, 2}, exist quantification: {3, 4}, cache: False, count of models: 2
+Assumption: -1, cache: False, count of models: 4
+Assumption: 1, cache: False, count of models: 4
+Assumption: -2 -1, cache: False, count of models: 2
+Assumption: 1 2, cache: False, count of models: 2
+Exist quantification: 1, cache: False, count of models: 8
+Exist quantification: 1 2, cache: False, count of models: 8
+Exist quantification: 1 2 3, cache: False, count of models: 8
+Assumption: -1, exist quantification: 2 3, cache: False, count of models: 4
+Assumption: 1, exist quantification: 2 3, cache: False, count of models: 4
+Assumption: 1 2, exist quantification: 3 4, cache: False, count of models: 2
 Node: 0, cache: True, count of models: 1
 Node: 1, cache: True, count of models: 1
 Node: 2, cache: True, count of models: 1
@@ -240,16 +240,16 @@ Node: 21, cache: True, count of models: 4
 Node: 22, cache: True, count of models: 0
 Node: 23, cache: True, count of models: 1
 Node: 24, cache: True, count of models: 8
-Assumption: {-1}, cache: True, count of models: 4
-Assumption: {1}, cache: True, count of models: 4
-Assumption: {-2, -1}, cache: True, count of models: 2
-Assumption: {1, 2}, cache: True, count of models: 2
-Exist quantification: {1}, cache: True, count of models: 8
-Exist quantification: {1, 2}, cache: True, count of models: 8
-Exist quantification: {1, 2, 3}, cache: True, count of models: 8
-Assumption: {-1}, exist quantification: {2, 3}, cache: True, count of models: 4
-Assumption: {1}, exist quantification: {2, 3}, cache: True, count of models: 4
-Assumption: {1, 2}, exist quantification: {3, 4}, cache: True, count of models: 2
+Assumption: -1, cache: True, count of models: 4
+Assumption: 1, cache: True, count of models: 4
+Assumption: -2 -1, cache: True, count of models: 2
+Assumption: 1 2, cache: True, count of models: 2
+Exist quantification: 1, cache: True, count of models: 8
+Exist quantification: 1 2, cache: True, count of models: 8
+Exist quantification: 1 2 3, cache: True, count of models: 8
+Assumption: -1, exist quantification: 2 3, cache: True, count of models: 4
+Assumption: 1, exist quantification: 2 3, cache: True, count of models: 4
+Assumption: 1 2, exist quantification: 3 4, cache: True, count of models: 2
 
 Model counting (negative)
 
@@ -277,11 +277,11 @@ Node: 13, cache: False, minimum cardinality: 1
 Node: 14, cache: False, minimum cardinality: inf
 Node: 15, cache: False, minimum cardinality: 0
 Node: 16, cache: False, minimum cardinality: 1
-Default: {4}, cache: False, minimum cardinality: 0
-Default: {4, 5}, cache: False, minimum cardinality: 0
-Observation: {3, -1}, default: {4, 5}, cache: False, minimum cardinality: 1
-Observation: {1, -3}, default: {4, 5}, cache: False, minimum cardinality: 1
-Observation: {1, 3}, default: {4, 5}, cache: False, minimum cardinality: 0
+Default: 4, cache: False, minimum cardinality: 0
+Default: 4 5, cache: False, minimum cardinality: 0
+Observation: -1 3, default: 4 5, cache: False, minimum cardinality: 1
+Observation: -3 1, default: 4 5, cache: False, minimum cardinality: 1
+Observation: 1 3, default: 4 5, cache: False, minimum cardinality: 0
 Node: 0, cache: True, minimum cardinality: 1
 Node: 1, cache: True, minimum cardinality: 1
 Node: 2, cache: True, minimum cardinality: 0
@@ -299,11 +299,11 @@ Node: 13, cache: True, minimum cardinality: 1
 Node: 14, cache: True, minimum cardinality: inf
 Node: 15, cache: True, minimum cardinality: 0
 Node: 16, cache: True, minimum cardinality: 1
-Default: {4}, cache: True, minimum cardinality: 0
-Default: {4, 5}, cache: True, minimum cardinality: 0
-Observation: {3, -1}, default: {4, 5}, cache: True, minimum cardinality: 1
-Observation: {1, -3}, default: {4, 5}, cache: True, minimum cardinality: 1
-Observation: {1, 3}, default: {4, 5}, cache: True, minimum cardinality: 0
+Default: 4, cache: True, minimum cardinality: 0
+Default: 4 5, cache: True, minimum cardinality: 0
+Observation: -1 3, default: 4 5, cache: True, minimum cardinality: 1
+Observation: -3 1, default: 4 5, cache: True, minimum cardinality: 1
+Observation: 1 3, default: 4 5, cache: True, minimum cardinality: 0
 
 Minimum default-cardinality (negative)
 
