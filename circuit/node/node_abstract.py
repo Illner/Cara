@@ -26,7 +26,7 @@ class NodeAbstract(ABC):
     Private Set<int> variable_in_circuit_set
     Private SortedList<int> variable_in_circuit_sorted_list
     Private Set<int> literal_in_circuit_set
-    
+
     Private Dict<str, bool> satisfiable_cache                   # key = {0|1}+
     Private Dict<str, int> model_counting_cache                 # key = {0|1}+
     Private Dict<str, float> minimal_default_cardinality_cache  # key = {0|1}+
@@ -40,34 +40,42 @@ class NodeAbstract(ABC):
         self.__id = id
 
         self.__node_in_circuit_set: set[TNodeAbstract] = node_in_circuit_set
-        self.__variable_in_circuit_set: set[int] = set()                        # initialization
+        self.__variable_in_circuit_set: set[int] = set()  # initialization
         self.__variable_in_circuit_sorted_list: SortedList[int] = SortedList()  # initialization
-        self.__literal_in_circuit_set: set[int] = set()                         # initialization
+        self.__literal_in_circuit_set: set[int] = set()  # initialization
 
         self._set_variable_in_circuit_set(variable_in_circuit_set)
         self._set_literal_in_circuit_set(literal_in_circuit_set)
 
         # Cache
-        self.__satisfiable_cache: dict[str, bool] = dict()                      # initialization
-        self.__model_counting_cache: dict[str, int] = dict()                    # initialization
-        self.__minimal_default_cardinality_cache: dict[str, float] = dict()     # initialization
+        self.__satisfiable_cache: dict[str, bool] = dict()  # initialization
+        self.__model_counting_cache: dict[str, int] = dict()  # initialization
+        self.__minimal_default_cardinality_cache: dict[str, float] = dict()  # initialization
 
     # region Abstract method
     @abstractmethod
-    def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int],
+                       use_caches: bool = True) -> bool:
         pass
 
     @abstractmethod
-    def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> int:
+    def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int],
+                       use_caches: bool = True) -> int:
         pass
 
     @abstractmethod
-    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int],
+                                    use_caches: bool = True) -> float:
         pass
 
     @abstractmethod
     def smooth(self, smooth_create_and_node_function) -> None:
         pass
+
+    @abstractmethod
+    def number_of_children(self) -> int:
+        pass
+
     # endregion
 
     # region Protected method
@@ -86,13 +94,18 @@ class NodeAbstract(ABC):
 
     def _update_size_based_on_children(self, child_set: set[TNodeAbstract]) -> None:
         """
-        The size will be changed to the sum of the sizes of all children (child_set) and the number of children
+        The size will be recalculated based on the child_set
         :param child_set: the children set
         """
 
         self.__size = len(child_set)
+
+        node_set = set()
         for child in child_set:
-            self.__size += child.size
+            node_set = node_set.union(child._get_node_in_circuit_set())
+
+        for node in node_set:
+            self.__size += node.number_of_children()
 
     def _add_variable_in_circuit_set(self, variable_set: set[int]) -> None:
         """
@@ -377,6 +390,7 @@ class NodeAbstract(ABC):
         str_temp = ''.join((assumption_str_temp, exist_quantification_str_temp))
 
         return str_temp
+
     # endregion
 
     # region Magic method
@@ -400,6 +414,7 @@ class NodeAbstract(ABC):
         string_temp = " ".join((string_temp, str(node_id_in_circuit_sorted_list_temp)))
 
         return string_temp
+
     # endregion
 
     # region Property

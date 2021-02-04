@@ -89,13 +89,11 @@ def create_parser() -> argparse.ArgumentParser:
                                      )
 
     # Add the arguments
-    parser.add_argument("if",
-                        "input_file",
+    parser.add_argument("input_file",
                         action="store",
                         type=check_input_file_path,
                         help="The path of the input file which is in the DIMACS CNF format.")
-    parser.add_argument("of",
-                        "output_file",
+    parser.add_argument("output_file",
                         action="store",
                         type=check_output_file_path,
                         help="The path of the output file where the circuit will be saved.")

@@ -48,6 +48,17 @@ class LeafAbstract(NodeAbstract, ABC):
         self.__parent_set.remove(parent_to_delete)
     # endregion
 
+    # region Override method
+    def number_of_children(self):
+        """
+        Ballast method (NodeAbstract._update_size_based_on_children).
+        Return a number of children.
+        :return: 0 because lists don't have any children
+        """
+
+        return 0
+    # endregion
+
     # region Magic method
     def __repr__(self):
         string_temp = super().__repr__()

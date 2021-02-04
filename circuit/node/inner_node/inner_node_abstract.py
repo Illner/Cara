@@ -11,7 +11,6 @@ import exception.circuit_exception as c_exception
 # Import enum
 import circuit.node.node_type_enum as nt_enum
 
-
 TInnerNodeAbstract = TypeVar("TInnerNodeAbstract", bound="InnerNodeAbstract")
 
 
@@ -25,7 +24,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     Protected Set<Leaf> leaf_set
     Protected Set<InnerNodeAbstract> parent_set
     Private Dict<NodeTypeEnum.value, int> node_type_in_circuit_counter_dict     # Could be None
-    
+
     Private bool decomposable                   # The node satisfies decomposability
     Private bool decomposable_in_circuit        # All nodes in the circuit satisfy decomposability
     Private bool deterministic                  # The node satisfies determinism
@@ -37,28 +36,30 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum, child_set: set[NodeAbstract],
                  decomposable: bool = True, deterministic: bool = True, smoothness: bool = True):
         self._child_set: set[NodeAbstract] = child_set
-        self._parent_set: set[TInnerNodeAbstract] = set()                                                       # initialization
-        self.__node_type_in_circuit_counter_dict: Union[dict[nt_enum.NodeTypeEnum.value, int], None] = None     # initialization
+        self._parent_set: set[TInnerNodeAbstract] = set()  # initialization
+        self.__node_type_in_circuit_counter_dict: Union[
+            dict[nt_enum.NodeTypeEnum.value, int], None] = None  # initialization
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
 
-        self._leaf_set: set[LeafAbstract] = set()   # initialization
-        node_in_circuit_set_temp = {self}           # initialization
+        self._leaf_set: set[LeafAbstract] = set()  # initialization
+        node_in_circuit_set_temp = {self}  # initialization
         for child in child_set:
             node_in_circuit_set_temp = node_in_circuit_set_temp.union(child._get_node_in_circuit_set())
             self._leaf_set.update(self.__get_leaf_set(child))
-            child._add_parent(self)      # add me as a parent
+            child._add_parent(self)  # add me as a parent
 
         self.__decomposable = decomposable
         self.__deterministic = deterministic
         self.__smoothness = smoothness
 
-        self.__decomposable_in_circuit = None   # initialization
+        self.__decomposable_in_circuit = None  # initialization
         self.__deterministic_in_circuit = None  # initialization
-        self.__smoothness_in_circuit = None     # initialization
+        self.__smoothness_in_circuit = None  # initialization
         self._check_properties_decomposable_deterministic_smoothness_in_circuit()
 
-        super().__init__(id, node_type, variable_in_circuit_set_temp, literal_in_circuit_set_temp, node_in_circuit_set_temp)
+        super().__init__(id, node_type, variable_in_circuit_set_temp, literal_in_circuit_set_temp,
+                         node_in_circuit_set_temp)
 
         # Set the size
         self._update_size_based_on_children(self._child_set)
@@ -101,12 +102,14 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             union_literal_set = union_literal_set.union(child._get_literal_in_circuit_set())
 
         return union_variable_set, union_literal_set
+
     # endregion
 
     # region Abstract method
     @abstractmethod
     def _update_properties(self) -> None:
         pass
+
     # endregion
 
     # region Protected method
@@ -307,6 +310,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._child_set.remove(child_to_delete)
 
         self._update()
+
     # endregion
 
     # region Public method
@@ -347,6 +351,18 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             child_id_list.append(child.id)
 
         return child_id_list
+
+    # endregion
+
+    # region Override method
+    def number_of_children(self):
+        """
+        Return a number of children
+        :return: a number of children
+        """
+
+        return len(self._child_set)
+
     # endregion
 
     # region Magic method
@@ -382,6 +398,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
                                     f"{nt.name}: {self.get_number_of_occurrences_node_type_in_circuit_counter_dict(nt)} "))
 
         return string_temp
+
     # endregion
 
     # region Property

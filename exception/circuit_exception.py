@@ -144,7 +144,7 @@ class SomethingWrongException(CircuitException):
 
     def __init__(self, message_extension: str = ""):
         self.message = "Something wrong"
-        if not message_extension:
+        if message_extension:
             self.message += f" ({message_extension})"
         super().__init__(self.message)
 
