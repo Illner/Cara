@@ -6,9 +6,10 @@ from circuit.node.inner_node.or_inner_node import OrInnerNode
 from other.sorted_list import SortedList
 from tests.circuit.node_test import NodeTest
 from tests.formula.formula_test import FormulaTest
+from tests.circuit.circuit_test import CircuitTest
 
-# n = NodeTest()
-# n.save()
+n = CircuitTest()
+n.save()
 
 from circuit.circuit import Circuit
 

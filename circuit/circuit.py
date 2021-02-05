@@ -17,6 +17,8 @@ import exception.circuit_exception as c_exception
 import circuit.circuit_type_enum as ct_enum
 import circuit.node.node_type_enum as nt_enum
 
+# TODO c >= 0
+
 
 class Circuit:
     """
@@ -73,8 +75,10 @@ class Circuit:
             is_n_line_defined = False
 
             for line_id, line in enumerate(file.readlines()):
+                line = line.strip()
+
                 # The line is empty
-                if not line.strip():
+                if not line:
                     continue
 
                 # Comment line
@@ -82,7 +86,7 @@ class Circuit:
                     if not self.__comments:  # First comment
                         self.__comments = line[1:].strip()
                     else:
-                        self.__comments = "\n".join((self.__comments, line[1:].strip()))
+                        self.__comments = ", ".join((self.__comments, line[1:].strip()))
                     continue
 
                 # End of file (optional)
@@ -114,17 +118,17 @@ class Circuit:
 
                 # Node line
                 # Constant leaf (TRUE)
-                if line.strip() == "A 0":
+                if line == "A 0" or line == "a 0":
                     root_id = self.create_constant_leaf(True)
                     continue
 
                 # Constant leaf (FALSE)
-                if line.strip() == "O 0 0" or line.strip() == "O 0":
+                if line == "O 0 0" or line == "O 0" or line == "o 0 0" or line == "o 0":
                     root_id = self.create_constant_leaf(False)
                     continue
 
                 # Literal leaf
-                if line.startswith("L"):
+                if line.startswith("L") or line.startswith("l"):
                     line_array_temp = line.split()
                     # Invalid line
                     if len(line_array_temp) != 2:
@@ -142,7 +146,7 @@ class Circuit:
                     continue
 
                 # AND node
-                if line.startswith("A"):
+                if line.startswith("A") or line.startswith("a"):
                     line_array_temp = line.split()
                     # Invalid line
                     if len(line_array_temp) < 3:
@@ -153,6 +157,9 @@ class Circuit:
                     child_id_set_temp = set()
                     try:
                         c_temp = int(line_array_temp[1])
+                        if c_temp < 0:
+                            raise c_exception.InvalidDimacsNnfFormatException(
+                                f"the c value ({c_temp}) mentioned on line {line_id + 1} in the AND node is negative")
 
                         for i in range(2, len(line_array_temp)):
                             id_temp = int(line_array_temp[i])
@@ -171,13 +178,13 @@ class Circuit:
                                 f"the c value ({c_temp}) and the number of children ({len(child_id_set_temp)}) mentioned on line {line_id + 1} in the AND node don't correspond")
                     except ValueError:
                         raise c_exception.InvalidDimacsNnfFormatException(
-                            f"some id ({line}) mentioned on line {line_id + 1} in the AND node is not an integer")
+                            f"the c value or some id of a node ({line}) mentioned on line {line_id + 1} in the AND node is not an integer")
 
                     root_id = self.create_and_node(child_id_set_temp)
                     continue
 
                 # OR node
-                if line.startswith("O"):
+                if line.startswith("O") or line.startswith("o"):
                     line_array_temp = line.split()
                     # Invalid line
                     if len(line_array_temp) < 4:
@@ -188,7 +195,14 @@ class Circuit:
                     child_id_set_temp = set()
                     try:
                         j_temp = int(line_array_temp[1])
+                        if (j_temp <= 0) or (j_temp > n):
+                            raise c_exception.InvalidDimacsNnfFormatException(
+                                f"the j value ({j_temp}) mentioned on line {line_id + 1} in the OR node is not a valid number")
+
                         c_temp = int(line_array_temp[2])
+                        if c_temp < 0:
+                            raise c_exception.InvalidDimacsNnfFormatException(
+                                f"the c value ({c_temp}) mentioned on line {line_id + 1} in the OR node is negative")
 
                         j_temp = None if j_temp == 0 else j_temp
 
@@ -209,10 +223,12 @@ class Circuit:
                                 f"the c value ({c_temp}) and the number of children ({len(child_id_set_temp)}) mentioned on line {line_id + 1} in the OR node don't correspond")
                     except ValueError:
                         raise c_exception.InvalidDimacsNnfFormatException(
-                            f"some id ({line}) mentioned on line {line_id + 1} in the OR node is not an integer")
+                            f"the c value, j value or some id of a node ({line}) mentioned on line {line_id + 1} in the OR node is not an integer")
 
                     root_id = self.create_or_node(child_id_set_temp, j_temp)
                     continue
+
+                raise c_exception.InvalidDimacsNnfFormatException(f"the line ({line_id + 1}) starts with an invalid char ({line})")
 
         # The file does not contain any node
         if not len(self.__id_node_dictionary):
@@ -225,14 +241,14 @@ class Circuit:
 
         # Check v, e, n
         if v != self.number_of_nodes:
-            raise c_exception.SomethingWrongException(
-                f"the number of nodes in the circuit ({self.number_of_nodes}) differs from the v value ({v})")
+            warnings.warn(f"The number of nodes in the circuit ({self.number_of_nodes}) differs from the v value ({v})!")
+            # raise c_exception.SomethingWrongException(f"the number of nodes in the circuit ({self.number_of_nodes}) differs from the v value ({v})")
         if e != self.size:
-            raise c_exception.SomethingWrongException(
-                f"the number of edges in the circuit ({self.size}) differs from the e value ({e})")
+            warnings.warn(f"The number of edges in the circuit ({self.size}) differs from the e value ({e})!")
+            # raise c_exception.SomethingWrongException(f"the number of edges in the circuit ({self.size}) differs from the e value ({e})")
         if n != self.number_of_variables:
-            raise c_exception.SomethingWrongException(
-                f"the number of variables in the circuit ({self.number_of_variables}) differs from the n value ({n})")
+            warnings.warn(f"The number of variables in the circuit ({self.number_of_variables}) differs from the n value ({n})!")
+            # raise c_exception.SomethingWrongException(f"the number of variables in the circuit ({self.number_of_variables}) differs from the n value ({n})")
 
     def __get_new_id(self) -> int:
         """

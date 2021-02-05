@@ -17,6 +17,9 @@ import exception.circuit_exception as c_exception
 # Warning
 warnings.simplefilter('ignore')
 
+# PyCharm
+# noinspection PyMethodMayBeStatic
+
 
 class NodeTest(TestAbstract):
     __FOLDER: str = "circuit"
@@ -197,9 +200,10 @@ class NodeTest(TestAbstract):
         n_16 = OrInnerNode({n_12, n_13}, 16, 1)
 
         return [n_0, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8, n_9, n_10, n_11, n_12, n_13, n_14, n_15, n_16]
+    # endregion
 
-    @staticmethod
-    def __test_1() -> str:
+    # region Private method
+    def __test_1(self) -> str:
         """
         A test for creating and connecting nodes.
         Positive
@@ -222,8 +226,7 @@ class NodeTest(TestAbstract):
 
         return result
 
-    @staticmethod
-    def __test_2() -> str:
+    def __test_2(self) -> str:
         """
         A test for modification (add_parent, remove_parent, add_child, remove_child).
         Positive
@@ -265,8 +268,7 @@ class NodeTest(TestAbstract):
 
         return result
 
-    @staticmethod
-    def __test_3() -> str:
+    def __test_3(self) -> str:
         """
         A test for detecting a cycle.
         Negative
@@ -283,8 +285,7 @@ class NodeTest(TestAbstract):
 
         return result
 
-    @staticmethod
-    def __test_4() -> str:
+    def __test_4(self) -> str:
         """
         A test for satisfiability.
         Positive
@@ -318,8 +319,7 @@ class NodeTest(TestAbstract):
 
         return result
 
-    @staticmethod
-    def __test_5() -> str:
+    def __test_5(self) -> str:
         """
         A test for satisfiability.
         Negative
@@ -335,8 +335,7 @@ class NodeTest(TestAbstract):
 
         return result
 
-    @staticmethod
-    def __test_6() -> str:
+    def __test_6(self) -> str:
         """
         A test for model counting.
         Positive
@@ -370,8 +369,7 @@ class NodeTest(TestAbstract):
 
         return result
 
-    @staticmethod
-    def __test_7() -> str:
+    def __test_7(self) -> str:
         """
         A test for model counting.
         Negative
@@ -392,8 +390,7 @@ class NodeTest(TestAbstract):
 
         return result
 
-    @staticmethod
-    def __test_8() -> str:
+    def __test_8(self) -> str:
         """
         A test for minimum default-cardinality.
         Positive
@@ -423,8 +420,7 @@ class NodeTest(TestAbstract):
 
         return result
 
-    @staticmethod
-    def __test_9() -> str:
+    def __test_9(self) -> str:
         """
         A test for minimum default-cardinality.
         Negative
@@ -440,8 +436,7 @@ class NodeTest(TestAbstract):
 
         return result
 
-    @staticmethod
-    def __test_10() -> str:
+    def __test_10(self) -> str:
         """
         A test for clearing caches.
         Positive

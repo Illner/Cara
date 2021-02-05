@@ -1,4 +1,5 @@
 # Import
+from circuit.circuit import Circuit
 from tests.test_abstract import TestAbstract
 
 # Import exception
@@ -15,5 +16,28 @@ class CircuitTest(TestAbstract):
 
     # region Override method
     def _get_actual_result(self) -> str:
-        pass
+        actual_result = ""
+
+        actual_result = "\n".join((actual_result, "Parsing", self.__test_1(), ""))  # Test 1
+
+        return actual_result
+    # endregion
+
+    # region Private method
+    def __test_1(self) -> str:
+        """
+        A test for parsing.
+        Positive / negative
+        """
+
+        result = ""
+
+        for (file_name, file_path) in self._files:
+            try:
+                c = Circuit(file_path)
+                result = "\n".join((result, file_name, str(c), ""))
+            except c_exception.CircuitException as err:
+                result = "\n".join((result, file_name, str(err), ""))
+
+        return result
     # endregion
