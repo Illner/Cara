@@ -61,9 +61,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         super().__init__(id, node_type, variable_in_circuit_set_temp, literal_in_circuit_set_temp,
                          node_in_circuit_set_temp)
 
-        # Set the size
-        self._update_size_based_on_children(self._child_set)
-
         # Set the node_type_in_circuit_counter_dict
         self._set_node_type_in_circuit_counter_dict()
 
@@ -116,7 +113,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def _update(self) -> None:
         """
         Update the properties of the circuit.
-        Called when something changes in the circuit and properties (size, nodes in the circuit, ...) need to be recomputed.
+        Called when something changes in the circuit and properties (nodes in the circuit, ...) need to be recomputed.
         """
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
@@ -130,7 +127,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             self._leaf_set.update(self.__get_leaf_set(child))
         self._set_node_in_circuit_set(node_in_circuit_set_temp)
 
-        self._update_size_based_on_children(self._child_set)
         self._set_node_type_in_circuit_counter_dict()
 
         self._update_properties()
@@ -355,14 +351,12 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     # endregion
 
     # region Override method
-    def number_of_children(self):
+    def node_size(self) -> int:
         """
-        Return a number of children
-        :return: a number of children
+        Return the size of the inner node (= number of children)
         """
 
         return len(self._child_set)
-
     # endregion
 
     # region Magic method

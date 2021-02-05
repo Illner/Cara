@@ -27,6 +27,7 @@ class Circuit:
     Private str circuit_name
     Private int id_counter
     Private str comments
+    Private int size    # The number of edges in the circuit + the sizes of all leaves in the circuit
     Private CircuitTypeEnum circuit_type
     Private Dict<int, NodeAbstract> id_node_dictionary              # key: id, value: node
     Private Dict<int, NodeAbstract> literal_node_dictionary         # key: literal, value: node
@@ -40,6 +41,7 @@ class Circuit:
         # region Initialization
         self.__id_counter: int = 0
         self.__comments: str = ""
+        self.__size: Union[int, None] = None
         self.__circuit_name: str = circuit_name
         self.__circuit_type: Union[ct_enum.CircuitTypeEnum, None] = None
 
@@ -311,6 +313,21 @@ class Circuit:
         topological_ordering_list.append(node_id)
         return topological_ordering_list
 
+    def __compute_size_of_circuit(self) -> None:
+        """
+        Compute the size of the circuit
+        """
+
+        # Root of the circuit is not set
+        if self.__root is None:
+            self.__size = None
+            return
+
+        self.__size = 0
+        node_set = self.__root._get_node_in_circuit_set()
+
+        for node in node_set:
+            self.__size += node.node_size()
     # endregion
 
     # region Static method
@@ -589,6 +606,8 @@ class Circuit:
 
         # Recheck the type of the circuit
         self.check_circuit_type()
+        # Recompute the size of the circuit
+        self.__compute_size_of_circuit()
 
         # The node's id does not exist in the circuit
         if self.__root is None:
@@ -740,6 +759,8 @@ class Circuit:
 
         # Recheck the type of the circuit
         self.check_circuit_type()
+        # Recompute the size of the circuit
+        self.__compute_size_of_circuit()
 
     def topological_ordering(self) -> list[int]:
         """
@@ -840,6 +861,8 @@ class Circuit:
 
         # Recheck the type of the circuit
         self.check_circuit_type()
+        # Recompute the size of the circuit
+        self.__compute_size_of_circuit()
 
     # endregion
 
@@ -976,10 +999,7 @@ class Circuit:
 
     @property
     def size(self):
-        if self.__root is None:
-            return 0
-
-        return self.__root.size
+        return self.__size
 
     @property
     def comments(self):

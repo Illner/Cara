@@ -3,9 +3,6 @@ from typing import Union, TypeVar
 from abc import ABC, abstractmethod
 from other.sorted_list import SortedList
 
-# Import exception
-import exception.circuit_exception as c_exception
-
 # Import enum
 import circuit.node.node_type_enum as nt_enum
 
@@ -21,7 +18,6 @@ class NodeAbstract(ABC):
     """
     Private int id
     Private NodeTypeEnum node_type
-    Private int size                                # The number of edges in the circuit + the sizes of all leaves in the circuit
     Private Set<NodeAbstract> node_in_circuit_set   # The set which contains all nodes in the circuit
     Private Set<int> variable_in_circuit_set
     Private SortedList<int> variable_in_circuit_sorted_list
@@ -34,9 +30,8 @@ class NodeAbstract(ABC):
 
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
                  variable_in_circuit_set: set[int], literal_in_circuit_set: set[int],
-                 node_in_circuit_set: set[TNodeAbstract], size: int = 0):
+                 node_in_circuit_set: set[TNodeAbstract]):
         self.__node_type: nt_enum.NodeTypeEnum = node_type
-        self.__size: int = size
         self.__id = id
 
         self.__node_in_circuit_set: set[TNodeAbstract] = node_in_circuit_set
@@ -73,40 +68,11 @@ class NodeAbstract(ABC):
         pass
 
     @abstractmethod
-    def number_of_children(self) -> int:
+    def node_size(self) -> int:
         pass
-
     # endregion
 
     # region Protected method
-    def _update_size(self, addend: int) -> None:
-        """
-        The addend will be added to the size. If the size after the update will be less than 0, raise an exception (SizeCannotBeLessThanZeroException).
-        The addend is greater than 0 => addition
-        The addend is less than 0 => subtraction
-        """
-
-        # The size after the update is negative
-        if self.__size + addend < 0:
-            raise c_exception.SizeCannotBeLessThanZeroException(str(self))
-
-        self.__size += addend
-
-    def _update_size_based_on_children(self, child_set: set[TNodeAbstract]) -> None:
-        """
-        The size will be recalculated based on the child_set
-        :param child_set: the children set
-        """
-
-        self.__size = len(child_set)
-
-        node_set = set()
-        for child in child_set:
-            node_set = node_set.union(child._get_node_in_circuit_set())
-
-        for node in node_set:
-            self.__size += node.number_of_children()
-
     def _add_variable_in_circuit_set(self, variable_set: set[int]) -> None:
         """
         Add the variables in the variable_set to the variable_in_circuit_set.
@@ -402,7 +368,6 @@ class NodeAbstract(ABC):
 
         string_temp = " ".join((f"ID: {str(self.__id)}",
                                 f"Node type: {self.__node_type.name}",
-                                f"Size: {str(self.__size)}",
                                 f"Variables in the circuit: {self.__variable_in_circuit_sorted_list}",
                                 f"Literals in the circuit: {literal_in_circuit_sorted_list_temp}"))
 
@@ -421,10 +386,6 @@ class NodeAbstract(ABC):
     @property
     def node_type(self):
         return self.__node_type
-
-    @property
-    def size(self):
-        return self.__size
 
     @property
     def id(self):

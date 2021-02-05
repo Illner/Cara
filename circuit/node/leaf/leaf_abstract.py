@@ -16,13 +16,15 @@ class LeafAbstract(NodeAbstract, ABC):
     """
 
     """
+    Private int size    # The size of the leaf
     Private Set<InnerNodeAbstract> parent_set
     """
 
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
                  variable_in_circuit_set: set[int], literal_in_circuit_set: set[int], size: int = 0):
         self.__parent_set: set[NodeAbstract] = set()
-        super().__init__(id, node_type, variable_in_circuit_set, literal_in_circuit_set, {self}, size)
+        self.__size: int = size
+        super().__init__(id, node_type, variable_in_circuit_set, literal_in_circuit_set, {self})
 
     # region Protected method
     def _add_parent(self, new_parent: NodeAbstract) -> None:
@@ -46,17 +48,22 @@ class LeafAbstract(NodeAbstract, ABC):
             raise c_exception.ParentDoesNotExistException(str(self), str(parent_to_delete))
 
         self.__parent_set.remove(parent_to_delete)
+
+    def _set_size(self, new_size: int) -> None:
+        """
+        Setter - size
+        """
+
+        self.__size = new_size
     # endregion
 
     # region Override method
-    def number_of_children(self):
+    def node_size(self) -> int:
         """
-        Ballast method (NodeAbstract._update_size_based_on_children).
-        Return a number of children.
-        :return: 0 because lists don't have any children
+        Return the size of the leaf
         """
 
-        return 0
+        return self.__size
     # endregion
 
     # region Magic method
@@ -71,4 +78,8 @@ class LeafAbstract(NodeAbstract, ABC):
         string_temp = " ".join((string_temp, str(parent_id_sorted_list_temp)))
 
         return string_temp
+    # endregion
+
+    # region Property
+
     # endregion

@@ -21,7 +21,7 @@ class LiteralLeaf(LeafAbstract):
         self.__literal: int = literal
         self.__variable: int = abs(literal)
         self.__is_positive = True if self.__literal > 0 else False
-        super().__init__(id, nt_enum.NodeTypeEnum.LITERAL, {self.__variable}, {self.__literal}, 0)
+        super().__init__(id, nt_enum.NodeTypeEnum.LITERAL, {self.__variable}, {self.__literal})
 
     # region Override method
     def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:

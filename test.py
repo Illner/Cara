@@ -12,7 +12,7 @@ from tests.formula.formula_test import FormulaTest
 
 from circuit.circuit import Circuit
 
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\circuit\NNF_formulae\sat-grid-pbl-0010_smooth_all.nnf"
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\circuit\NNF_formulae\sat-grid-pbl-0010.nnf"
 
 c = Circuit(path)
 
@@ -23,4 +23,4 @@ c = Circuit(path)
 # print(repr(c))
 # print(c.topological_ordering())
 
-# print(repr(c))
+print(c.size)

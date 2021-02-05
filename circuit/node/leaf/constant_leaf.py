@@ -17,7 +17,7 @@ class ConstantLeaf(LeafAbstract):
 
     def __init__(self, constant: bool, id: int = 0):
         self.__constant: bool = constant
-        super().__init__(id, nt_enum.NodeTypeEnum.CONSTANT, set(), set(), 0)
+        super().__init__(id, nt_enum.NodeTypeEnum.CONSTANT, set(), set())
 
     # region Override method
     def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
