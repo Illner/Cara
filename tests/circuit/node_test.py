@@ -113,8 +113,8 @@ class NodeTest(TestAbstract):
         n_15 = AndInnerNode({n_6, n_7}, 15)
 
         n_16 = OrInnerNode({n_8, n_11}, 16, 1)
-        n_17 = OrInnerNode({n_13, n_14}, 17, 3)
-        n_18 = OrInnerNode({n_9, n_10}, 18, 1)
+        n_17 = OrInnerNode({n_13, n_14}, 17, 4)
+        n_18 = OrInnerNode({n_9, n_10}, 18, 2)
         n_19 = OrInnerNode({n_12, n_15}, 19, 3)
 
         n_20 = AndInnerNode({n_16, n_17}, 20)

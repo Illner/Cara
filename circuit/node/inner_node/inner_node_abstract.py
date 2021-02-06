@@ -306,7 +306,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._child_set.remove(child_to_delete)
 
         self._update()
-
     # endregion
 
     # region Public method

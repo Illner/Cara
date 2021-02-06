@@ -8,8 +8,8 @@ from tests.circuit.node_test import NodeTest
 from tests.formula.formula_test import FormulaTest
 from tests.circuit.circuit_test import CircuitTest
 
-n = CircuitTest()
-n.save()
+# n = CircuitTest()
+# n.save()
 
 from circuit.circuit import Circuit
 
@@ -20,8 +20,8 @@ c = Circuit(path)
 # print(repr(c))
 
 # print(c.topological_ordering())
-# c.smooth()
+c.smooth()
 # print(repr(c))
 # print(c.topological_ordering())
 
-print(c.size)
+print(c.is_smooth())

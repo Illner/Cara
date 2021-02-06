@@ -17,8 +17,6 @@ import exception.circuit_exception as c_exception
 import circuit.circuit_type_enum as ct_enum
 import circuit.node.node_type_enum as nt_enum
 
-# TODO c >= 0
-
 
 class Circuit:
     """
@@ -272,7 +270,7 @@ class Circuit:
 
         # There is already some node with the same ID
         if self.node_exist(node):
-            c_exception.NodeWithSameIDAlreadyExistsInCircuitException(str(node))
+            raise c_exception.NodeWithSameIDAlreadyExistsInCircuitException(str(node))
 
         self.__id_node_dictionary[id_temp] = node
 
@@ -589,7 +587,7 @@ class Circuit:
 
         # Root of the circuit is not set
         if self.__root is None:
-            c_exception.RootOfCircuitIsNotSetException()
+            raise c_exception.RootOfCircuitIsNotSetException()
 
         if self.real_number_of_nodes == self.number_of_nodes:
             return True
@@ -682,7 +680,7 @@ class Circuit:
 
         # Root of the circuit is not set
         if self.__root is None:
-            c_exception.RootOfCircuitIsNotSetException()
+            raise c_exception.RootOfCircuitIsNotSetException()
 
         self.__check_assumption_set_and_exist_quantification_set(assumption_set, exist_quantification_set)
 
@@ -723,7 +721,7 @@ class Circuit:
 
         # Root of the circuit is not set
         if self.__root is None:
-            c_exception.RootOfCircuitIsNotSetException()
+            raise c_exception.RootOfCircuitIsNotSetException()
 
         self.__check_assumption_set_and_exist_quantification_set(assumption_set, exist_quantification_set)
 
@@ -748,7 +746,7 @@ class Circuit:
 
         # Root of the circuit is not set
         if self.__root is None:
-            c_exception.RootOfCircuitIsNotSetException()
+            raise c_exception.RootOfCircuitIsNotSetException()
 
         # The default set is empty
         if not default_set:
@@ -787,7 +785,7 @@ class Circuit:
 
         # Root of the circuit is not set
         if self.__root is None:
-            c_exception.RootOfCircuitIsNotSetException()
+            raise c_exception.RootOfCircuitIsNotSetException()
 
         return self.__topological_ordering_recursion(self.__root.id, [])
 
@@ -902,9 +900,10 @@ class Circuit:
                     string = "\n".join((string,
                                         f"C {nt.name}: {self.__root.get_number_of_occurrences_node_type_in_circuit_counter_dict(nt)}"))
 
+            comments_temp = self.comments.replace("\n", ", ")
             string = "\n".join((string,
                                 "C",
-                                f"C {self.comments}"))
+                                f'C {comments_temp}'))
 
             # N line
             string = "\n".join(
@@ -969,9 +968,10 @@ class Circuit:
             return ""
 
     def __repr__(self):
+        comments_temp = self.comments.replace("\n", ", ")
         string_temp = " ".join((f"Name: {self.circuit_name}",
                                 f"Number of nodes: {str(self.number_of_nodes)}",
-                                f"Comments: {self.comments}"))
+                                f"Comments: {comments_temp}"))
 
         if self.__root is not None:
             string_temp = " ".join((string_temp,
