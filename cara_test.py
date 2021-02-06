@@ -1,9 +1,10 @@
 # Import
 import cara
 import argparse
+import warnings
+import tests.circuit.node_test as n_test
 import tests.formula.formula_test as f_test
 import tests.circuit.circuit_test as c_test
-import tests.circuit.node_test as n_test
 from tests.test_abstract import TestAbstract
 
 # Import exception
@@ -99,5 +100,8 @@ if __name__ == "__main__":
     # Parser
     parser = create_parser()
     args = parser.parse_args()
+
+    # Warning
+    warnings.simplefilter('ignore')
 
     main(args)

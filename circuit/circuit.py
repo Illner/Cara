@@ -29,12 +29,13 @@ class Circuit:
     Private str comments
     Private int size    # The number of edges in the circuit + the sizes of all leaves in the circuit
     Private CircuitTypeEnum circuit_type
+    
     Private Dict<int, NodeAbstract> id_node_dictionary              # key: id, value: node
     Private Dict<int, NodeAbstract> literal_node_dictionary         # key: literal, value: node
     Private List<NodeAbstract> constant_node_list                   # [False: node, True: node]
     Private Dict<int, NodeAbstract> variable_id_smooth_dictionary   # key: variable, value: id
 
-    private NodeAbstract root
+    Private NodeAbstract root
     """
 
     def __init__(self, dimacs_nnf_file_path: str = None, circuit_name: str = "Circuit"):
@@ -45,10 +46,10 @@ class Circuit:
         self.__circuit_name: str = circuit_name
         self.__circuit_type: Union[ct_enum.CircuitTypeEnum, None] = None
 
-        self.__id_node_dictionary: dict[int, NodeAbstract] = dict()  # initialization
-        self.__literal_node_dictionary: dict[int, NodeAbstract] = dict()  # initialization
-        self.__constant_node_list: list[Union[NodeAbstract, None]] = [None, None]  # initialization
-        self.__variable_id_smooth_dictionary: dict[int, int] = dict()  # initialization
+        self.__id_node_dictionary: dict[int, NodeAbstract] = dict()                 # initialization
+        self.__literal_node_dictionary: dict[int, NodeAbstract] = dict()            # initialization
+        self.__constant_node_list: list[Union[NodeAbstract, None]] = [None, None]   # initialization
+        self.__variable_id_smooth_dictionary: dict[int, int] = dict()               # initialization
 
         self.__root: Union[NodeAbstract, None] = None
         # endregion
@@ -285,6 +286,7 @@ class Circuit:
         """
 
         node = self.get_node(id_node)
+
         # The node does not exist in the circuit
         if node is None:
             raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(id_node))
@@ -342,6 +344,26 @@ class Circuit:
 
         for node in node_set:
             self.__size += node.node_size()
+
+    def __add_edge(self, from_node: NodeAbstract, to_node: NodeAbstract, call_update: bool = True) -> None:
+        """
+        Add an oriented edge (from_node -> to_node) in the circuit.
+        :param call_update: True for calling the update function after this modification.
+        If the parameter is set to False, then the circuit may be inconsistent after this modification.
+        """
+
+        to_node._add_parent(from_node)
+        from_node._add_child(to_node, call_update)
+
+    def __remove_edge(self, from_node: NodeAbstract, to_node: NodeAbstract, call_update: bool = True) -> None:
+        """
+        Remove an oriented edge (from_node -> to_node) in the circuit.
+        :param call_update: True for calling the update function after this modification.
+        If the parameter is set to False, then the circuit may be inconsistent after this modification.
+        """
+
+        to_node._remove_parent(from_node)
+        from_node._remove_child(to_node, call_update)
     # endregion
 
     # region Static method
@@ -374,8 +396,7 @@ class Circuit:
 
         if intersection_set_temp:
             if error:
-                raise c_exception.AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(
-                    intersection_set_temp, assumption_and_exist_set)
+                raise c_exception.AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(intersection_set_temp, assumption_and_exist_set)
             else:
                 return False
 
@@ -383,8 +404,7 @@ class Circuit:
         for var in exist_quantification_set:
             if var <= 0:
                 set_name_temp = "existential quantification set" if assumption_and_exist_set else "default set"
-                raise c_exception.SetContainsLiteralsButOnlyVariablesAreAllowedException(set_name_temp,
-                                                                                         exist_quantification_set)
+                raise c_exception.SetContainsLiteralsButOnlyVariablesAreAllowedException(set_name_temp, exist_quantification_set)
 
         # Check complementary literals in the assumption set
         complementary_literals_set_temp = set()
@@ -394,13 +414,11 @@ class Circuit:
 
         if complementary_literals_set_temp:
             if error:
-                raise c_exception.AssumptionSetContainsComplementLiteralsException(complementary_literals_set_temp,
-                                                                                   assumption_and_exist_set)
+                raise c_exception.AssumptionSetContainsComplementLiteralsException(complementary_literals_set_temp, assumption_and_exist_set)
             else:
                 return False
 
         return True
-
     # endregion
 
     # region Public method
@@ -489,8 +507,7 @@ class Circuit:
 
             # The child's id does not exist in the circuit
             if child_temp is None:
-                raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(child_id),
-                                                                           "trying to create an AND node with a nonexisting child")
+                raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(child_id), "trying to create an AND node with a nonexisting child")
 
             child_node_set.add(child_temp)
 
@@ -518,8 +535,7 @@ class Circuit:
 
             # The child's id does not exist in the circuit
             if child_temp is None:
-                raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(child_id),
-                                                                           "trying to create an OR node with a nonexisting child")
+                raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(child_id), "trying to create an OR node with a nonexisting child")
 
             child_node_set.add(child_temp)
 
@@ -563,11 +579,9 @@ class Circuit:
         true_node_temp = self.get_node(true_node_id)
         false_node_temp = self.get_node(false_node_id)
         if true_node_temp is None:
-            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(true_node_id),
-                                                                       message_extension="decision node (true_node)")
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(true_node_id), message_extension="decision node (true_node)")
         if false_node_temp is None:
-            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(false_node_id),
-                                                                       message_extension="decision node (false_node)")
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(false_node_id), message_extension="decision node (false_node)")
 
         true_literal_leaf_id = self.create_literal_leaf(variable)
         false_literal_leaf_id = self.create_literal_leaf(-variable)
@@ -616,20 +630,22 @@ class Circuit:
         :param node_id: the node's ID
         """
 
-        self.__root = self.get_node(node_id)
+        root_temp = self.get_node(node_id)
+
+        # The node's id does not exist in the circuit
+        if root_temp is None:
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(node_id))
+
+        self.__root = root_temp
 
         # Recheck the type of the circuit
         self.check_circuit_type()
         # Recompute the size of the circuit
         self.__compute_size_of_circuit()
 
-        # The node's id does not exist in the circuit
-        if self.__root is None:
-            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(node_id))
-
     def check_circuit_type(self) -> None:
         """
-        Recheck the circuit type.
+        Check the circuit type.
         If the root of the circuit is not set, None is set.
         """
 
@@ -765,11 +781,71 @@ class Circuit:
         Smooth the circuit
         """
 
-        # Root of the circuit is not set
-        if self.__root is None:
+        # Root of the circuit is not set or the root is a leaf
+        if (self.__root is None) or (isinstance(self.__root, LeafAbstract)):
             return
 
-        self.__root.smooth(self.__smooth_create_and_node)
+        # The circuit is already smooth
+        if self.__root.smoothness_in_circuit:
+            return
+
+        node_in_circuit_set = self.__root._get_node_in_circuit_set()
+        for node in node_in_circuit_set:
+            # The node is not an inner node
+            if not isinstance(node, OrInnerNode):
+                continue
+
+            # The node is smooth
+            if node.smoothness:
+                continue
+
+            union_variable_set = node._get_variable_in_circuit_set()
+            child_set = node._get_child_set(True)
+            for child in child_set:
+                difference_set = union_variable_set.difference(child._get_variable_in_circuit_set())
+
+                # The difference set is not empty
+                if difference_set:
+                    and_node = self.__smooth_create_and_node(child.id, difference_set)
+
+                    self.__remove_edge(node, child, False)
+                    self.__add_edge(node, and_node, False)
+
+        # Update properties for all inner nodes in the circuit
+        leaf_set = set()
+        inner_node_set = set()
+
+        inner_node_set_temp = set()
+        for id in self.__id_node_dictionary:
+            node_temp = self.get_node(id)
+            if isinstance(node_temp, LeafAbstract):
+                leaf_set.add(node_temp)
+                inner_node_set_temp.update(node_temp._get_parent_set())
+
+        visited_inner_node_set = leaf_set
+
+        # Get only those inner nodes whose children are only leaves
+        for inner_node in inner_node_set_temp:
+            child_set = inner_node._get_child_set()
+
+            if len(child_set.intersection(leaf_set)) == len(child_set):
+                inner_node_set.add(inner_node)
+
+        while inner_node_set:
+            inner_node_set_temp = set()
+
+            for inner_node in inner_node_set:
+                inner_node._update(False)
+                visited_inner_node_set.add(inner_node)
+
+                # Add parents whose all children are visited nodes
+                parent_set = inner_node._get_parent_set()
+                for parent in parent_set:
+                    child_set = parent._get_child_set()
+                    if len(child_set.intersection(visited_inner_node_set)) == len(child_set):
+                        inner_node_set_temp.add(parent)
+
+            inner_node_set = inner_node_set_temp
 
         # Recheck the type of the circuit
         self.check_circuit_type()
@@ -855,29 +931,24 @@ class Circuit:
         from_node = self.get_node(from_id_node)
         to_node = self.get_node(to_id_node)
         if from_node is None:
-            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(from_id_node),
-                                                                       message_extension="add_edge (from_id_node)")
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(from_id_node), message_extension="add_edge (from_id_node)")
         if to_node is None:
-            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(to_id_node),
-                                                                       message_extension="add_edge (to_id_node)")
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(to_id_node), message_extension="add_edge (to_id_node)")
 
         # from_node is not an inner node
         if not isinstance(from_node, InnerNodeAbstract):
-            raise c_exception.SomethingWrongException(
-                f"trying to add an edge from the node ({from_id_node}) which is not an inner node")
+            raise c_exception.SomethingWrongException(f"trying to add an edge from the node ({from_id_node}) which is not an inner node")
 
         # The edge already exists
         if to_id_node in from_node.get_child_id_list():
             return
 
-        to_node._add_parent(from_node)
-        from_node._add_child(to_node)
+        self.__add_edge(from_node, to_node)
 
         # Recheck the type of the circuit
         self.check_circuit_type()
         # Recompute the size of the circuit
         self.__compute_size_of_circuit()
-
     # endregion
 
     # region Magic method
@@ -903,11 +974,10 @@ class Circuit:
             comments_temp = self.comments.replace("\n", ", ")
             string = "\n".join((string,
                                 "C",
-                                f'C {comments_temp}'))
+                                f"C {comments_temp}"))
 
             # N line
-            string = "\n".join(
-                (string, f"nnf {str(self.real_number_of_nodes)} {str(self.size)} {str(self.number_of_variables)}"))
+            string = "\n".join((string, f"nnf {str(self.real_number_of_nodes)} {str(self.size)} {str(self.number_of_variables)}"))
 
             # Node line
             for node_id in topological_ordering:
@@ -987,7 +1057,6 @@ class Circuit:
             string_temp = "\n".join((string_temp, repr(self.__id_node_dictionary[key])))
 
         return string_temp
-
     # endregion
 
     # region Property

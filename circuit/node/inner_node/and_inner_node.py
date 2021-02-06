@@ -147,16 +147,4 @@ class AndInnerNode(InnerNodeAbstract):
             self._add_minimal_default_cardinality_cache(key, default_cardinality)
 
         return default_cardinality
-
-    def smooth(self, smooth_create_and_node_function) -> None:
-        # The circuit is already smooth
-        if self.smoothness_in_circuit:
-            return
-
-        for child in self._child_set:
-            child.smooth(smooth_create_and_node_function)
-
-            # Check if smoothness has changed
-            if self.smoothness_in_circuit:
-                return
     # endregion

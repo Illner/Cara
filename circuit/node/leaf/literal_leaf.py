@@ -67,9 +67,6 @@ class LiteralLeaf(LeafAbstract):
             return math.inf  # False
 
         return 0
-
-    def smooth(self, smooth_create_and_node_function) -> None:
-        return
     # endregion
 
     # endregion Magic method

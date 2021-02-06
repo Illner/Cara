@@ -1,5 +1,4 @@
 # Import
-import warnings
 from typing import Union
 from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
@@ -13,12 +12,6 @@ from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
 # Import exception
 import exception.circuit_exception as c_exception
-
-# Warning
-warnings.simplefilter('ignore')
-
-# PyCharm
-# noinspection PyMethodMayBeStatic
 
 
 class NodeTest(TestAbstract):

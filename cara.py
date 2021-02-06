@@ -1,6 +1,7 @@
 # Import
 import os.path
 import argparse
+import warnings
 
 # Import exception
 import exception.cara_exception as c_exception
@@ -158,5 +159,8 @@ if __name__ == "__main__":
     # Parser
     parser = create_parser()
     args = parser.parse_args()
+
+    # Warning
+    warnings.simplefilter('ignore', category=ResourceWarning)
 
     main(args)

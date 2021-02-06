@@ -37,9 +37,6 @@ class ConstantLeaf(LeafAbstract):
             return 0
         else:
             return math.inf
-
-    def smooth(self, smooth_create_and_node_function) -> None:
-        return
     # endregion
 
     # region Magic method

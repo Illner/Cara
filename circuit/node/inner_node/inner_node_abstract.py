@@ -1,9 +1,9 @@
 # Import
-from abc import ABC, abstractmethod
 from typing import Union, TypeVar
-from circuit.node.leaf.leaf_abstract import LeafAbstract
-from circuit.node.node_abstract import NodeAbstract
+from abc import ABC, abstractmethod
 from other.sorted_list import SortedList
+from circuit.node.node_abstract import NodeAbstract
+from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import exception
 import exception.circuit_exception as c_exception
@@ -99,7 +99,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             union_literal_set = union_literal_set.union(child._get_literal_in_circuit_set())
 
         return union_variable_set, union_literal_set
-
     # endregion
 
     # region Abstract method
@@ -110,7 +109,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     # endregion
 
     # region Protected method
-    def _update(self) -> None:
+    def _update(self, call_parent_update: bool = True) -> None:
         """
         Update the properties of the circuit.
         Called when something changes in the circuit and properties (nodes in the circuit, ...) need to be recomputed.
@@ -133,8 +132,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._check_properties_decomposable_deterministic_smoothness_in_circuit()
 
         # Notice my parents
-        for parent in self._parent_set:
-            parent._update()
+        if call_parent_update:
+            for parent in self._parent_set:
+                parent._update()
 
         # Clear caches
         self._clear_cache()
@@ -277,11 +277,13 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         self._parent_set.remove(parent_to_delete)
 
-    def _add_child(self, new_child: NodeAbstract) -> None:
+    def _add_child(self, new_child: NodeAbstract, call_update: bool = True) -> None:
         """
         Add the child (new_child) to the set of children (child_set).
         If the child already exists in the set, nothing happens.
         :param new_child: the new child
+        :param call_update: True for calling the update function after this modification.
+        If the parameter is set to False, then the circuit may be inconsistent after this modification.
         """
 
         # The child already exists in the list
@@ -290,13 +292,16 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         self._child_set.add(new_child)
 
-        self._update()
+        if call_update:
+            self._update()
 
-    def _remove_child(self, child_to_delete: NodeAbstract) -> None:
+    def _remove_child(self, child_to_delete: NodeAbstract, call_update: bool = True) -> None:
         """
         Remove the child (child_to_delete) from the set of children (child_set).
         If the child does not exist in the set, raise an exception (ChildDoesNotExistException).
         :param child_to_delete: the child
+        :param call_update: True for calling the update function after this modification.
+        If the parameter is set to False, then the circuit may be inconsistent after this modification.
         """
 
         # The child does not exist in the list
@@ -305,7 +310,38 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         self._child_set.remove(child_to_delete)
 
-        self._update()
+        if call_update:
+            self._update()
+
+    def _get_child_set(self, copy: bool = False) -> set[NodeAbstract]:
+        """
+        Getter - child_set
+        """
+
+        if copy:
+            return self._child_set.copy()
+
+        return self._child_set
+
+    def _get_parent_set(self, copy: bool = False) -> set[NodeAbstract]:
+        """
+        Getter - parent_set
+        """
+
+        if copy:
+            return self._parent_set.copy()
+
+        return self._parent_set
+
+    def _get_leaf_set(self, copy: bool = False) -> set[NodeAbstract]:
+        """
+        Getter - leaf_set
+        """
+
+        if copy:
+            return self._leaf_set.copy()
+
+        return self._leaf_set
     # endregion
 
     # region Public method
@@ -326,14 +362,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         else:
             return 0
 
-    def get_child_set(self) -> set[NodeAbstract]:
-        """
-        Return a COPY of the children set
-        :return: a copy of the children set
-        """
-
-        return self._child_set.copy()
-
     def get_child_id_list(self) -> list[int]:
         """
         Return a list which contains children's ID
@@ -346,7 +374,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             child_id_list.append(child.id)
 
         return child_id_list
-
     # endregion
 
     # region Override method
@@ -391,7 +418,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
                                     f"{nt.name}: {self.get_number_of_occurrences_node_type_in_circuit_counter_dict(nt)} "))
 
         return string_temp
-
     # endregion
 
     # region Property

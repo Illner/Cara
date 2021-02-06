@@ -50,7 +50,7 @@ class OrInnerNode(InnerNodeAbstract):
         if not len(child_set) or len(child_set) == 1:
             return True
 
-        warnings.warn("Warning: __is_deterministic_set is not implemented. Deterministic was set to True!")
+        warnings.warn("Warning: __is_deterministic_set is not implemented. Deterministic was set to True!", category=ResourceWarning)
         return True
 
     @staticmethod
@@ -193,34 +193,6 @@ class OrInnerNode(InnerNodeAbstract):
             self._add_minimal_default_cardinality_cache(key, default_cardinality)
 
         return default_cardinality
-
-    def smooth(self, smooth_create_and_node_function) -> None:
-        # The circuit is already smooth
-        if self.smoothness_in_circuit:
-            return
-
-        # This node is smooth, but the circuit is not
-        if self.smoothness:
-            for child in self._child_set:
-                child.smooth(smooth_create_and_node_function)
-
-            return
-
-        union_variable_set = self._get_variable_in_circuit_set()
-        for child in self._child_set:
-            difference_set = union_variable_set.difference(child._get_variable_in_circuit_set())
-
-            if difference_set:
-                and_node = smooth_create_and_node_function(child.id, difference_set)
-
-                child._remove_parent(self)
-                self._remove_child(child)
-
-                and_node._add_parent(self)
-                self._add_child(and_node)
-
-        for child in self._child_set:
-            child.smooth(smooth_create_and_node_function)
     # endregion
 
     # region Magic method

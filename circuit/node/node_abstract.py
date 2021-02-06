@@ -64,10 +64,6 @@ class NodeAbstract(ABC):
         pass
 
     @abstractmethod
-    def smooth(self, smooth_create_and_node_function) -> None:
-        pass
-
-    @abstractmethod
     def node_size(self) -> int:
         pass
     # endregion
@@ -356,7 +352,6 @@ class NodeAbstract(ABC):
         str_temp = ''.join((assumption_str_temp, exist_quantification_str_temp))
 
         return str_temp
-
     # endregion
 
     # region Magic method
@@ -379,7 +374,6 @@ class NodeAbstract(ABC):
         string_temp = " ".join((string_temp, str(node_id_in_circuit_sorted_list_temp)))
 
         return string_temp
-
     # endregion
 
     # region Property

@@ -55,6 +55,16 @@ class LeafAbstract(NodeAbstract, ABC):
         """
 
         self.__size = new_size
+
+    def _get_parent_set(self, copy: bool = False) -> set[NodeAbstract]:
+        """
+        Getter - parent_set
+        """
+
+        if copy:
+            return self.__parent_set.copy()
+
+        return self.__parent_set
     # endregion
 
     # region Override method
@@ -78,8 +88,4 @@ class LeafAbstract(NodeAbstract, ABC):
         string_temp = " ".join((string_temp, str(parent_id_sorted_list_temp)))
 
         return string_temp
-    # endregion
-
-    # region Property
-
     # endregion

@@ -6,9 +6,6 @@ from tests.test_abstract import TestAbstract
 # Import exception
 import exception.circuit_exception as c_exception
 
-# PyCharm
-# noinspection PyMethodMayBeStatic
-
 
 class CircuitTest(TestAbstract):
     __FOLDER: str = "circuit"

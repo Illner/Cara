@@ -1,6 +1,3 @@
-# Import
-
-
 # Import exception
 import exception.formula_exception as f_exception
 
@@ -11,21 +8,21 @@ class Cnf:
     """
 
     """
-    private str comments
-    private int number_of_clauses
-    private int real_number_of_clauses
-    private int number_of_variables
-    private int number_of_literals                      # 2 * number_of_variables
-    private List<Set<int>> cnf
-    private List<int> variable_list
-    private Set<int> variable_set
-    private List<int> literal_list
-    private Set<int> literal_set
+    Private str comments
+    Private int number_of_clauses
+    Private int real_number_of_clauses
+    Private int number_of_variables
+    Private int number_of_literals                      # 2 * number_of_variables
+    Private List<Set<int>> cnf
+    Private List<int> variable_list
+    Private Set<int> variable_set
+    Private List<int> literal_list
+    Private Set<int> literal_set
 
-    private Dict<int, Set<int>> adjacency_dictionary    # key: literal, value: a set of clauses where the literal appears
-    private Set<int> unit_clause_set                    # a set which contains all unit clauses
-    private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
-    private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with size k
+    Private Dict<int, Set<int>> adjacency_dictionary    # key: literal, value: a set of clauses where the literal appears
+    Private Set<int> unit_clause_set                    # a set which contains all unit clauses
+    Private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
+    Private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with size k
     """
 
     def __init__(self, dimacs_cnf_file_path: str):
