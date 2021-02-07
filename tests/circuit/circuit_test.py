@@ -26,6 +26,7 @@ class CircuitTest(TestAbstract):
         actual_result = "\n".join((actual_result, "Properties", self.__test_5(), ""))           # Test 5
         actual_result = "\n".join((actual_result, "Checking an assumption set and exist quantification set", self.__test_6(), ""))  # Test 6
         actual_result = "\n".join((actual_result, "Smoothness", self.__test_7(), ""))           # Test 7
+        actual_result = "\n".join((actual_result, "Leaf as root", self.__test_8(), ""))         # Test 8
 
         return actual_result
     # endregion
@@ -254,10 +255,10 @@ class CircuitTest(TestAbstract):
             result = "\n".join((result, "Comment"))
             # New comment
             circuit.set_comments("New comment 1\nNew comment 2")
-            result = "\n".join((result, "New comments", str(circuit)))
+            result = "\n".join((result, "New comments", str(circuit), ""))
             # Clear comment
             circuit.clear_comments()
-            result = "\n".join((result, "Clear comments", str(circuit)))
+            result = "\n".join((result, "Clear comments", str(circuit), ""))
 
             # Modification
             result = "\n".join((result, "Modification"))
@@ -282,6 +283,15 @@ class CircuitTest(TestAbstract):
             node_id = circuit.create_decision_node(1, max_id, 26)
             circuit.set_root(node_id)
             result = "\n".join((result, f"Add a decision node", f"{repr(circuit)}"))
+
+            # Add a constant leaf
+            constant_list = [True, False, True, False]
+            for constant in constant_list:
+                node_id_temp = circuit.create_constant_leaf(constant)
+                result = "\n".join((result, f"Add a constant leaf ({constant})", f"Node id: {node_id_temp}"))
+
+            or_node_id_temp = circuit.create_or_node({circuit.create_constant_leaf(True), circuit.create_constant_leaf(False)})
+            circuit.add_edge(29, or_node_id_temp)
 
             # Add an edge / is connected
             result = "\n".join((result, "Add an edge / is connected", f"is connected: {circuit.is_circuit_connected()}"))
@@ -403,11 +413,44 @@ class CircuitTest(TestAbstract):
 
             try:
                 c, _ = circuit()
-                result = "\n".join((result, f"Smooth: {c.is_smooth()}", str(c), ""))
+                result = "\n".join((result, f"Smooth: {c.is_smooth()}", ""))
                 c.smooth()
-                result = "\n".join((result, f"Smooth: {c.is_smooth()}", str(c), ""))
+                result = "\n".join((result, f"Smooth: {c.is_smooth()}", ""))
             except c_exception.CircuitException as err:
                 result = "\n".join((result, str(err), ""))
+
+        return result
+
+    def __test_8(self) -> str:
+        """
+        A leaf as the root of the circuit.
+        """
+
+        result = ""
+
+        try:
+            circuit = Circuit()
+            id = circuit.create_literal_leaf(1)
+            circuit.set_root(id)
+
+            result = "\n".join((result, str(circuit), ""))
+
+            # Operations
+            result = "\n".join((result, f"Satisfiable: {circuit.is_satisfiable(set(), set())}"))
+            result = "\n".join((result, f"Clause entailment: {circuit.clause_entailment(set(), set())}"))
+            result = "\n".join((result, f"Model counting: {circuit.model_counting(set(), set())}"))
+            result = "\n".join((result, f"Minimum default-cardinality: {circuit.minimum_default_cardinality({1}, set())}", ""))
+
+            # Smooth
+            result = "\n".join((result, "Smooth", ""))
+            circuit.smooth()
+
+            # Properties
+            result = "\n".join((result, f"Decomposability: {circuit.is_decomposable()}, determinism: {circuit.is_deterministic()}, smoothness: {circuit.is_smooth()}, circuit type: {circuit.circuit_type.name}"))
+            result = "\n".join((result, f"is connected: {circuit.is_circuit_connected()}"))
+
+        except c_exception.CircuitException as err:
+            result = "\n".join((result, str(err)))
 
         return result
     # endregion

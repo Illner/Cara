@@ -99,7 +99,7 @@ class Circuit:
                     # N line has an invalid format
                     if len(line_array_temp) != 4:  # nnf number_of_nodes number_of_edges number_of_variables
                         raise c_exception.InvalidDimacsNnfFormatException(
-                            "nnf line has an invalid format. Valid format is 'nnf number_of_nodes number_of_edges number_of_variables'")
+                            "nnf line has an invalid format - valid format is 'nnf number_of_nodes number_of_edges number_of_variables'")
 
                     # Parse the parameters
                     try:
