@@ -2,6 +2,7 @@
 import warnings
 from typing import Union
 from sortedcontainers import SortedDict
+from other.sorted_list import SortedList
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.leaf.literal_leaf import LiteralLeaf
 from circuit.node.leaf.constant_leaf import ConstantLeaf
@@ -24,18 +25,19 @@ class Circuit:
     """
 
     """
-    Private str circuit_name
     Private int id_counter
     Private str comments
     Private int size    # The number of edges in the circuit + the sizes of all leaves in the circuit
     Private CircuitTypeEnum circuit_type
+    Private str circuit_name
+    Private NodeAbstract root
     
     Private Dict<int, NodeAbstract> id_node_dictionary              # key: id, value: node
-    Private Dict<int, NodeAbstract> literal_node_dictionary         # key: literal, value: node
-    Private List<NodeAbstract> constant_node_list                   # [False: node, True: node]
-    Private Dict<int, NodeAbstract> variable_id_smooth_dictionary   # key: variable, value: id
 
-    Private NodeAbstract root
+    Private Dict<int, NodeAbstract> literal_unique_node_cache       # key: literal, value: node
+    Private List<NodeAbstract> constant_unique_node_cache           # [False: node, True: node]
+    Private Dict<str, NodeAbstract> and_unique_node_cache           # key = {number >= 0}+
+    Private Dict<str, NodeAbstract> or_unique_node_cache            # key = {number >= 0}+
     """
 
     def __init__(self, dimacs_nnf_file_path: str = None, circuit_name: str = "Circuit"):
@@ -45,13 +47,14 @@ class Circuit:
         self.__size: Union[int, None] = None
         self.__circuit_name: str = circuit_name
         self.__circuit_type: Union[ct_enum.CircuitTypeEnum, None] = None
-
-        self.__id_node_dictionary: dict[int, NodeAbstract] = dict()                 # initialization
-        self.__literal_node_dictionary: dict[int, NodeAbstract] = dict()            # initialization
-        self.__constant_node_list: list[Union[NodeAbstract, None]] = [None, None]   # initialization
-        self.__variable_id_smooth_dictionary: dict[int, int] = dict()               # initialization
-
         self.__root: Union[NodeAbstract, None] = None
+
+        self.__id_node_dictionary: dict[int, NodeAbstract] = dict()
+
+        self.__literal_unique_node_cache: dict[int, NodeAbstract] = dict()
+        self.__constant_unique_node_cache: list[Union[NodeAbstract, None]] = [None, None]
+        self.__and_unique_node_cache: dict[str, NodeAbstract] = dict()
+        self.__or_unique_node_cache: dict[str, NodeAbstract] = dict()
         # endregion
 
         # The file with the circuit was given
@@ -118,12 +121,12 @@ class Circuit:
                 # Node line
                 # Constant leaf (TRUE)
                 if line == "A 0" or line == "a 0":
-                    root_id = self.create_constant_leaf(True)
+                    root_id = self.create_constant_leaf(True, use_unique_node_cache=False)
                     continue
 
                 # Constant leaf (FALSE)
                 if line == "O 0 0" or line == "O 0" or line == "o 0 0" or line == "o 0":
-                    root_id = self.create_constant_leaf(False)
+                    root_id = self.create_constant_leaf(False, use_unique_node_cache=False)
                     continue
 
                 # Literal leaf
@@ -141,7 +144,7 @@ class Circuit:
                         raise c_exception.InvalidDimacsNnfFormatException(
                             f"the literal ({line_array_temp[1]}) mentioned on line {line_id + 1} in the leaf node is not an integer")
 
-                    root_id = self.create_literal_leaf(literal_temp)
+                    root_id = self.create_literal_leaf(literal_temp, use_unique_node_cache=False)
                     continue
 
                 # AND node
@@ -179,7 +182,7 @@ class Circuit:
                         raise c_exception.InvalidDimacsNnfFormatException(
                             f"the c value or some id of a node ({line}) mentioned on line {line_id + 1} in the AND node is not an integer")
 
-                    root_id = self.create_and_node(child_id_set_temp)
+                    root_id = self.create_and_node(child_id_set_temp, use_unique_node_cache=False)
                     continue
 
                 # OR node
@@ -224,7 +227,7 @@ class Circuit:
                         raise c_exception.InvalidDimacsNnfFormatException(
                             f"the c value, j value or some id of a node ({line}) mentioned on line {line_id + 1} in the OR node is not an integer")
 
-                    root_id = self.create_or_node(child_id_set_temp, j_temp)
+                    root_id = self.create_or_node(child_id_set_temp, j_temp, use_unique_node_cache=False)
                     continue
 
                 raise c_exception.InvalidDimacsNnfFormatException(f"the line ({line_id + 1}) starts with an invalid char ({line})")
@@ -364,6 +367,17 @@ class Circuit:
 
         to_node._remove_parent(from_node)
         from_node._remove_child(to_node, call_update)
+
+    def __generate_key_cache(self, child_id_set: set[int]) -> str:
+        """
+        Generate a key for caching based on the children set.
+        Cache: and_unique_node_cache, or_unique_node_cache
+        :param child_id_set: the set of child's id
+        :return: the generated key based on the child_id_set
+        """
+
+        child_id_sorted_list = SortedList(child_id_set)
+        return child_id_sorted_list.str_delimiter("-")
     # endregion
 
     # region Static method
@@ -453,53 +467,61 @@ class Circuit:
 
         return self.__id_node_dictionary[id]
 
-    def create_constant_leaf(self, constant: bool) -> int:
+    def create_constant_leaf(self, constant: bool, use_unique_node_cache: bool = True) -> int:
         """
         Create a new constant leaf in the circuit.
         If the node already exists in the circuit, then new node will not be created, and the existed node will be used instead.
         :param constant: the value of the constant leaf
+        :param use_unique_node_cache: True if unique node caching can be used, otherwise False
         :return: the node's id
         """
 
         # The node already exists in the circuit
-        if self.__constant_node_list[int(constant)] is not None:
-            return self.__constant_node_list[int(constant)].id
+        if use_unique_node_cache and (self.__constant_unique_node_cache[int(constant)] is not None):
+            return self.__constant_unique_node_cache[int(constant)].id
 
         node = ConstantLeaf(constant, self.__get_new_id())
         self.__add_new_node(node)
-        self.__constant_node_list[int(constant)] = node
+        self.__constant_unique_node_cache[int(constant)] = node
 
         return node.id
 
-    def create_literal_leaf(self, literal: int) -> int:
+    def create_literal_leaf(self, literal: int, use_unique_node_cache: bool = True) -> int:
         """
         Create a new literal leaf in the circuit.
         If the node already exists in the circuit, then new node will not be created, and the existed node will be used instead.
         :param literal: the value of the literal leaf
+        :param use_unique_node_cache: True if unique node caching can be used, otherwise False
         :return: the node's id
         """
 
         # The node already exists in the circuit
-        if literal in self.__literal_node_dictionary:
-            return self.__literal_node_dictionary[literal].id
+        if use_unique_node_cache and (literal in self.__literal_unique_node_cache):
+            return self.__literal_unique_node_cache[literal].id
 
         node = LiteralLeaf(literal, self.__get_new_id())
         self.__add_new_node(node)
-        self.__literal_node_dictionary[literal] = node
+        self.__literal_unique_node_cache[literal] = node
 
         return node.id
 
-    def create_and_node(self, child_id_set: set[int]) -> int:
+    def create_and_node(self, child_id_set: set[int], use_unique_node_cache: bool = True) -> int:
         """
         Create a new AND node in the circuit.
         If some child's id does not exist in the circuit, raise an exception (NodeWithIDDoesNotExistInCircuitException).
         :param child_id_set: the set of child's id
+        :param use_unique_node_cache: True if unique node caching can be used, otherwise False
         :return: the node's id
         """
 
         # No child was given -> constant leaf (TRUE)
         if not len(child_id_set):
             return self.create_constant_leaf(True)
+
+        # Check if the node already exists in the cache
+        key_cache = self.__generate_key_cache(child_id_set)
+        if use_unique_node_cache and (key_cache in self.__and_unique_node_cache):
+            return self.__and_unique_node_cache[key_cache].id
 
         child_node_set = set()
         for child_id in child_id_set:
@@ -514,20 +536,29 @@ class Circuit:
         node = AndInnerNode(child_node_set, self.__get_new_id())
         self.__add_new_node(node)
 
+        # Cache
+        self.__and_unique_node_cache[key_cache] = node
+
         return node.id
 
-    def create_or_node(self, child_id_set: set[int], decision_variable: Union[int, None] = None) -> int:
+    def create_or_node(self, child_id_set: set[int], decision_variable: Union[int, None] = None, use_unique_node_cache: bool = True) -> int:
         """
         Create a new OR node in the circuit.
         If some child's id does not exist in the circuit, raise an exception (NodeWithIDDoesNotExistInCircuitException).
         :param child_id_set: the set of child's id
         :param decision_variable: The decision variable. If the decision variable does not exist, None is expected.
+        :param use_unique_node_cache: True if unique node caching can be used, otherwise False
         :return: the node's id
         """
 
         # No child was given -> constant leaf (FALSE)
         if not len(child_id_set):
             return self.create_constant_leaf(False)
+
+        # Check if the node already exists in the cache
+        key_cache = self.__generate_key_cache(child_id_set)
+        if use_unique_node_cache and (key_cache in self.__or_unique_node_cache):
+            return self.__or_unique_node_cache[key_cache].id
 
         child_node_set = set()
         for child_id in child_id_set:
@@ -539,28 +570,11 @@ class Circuit:
 
             child_node_set.add(child_temp)
 
-        # Smooth - (l) v (-l)
-        smooth_variable_temp = None
-        if len(child_node_set) == 2:
-            child_node_iterator_temp = iter(child_node_set)
-            node_1_temp = next(child_node_iterator_temp)
-            node_2_temp = next(child_node_iterator_temp)
-
-            if (node_1_temp.node_type == nt_enum.NodeTypeEnum.LITERAL) and \
-                    (node_2_temp.node_type == nt_enum.NodeTypeEnum.LITERAL) and \
-                    (node_1_temp.literal == -node_2_temp.literal):
-                smooth_variable_temp = abs(node_1_temp.literal)
-
-        # Smooth dictionary
-        if (smooth_variable_temp is not None) and (smooth_variable_temp in self.__variable_id_smooth_dictionary):
-            return self.__variable_id_smooth_dictionary[smooth_variable_temp]
-
         node = OrInnerNode(child_node_set, self.__get_new_id(), decision_variable=decision_variable)
         self.__add_new_node(node)
 
-        # Smooth dictionary
-        if smooth_variable_temp is not None:
-            self.__variable_id_smooth_dictionary[smooth_variable_temp] = node.id
+        # Cache
+        self.__or_unique_node_cache[key_cache] = node
 
         return node.id
 

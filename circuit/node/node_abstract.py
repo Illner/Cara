@@ -35,17 +35,17 @@ class NodeAbstract(ABC):
         self.__id = id
 
         self.__node_in_circuit_set: set[TNodeAbstract] = node_in_circuit_set
-        self.__variable_in_circuit_set: set[int] = set()  # initialization
+        self.__variable_in_circuit_set: set[int] = set()                        # initialization
         self.__variable_in_circuit_sorted_list: SortedList[int] = SortedList()  # initialization
-        self.__literal_in_circuit_set: set[int] = set()  # initialization
+        self.__literal_in_circuit_set: set[int] = set()                         # initialization
 
         self._set_variable_in_circuit_set(variable_in_circuit_set)
         self._set_literal_in_circuit_set(literal_in_circuit_set)
 
         # Cache
-        self.__satisfiable_cache: dict[str, bool] = dict()  # initialization
-        self.__model_counting_cache: dict[str, int] = dict()  # initialization
-        self.__minimal_default_cardinality_cache: dict[str, float] = dict()  # initialization
+        self.__satisfiable_cache: dict[str, bool] = dict()                      # initialization
+        self.__model_counting_cache: dict[str, int] = dict()                    # initialization
+        self.__minimal_default_cardinality_cache: dict[str, float] = dict()     # initialization
 
     # region Abstract method
     @abstractmethod

@@ -52,7 +52,7 @@ def test(test_instantiation: TestAbstract) -> str:
             result = "\n".join((test_instantiation.test_name, str(result_bool)))
         else:   # Test failed
             result = "\n".join((test_instantiation.test_name, str(result_bool),
-                                "Original result", result_tuple[0],
+                                # "Original result", result_tuple[0],
                                 "Actual result", result_tuple[1]))
     except t_exception.TestException as err:
         result = "\n".join((test_instantiation.test_name, str(err)))

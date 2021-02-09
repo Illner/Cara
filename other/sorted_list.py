@@ -7,4 +7,7 @@ class SortedList(sortedcontainers.SortedList):
         super().__init__(iterable, key)
 
     def __str__(self):
-        return " ".join(map(str, self))
+        return self.str_delimiter()
+
+    def str_delimiter(self, delimiter: str = " ") -> str:
+        return f"{delimiter}".join(map(str, self))
