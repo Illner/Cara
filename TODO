@@ -1,0 +1,50 @@
+Component
+Variables
+1) set[int] clause_id_set
+2) list[int] assignment_list
+
+3) Lazy structure
+
+Functions
+1) BCP
+2) Implicit BCP
+3) BackBone - .py
+4) Formula type
+
+5) Connected components (incrementally ??)
+6) create_new_component_list() -> list[Component]
+
+6) Add a literal to the assignment
+7) Remove a literal from the assignment
+
+8) Get_key_cache
+
+
+HyperGraph
+Variables
+1) CNF
+2) HyperGraph representation (fixed)
+dict<int, set[int]> - key - variable, value - a set of clause's id where the variable appears
+3) weights (node + edge) (AS-IS)
+
+4) Cache
+
+Function
+1) get_hyperGraph(clause_id_set: set[int], ignored_variable_set: set[int]) -> nodes and hyperEdges
+2) get_cutSet(clause_id_set: set[int], ignored_variable_set: set[int]) -> cutSet
+
+
+CNF
+Variables
+hyperGraph HyperGraph
+
+cache ??
+
+Function
+clause_to_dimacs(ignored_variable_list: list[int]) -> str
+dimacs(clause_id_set: set[int], ignored_variable_set: set[int]) -> str
+
+
+Solver
+Variables
+1) Learned clauses

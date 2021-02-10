@@ -13,3 +13,12 @@ from tests.circuit.circuit_test import CircuitTest
 
 # n = CircuitTest()
 # n.save()
+
+
+from formula.cnf import Cnf
+
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\large_cnf_valid.cnf"
+
+cnf = Cnf(path)
+
+print(cnf)

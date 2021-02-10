@@ -22,7 +22,7 @@ class Cnf:
     Private Dict<int, Set<int>> adjacency_dictionary    # key: literal, value: a set of clauses where the literal appears
     Private Set<int> unit_clause_set                    # a set which contains all unit clauses
     Private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
-    Private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with size k
+    Private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with the size k
     """
 
     def __init__(self, dimacs_cnf_file_path: str):
@@ -163,7 +163,8 @@ class Cnf:
 
     def __get_clause(self, clause_id: int) -> set[int]:
         """
-        Return a clause with the given identifier. If the clause does not exist, raise an exception (ClauseDoesNotExistException).
+        Return a clause with the given identifier.
+        If the clause does not exist, raise an exception (ClauseDoesNotExistException).
         :param clause_id: the identifier of the clause
         :return: the clause
         """
@@ -178,7 +179,8 @@ class Cnf:
     # region Public methods
     def get_clause(self, clause_id: int) -> set[int]:
         """
-        Return a clause with the given identifier. If the clause does not exist, raise an exception (ClauseDoesNotExistException).
+        Return a clause with the given identifier.
+        If the clause does not exist, raise an exception (ClauseDoesNotExistException).
         Copy is used!
         :param clause_id: the identifier of the clause
         :return: the clause
