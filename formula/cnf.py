@@ -25,6 +25,8 @@ class Cnf:
     Private Set<int> unit_clause_set                    # a set which contains all unit clauses
     Private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
     Private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with the size k
+    
+    Private Hypergraph hypergraph
     """
 
     def __init__(self, dimacs_cnf_file_path: str):
@@ -48,7 +50,11 @@ class Cnf:
 
         self.__create_cnf(dimacs_cnf_file_path)
 
-    # region Private methods
+        # Hypergraph
+        from formula.hypergraph import Hypergraph
+        self.__hypergraph: Hypergraph = Hypergraph(self)
+
+    # region Private method
     def __create_cnf(self, dimacs_cnf_file_path: str) -> None:
         """
         Convert the formula from the file into our structure
@@ -162,8 +168,32 @@ class Cnf:
             raise f_exception.InvalidDimacsCnfFormatException("file does not contain any clause")
 
         self.__unit_clause_set = self.__clause_size_list[1].copy()  # get unit clauses
+    # endregion
 
-    def __get_clause(self, clause_id: int) -> Set[int]:
+    # region Protected method
+    def _get_variable_set(self, copy: bool = False) -> Set[int]:
+        """
+        Return a set of variables
+        """
+
+        if copy:
+            return self.__variable_set.copy()
+
+        return self.__variable_set
+
+    def _get_clause_set(self, literal: int) -> Set[int]:
+        """
+        Return a set of clause's id, where the literal appears.
+        If the literal does not exist in the formula, an empty set is returned.
+        """
+
+        # The literal does not appear in any clause
+        if literal not in self.__adjacency_dictionary:
+            return set()
+
+        return self.__adjacency_dictionary[literal]
+
+    def _get_clause(self, clause_id: int) -> Set[int]:
         """
         Return a clause with the given identifier.
         If the clause does not exist, raise an exception (ClauseDoesNotExistException).
@@ -178,7 +208,7 @@ class Cnf:
         return self.__cnf[clause_id]
     # endregion
 
-    # region Public methods
+    # region Public method
     def get_clause(self, clause_id: int) -> Set[int]:
         """
         Return a clause with the given identifier.
@@ -188,14 +218,14 @@ class Cnf:
         :return: the clause
         """
 
-        return self.__get_clause(clause_id).copy()
+        return self._get_clause(clause_id).copy()
     # endregion
 
     # region Magic method
     def __str__(self):
         string_temp = "".join(f"Number of clauses: {self.__number_of_clauses}")
-        string_temp = "\n".join((string_temp, f"Real number of clauses: {self.__real_number_of_clauses}"))
-        string_temp = "\n".join((string_temp, f"Number of variables: {self.__number_of_variables}"))
+        string_temp = "\n".join((string_temp, f"Real number of clauses: {self.real_number_of_clauses}"))
+        string_temp = "\n".join((string_temp, f"Number of variables: {self.number_of_variables}"))
         string_temp = "\n".join((string_temp, f"Unit clauses: {self.__unit_clause_set}"))
         string_temp = "\n".join((string_temp, f"Unused variables: {self.__unused_variable_set}"))
         string_temp = "\n".join((string_temp, "\nComments: ", self.__comments))
@@ -227,4 +257,8 @@ class Cnf:
         """
 
         return self.__unit_clause_set.copy()
+
+    @property
+    def hypergraph(self):
+        return self.__hypergraph
     # endregion

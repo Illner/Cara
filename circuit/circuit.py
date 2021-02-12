@@ -388,7 +388,7 @@ class Circuit:
                                                             error: bool = True) -> bool:
         """
         Check if the assumption set and existential quantification set are valid.
-        The assumption set and existential quantification set must be disjoint (respect to variables).
+        The assumption set and existential quantification set must be disjoint (with respect to variables).
         No complementary literals can appear in the assumption set.
         If the sets are not valid, raise an exception (AssumptionSetAndExistentialQuantificationSetAreNotDisjointException,
         AssumptionSetContainsComplementLiteralsException, SetContainsLiteralsButOnlyVariablesAreAllowedException)

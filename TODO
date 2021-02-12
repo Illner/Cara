@@ -21,6 +21,9 @@ Functions
 
 
 HyperGraph
+V -> clause
+E -> variable
+
 Variables
 1) CNF
 2) HyperGraph representation (fixed)

@@ -2,7 +2,7 @@
 **Backdoor Decomposable Monotone Circuits (BDMC) compiler**
 
 ## Language
-Python 3.8.7
+Python 3.8.7 (64 bit)
 
 ## Packages
 * sortedcontainers 2.3.0

@@ -22,3 +22,4 @@ path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\
 cnf = Cnf(path)
 
 print(cnf)
+print(cnf.hypergraph)
