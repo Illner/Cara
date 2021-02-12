@@ -1,7 +1,7 @@
 # Import
 import os
-from typing import Union
 from abc import ABC, abstractmethod
+from typing import List, Tuple, Union
 
 # Import exception
 import exception.test_exception as t_exception
@@ -17,7 +17,7 @@ class TestAbstract(ABC):
 
         # File's variables initialization
         self.__path_dictionary: Union[str, None] = None
-        self._files: Union[list[(str, str)], None] = None
+        self._files: Union[List[Tuple[str, str]], None] = None
 
     # region Abstract method
     @abstractmethod
@@ -91,7 +91,7 @@ class TestAbstract(ABC):
     # endregion
 
     # region Private method
-    def __get_files(self) -> list[(str, str)]:
+    def __get_files(self) -> List[Tuple[str, str]]:
         """
         Return a list of all files (name, path) in the dictionary (_path_dictionary)
         :return: list of files

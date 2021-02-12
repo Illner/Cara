@@ -1,4 +1,5 @@
 # Import enum
+from typing import Set
 import circuit.node.node_type_enum as nt_enum
 
 
@@ -175,7 +176,7 @@ class AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(Circui
     Can be used for an observation set and default set as well (assumption_and_exist_set = False).
     """
 
-    def __init__(self, variable_union_set: set[int], assumption_and_exist_set: bool = True):
+    def __init__(self, variable_union_set: Set[int], assumption_and_exist_set: bool = True):
         assumption_set_name_temp = "assumption set" if assumption_and_exist_set else "observation set"
         exist_quantification_set_name_temp = "existential quantification set" if assumption_and_exist_set else "default set"
 
@@ -189,7 +190,7 @@ class AssumptionSetContainsComplementLiteralsException(CircuitException):
     Can be used for an observation set as well (assumption_set = False).
     """
 
-    def __init__(self, complement_literals_set: set[int], assumption_set: bool = True):
+    def __init__(self, complement_literals_set: Set[int], assumption_set: bool = True):
         assumption_set_name_temp = "assumption set" if assumption_set else "observation set"
 
         self.message = f"The {assumption_set_name_temp} contains complement literals ({complement_literals_set})!"
@@ -201,6 +202,6 @@ class SetContainsLiteralsButOnlyVariablesAreAllowedException(CircuitException):
     The set contains literals, but only variables are allowed
     """
 
-    def __init__(self, set_name: str, variable_set: set[int]):
+    def __init__(self, set_name: str, variable_set: Set[int]):
         self.message = f"The set ({set_name}) contains literals, but only variables are allowed ({variable_set}!)"
         super().__init__(self.message)

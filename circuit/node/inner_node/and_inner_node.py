@@ -1,4 +1,5 @@
 # Import
+from typing import Set
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
@@ -14,14 +15,14 @@ class AndInnerNode(InnerNodeAbstract):
     Circuit AND inner node representation
     """
 
-    def __init__(self, child_set: set[NodeAbstract], id: int = 0):
+    def __init__(self, child_set: Set[NodeAbstract], id: int = 0):
         decomposable_temp = self.__is_decomposable_set(child_set)
 
         super().__init__(id, nt_enum.NodeTypeEnum.AND_NODE, child_set, decomposable=decomposable_temp)
 
     # region Private method
     @staticmethod
-    def __is_decomposable_set(child_set: set[NodeAbstract]) -> bool:
+    def __is_decomposable_set(child_set: Set[NodeAbstract]) -> bool:
         """
         Check if the node is decomposable
         :param child_set: the children set
@@ -58,7 +59,7 @@ class AndInnerNode(InnerNodeAbstract):
     def _update_properties(self) -> None:
         self._set_decomposable(self._is_decomposable())
 
-    def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> bool:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Satisfiability is not supported if the circuit is not decomposable.")
@@ -88,7 +89,7 @@ class AndInnerNode(InnerNodeAbstract):
 
         return result
 
-    def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> int:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Model counting is not supported if the circuit is not decomposable.")
@@ -122,7 +123,7 @@ class AndInnerNode(InnerNodeAbstract):
 
         return number_of_models
 
-    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_caches: bool = True) -> float:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Minimum default-cardinality is not supported if the circuit is not decomposable.")

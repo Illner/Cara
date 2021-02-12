@@ -2,12 +2,14 @@
 **Backdoor Decomposable Monotone Circuits (BDMC) compiler**
 
 ## Language
-Python 3.9.1
+Python 3.8.7
 
 ## Packages
 * sortedcontainers 2.3.0
+* python-sat 0.1.6.dev11
+* kahypar 1.1.6
 
-You can install all required packages to central user packages repository using **pip3 install --user sortedcontainers==2.3.0**
+You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11 kahypar==1.1.6**
 
 ## Arguments
 **Cara [-h] [-ct {D_BDMC,SD_BDMC}] [-ss {MiniSAT,Glucose,Lingeling,CaDiCal}] [-cc {C2D,NONE}] [-il {BCP,IMPLICIT_BCP,BACKBONE,NONE}] [-bc {LITERAL,QUADRATIC,MATCHED,HORN,HIDDEN_HORN,Q_HORN}] [-dd | -sd] [-v]

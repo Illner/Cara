@@ -1,5 +1,6 @@
 # Import
 import math
+from typing import Set
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import enum
@@ -20,19 +21,19 @@ class ConstantLeaf(LeafAbstract):
         super().__init__(id, nt_enum.NodeTypeEnum.CONSTANT, set(), set())
 
     # region Override method
-    def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> bool:
         if self.constant:
             return True
         else:
             return False
 
-    def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> int:
         if self.constant:
             return 1
         else:
             return 0
 
-    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_caches: bool = True) -> float:
         if self.constant:
             return 0
         else:

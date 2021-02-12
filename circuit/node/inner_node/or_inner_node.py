@@ -1,7 +1,7 @@
 # Import
 import math
 import warnings
-from typing import Union
+from typing import Set, Union
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
@@ -21,7 +21,7 @@ class OrInnerNode(InnerNodeAbstract):
     Private int decision_variable
     """
 
-    def __init__(self, child_set: set[NodeAbstract], id: int = 0,
+    def __init__(self, child_set: Set[NodeAbstract], id: int = 0,
                  decision_variable: Union[int, None] = None):
         if decision_variable is None:
             deterministic_temp = self.__is_deterministic_set(child_set)
@@ -39,7 +39,7 @@ class OrInnerNode(InnerNodeAbstract):
 
     # region Static method
     @staticmethod
-    def __is_deterministic_set(child_set: set[NodeAbstract]) -> bool:
+    def __is_deterministic_set(child_set: Set[NodeAbstract]) -> bool:
         """
         Check if the node is deterministic
         :param child_set: the children set
@@ -54,7 +54,7 @@ class OrInnerNode(InnerNodeAbstract):
         return True
 
     @staticmethod
-    def __is_smooth_set(child_set: set[NodeAbstract]) -> bool:
+    def __is_smooth_set(child_set: Set[NodeAbstract]) -> bool:
         """
         Check if the node is smooth
         :param child_set: the children set
@@ -99,7 +99,7 @@ class OrInnerNode(InnerNodeAbstract):
         self._set_deterministic(self._is_deterministic())
         self._set_smoothness(self._is_smooth())
 
-    def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> bool:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Satisfiability is not supported if the circuit is not decomposable.")
@@ -129,7 +129,7 @@ class OrInnerNode(InnerNodeAbstract):
 
         return result
 
-    def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> int:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Model counting is not supported if the circuit is not decomposable.")
@@ -163,7 +163,7 @@ class OrInnerNode(InnerNodeAbstract):
 
         return number_of_models
 
-    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_caches: bool = True) -> float:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Minimum default-cardinality is not supported if the circuit is not decomposable.")

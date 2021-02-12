@@ -1,7 +1,8 @@
 # Import
 from abc import ABC
-from circuit.node.node_abstract import NodeAbstract
+from typing import Set
 from other.sorted_list import SortedList
+from circuit.node.node_abstract import NodeAbstract
 
 # Import exception
 import exception.circuit_exception as c_exception
@@ -21,8 +22,8 @@ class LeafAbstract(NodeAbstract, ABC):
     """
 
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
-                 variable_in_circuit_set: set[int], literal_in_circuit_set: set[int], size: int = 0):
-        self.__parent_set: set[NodeAbstract] = set()
+                 variable_in_circuit_set: Set[int], literal_in_circuit_set: Set[int], size: int = 0):
+        self.__parent_set: Set[NodeAbstract] = set()
         self.__size: int = size
         super().__init__(id, node_type, variable_in_circuit_set, literal_in_circuit_set, {self})
 
@@ -56,7 +57,7 @@ class LeafAbstract(NodeAbstract, ABC):
 
         self.__size = new_size
 
-    def _get_parent_set(self, copy: bool = False) -> set[NodeAbstract]:
+    def _get_parent_set(self, copy: bool = False) -> Set[NodeAbstract]:
         """
         Getter - parent_set
         """

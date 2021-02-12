@@ -1,7 +1,7 @@
 # Import
-from typing import Union, TypeVar
 from abc import ABC, abstractmethod
 from other.sorted_list import SortedList
+from typing import Set, Dict, Union, TypeVar
 
 # Import enum
 import circuit.node.node_type_enum as nt_enum
@@ -29,37 +29,37 @@ class NodeAbstract(ABC):
     """
 
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
-                 variable_in_circuit_set: set[int], literal_in_circuit_set: set[int],
-                 node_in_circuit_set: set[TNodeAbstract]):
+                 variable_in_circuit_set: Set[int], literal_in_circuit_set: Set[int],
+                 node_in_circuit_set: Set[TNodeAbstract]):
         self.__node_type: nt_enum.NodeTypeEnum = node_type
         self.__id = id
 
-        self.__node_in_circuit_set: set[TNodeAbstract] = node_in_circuit_set
-        self.__variable_in_circuit_set: set[int] = set()                        # initialization
+        self.__node_in_circuit_set: Set[TNodeAbstract] = node_in_circuit_set
+        self.__variable_in_circuit_set: Set[int] = set()                        # initialization
         self.__variable_in_circuit_sorted_list: SortedList[int] = SortedList()  # initialization
-        self.__literal_in_circuit_set: set[int] = set()                         # initialization
+        self.__literal_in_circuit_set: Set[int] = set()                         # initialization
 
         self._set_variable_in_circuit_set(variable_in_circuit_set)
         self._set_literal_in_circuit_set(literal_in_circuit_set)
 
         # Cache
-        self.__satisfiable_cache: dict[str, bool] = dict()                      # initialization
-        self.__model_counting_cache: dict[str, int] = dict()                    # initialization
-        self.__minimal_default_cardinality_cache: dict[str, float] = dict()     # initialization
+        self.__satisfiable_cache: Dict[str, bool] = dict()                      # initialization
+        self.__model_counting_cache: Dict[str, int] = dict()                    # initialization
+        self.__minimal_default_cardinality_cache: Dict[str, float] = dict()     # initialization
 
     # region Abstract method
     @abstractmethod
-    def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int],
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int],
                        use_caches: bool = True) -> bool:
         pass
 
     @abstractmethod
-    def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int],
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int],
                        use_caches: bool = True) -> int:
         pass
 
     @abstractmethod
-    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int],
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int],
                                     use_caches: bool = True) -> float:
         pass
 
@@ -69,7 +69,7 @@ class NodeAbstract(ABC):
     # endregion
 
     # region Protected method
-    def _add_variable_in_circuit_set(self, variable_set: set[int]) -> None:
+    def _add_variable_in_circuit_set(self, variable_set: Set[int]) -> None:
         """
         Add the variables in the variable_set to the variable_in_circuit_set.
         If some variable already exists in the variable_in_circuit_set, nothing happens.
@@ -84,7 +84,7 @@ class NodeAbstract(ABC):
         # Update variable_in_circuit_set
         self.__variable_in_circuit_set.update(variable_set)
 
-    def _remove_variable_in_circuit_set(self, variable_to_delete_set: set[int]) -> None:
+    def _remove_variable_in_circuit_set(self, variable_to_delete_set: Set[int]) -> None:
         """
         Remove the variables in the variable_to_delete_set from the variable_in_circuit_set.
         If some variable does not exist in the variable_in_circuit_set, nothing happens.
@@ -99,7 +99,7 @@ class NodeAbstract(ABC):
         # Update variable_in_circuit_set
         self.__variable_in_circuit_set.difference_update(variable_to_delete_set)
 
-    def _set_variable_in_circuit_set(self, new_variable_in_circuit_set: set[int]) -> None:
+    def _set_variable_in_circuit_set(self, new_variable_in_circuit_set: Set[int]) -> None:
         """
         Setter - variable_in_circuit_set
         """
@@ -107,7 +107,7 @@ class NodeAbstract(ABC):
         self.__variable_in_circuit_set = new_variable_in_circuit_set
         self.__variable_in_circuit_sorted_list = SortedList(new_variable_in_circuit_set)
 
-    def _get_variable_in_circuit_set(self, copy: bool = False) -> set[int]:
+    def _get_variable_in_circuit_set(self, copy: bool = False) -> Set[int]:
         """
         Getter - variable_in_circuit_set
         """
@@ -126,7 +126,7 @@ class NodeAbstract(ABC):
 
         return variable in self.__variable_in_circuit_set
 
-    def _add_literal_in_circuit_set(self, literal_set: set[int]) -> None:
+    def _add_literal_in_circuit_set(self, literal_set: Set[int]) -> None:
         """
         Add the literals in the literal_set to the literal_in_circuit_set.
         If some literal already exists in the literal_in_circuit_set, nothing happens.
@@ -135,7 +135,7 @@ class NodeAbstract(ABC):
 
         self.__literal_in_circuit_set.update(literal_set)
 
-    def _remove_literal_in_circuit_set(self, literal_to_delete_set: set[int]) -> None:
+    def _remove_literal_in_circuit_set(self, literal_to_delete_set: Set[int]) -> None:
         """
         Remove the literals in the literal_to_delete_set from the literal_in_circuit_set.
         If some literal does not exist in the literal_in_circuit_set, nothing happens.
@@ -144,14 +144,14 @@ class NodeAbstract(ABC):
 
         self.__literal_in_circuit_set.difference_update(literal_to_delete_set)
 
-    def _set_literal_in_circuit_set(self, new_literal_in_circuit_set: set[int]) -> None:
+    def _set_literal_in_circuit_set(self, new_literal_in_circuit_set: Set[int]) -> None:
         """
         Setter - literal_in_circuit_set
         """
 
         self.__literal_in_circuit_set = new_literal_in_circuit_set
 
-    def _get_literal_in_circuit_set(self, copy: bool = False) -> set[int]:
+    def _get_literal_in_circuit_set(self, copy: bool = False) -> Set[int]:
         """
         Getter - literal_in_circuit_set
         """
@@ -170,7 +170,7 @@ class NodeAbstract(ABC):
 
         return literal in self.__literal_in_circuit_set
 
-    def _add_node_in_circuit_set(self, node_set: set[TNodeAbstract]) -> None:
+    def _add_node_in_circuit_set(self, node_set: Set[TNodeAbstract]) -> None:
         """
         Add the nodes in the node_set to the node_in_circuit_set.
         If some node already exists in the node_in_circuit_set, nothing happens.
@@ -179,7 +179,7 @@ class NodeAbstract(ABC):
 
         self.__node_in_circuit_set = self.__node_in_circuit_set.union(node_set)
 
-    def _remove_node_in_circuit_set(self, node_to_delete_set: set[TNodeAbstract]) -> None:
+    def _remove_node_in_circuit_set(self, node_to_delete_set: Set[TNodeAbstract]) -> None:
         """
         Remove the nodes in the node_to_delete_set from the node_in_circuit_set.
         If some node does not exist in the node_in_circuit_set, nothing happens.
@@ -188,14 +188,14 @@ class NodeAbstract(ABC):
 
         self.__node_in_circuit_set = self.__node_in_circuit_set.difference(node_to_delete_set)
 
-    def _set_node_in_circuit_set(self, new_node_in_circuit_set: set[TNodeAbstract]) -> None:
+    def _set_node_in_circuit_set(self, new_node_in_circuit_set: Set[TNodeAbstract]) -> None:
         """
         Setter - variable_in_circuit_set
         """
 
         self.__node_in_circuit_set = new_node_in_circuit_set
 
-    def _get_node_in_circuit_set(self, copy: bool = False) -> set[TNodeAbstract]:
+    def _get_node_in_circuit_set(self, copy: bool = False) -> Set[TNodeAbstract]:
         """
         Getter - node_in_circuit_set
         """
@@ -317,7 +317,7 @@ class NodeAbstract(ABC):
         self._clear_model_counting_cache()
         self._clear_minimal_default_cardinality_cache()
 
-    def _generate_key_cache(self, assumption_set: set[int], exist_quantification_set: set[int]) -> str:
+    def _generate_key_cache(self, assumption_set: Set[int], exist_quantification_set: Set[int]) -> str:
         """
         Generate a key for caching.
         Cache: satisfiable_cache, model_counting_cache, minimal_default_cardinality_cache

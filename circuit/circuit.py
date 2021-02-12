@@ -1,8 +1,8 @@
 # Import
 import warnings
-from typing import Union
 from sortedcontainers import SortedDict
 from other.sorted_list import SortedList
+from typing import Set, Dict, List, Union
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.leaf.literal_leaf import LiteralLeaf
 from circuit.node.leaf.constant_leaf import ConstantLeaf
@@ -49,12 +49,12 @@ class Circuit:
         self.__circuit_type: Union[ct_enum.CircuitTypeEnum, None] = None
         self.__root: Union[NodeAbstract, None] = None
 
-        self.__id_node_dictionary: dict[int, NodeAbstract] = dict()
+        self.__id_node_dictionary: Dict[int, NodeAbstract] = dict()
 
-        self.__literal_unique_node_cache: dict[int, NodeAbstract] = dict()
-        self.__constant_unique_node_cache: list[Union[NodeAbstract, None]] = [None, None]
-        self.__and_unique_node_cache: dict[str, NodeAbstract] = dict()
-        self.__or_unique_node_cache: dict[str, NodeAbstract] = dict()
+        self.__literal_unique_node_cache: Dict[int, NodeAbstract] = dict()
+        self.__constant_unique_node_cache: List[Union[NodeAbstract, None]] = [None, None]
+        self.__and_unique_node_cache: Dict[str, NodeAbstract] = dict()
+        self.__or_unique_node_cache: Dict[str, NodeAbstract] = dict()
         # endregion
 
         # The file with the circuit was given
@@ -278,7 +278,7 @@ class Circuit:
 
         self.__id_node_dictionary[id_temp] = node
 
-    def __smooth_create_and_node(self, id_node: int, variable_set: set[int]) -> NodeAbstract:
+    def __smooth_create_and_node(self, id_node: int, variable_set: Set[int]) -> NodeAbstract:
         """
         This function is used for smoothing.
         id_node --> AND (id_node, (v_1 OR -v_1), (v_2 OR -v_2), ...)
@@ -305,7 +305,7 @@ class Circuit:
         and_node_id = self.create_and_node(child_id_set)
         return self.get_node(and_node_id)
 
-    def __topological_ordering_recursion(self, node_id: int, topological_ordering_list: list[int]) -> list[int]:
+    def __topological_ordering_recursion(self, node_id: int, topological_ordering_list: List[int]) -> List[int]:
         node = self.get_node(node_id)
 
         # The node does not exist in the circuit
@@ -368,7 +368,7 @@ class Circuit:
         to_node._remove_parent(from_node)
         from_node._remove_child(to_node, call_update)
 
-    def __generate_key_cache(self, child_id_set: set[int]) -> str:
+    def __generate_key_cache(self, child_id_set: Set[int]) -> str:
         """
         Generate a key for caching based on the children set.
         Cache: and_unique_node_cache, or_unique_node_cache
@@ -382,8 +382,8 @@ class Circuit:
 
     # region Static method
     @staticmethod
-    def __check_assumption_set_and_exist_quantification_set(assumption_set: set[int],
-                                                            exist_quantification_set: set[int],
+    def __check_assumption_set_and_exist_quantification_set(assumption_set: Set[int],
+                                                            exist_quantification_set: Set[int],
                                                             assumption_and_exist_set: bool = True,
                                                             error: bool = True) -> bool:
         """
@@ -505,7 +505,7 @@ class Circuit:
 
         return node.id
 
-    def create_and_node(self, child_id_set: set[int], use_unique_node_cache: bool = True) -> int:
+    def create_and_node(self, child_id_set: Set[int], use_unique_node_cache: bool = True) -> int:
         """
         Create a new AND node in the circuit.
         If some child's id does not exist in the circuit, raise an exception (NodeWithIDDoesNotExistInCircuitException).
@@ -541,7 +541,7 @@ class Circuit:
 
         return node.id
 
-    def create_or_node(self, child_id_set: set[int], decision_variable: Union[int, None] = None, use_unique_node_cache: bool = True) -> int:
+    def create_or_node(self, child_id_set: Set[int], decision_variable: Union[int, None] = None, use_unique_node_cache: bool = True) -> int:
         """
         Create a new OR node in the circuit.
         If some child's id does not exist in the circuit, raise an exception (NodeWithIDDoesNotExistInCircuitException).
@@ -693,7 +693,7 @@ class Circuit:
             else:
                 self.__circuit_type = ct_enum.CircuitTypeEnum.NNF
 
-    def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int],
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int],
                        use_caches: bool = True) -> bool:
         """
         Check if the circuit is satisfiable with the assumption set and existential quantification set
@@ -716,7 +716,7 @@ class Circuit:
 
         return self.__root.is_satisfiable(assumption_set, exist_quantification_set, use_caches)
 
-    def clause_entailment(self, clause: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
+    def clause_entailment(self, clause: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> bool:
         """
         Clause entailment
         Check if the clause is implied by the circuit
@@ -733,7 +733,7 @@ class Circuit:
 
         return not self.is_satisfiable(assumption_set, exist_quantification_set, use_caches)
 
-    def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int],
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int],
                        use_caches: bool = True) -> int:
         """
         Count the number of models with the assumption set and existential quantification set
@@ -758,7 +758,7 @@ class Circuit:
         self.smooth()
         return self.__root.model_counting(assumption_set, exist_quantification_set, use_caches)
 
-    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int],
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int],
                                     use_caches: bool = True) -> float:
         """
         Compute minimum default-cardinality of the circuit.
@@ -866,7 +866,7 @@ class Circuit:
         # Recompute the size of the circuit
         self.__compute_size_of_circuit()
 
-    def topological_ordering(self) -> list[int]:
+    def topological_ordering(self) -> List[int]:
         """
         Return a topological ordering of the circuit.
         If the root of the circuit is not set, raise an exception (RootOfCircuitIsNotSetUpException).

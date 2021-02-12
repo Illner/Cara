@@ -1,7 +1,7 @@
 # Import
-from typing import Union, TypeVar
 from abc import ABC, abstractmethod
 from other.sorted_list import SortedList
+from typing import Set, Dict, List, Union, TypeVar
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
@@ -33,16 +33,15 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     Private bool smoothness_in_circuit          # All nodes in the circuit satisfy smoothness
     """
 
-    def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum, child_set: set[NodeAbstract],
+    def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum, child_set: Set[NodeAbstract],
                  decomposable: bool = True, deterministic: bool = True, smoothness: bool = True):
-        self._child_set: set[NodeAbstract] = child_set
-        self._parent_set: set[TInnerNodeAbstract] = set()  # initialization
-        self.__node_type_in_circuit_counter_dict: Union[
-            dict[nt_enum.NodeTypeEnum.value, int], None] = None  # initialization
+        self._child_set: Set[NodeAbstract] = child_set
+        self._parent_set: Set[TInnerNodeAbstract] = set()  # initialization
+        self.__node_type_in_circuit_counter_dict: Union[Dict[nt_enum.NodeTypeEnum.value, int], None] = None  # initialization
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
 
-        self._leaf_set: set[LeafAbstract] = set()  # initialization
+        self._leaf_set: Set[LeafAbstract] = set()  # initialization
         node_in_circuit_set_temp = {self}  # initialization
         for child in child_set:
             node_in_circuit_set_temp = node_in_circuit_set_temp.union(child._get_node_in_circuit_set())
@@ -66,7 +65,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
     # region Static method
     @staticmethod
-    def __get_leaf_set(node: NodeAbstract) -> set[LeafAbstract]:
+    def __get_leaf_set(node: NodeAbstract) -> Set[LeafAbstract]:
         """
         Return a set of leaves in the circuit where the node is the root
         :param node: the node (root of the circuit)
@@ -84,7 +83,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             assert False
 
     @staticmethod
-    def _union_variable_and_literal_in_circuit_set_over_set(child_set: set[NodeAbstract]) -> (set[int], set[int]):
+    def _union_variable_and_literal_in_circuit_set_over_set(child_set: Set[NodeAbstract]) -> (Set[int], Set[int]):
         """
         Return a tuple of two sets, where the first set contains all variables that appear in the child_set and
         the second set contains all literals that appear in the child_set
@@ -119,7 +118,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._set_variable_in_circuit_set(variable_in_circuit_set_temp)
         self._set_literal_in_circuit_set(literal_in_circuit_set_temp)
 
-        self._leaf_set: set[LeafAbstract] = set()
+        self._leaf_set: Set[LeafAbstract] = set()
         node_in_circuit_set_temp = {self}
         for child in self._child_set:
             node_in_circuit_set_temp = node_in_circuit_set_temp.union(child._get_node_in_circuit_set())
@@ -241,7 +240,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         return self.__node_type_in_circuit_counter_dict
 
-    def _union_variable_and_literal_in_circuit_set_over_all_children(self) -> (set[int], set[int]):
+    def _union_variable_and_literal_in_circuit_set_over_all_children(self) -> (Set[int], Set[int]):
         """
         Return a tuple of two sets, where the first set contains all variables in the circuit and
         the second set contains all literals in the circuit
@@ -313,7 +312,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         if call_update:
             self._update()
 
-    def _get_child_set(self, copy: bool = False) -> set[NodeAbstract]:
+    def _get_child_set(self, copy: bool = False) -> Set[NodeAbstract]:
         """
         Getter - child_set
         """
@@ -323,7 +322,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         return self._child_set
 
-    def _get_parent_set(self, copy: bool = False) -> set[NodeAbstract]:
+    def _get_parent_set(self, copy: bool = False) -> Set[NodeAbstract]:
         """
         Getter - parent_set
         """
@@ -333,7 +332,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         return self._parent_set
 
-    def _get_leaf_set(self, copy: bool = False) -> set[NodeAbstract]:
+    def _get_leaf_set(self, copy: bool = False) -> Set[NodeAbstract]:
         """
         Getter - leaf_set
         """
@@ -362,7 +361,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         else:
             return 0
 
-    def get_child_id_list(self) -> list[int]:
+    def get_child_id_list(self) -> List[int]:
         """
         Return a list which contains children's ID
         :return: a children's ID list

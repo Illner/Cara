@@ -1,3 +1,6 @@
+# Import
+from typing import Set, Dict, List
+
 # Import exception
 import exception.formula_exception as f_exception
 
@@ -18,7 +21,6 @@ class Cnf:
     Private Set<int> variable_set
     Private List<int> literal_list
     Private Set<int> literal_set
-
     Private Dict<int, Set<int>> adjacency_dictionary    # key: literal, value: a set of clauses where the literal appears
     Private Set<int> unit_clause_set                    # a set which contains all unit clauses
     Private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
@@ -32,16 +34,16 @@ class Cnf:
         self.__real_number_of_clauses: int = 0
         self.__number_of_variables: int = 0
         self.__number_of_literals: int = 0
-        self.__cnf: list[set[int]] = []
-        self.__variable_list: list[int] = []
-        self.__variable_set: set[int] = set()
-        self.__literal_list: list[int] = []
-        self.__literal_set: set[int] = set()
+        self.__cnf: List[Set[int]] = []
+        self.__variable_list: List[int] = []
+        self.__variable_set: Set[int] = set()
+        self.__literal_list: List[int] = []
+        self.__literal_set: Set[int] = set()
 
-        self.__adjacency_dictionary: dict[int, set[int]] = dict()
-        self.__unit_clause_set: set[int] = set()
-        self.__unused_variable_set: set[int] = set()
-        self.__clause_size_list: list[set[int]] = []
+        self.__adjacency_dictionary: Dict[int, Set[int]] = dict()
+        self.__unit_clause_set: Set[int] = set()
+        self.__unused_variable_set: Set[int] = set()
+        self.__clause_size_list: List[Set[int]] = []
         # endregion
 
         self.__create_cnf(dimacs_cnf_file_path)
@@ -161,7 +163,7 @@ class Cnf:
 
         self.__unit_clause_set = self.__clause_size_list[1].copy()  # get unit clauses
 
-    def __get_clause(self, clause_id: int) -> set[int]:
+    def __get_clause(self, clause_id: int) -> Set[int]:
         """
         Return a clause with the given identifier.
         If the clause does not exist, raise an exception (ClauseDoesNotExistException).
@@ -177,7 +179,7 @@ class Cnf:
     # endregion
 
     # region Public methods
-    def get_clause(self, clause_id: int) -> set[int]:
+    def get_clause(self, clause_id: int) -> Set[int]:
         """
         Return a clause with the given identifier.
         If the clause does not exist, raise an exception (ClauseDoesNotExistException).
@@ -211,7 +213,7 @@ class Cnf:
         return self.__number_of_variables
 
     @property
-    def unused_variable_set(self) -> set[int]:
+    def unused_variable_set(self) -> Set[int]:
         """
         Copy is used!
         """
@@ -219,7 +221,7 @@ class Cnf:
         return self.__unused_variable_set.copy()
 
     @property
-    def unit_clause_set(self) -> set[int]:
+    def unit_clause_set(self) -> Set[int]:
         """
         Copy is used!
         """

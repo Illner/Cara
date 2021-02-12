@@ -1,5 +1,6 @@
 # Import
 import math
+from typing import Set
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import enum
@@ -24,7 +25,7 @@ class LiteralLeaf(LeafAbstract):
         super().__init__(id, nt_enum.NodeTypeEnum.LITERAL, {self.__variable}, {self.__literal})
 
     # region Override method
-    def is_satisfiable(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> bool:
         # The assumption set
         if self.literal in assumption_set:
             return True
@@ -37,7 +38,7 @@ class LiteralLeaf(LeafAbstract):
 
         return True
 
-    def model_counting(self, assumption_set: set[int], exist_quantification_set: set[int], use_caches: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> int:
         # The assumption set
         if self.literal in assumption_set:
             return 1
@@ -50,7 +51,7 @@ class LiteralLeaf(LeafAbstract):
 
         return 1
 
-    def minimum_default_cardinality(self, observation_set: set[int], default_set: set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_caches: bool = True) -> float:
         # The default set contains this variable
         if self.variable in default_set:
             if self.is_positive:

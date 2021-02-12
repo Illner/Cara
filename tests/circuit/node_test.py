@@ -1,5 +1,5 @@
 # Import
-from typing import Union
+from typing import List, Union
 from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
 from circuit.node.node_abstract import NodeAbstract
@@ -41,7 +41,7 @@ class NodeTest(TestAbstract):
 
     # region Static method
     @staticmethod
-    def __create_circuit_1() -> list[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def __create_circuit_1() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_1)
         Decomposable
@@ -61,7 +61,7 @@ class NodeTest(TestAbstract):
         return [n_0, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8]
 
     @staticmethod
-    def __create_circuit_2() -> list[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def __create_circuit_2() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_2)
         Non-decomposable
@@ -79,7 +79,7 @@ class NodeTest(TestAbstract):
         return [n_0, n_1, n_2, n_3, n_4, n_5, n_6]
 
     @staticmethod
-    def __create_circuit_3() -> list[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def __create_circuit_3() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_3)
         Decomposable
@@ -122,7 +122,7 @@ class NodeTest(TestAbstract):
                 n_17, n_18, n_19, n_20, n_21, n_22, n_23, n_24]
 
     @staticmethod
-    def __create_circuit_4() -> list[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def __create_circuit_4() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_4)
         Decomposable
@@ -162,7 +162,7 @@ class NodeTest(TestAbstract):
                 n_17, n_18, n_19, n_20, n_21]
 
     @staticmethod
-    def __create_circuit_5() -> list[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def __create_circuit_5() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_5)
         Decomposable
