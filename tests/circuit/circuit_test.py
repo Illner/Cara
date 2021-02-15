@@ -4,7 +4,7 @@ from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
 
 # Import exception
-import exception.circuit_exception as c_exception
+import exception.circuit.circuit_exception as c_exception
 
 
 class CircuitTest(TestAbstract):

@@ -12,7 +12,7 @@ from circuit.node.inner_node.and_inner_node import AndInnerNode
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
 # Import exception
-import exception.circuit_exception as c_exception
+import exception.circuit.circuit_exception as c_exception
 
 # Import enum
 import circuit.circuit_type_enum as ct_enum

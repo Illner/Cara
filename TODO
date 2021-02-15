@@ -51,3 +51,11 @@ dimacs(clause_id_set: set[int], ignored_variable_set: set[int]) -> str
 Solver
 Variables
 1) Learned clauses
+
+
+
+Others
+Second, the hypergraph
+partitioning algorithm requires a balance factor, which
+is used to enforce the balance constraint. We have found that
+a balance factor of 3/1 seems to generate good results

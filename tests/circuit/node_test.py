@@ -11,7 +11,7 @@ from circuit.node.inner_node.or_inner_node import OrInnerNode
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
 # Import exception
-import exception.circuit_exception as c_exception
+import exception.circuit.circuit_exception as c_exception
 
 
 class NodeTest(TestAbstract):

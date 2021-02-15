@@ -3,7 +3,7 @@ import formula.cnf as cnf
 from tests.test_abstract import TestAbstract
 
 # Import exception
-import exception.formula_exception as f_exception
+import exception.formula.formula_exception as f_exception
 
 
 class FormulaTest(TestAbstract):

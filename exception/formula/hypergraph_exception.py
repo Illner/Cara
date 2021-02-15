@@ -1,9 +1,9 @@
-class CaraException(Exception):
+class HypergraphException(Exception):
     def __init__(self, message: str):
         super().__init__(message)
 
 
-class SomethingWrongException(CaraException):
+class SomethingWrongException(HypergraphException):
     """
     Something wrong
     """

@@ -6,7 +6,7 @@ from circuit.node.node_abstract import NodeAbstract
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import exception
-import exception.circuit_exception as c_exception
+import exception.circuit.circuit_exception as c_exception
 
 # Import enum
 import circuit.node.node_type_enum as nt_enum

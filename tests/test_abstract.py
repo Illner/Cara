@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import List, Tuple, Union
 
 # Import exception
-import exception.test_exception as t_exception
+import exception.test.test_exception as t_exception
 
 
 class TestAbstract(ABC):

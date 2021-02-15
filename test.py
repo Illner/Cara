@@ -1,3 +1,5 @@
+import ctypes
+
 from circuit.node.leaf.constant_leaf import ConstantLeaf
 from circuit.node.leaf.literal_leaf import LiteralLeaf
 from circuit.node.inner_node.and_inner_node import AndInnerNode
@@ -23,3 +25,7 @@ cnf = Cnf(path)
 
 print(cnf)
 print(cnf.hypergraph)
+
+import other.environment
+
+print(other.environment.is_64bit())

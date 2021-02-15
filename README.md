@@ -5,11 +5,14 @@
 Python 3.8.7 (64 bit)
 
 ## Packages
-* sortedcontainers 2.3.0
-* python-sat 0.1.6.dev11
-* kahypar 1.1.6
+* <a href="https://pypi.org/project/sortedcontainers/">sortedcontainers</a> 2.3.0 (Windows / Linux / Mac)
+* <a href="https://pypi.org/project/python-sat/">python-sat</a> 0.1.6.dev11 (Windows / Linux / Mac)
 
-You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11 kahypar==1.1.6**
+## Software
+* <a href="http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview">hMETIS</a> 1.5.3 (Windows / Linux)
+* <a href="https://www.cc.gatech.edu/~umit/software.html">PaToH</a> 3.3 (Linux / Mac)
+
+You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11**
 
 ## Arguments
 **Cara [-h] [-ct {D_BDMC,SD_BDMC}] [-ss {MiniSAT,Glucose,Lingeling,CaDiCal}] [-cc {C2D,NONE}] [-il {BCP,IMPLICIT_BCP,BACKBONE,NONE}] [-bc {LITERAL,QUADRATIC,MATCHED,HORN,HIDDEN_HORN,Q_HORN}] [-dd | -sd] [-v]

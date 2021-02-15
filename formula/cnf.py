@@ -2,7 +2,7 @@
 from typing import Set, Dict, List
 
 # Import exception
-import exception.formula_exception as f_exception
+import exception.formula.formula_exception as f_exception
 
 
 class Cnf:

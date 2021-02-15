@@ -8,7 +8,7 @@ import tests.circuit.circuit_test as c_test
 from tests.test_abstract import TestAbstract
 
 # Import exception
-import exception.test_exception as t_exception
+import exception.test.test_exception as t_exception
 
 
 def main(args):
