@@ -53,3 +53,13 @@ class HyperedgeDoesNotExistException(HypergraphException):
     def __init__(self, hyperedge_id: int):
         self.message = f"The hyperedge ({hyperedge_id}) does not exist in the hypergraph!"
         super().__init__(self.message)
+
+
+class InvalidUBfactorException(HypergraphException):
+    """
+    Invalid UBfactor
+    """
+
+    def __init__(self, ub_factor: float):
+        self.message = f"The UBfactor ({ub_factor}) has to be a real number between 0.01 (1%) and 0.49 (49%)!"
+        super().__init__(self.message)

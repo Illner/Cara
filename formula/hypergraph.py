@@ -1,5 +1,6 @@
 # Import
 import os
+import subprocess
 from pathlib import Path
 from formula.cnf import Cnf
 import other.environment as env
@@ -22,6 +23,7 @@ class Hypergraph:
 
     """
     Private Cnf cnf
+    Private float ub_factor
     Private int number_of_nodes                         # number of clauses
     Private int number_of_hyperedges                    # number of variables
     Private Set<int> variable_set
@@ -38,13 +40,11 @@ class Hypergraph:
 
     # Static variable - Path
     TEMP_FOLDER_PATH = os.path.join(os.getcwd(), "temp")
-    WIN_PROGRAM_HMETIS_PATH = os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "hmetis.exe")
+    INPUT_FILE_EXE_HMETIS_PATH = os.path.join(TEMP_FOLDER_PATH, "input_file_hypergraph.graph")
+    OUTPUT_FILE_EXE_HMETIS_PATH = INPUT_FILE_EXE_HMETIS_PATH + ".part.2"
+    WIN_PROGRAM_EXE_HMETIS_PATH = os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe")
 
-    # TODO Cache
-    # TODO Cache enum
-    # TODO Cut_set enum
-
-    def __init__(self, cnf: Cnf, cache_enum: hc_enum.HypergraphCacheEnum = hc_enum.HypergraphCacheEnum.NONE,
+    def __init__(self, cnf: Cnf, ub_factor: float = 0.10, cache_enum: hc_enum.HypergraphCacheEnum = hc_enum.HypergraphCacheEnum.NONE,
                  node_weight_enum: hw_enum.HypergraphNodeWeightEnum = hw_enum.HypergraphNodeWeightEnum.NONE,
                  hyperedge_weight_enum: hw_enum.HypergraphHyperedgeWeightEnum = hw_enum.HypergraphHyperedgeWeightEnum.NONE,
                  software_enum: hs_enum.HypergraphSoftwareEnum = hs_enum.HypergraphSoftwareEnum.HMETIS):
@@ -56,6 +56,12 @@ class Hypergraph:
         self.__number_of_nodes: int = cnf.real_number_of_clauses
         self.__number_of_hyperedges: int = cnf.number_of_variables
         self.__variable_set: Set[int] = cnf._get_variable_set(copy=True)
+
+        # UBfactor
+        ub_factor = round(ub_factor, 2)
+        if ub_factor < 0.01 or ub_factor > 0.49:
+            raise h_exception.InvalidUBfactorException(ub_factor)
+        self.__ub_factor: float = ub_factor
 
         self.__node_weight_dictionary: Dict[int, int] = dict()
         self.__hyperedge_weight_dictionary: Dict[int, int] = dict()
@@ -93,12 +99,12 @@ class Hypergraph:
         # Node's weight
         if self.__node_weight_enum == hw_enum.HypergraphNodeWeightEnum.STATIC:
             for node in range(self.__number_of_nodes):
-                self.__node_weight_dictionary[node] = 1     # TODO
+                self.__node_weight_dictionary[node] = node + 1     # TODO
 
         # Hyperedge's weight
         if self.__hyperedge_weight_enum == hw_enum.HypergraphHyperedgeWeightEnum.STATIC:
             for hyperedge in self.__variable_set:
-                self.__hyperedge_weight_dictionary[hyperedge] = 1   # TODO
+                self.__hyperedge_weight_dictionary[hyperedge] = hyperedge   # TODO
 
     def __set_dynamic_weights(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> None:
         """
@@ -153,7 +159,7 @@ class Hypergraph:
         # Static/Dynamic weights
         if (self.__hyperedge_weight_enum == hw_enum.HypergraphHyperedgeWeightEnum.STATIC) or \
            (self.__hyperedge_weight_enum == hw_enum.HypergraphHyperedgeWeightEnum.DYNAMIC):
-            return self.__node_weight_dictionary[node_id]
+            return self.__hyperedge_weight_dictionary[hyperedge_id]
 
         raise c_exception.FunctionNotImplementedException("get_hyperedge_weight", f"this type of weights ({self.__hyperedge_weight_enum.name}) is not implemented")
 
@@ -170,9 +176,9 @@ class Hypergraph:
             if self.__software_enum == hs_enum.HypergraphSoftwareEnum.HMETIS:
                 Path(Hypergraph.TEMP_FOLDER_PATH).mkdir(exist_ok=True)
 
-                file_temp = Path(Hypergraph.WIN_PROGRAM_HMETIS_PATH)
+                file_temp = Path(Hypergraph.WIN_PROGRAM_EXE_HMETIS_PATH)
                 if not file_temp.exists():
-                    raise h_exception.FileIsMissingException(Hypergraph.WIN_PROGRAM_HMETIS_PATH)
+                    raise h_exception.FileIsMissingException(Hypergraph.WIN_PROGRAM_EXE_HMETIS_PATH)
                 return
 
             raise h_exception.SoftwareIsNotSupportedOnSystemException(self.__software_enum.name)
@@ -193,16 +199,112 @@ class Hypergraph:
         Generate a key for caching
         """
 
-        pass    # TODO
+        pass
 
     # region hMETIS
-    def __create_hypergraph_hmetis_exe(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> str:
-        # TODO
-        pass
+    def __create_hypergraph_hmetis_exe(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> Tuple[str, Dict[int, int]]:
+        """
+        Create an input file with the hypergraph for hMETIS.exe.
+        Hypergraph's nodes (clauses) are restricted to the clause_id_set and hyperedges (variables) are restricted to all
+        variables except those in the ignored_literal_set.
+        @param clause_id_set: the subset of clauses
+        @param ignored_literal_set: the ignored literals
+        @return: (file string, mapping from node_id (file) to clause_id (CNF))
+        """
+
+        clause_id_node_id_dictionary: Dict[int, int] = dict()   # Mapping clause_id -> node_id
+        node_id_clause_id_dictionary: Dict[int, int] = dict()   # Mapping node_id -> clause_id
+
+        number_of_nodes = 0
+        number_of_hyperedges = 0
+        string_hyperedge = "% Hyperedges"
+        string_weight = "% Weights"
+        variable_set = self.__variable_set.difference(ignored_literal_set)
+
+        # Hyperedges
+        for variable in variable_set:
+            occurrences_list = self.__hypergraph_dictionary[variable].intersection(clause_id_set)
+            if not occurrences_list:
+                continue
+
+            number_of_hyperedges += 1
+            line_temp = [self.__get_hyperedge_weight(variable)]
+            for clause_id in occurrences_list:
+                # Mapping
+                if clause_id not in clause_id_node_id_dictionary:
+                    number_of_nodes += 1
+                    clause_id_node_id_dictionary[clause_id] = number_of_nodes
+                    node_id_clause_id_dictionary[number_of_nodes] = clause_id
+
+                line_temp.append(clause_id_node_id_dictionary[clause_id])
+
+            string_hyperedge = "\n".join((string_hyperedge, " ".join(map(str, line_temp))))
+
+        # Weights
+        for node_id in range(1, number_of_nodes + 1):
+            string_weight = "\n".join((string_weight, str(self.__get_node_weight(node_id_clause_id_dictionary[node_id]))))
+
+        string_result = "\n".join((f"{number_of_hyperedges} {number_of_nodes} 11",
+                                   string_hyperedge,
+                                   string_weight))
+
+        return string_result, node_id_clause_id_dictionary
 
     def __get_cut_set_hmetis_exe(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> Set[int]:
-        # TODO
-        pass
+        """
+        Compute a cut set using hMETIS.exe
+        @param clause_id_set: the subset of clauses
+        @param ignored_literal_set: the ignored literals
+        @return: a cut set of the hypergraph
+        """
+
+        file_string, node_id_clause_id_dictionary = self.__create_hypergraph_hmetis_exe(clause_id_set, ignored_literal_set)
+
+        # Delete temp files
+        Path(Hypergraph.INPUT_FILE_EXE_HMETIS_PATH).unlink(missing_ok=True)
+        Path(Hypergraph.OUTPUT_FILE_EXE_HMETIS_PATH).unlink(missing_ok=True)
+
+        # Save the input file
+        with open(Hypergraph.INPUT_FILE_EXE_HMETIS_PATH, "w", encoding="utf8") as input_file:
+            input_file.write(file_string)
+
+        devnull = open(os.devnull, 'w')
+        subprocess.run([Hypergraph.WIN_PROGRAM_EXE_HMETIS_PATH, Hypergraph.INPUT_FILE_EXE_HMETIS_PATH, str(2), str(100 * self.__ub_factor)],
+                       stdout=devnull, stderr=devnull)
+
+        # The output file has not been generated => an error occurred
+        if not Path(Hypergraph.OUTPUT_FILE_EXE_HMETIS_PATH).exists():
+            raise h_exception.SomethingWrongException("the output file from hMETIS.exe has not been generated => an error occurred")
+
+        # Get the cut set
+        variable_partition_0_set = set()
+        variable_partition_1_set = set()
+        with open(Hypergraph.OUTPUT_FILE_EXE_HMETIS_PATH, "r", encoding="utf8") as output_file:
+            for line_id, line in enumerate(output_file.readlines()):
+                try:
+                    partition_temp = int(line)
+                except ValueError:
+                    raise h_exception.SomethingWrongException(f"partition ({line}) in the output file from hMETIS.exe is not a number")
+
+                if partition_temp != 0 and partition_temp != 1:
+                    raise h_exception.SomethingWrongException(f"invalid partition ({partition_temp}) in the output file from hMETIS.exe")
+
+                literal_set_temp = self.__cnf._get_clause(node_id_clause_id_dictionary[line_id + 1])
+                variable_set_temp = map(lambda l: abs(l), literal_set_temp)
+
+                if partition_temp == 0:
+                    variable_partition_0_set.update(variable_set_temp)
+                else:
+                    variable_partition_1_set.update(variable_set_temp)
+
+        cut_set = variable_partition_0_set.intersection(variable_partition_1_set)
+        cut_set.difference_update(ignored_literal_set)
+
+        # Delete temp files
+        Path(Hypergraph.INPUT_FILE_EXE_HMETIS_PATH).unlink(missing_ok=True)
+        Path(Hypergraph.OUTPUT_FILE_EXE_HMETIS_PATH).unlink(missing_ok=True)
+
+        return cut_set
     # endregion
     # endregion
 
@@ -222,6 +324,7 @@ class Hypergraph:
                 ignored_literal_set.add(-variable)
 
         cut_set = set()
+        self.__set_dynamic_weights(clause_id_set, ignored_literal_set)
 
         # TODO Cache
 

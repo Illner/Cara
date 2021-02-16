@@ -19,13 +19,11 @@ from tests.circuit.circuit_test import CircuitTest
 
 from formula.cnf import Cnf
 
+# path = r"C:\Users\illner\Desktop\temp.txt"
 path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\large_cnf_valid.cnf"
 
 cnf = Cnf(path)
 
-print(cnf)
-print(cnf.hypergraph)
-
-import other.environment
-
-print(other.environment.is_64bit())
+c = cnf.hypergraph.get_cut_set(set(list(range(cnf.real_number_of_clauses))), [])
+print(len(c))
+print(c)
