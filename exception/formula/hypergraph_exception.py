@@ -33,3 +33,23 @@ class SoftwareIsNotSupportedOnSystemException(HypergraphException):
     def __init__(self, software_name: str):
         self.message = f"The software ({software_name}) is not supported on the system!"
         super().__init__(self.message)
+
+
+class NodeDoesNotExistException(HypergraphException):
+    """
+    The node does not exist in the hypergraph
+    """
+
+    def __init__(self, node_id: int):
+        self.message = f"The node ({str(node_id)}) does not exist in the hypergraph!"
+        super().__init__(self.message)
+
+
+class HyperedgeDoesNotExistException(HypergraphException):
+    """
+    The hyperedge does not exist in the hypergraph
+    """
+
+    def __init__(self, hyperedge_id: int):
+        self.message = f"The hyperedge ({hyperedge_id}) does not exist in the hypergraph!"
+        super().__init__(self.message)

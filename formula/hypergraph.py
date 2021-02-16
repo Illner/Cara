@@ -6,11 +6,12 @@ import other.environment as env
 from typing import Set, Dict, List, Tuple
 
 # Import exception
+import exception.cara_exception as c_exception
 import exception.formula.hypergraph_exception as h_exception
 
 # Import enum
 import formula.hypergraph_cache_enum as hc_enum
-import formula.hypergraph_weight_enum as hw_enum
+import formula.hypergraph_weight_type_enum as hw_enum
 import formula.hypergraph_software_enum as hs_enum
 
 
@@ -25,11 +26,12 @@ class Hypergraph:
     Private int number_of_hyperedges                    # number of variables
     Private Set<int> variable_set
     Private HypergraphCacheEnum cache_enum
-    Private HypergraphWeightEnum weight_enum
+    Private HypergraphNodeWeightEnum node_weight_enum
+    Private HypergraphHyperedgeWeightEnum hyperedge_weight_enum
     Private HypergraphSoftwareEnum software_enum
     
-    Private Dict<int, int> node_static_weight_dictionary       # key: node = clause's id, value: the weight of the clause
-    Private Dict<int, int> hyperedge_static_weight_dictionary  # key: edge = variable, value: the weight of the variable
+    Private Dict<int, int> node_weight_dictionary       # key: node = clause's id, value: the weight of the clause
+    Private Dict<int, int> hyperedge_weight_dictionary  # key: edge = variable, value: the weight of the variable
     
     Private Dict<int, Set<int>> hypergraph_dictionary   # key: variable, value: a set of clauses where the variable appears
     """
@@ -43,18 +45,20 @@ class Hypergraph:
     # TODO Cut_set enum
 
     def __init__(self, cnf: Cnf, cache_enum: hc_enum.HypergraphCacheEnum = hc_enum.HypergraphCacheEnum.NONE,
-                 weight_enum: hw_enum.HypergraphWeightEnum = hw_enum.HypergraphWeightEnum.NONE,
+                 node_weight_enum: hw_enum.HypergraphNodeWeightEnum = hw_enum.HypergraphNodeWeightEnum.NONE,
+                 hyperedge_weight_enum: hw_enum.HypergraphHyperedgeWeightEnum = hw_enum.HypergraphHyperedgeWeightEnum.NONE,
                  software_enum: hs_enum.HypergraphSoftwareEnum = hs_enum.HypergraphSoftwareEnum.HMETIS):
         self.__cnf: Cnf = cnf
-        self.__cache_enum = cache_enum
-        self.__weight_enum = weight_enum
-        self.__software_enum = software_enum
+        self.__cache_enum: hc_enum.HypergraphCacheEnum = cache_enum
+        self.__node_weight_enum: hw_enum.HypergraphNodeWeightEnum = node_weight_enum
+        self.__hyperedge_weight_enum: hw_enum.HypergraphHyperedgeWeightEnum = hyperedge_weight_enum
+        self.__software_enum: hs_enum.HypergraphSoftwareEnum = software_enum
         self.__number_of_nodes: int = cnf.real_number_of_clauses
         self.__number_of_hyperedges: int = cnf.number_of_variables
         self.__variable_set: Set[int] = cnf._get_variable_set(copy=True)
 
-        self.__node_static_weight_dictionary: Dict[int, int] = dict()
-        self.__hyperedge_static_weight_dictionary: Dict[int, int] = dict()
+        self.__node_weight_dictionary: Dict[int, int] = dict()
+        self.__hyperedge_weight_dictionary: Dict[int, int] = dict()
 
         self.__hypergraph_dictionary: Dict[int, Set[int]] = dict()
 
@@ -63,7 +67,7 @@ class Hypergraph:
         self.__set_static_weights()
 
     # region Private method
-    def __create_hypergraph(self):
+    def __create_hypergraph(self) -> None:
         """
         Initialize the hypergraph
         Variable: hypergraph_dictionary
@@ -79,19 +83,79 @@ class Hypergraph:
 
             self.__hypergraph_dictionary[variable] = clause_temp
 
-    def __set_static_weights(self):
+    def __set_static_weights(self) -> None:
         """
-        Initialize the static weights
-        Variable: node_static_weight_dictionary, hyperedge_static_weight_dictionary
+        Initialize the static weights.
+        If the type of weights is not STATIC, nothing happens.
+        Variable: node_weight_dictionary, hyperedge_weight_dictionary
         """
 
         # Node's weight
-        for node in range(self.__number_of_nodes):
-            self.__node_static_weight_dictionary[node] = 1
+        if self.__node_weight_enum == hw_enum.HypergraphNodeWeightEnum.STATIC:
+            for node in range(self.__number_of_nodes):
+                self.__node_weight_dictionary[node] = 1     # TODO
 
         # Hyperedge's weight
-        for hyperedge in self.__variable_set:
-            self.__hyperedge_static_weight_dictionary[hyperedge] = 1
+        if self.__hyperedge_weight_enum == hw_enum.HypergraphHyperedgeWeightEnum.STATIC:
+            for hyperedge in self.__variable_set:
+                self.__hyperedge_weight_dictionary[hyperedge] = 1   # TODO
+
+    def __set_dynamic_weights(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> None:
+        """
+        Initialize the dynamic weights based on the clause_id_set and ignored_literal_set.
+        If the type of weights is not Dynamic, nothing happens.
+        Variable: node_weight_dictionary, hyperedge_weight_dictionary
+        """
+
+        # Node's weight
+        if self.__node_weight_enum == hw_enum.HypergraphNodeWeightEnum.DYNAMIC:
+            pass    # TODO
+
+        # Hyperedge's weight
+        if self.__hyperedge_weight_enum == hw_enum.HypergraphHyperedgeWeightEnum.DYNAMIC:
+            pass    # TODO
+
+    def __get_node_weight(self, node_id: int) -> int:
+        """
+        Return the weight of the node based on the node_weight_enum.
+        If the node does not exist in the hypergraph, raise an exception (NodeDoesNotExistException).
+        """
+
+        # The node does not exist in the hypergraph
+        if node_id < 0 or node_id >= self.__number_of_nodes:
+            raise h_exception.NodeDoesNotExistException(node_id)
+
+        # No weights
+        if self.__node_weight_enum == hw_enum.HypergraphNodeWeightEnum.NONE:
+            return 1
+
+        # Static/Dynamic weights
+        if (self.__node_weight_enum == hw_enum.HypergraphNodeWeightEnum.STATIC) or \
+           (self.__node_weight_enum == hw_enum.HypergraphNodeWeightEnum.DYNAMIC):
+            return self.__node_weight_dictionary[node_id]
+
+        raise c_exception.FunctionNotImplementedException("get_node_weight", f"this type of weights ({self.__node_weight_enum.name}) is not implemented")
+
+    def __get_hyperedge_weight(self, hyperedge_id: int) -> int:
+        """
+        Return the weight of the hyperedge based on the hyperedge_weight_enum.
+        If the hyperedge does not exist in the hypergraph, raise an exception (HyperedgeDoesNotExistException).
+        """
+
+        # The hyperedge does not exist in the hypergraph
+        if hyperedge_id not in self.__variable_set:
+            raise h_exception.HyperedgeDoesNotExistException(hyperedge_id)
+
+        # No weights
+        if self.__hyperedge_weight_enum == hw_enum.HypergraphHyperedgeWeightEnum.NONE:
+            return 1
+
+        # Static/Dynamic weights
+        if (self.__hyperedge_weight_enum == hw_enum.HypergraphHyperedgeWeightEnum.STATIC) or \
+           (self.__hyperedge_weight_enum == hw_enum.HypergraphHyperedgeWeightEnum.DYNAMIC):
+            return self.__node_weight_dictionary[node_id]
+
+        raise c_exception.FunctionNotImplementedException("get_hyperedge_weight", f"this type of weights ({self.__hyperedge_weight_enum.name}) is not implemented")
 
     def __check_files_and_folders(self) -> None:
         """
@@ -122,10 +186,17 @@ class Hypergraph:
             pass    # TODO
 
         # Undefined
-        raise h_exception.SomethingWrongException(f"The function (check_files_and_folders) is not implemented for this OS ({env.get_os().name})!")
+        raise c_exception.FunctionNotImplementedException("check_files_and_folders", f"not implemented for this OS ({env.get_os().name})")
+
+    def __generate_key_cache(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> str:
+        """
+        Generate a key for caching
+        """
+
+        pass    # TODO
 
     # region hMETIS
-    def __get_hypergraph_hmetis_exe(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> str:
+    def __create_hypergraph_hmetis_exe(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> str:
         # TODO
         pass
 
@@ -151,6 +222,8 @@ class Hypergraph:
                 ignored_literal_set.add(-variable)
 
         cut_set = set()
+
+        # TODO Cache
 
         # Windows -> hMETIS.exe
         if env.is_windows():

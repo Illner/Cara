@@ -13,3 +13,15 @@ class SomethingWrongException(CaraException):
         if message_extension:
             self.message += f" ({message_extension})"
         super().__init__(self.message)
+
+
+class FunctionNotImplementedException(CaraException):
+    """
+    The function is not implemented
+    """
+
+    def __init__(self, function_name: str, message_extension: str = ""):
+        self.message = f"The function ({function_name}) is not implemented!"
+        if message_extension:
+            self.message += f" ({message_extension})"
+        super().__init__(self.message)
