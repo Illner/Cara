@@ -45,6 +45,7 @@ class TestAbstract(ABC):
     def save(self) -> None:
         """
         Generate an actual result and save it as the original result
+        :return: None
         """
 
         original_result = self._get_actual_result()
@@ -105,6 +106,7 @@ class TestAbstract(ABC):
     def _set_files(self, *dictionaries: str) -> None:
         """
         Get the files from the dictionary and save them to the _files
+        :return: None
         """
 
         self.__path_dictionary = self._create_path(*dictionaries)

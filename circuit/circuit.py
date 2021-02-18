@@ -66,6 +66,7 @@ class Circuit:
         """
         Convert the circuit from the file into our structure
         :param dimacs_nnf_file_path: the file which is in the DIMACS NNF format
+        :return: None
         """
 
         root_id = None
@@ -254,7 +255,8 @@ class Circuit:
 
     def __get_new_id(self) -> int:
         """
-        Return a new ID. The ID counter will be incremented.
+        Return a new ID.
+        The ID counter will be incremented.
         :return: a new ID
         """
 
@@ -268,6 +270,7 @@ class Circuit:
         Add the node to the circuit.
         If some node already exists in the circuit with the same ID, raise an exception (NodeWithSameIDAlreadyExistsInCircuitException).
         :param node: the node
+        :return: None
         """
 
         id_temp = node.id
@@ -335,6 +338,7 @@ class Circuit:
     def __compute_size_of_circuit(self) -> None:
         """
         Compute the size of the circuit
+        :return: None
         """
 
         # Root of the circuit is not set
@@ -353,6 +357,7 @@ class Circuit:
         Add an oriented edge (from_node -> to_node) in the circuit.
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
+        :return: None
         """
 
         to_node._add_parent(from_node)
@@ -363,6 +368,7 @@ class Circuit:
         Remove an oriented edge (from_node -> to_node) in the circuit.
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
+        :return: None
         """
 
         to_node._remove_parent(from_node)
@@ -625,6 +631,7 @@ class Circuit:
     def clear_comments(self) -> None:
         """
         Clear the comments of the circuit
+        :return: None
         """
 
         self.set_comments("")
@@ -633,6 +640,7 @@ class Circuit:
         """
         Set the comments of the circuit
         :param new_comment: the new comment
+        :return: None
         """
 
         self.__comments = new_comment
@@ -642,6 +650,7 @@ class Circuit:
         Set the root of the circuit.
         If the node's ID does not exist in the circuit, raise an exception (NodeWithIDDoesNotExistInCircuitException).
         :param node_id: the node's ID
+        :return: None
         """
 
         root_temp = self.get_node(node_id)
@@ -661,6 +670,7 @@ class Circuit:
         """
         Check the circuit type.
         If the root of the circuit is not set, None is set.
+        :return: None
         """
 
         # Root of the circuit is not set
@@ -724,7 +734,7 @@ class Circuit:
         :param clause: the clause
         :param exist_quantification_set: the existential quantification set
         :param use_caches: True if clause entailment can use the caches
-        :return:
+        :return: True if the clause is implied by the circuit, otherwise False is returned
         """
 
         assumption_set = set()
@@ -793,6 +803,7 @@ class Circuit:
     def smooth(self) -> None:
         """
         Smooth the circuit
+        :return: None
         """
 
         # Root of the circuit is not set or the root is a leaf
@@ -939,6 +950,7 @@ class Circuit:
         If a cycle is detected, raise an exception (CycleWasDetectedException).
         :param from_id_node: new to_id_node's parent
         :param to_id_node: new from_id_node's child
+        :return: None
         """
 
         # One of the nodes does not exist in the circuit

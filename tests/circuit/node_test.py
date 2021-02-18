@@ -200,6 +200,7 @@ class NodeTest(TestAbstract):
         """
         A test for creating and connecting nodes.
         Positive
+        :return: the result of the test
         """
 
         result = ""
@@ -223,6 +224,7 @@ class NodeTest(TestAbstract):
         """
         A test for modification (add_parent, remove_parent, add_child, remove_child).
         Positive
+        :return: the result of the test
         """
 
         result = ""
@@ -265,6 +267,7 @@ class NodeTest(TestAbstract):
         """
         A test for detecting a cycle.
         Negative
+        :return: the result of the test
         """
 
         result = ""
@@ -282,6 +285,7 @@ class NodeTest(TestAbstract):
         """
         A test for satisfiability.
         Positive
+        :return: the result of the test
         """
 
         result = ""
@@ -316,6 +320,7 @@ class NodeTest(TestAbstract):
         """
         A test for satisfiability.
         Negative
+        :return: the result of the test
         """
 
         result = ""
@@ -332,6 +337,7 @@ class NodeTest(TestAbstract):
         """
         A test for model counting.
         Positive
+        :return: the result of the test
         """
 
         result = ""
@@ -366,6 +372,7 @@ class NodeTest(TestAbstract):
         """
         A test for model counting.
         Negative
+        :return: the result of the test
         """
 
         result = ""
@@ -387,6 +394,7 @@ class NodeTest(TestAbstract):
         """
         A test for minimum default-cardinality.
         Positive
+        :return: the result of the test
         """
 
         result = ""
@@ -417,6 +425,7 @@ class NodeTest(TestAbstract):
         """
         A test for minimum default-cardinality.
         Negative
+        :return: the result of the test
         """
 
         result = ""
@@ -433,6 +442,7 @@ class NodeTest(TestAbstract):
         """
         A test for clearing caches.
         Positive
+        :return: the result of the test
         """
 
         result = ""

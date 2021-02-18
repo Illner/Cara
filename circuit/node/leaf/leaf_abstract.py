@@ -33,6 +33,7 @@ class LeafAbstract(NodeAbstract, ABC):
         Add the parent (new_parent) to the set of parents (parent_set).
         If the parent already exists in the set, nothing happens.
         :param new_parent: the new parent
+        :return: None
         """
 
         self.__parent_set.add(new_parent)
@@ -42,6 +43,7 @@ class LeafAbstract(NodeAbstract, ABC):
         Remove the parent (parent_to_delete) from the set of parents (parent_set).
         If the parent does not exist in the set, raise an exception (ParentDoesNotExistException).
         :param parent_to_delete: the parent
+        :return: None
         """
 
         # The parent does not exist in the set
@@ -53,13 +55,14 @@ class LeafAbstract(NodeAbstract, ABC):
     def _set_size(self, new_size: int) -> None:
         """
         Setter - size
+        :return: None
         """
 
         self.__size = new_size
 
     def _get_parent_set(self, copy: bool = False) -> Set[NodeAbstract]:
         """
-        Getter - parent_set
+        :return: parent_set (getter)
         """
 
         if copy:
@@ -71,7 +74,7 @@ class LeafAbstract(NodeAbstract, ABC):
     # region Override method
     def node_size(self) -> int:
         """
-        Return the size of the leaf
+        :return: the size of the leaf
         """
 
         return self.__size

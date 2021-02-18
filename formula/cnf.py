@@ -59,6 +59,7 @@ class Cnf:
         """
         Convert the formula from the file into our structure
         :param dimacs_cnf_file_path: the file which is in the DIMACS CNF format
+        :return: None
         """
 
         with open(dimacs_cnf_file_path, "r") as file:
@@ -173,7 +174,7 @@ class Cnf:
     # region Protected method
     def _get_variable_set(self, copy: bool = False) -> Set[int]:
         """
-        Return a set of variables
+        :return: a set of variables
         """
 
         if copy:
@@ -185,6 +186,8 @@ class Cnf:
         """
         Return a set of clause's id, where the literal appears.
         If the literal does not exist in the formula, an empty set is returned.
+        :param literal: the literal
+        :return: a set of clause's id, where the literal appears
         """
 
         # The literal does not appear in any clause
@@ -198,7 +201,7 @@ class Cnf:
         Return a clause with the given identifier.
         If the clause does not exist, raise an exception (ClauseDoesNotExistException).
         :param clause_id: the identifier of the clause
-        :return: the clause
+        :return: the clause (a set of literals)
         """
 
         # The clause doesn't exist
@@ -215,7 +218,7 @@ class Cnf:
         If the clause does not exist, raise an exception (ClauseDoesNotExistException).
         Copy is used!
         :param clause_id: the identifier of the clause
-        :return: the clause
+        :return: the clause (a set of literals)
         """
 
         return self._get_clause(clause_id).copy()

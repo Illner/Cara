@@ -65,7 +65,6 @@ class Hypergraph:
 
         self.__node_weight_dictionary: Dict[int, int] = dict()
         self.__hyperedge_weight_dictionary: Dict[int, int] = dict()
-
         self.__hypergraph_dictionary: Dict[int, Set[int]] = dict()
 
         self.__check_files_and_folders()
@@ -77,6 +76,7 @@ class Hypergraph:
         """
         Initialize the hypergraph
         Variable: hypergraph_dictionary
+        :return: None
         """
 
         for variable in self.__variable_set:
@@ -94,6 +94,7 @@ class Hypergraph:
         Initialize the static weights.
         If the type of weights is not STATIC, nothing happens.
         Variable: node_weight_dictionary, hyperedge_weight_dictionary
+        :return: None
         """
 
         # Node's weight
@@ -111,6 +112,9 @@ class Hypergraph:
         Initialize the dynamic weights based on the clause_id_set and ignored_literal_set.
         If the type of weights is not Dynamic, nothing happens.
         Variable: node_weight_dictionary, hyperedge_weight_dictionary
+        :param clause_id_set: the subset of clauses
+        :param ignored_literal_set: the ignored literals
+        :return: None
         """
 
         # Node's weight
@@ -125,6 +129,8 @@ class Hypergraph:
         """
         Return the weight of the node based on the node_weight_enum.
         If the node does not exist in the hypergraph, raise an exception (NodeDoesNotExistException).
+        :param node_id: the node's ID
+        :return: the weight of the node
         """
 
         # The node does not exist in the hypergraph
@@ -146,6 +152,8 @@ class Hypergraph:
         """
         Return the weight of the hyperedge based on the hyperedge_weight_enum.
         If the hyperedge does not exist in the hypergraph, raise an exception (HyperedgeDoesNotExistException).
+        :param hyperedge_id: the hyperedge's ID
+        :return: the weight of the hyperedge
         """
 
         # The hyperedge does not exist in the hypergraph
@@ -168,6 +176,7 @@ class Hypergraph:
         Check if all necessary files and folders exist.
         If some file is missing, raise an exception (FileIsMissingException).
         If the chosen software is not supported on the system, raise an exception (SoftwareIsNotSupportedOnSystemException).
+        :return: None
         """
 
         # Windows
@@ -176,8 +185,7 @@ class Hypergraph:
             if self.__software_enum == hs_enum.HypergraphSoftwareEnum.HMETIS:
                 Path(Hypergraph.TEMP_FOLDER_PATH).mkdir(exist_ok=True)
 
-                file_temp = Path(Hypergraph.WIN_PROGRAM_EXE_HMETIS_PATH)
-                if not file_temp.exists():
+                if not Path(Hypergraph.WIN_PROGRAM_EXE_HMETIS_PATH).exists():
                     raise h_exception.FileIsMissingException(Hypergraph.WIN_PROGRAM_EXE_HMETIS_PATH)
                 return
 
@@ -207,9 +215,9 @@ class Hypergraph:
         Create an input file with the hypergraph for hMETIS.exe.
         Hypergraph's nodes (clauses) are restricted to the clause_id_set and hyperedges (variables) are restricted to all
         variables except those in the ignored_literal_set.
-        @param clause_id_set: the subset of clauses
-        @param ignored_literal_set: the ignored literals
-        @return: (file string, mapping from node_id (file) to clause_id (CNF))
+        :param clause_id_set: the subset of clauses
+        :param ignored_literal_set: the ignored literals
+        :return: (file string, mapping from node_id (file) to clause_id (CNF))
         """
 
         clause_id_node_id_dictionary: Dict[int, int] = dict()   # Mapping clause_id -> node_id
@@ -223,14 +231,15 @@ class Hypergraph:
 
         # Hyperedges
         for variable in variable_set:
-            occurrences_list = self.__hypergraph_dictionary[variable].intersection(clause_id_set)
-            if not occurrences_list:
+            occurrence_list = (self.__hypergraph_dictionary[variable]).intersection(clause_id_set)
+            # The variable is not in the hypergraph
+            if not occurrence_list:
                 continue
 
             number_of_hyperedges += 1
             line_temp = [self.__get_hyperedge_weight(variable)]
-            for clause_id in occurrences_list:
-                # Mapping
+            for clause_id in occurrence_list:
+                # Add to the mapping
                 if clause_id not in clause_id_node_id_dictionary:
                     number_of_nodes += 1
                     clause_id_node_id_dictionary[clause_id] = number_of_nodes
@@ -253,9 +262,9 @@ class Hypergraph:
     def __get_cut_set_hmetis_exe(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> Set[int]:
         """
         Compute a cut set using hMETIS.exe
-        @param clause_id_set: the subset of clauses
-        @param ignored_literal_set: the ignored literals
-        @return: a cut set of the hypergraph
+        :param clause_id_set: the subset of clauses
+        :param ignored_literal_set: the ignored literals
+        :return: a cut set of the hypergraph
         """
 
         file_string, node_id_clause_id_dictionary = self.__create_hypergraph_hmetis_exe(clause_id_set, ignored_literal_set)
@@ -312,8 +321,10 @@ class Hypergraph:
     def get_cut_set(self, clause_id_set: Set[int], ignored_literal_list: List[int]) -> Set[int]:
         """
         Create a hypergraph, where nodes (clauses) are restricted to the clause_id_set and
-        hyperedges (variables) are restricted to all variables except those which are in the ignored_literal_list.
-        Return a cut set of the hypergraph.
+        hyperedges (variables) are restricted to all variables except those in the ignored_literal_list.
+        :param clause_id_set: the subset of clauses
+        :param ignored_literal_list: the ignored literals (a partial assignment)
+        :return: a cut set of the hypergraph
         """
 
         ignored_literal_set = set()

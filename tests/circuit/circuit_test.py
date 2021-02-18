@@ -183,6 +183,7 @@ class CircuitTest(TestAbstract):
         """
         A test for parsing.
         Positive / negative
+        :return: the result of the test
         """
 
         result = ""
@@ -200,6 +201,7 @@ class CircuitTest(TestAbstract):
         """
         A test for creating circuits.
         Positive
+        :return: the result of the test
         """
 
         result = ""
@@ -221,6 +223,7 @@ class CircuitTest(TestAbstract):
         """
         A test for modification and getters.
         Positive / negative
+        :return: the result of the test
         """
 
         result = ""
@@ -312,6 +315,7 @@ class CircuitTest(TestAbstract):
         """
         A test for operations.
         Positive / negative
+        :return: the result of the test
         """
 
         result = ""
@@ -347,6 +351,7 @@ class CircuitTest(TestAbstract):
         """
         A test for properties.
         Positive
+        :return: the result of the test
         """
 
         result = ""
@@ -379,6 +384,7 @@ class CircuitTest(TestAbstract):
         """
         A test for checking an assumption set and exist quantification set.
         Negative
+        :return: the result of the test
         """
 
         result = ""
@@ -402,6 +408,7 @@ class CircuitTest(TestAbstract):
         """
         A test for smoothness.
         Positive
+        :return: the result of the test
         """
 
         result = ""
@@ -424,6 +431,7 @@ class CircuitTest(TestAbstract):
     def __test_8(self) -> str:
         """
         A leaf as the root of the circuit.
+        :return: the result of the test
         """
 
         result = ""

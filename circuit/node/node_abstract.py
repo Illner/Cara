@@ -74,6 +74,7 @@ class NodeAbstract(ABC):
         Add the variables in the variable_set to the variable_in_circuit_set.
         If some variable already exists in the variable_in_circuit_set, nothing happens.
         :param variable_set: a set of variables which will be added to the variable_in_circuit_set
+        :return: None
         """
 
         # Update variable_in_circuit_sorted_list
@@ -89,6 +90,7 @@ class NodeAbstract(ABC):
         Remove the variables in the variable_to_delete_set from the variable_in_circuit_set.
         If some variable does not exist in the variable_in_circuit_set, nothing happens.
         :param variable_to_delete_set: a set of variables which will be deleted from the variable_in_circuit_set
+        :return: None
         """
 
         # Update variable_in_circuit_sorted_list
@@ -102,6 +104,7 @@ class NodeAbstract(ABC):
     def _set_variable_in_circuit_set(self, new_variable_in_circuit_set: Set[int]) -> None:
         """
         Setter - variable_in_circuit_set
+        :return: None
         """
 
         self.__variable_in_circuit_set = new_variable_in_circuit_set
@@ -109,7 +112,7 @@ class NodeAbstract(ABC):
 
     def _get_variable_in_circuit_set(self, copy: bool = False) -> Set[int]:
         """
-        Getter - variable_in_circuit_set
+        :return: variable_in_circuit_set (getter)
         """
 
         if copy:
@@ -131,6 +134,7 @@ class NodeAbstract(ABC):
         Add the literals in the literal_set to the literal_in_circuit_set.
         If some literal already exists in the literal_in_circuit_set, nothing happens.
         :param literal_set: a set of literals which will be added to the literal_in_circuit_set
+        :return: None
         """
 
         self.__literal_in_circuit_set.update(literal_set)
@@ -140,6 +144,7 @@ class NodeAbstract(ABC):
         Remove the literals in the literal_to_delete_set from the literal_in_circuit_set.
         If some literal does not exist in the literal_in_circuit_set, nothing happens.
         :param literal_to_delete_set: a set of literals which will be deleted from the literal_in_circuit_set
+        :return: None
         """
 
         self.__literal_in_circuit_set.difference_update(literal_to_delete_set)
@@ -147,13 +152,14 @@ class NodeAbstract(ABC):
     def _set_literal_in_circuit_set(self, new_literal_in_circuit_set: Set[int]) -> None:
         """
         Setter - literal_in_circuit_set
+        :return: None
         """
 
         self.__literal_in_circuit_set = new_literal_in_circuit_set
 
     def _get_literal_in_circuit_set(self, copy: bool = False) -> Set[int]:
         """
-        Getter - literal_in_circuit_set
+        :return: literal_in_circuit_set (getter)
         """
 
         if copy:
@@ -175,6 +181,7 @@ class NodeAbstract(ABC):
         Add the nodes in the node_set to the node_in_circuit_set.
         If some node already exists in the node_in_circuit_set, nothing happens.
         :param node_set: the set of nodes which will be added to the node_in_circuit_set
+        :return: None
         """
 
         self.__node_in_circuit_set = self.__node_in_circuit_set.union(node_set)
@@ -184,6 +191,7 @@ class NodeAbstract(ABC):
         Remove the nodes in the node_to_delete_set from the node_in_circuit_set.
         If some node does not exist in the node_in_circuit_set, nothing happens.
         :param node_to_delete_set: the set of nodes which will be deleted from the node_in_circuit_set
+        :return: None
         """
 
         self.__node_in_circuit_set = self.__node_in_circuit_set.difference(node_to_delete_set)
@@ -191,13 +199,14 @@ class NodeAbstract(ABC):
     def _set_node_in_circuit_set(self, new_node_in_circuit_set: Set[TNodeAbstract]) -> None:
         """
         Setter - variable_in_circuit_set
+        :return: None
         """
 
         self.__node_in_circuit_set = new_node_in_circuit_set
 
     def _get_node_in_circuit_set(self, copy: bool = False) -> Set[TNodeAbstract]:
         """
-        Getter - node_in_circuit_set
+        :return: node_in_circuit_set (getter)
         """
 
         if copy:
@@ -220,6 +229,7 @@ class NodeAbstract(ABC):
         If the record already exists in the cache, the value of the record will be updated.
         :param key: the key
         :param satisfiable: the value
+        :return: None
         """
 
         self.__satisfiable_cache[key] = satisfiable
@@ -241,6 +251,7 @@ class NodeAbstract(ABC):
     def _clear_satisfiable_cache(self) -> None:
         """
         Clear the cache
+        :return: None
         """
 
         self.__satisfiable_cache = dict()
@@ -251,6 +262,7 @@ class NodeAbstract(ABC):
         If the record already exists in the cache, the value of the record will be updated.
         :param key: the key
         :param model_count: the value
+        :return: None
         """
 
         self.__model_counting_cache[key] = model_count
@@ -272,6 +284,7 @@ class NodeAbstract(ABC):
     def _clear_model_counting_cache(self) -> None:
         """
         Clear the cache
+        :return: None
         """
 
         self.__model_counting_cache = dict()
@@ -282,6 +295,7 @@ class NodeAbstract(ABC):
         If the record already exists in the cache, the value of the record will be updated.
         :param key: the key
         :param minimal_default_cardinality: the value
+        :return: None
         """
 
         self.__minimal_default_cardinality_cache[key] = minimal_default_cardinality
@@ -303,6 +317,7 @@ class NodeAbstract(ABC):
     def _clear_minimal_default_cardinality_cache(self) -> None:
         """
         Clear the cache
+        :return: None
         """
 
         self.__minimal_default_cardinality_cache = dict()
@@ -311,6 +326,7 @@ class NodeAbstract(ABC):
         """
         Clear all caches
         Cache: satisfiable_cache, model_counting_cache, minimal_default_cardinality_cache
+        :return: None
         """
 
         self._clear_satisfiable_cache()

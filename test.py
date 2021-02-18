@@ -18,12 +18,44 @@ from tests.circuit.circuit_test import CircuitTest
 
 
 from formula.cnf import Cnf
+import time
 
 # path = r"C:\Users\illner\Desktop\temp.txt"
 path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\large_cnf_valid.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\SATLIB - Benchmark Problems\All Intervall Series\ais\ais12.cnf"
 
 cnf = Cnf(path)
 
+start = time.time()
 c = cnf.hypergraph.get_cut_set(set(list(range(cnf.real_number_of_clauses))), [])
-print(len(c))
-print(c)
+end = time.time()
+print(end - start)
+
+variables = cnf._get_variable_set()
+
+occurrences = dict()
+len_list = [[]]*(len(variables) + 1)
+
+start = time.time()
+for var in variables:
+    temp = set()
+    temp.update(cnf._get_clause_set(var))
+    temp.update(cnf._get_clause_set(-var))
+    occ = len(temp)
+    if occ not in occurrences:
+        occurrences[occ] = 1
+    else:
+        occurrences[occ] += 1
+
+    for clause_id in temp:
+        temp_a = len(cnf.get_clause(clause_id))
+        len_list[var].append(temp_a)
+
+# print(occurrences)
+
+# print(mean)
+end = time.time()
+print(end - start)
+
+
+print(2**30)

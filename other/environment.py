@@ -8,7 +8,7 @@ import other.os_enum as os_enum
 # region system/OS
 def get_os() -> os_enum.OsEnum:
     """
-    Return the system/OS
+    :return: the system/OS
     """
 
     os = platform.system()
@@ -26,7 +26,7 @@ def get_os() -> os_enum.OsEnum:
 
 def is_windows() -> bool:
     """
-    Return True if the system/OS is Windows, otherwise False is returned
+    :return: True if the system/OS is Windows, otherwise False is returned
     """
 
     os = get_os()
@@ -38,7 +38,7 @@ def is_windows() -> bool:
 
 def is_linux() -> bool:
     """
-    Return True if the system/OS is Linux, otherwise False is returned
+    :return: True if the system/OS is Linux, otherwise False is returned
     """
 
     os = get_os()
@@ -50,7 +50,7 @@ def is_linux() -> bool:
 
 def is_mac() -> bool:
     """
-    Return True if the system/OS is MacOS, otherwise False is returned
+    :return: True if the system/OS is MacOS, otherwise False is returned
     """
 
     os = get_os()
@@ -63,7 +63,7 @@ def is_mac() -> bool:
 
 def is_64bit() -> bool:
     """
-    Return True if the system/OS is 64 bit, otherwise False is returned
+    :return: True if the system/OS is 64 bit, otherwise False is returned
     """
 
     return platform.architecture()[0] == "64bit"

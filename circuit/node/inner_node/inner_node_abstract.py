@@ -112,6 +112,8 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
         Update the properties of the circuit.
         Called when something changes in the circuit and properties (nodes in the circuit, ...) need to be recomputed.
+        :param call_parent_update: True for calling the update functions of parents recursively
+        :return: None
         """
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
@@ -141,6 +143,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def _check_properties_decomposable_deterministic_smoothness_in_circuit(self) -> None:
         """
         Set decomposable_in_circuit, deterministic_in_circuit and smoothness_in_circuit based on the children
+        :return: None
         """
 
         # Check decomposable_in_circuit
@@ -175,6 +178,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         Set the decomposable property.
         In case the decomposable property is False, change the decomposable_in_circuit property to False.
         :param new_decomposable_value: the new value of the decomposable property
+        :return: None
         """
 
         self.__decomposable = new_decomposable_value
@@ -188,6 +192,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         Set the deterministic property.
         In case the deterministic property is False, change the deterministic_in_circuit property to False.
         :param new_deterministic_value: the new value of the deterministic property
+        :return: None
         """
 
         self.__deterministic = new_deterministic_value
@@ -201,6 +206,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         Set the smoothness property.
         In case the smoothness property is False, change the smoothness_in_circuit property to False.
         :param new_smoothness_value: the new value of the smoothness property
+        :return: None
         """
 
         self.__smoothness = new_smoothness_value
@@ -212,6 +218,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def _set_node_type_in_circuit_counter_dict(self) -> None:
         """
         Set the node_type_in_circuit_counter_dict
+        :return: None
         """
 
         self.__node_type_in_circuit_counter_dict = dict()
@@ -228,7 +235,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
     def _get_node_type_in_circuit_counter_dict(self, copy: bool = False):
         """
-        Getter - node_type_in_circuit_counter_dict
+        :return: node_type_in_circuit_counter_dict (getter)
         """
 
         # The node_type_in_circuit_counter_dict is not initialized
@@ -255,6 +262,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         If the parent already exists in the set, nothing happens.
         If a cycle was detected (the new parent is already in the circuit), raise an exception (CycleWasDetectedException).
         :param new_parent: the new parent
+        :return: None
         """
 
         # The new parent already exists in the circuit
@@ -268,6 +276,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         Remove the parent (parent_to_delete) from the set of parents (parent_set).
         If the parent does not exist in the set, raise an exception (ParentDoesNotExistException).
         :param parent_to_delete: the parent
+        :return: None
         """
 
         # The parent does not exist in the set
@@ -283,6 +292,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         :param new_child: the new child
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
+        :return: None
         """
 
         # The child already exists in the list
@@ -301,6 +311,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         :param child_to_delete: the child
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
+        :return: None
         """
 
         # The child does not exist in the list
@@ -314,7 +325,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
     def _get_child_set(self, copy: bool = False) -> Set[NodeAbstract]:
         """
-        Getter - child_set
+        :return: child_set (getter)
         """
 
         if copy:
@@ -324,7 +335,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
     def _get_parent_set(self, copy: bool = False) -> Set[NodeAbstract]:
         """
-        Getter - parent_set
+        :return: parent_set (getter)
         """
 
         if copy:
@@ -334,7 +345,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
     def _get_leaf_set(self, copy: bool = False) -> Set[NodeAbstract]:
         """
-        Getter - leaf_set
+        :return: leaf_set (getter)
         """
 
         if copy:
@@ -378,7 +389,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     # region Override method
     def node_size(self) -> int:
         """
-        Return the size of the inner node (= number of children)
+        :return: the size of the inner node (= number of children)
         """
 
         return len(self._child_set)
