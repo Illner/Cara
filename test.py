@@ -28,6 +28,7 @@ cnf = Cnf(path)
 
 start = time.time()
 c = cnf.hypergraph.get_cut_set(set(list(range(cnf.real_number_of_clauses))), [])
+print(len(c))
 end = time.time()
 print(end - start)
 
@@ -56,6 +57,3 @@ for var in variables:
 # print(mean)
 end = time.time()
 print(end - start)
-
-
-print(2**30)

@@ -210,13 +210,12 @@ class Hypergraph:
         pass
 
     # region hMETIS
-    def __create_hypergraph_hmetis_exe(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> Tuple[str, Dict[int, int]]:
+    def __create_hypergraph_hmetis_exe(self, clause_id_set: Set[int], variable_set: Set[int]) -> Tuple[str, Dict[int, int]]:
         """
         Create an input file with the hypergraph for hMETIS.exe.
-        Hypergraph's nodes (clauses) are restricted to the clause_id_set and hyperedges (variables) are restricted to all
-        variables except those in the ignored_literal_set.
+        Hypergraph's nodes (clauses) are restricted to the clause_id_set and hyperedges (variables) are restricted to the variable_set.
         :param clause_id_set: the subset of clauses
-        :param ignored_literal_set: the ignored literals
+        :param variable_set: the variables which occur in the clause_id_set and are not ignored (assigned)
         :return: (file string, mapping from node_id (file) to clause_id (CNF))
         """
 
@@ -227,7 +226,6 @@ class Hypergraph:
         number_of_hyperedges = 0
         string_hyperedge = "% Hyperedges"
         string_weight = "% Weights"
-        variable_set = self.__variable_set.difference(ignored_literal_set)
 
         # Hyperedges
         for variable in variable_set:
@@ -259,15 +257,16 @@ class Hypergraph:
 
         return string_result, node_id_clause_id_dictionary
 
-    def __get_cut_set_hmetis_exe(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> Set[int]:
+    def __get_cut_set_hmetis_exe(self, clause_id_set: Set[int], variable_set: Set[int], ignored_variable_set: Set[int]) -> Set[int]:
         """
         Compute a cut set using hMETIS.exe
         :param clause_id_set: the subset of clauses
-        :param ignored_literal_set: the ignored literals
+        :param variable_set: the variables which occur in the clause_id_set and are not ignored (assigned)
+        :param ignored_variable_set: the ignored variables
         :return: a cut set of the hypergraph
         """
 
-        file_string, node_id_clause_id_dictionary = self.__create_hypergraph_hmetis_exe(clause_id_set, ignored_literal_set)
+        file_string, node_id_clause_id_dictionary = self.__create_hypergraph_hmetis_exe(clause_id_set, variable_set)
 
         # Delete temp files
         Path(Hypergraph.INPUT_FILE_EXE_HMETIS_PATH).unlink(missing_ok=True)
@@ -307,7 +306,7 @@ class Hypergraph:
                     variable_partition_1_set.update(variable_set_temp)
 
         cut_set = variable_partition_0_set.intersection(variable_partition_1_set)
-        cut_set.difference_update(ignored_literal_set)
+        cut_set.difference_update(ignored_variable_set)
 
         # Delete temp files
         Path(Hypergraph.INPUT_FILE_EXE_HMETIS_PATH).unlink(missing_ok=True)
@@ -327,12 +326,30 @@ class Hypergraph:
         :return: a cut set of the hypergraph
         """
 
+        # Ignored variable/literal set
+        ignored_variable_set = set()
         ignored_literal_set = set()
         for literal in ignored_literal_list:
             variable = abs(literal)
             if variable in self.__variable_set:
+                ignored_variable_set.add(variable)
                 ignored_literal_set.add(variable)
                 ignored_literal_set.add(-variable)
+
+        # Variable set and satisfied clause set
+        variable_set = set()
+        satisfied_clause_set = set()
+        for clause_id in clause_id_set:
+            clause_temp = self.__cnf.get_clause(clause_id)
+            # The clause is satisfied
+            if clause_temp.intersection(ignored_literal_list):
+                satisfied_clause_set.add(clause_id)
+                continue
+
+            variable_set.update(map(lambda l: abs(l), clause_temp))
+
+        clause_id_set.difference_update(satisfied_clause_set)
+        variable_set.difference_update(ignored_variable_set)
 
         cut_set = set()
         self.__set_dynamic_weights(clause_id_set, ignored_literal_set)
@@ -341,7 +358,7 @@ class Hypergraph:
 
         # Windows -> hMETIS.exe
         if env.is_windows():
-            cut_set = self.__get_cut_set_hmetis_exe(clause_id_set, ignored_literal_set)
+            cut_set = self.__get_cut_set_hmetis_exe(clause_id_set, variable_set, ignored_variable_set)
 
         # TODO Cache
 
