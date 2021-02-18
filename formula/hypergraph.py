@@ -83,9 +83,9 @@ class Hypergraph:
             clause_temp = set()
 
             # Positive literal
-            clause_temp.update(self.__cnf._get_clause_set(variable))
+            clause_temp.update(self.__cnf._get_clause_set_literal(variable))
             # Negative literal
-            clause_temp.update(self.__cnf._get_clause_set(-variable))
+            clause_temp.update(self.__cnf._get_clause_set_literal(-variable))
 
             self.__hypergraph_dictionary[variable] = clause_temp
 
@@ -202,20 +202,106 @@ class Hypergraph:
         # Undefined
         raise c_exception.FunctionNotImplementedException("check_files_and_folders", f"not implemented for this OS ({env.get_os().name})")
 
-    def __generate_key_cache(self, clause_id_set: Set[int], ignored_literal_set: Set[int]) -> str:
+    def __generate_key_cache(self, clause_id_set: Set[int], variable_clause_id_dictionary: Dict[int, Set[int]],
+                             use_variance: bool = True) -> Tuple[str, Dict[int, int]]:
         """
         Generate a key for caching
+        Variable property: occurrence, mean, variance (optional)
+        :param clause_id_set: the subset of clauses
+        :param variable_clause_id_dictionary: the hypergraph structure
+        :param use_variance: True if variances can be used for generating the key
+        :return: the generated key based on the variable_clause_id_dictionary and the mapping between variables
         """
 
-        pass
+        occurrence_dictionary: Dict[int, int] = dict()
+        mean_dictionary: Dict[int, float] = dict()
+        variance_dictionary: Dict[int, float] = dict()
+
+        # Compute occurrences and means
+        for variable in variable_clause_id_dictionary:
+            occurrence_list_temp = variable_clause_id_dictionary[variable]
+
+            # Occurrence
+            occurrence_dictionary[variable] = len(occurrence_list_temp)
+
+            # Mean
+            mean_temp = 0
+            for clause_id in occurrence_list_temp:
+                mean_temp += len(self.__cnf.get_clause(clause_id))
+            # mean_temp = mean_temp / len(occurrence_list_temp)
+            mean_dictionary[variable] = mean_temp
+
+        # Compute variances
+        if use_variance:
+            for variable in variable_clause_id_dictionary:
+                occurrence_list_temp = variable_clause_id_dictionary[variable]
+                mean_temp = mean_dictionary[variable]
+
+                variance_temp = 0
+                for clause_id in occurrence_list_temp:
+                    variance_temp += (len(self.__cnf.get_clause(clause_id)) - mean_temp)**2
+                # variance_temp = variance_temp / (len(occurrence_list_temp) - 1)
+                variance_dictionary[variable] = variance_temp
+
+        def variable_order(ordering: List[List[int]], mapping_dictionary: Dict[int, float]) -> List[List[int]]:
+            result_ordering = []
+
+            for group in ordering:
+                last_value = None
+                new_group = []
+
+                for var in sorted(group, key=lambda v: mapping_dictionary[v]):
+                    value = mapping_dictionary[var]
+
+                    if (last_value is None) or (value == last_value):
+                        new_group.append(var)
+                    else:
+                        result_ordering.append(new_group)
+                        new_group = [var]
+
+                    last_value = value
+
+                result_ordering.append(new_group)
+
+            return result_ordering
+
+        variable_ordering = [[v for v in variable_clause_id_dictionary]]
+        variable_ordering = variable_order(variable_ordering, occurrence_dictionary)
+        variable_ordering = variable_order(variable_ordering, mean_dictionary)
+        if use_variance:
+            variable_ordering = variable_order(variable_ordering, variance_dictionary)
+
+        variable_id_order_id_dictionary: Dict[int, int] = dict()    # Mapping variable_id -> order_id
+        order_id_variable_id_dictionary: Dict[int, int] = dict()    # Mapping order_id -> variable_id
+        counter_temp = 0
+        # Create an ordering
+        for group in variable_ordering:
+            for var in sorted(group):
+                variable_id_order_id_dictionary[var] = counter_temp
+                order_id_variable_id_dictionary[counter_temp] = var
+                counter_temp += 1
+
+        key_list = []
+        for clause_id in clause_id_set:
+            variable_set_temp = self.__cnf.get_variable_in_clauses({clause_id})
+            key_clause = 0
+            for v in variable_set_temp:
+                if v in variable_clause_id_dictionary:
+                    key_clause += 2**(variable_id_order_id_dictionary[v])
+
+            key_list.append(key_clause)
+
+        key_string = ""
+        for key in sorted(key_list):
+            key_string = "-".join(str(key))
+
+        return key_string, order_id_variable_id_dictionary
 
     # region hMETIS
-    def __create_hypergraph_hmetis_exe(self, clause_id_set: Set[int], variable_set: Set[int]) -> Tuple[str, Dict[int, int]]:
+    def __create_hypergraph_hmetis_exe(self, variable_clause_id_dictionary: Dict[int, Set[int]]) -> Tuple[str, Dict[int, int]]:
         """
-        Create an input file with the hypergraph for hMETIS.exe.
-        Hypergraph's nodes (clauses) are restricted to the clause_id_set and hyperedges (variables) are restricted to the variable_set.
-        :param clause_id_set: the subset of clauses
-        :param variable_set: the variables which occur in the clause_id_set and are not ignored (assigned)
+        Create an input file with the hypergraph for hMETIS.exe based on variable_clause_id_dictionary
+        :param variable_clause_id_dictionary: the hypergraph structure
         :return: (file string, mapping from node_id (file) to clause_id (CNF))
         """
 
@@ -228,11 +314,8 @@ class Hypergraph:
         string_weight = "% Weights"
 
         # Hyperedges
-        for variable in variable_set:
-            occurrence_list = (self.__hypergraph_dictionary[variable]).intersection(clause_id_set)
-            # The variable is not in the hypergraph
-            if not occurrence_list:
-                continue
+        for variable in variable_clause_id_dictionary:
+            occurrence_list = variable_clause_id_dictionary[variable]
 
             number_of_hyperedges += 1
             line_temp = [self.__get_hyperedge_weight(variable)]
@@ -257,16 +340,15 @@ class Hypergraph:
 
         return string_result, node_id_clause_id_dictionary
 
-    def __get_cut_set_hmetis_exe(self, clause_id_set: Set[int], variable_set: Set[int], ignored_variable_set: Set[int]) -> Set[int]:
+    def __get_cut_set_hmetis_exe(self, variable_clause_id_dictionary: Dict[int, Set[int]], ignored_variable_set: Set[int]) -> Set[int]:
         """
         Compute a cut set using hMETIS.exe
-        :param clause_id_set: the subset of clauses
-        :param variable_set: the variables which occur in the clause_id_set and are not ignored (assigned)
+        :param variable_clause_id_dictionary: the hypergraph structure
         :param ignored_variable_set: the ignored variables
         :return: a cut set of the hypergraph
         """
 
-        file_string, node_id_clause_id_dictionary = self.__create_hypergraph_hmetis_exe(clause_id_set, variable_set)
+        file_string, node_id_clause_id_dictionary = self.__create_hypergraph_hmetis_exe(variable_clause_id_dictionary)
 
         # Delete temp files
         Path(Hypergraph.INPUT_FILE_EXE_HMETIS_PATH).unlink(missing_ok=True)
@@ -336,29 +418,25 @@ class Hypergraph:
                 ignored_literal_set.add(variable)
                 ignored_literal_set.add(-variable)
 
-        # Variable set and satisfied clause set
-        variable_set = set()
-        satisfied_clause_set = set()
-        for clause_id in clause_id_set:
-            clause_temp = self.__cnf.get_clause(clause_id)
-            # The clause is satisfied
-            if clause_temp.intersection(ignored_literal_list):
-                satisfied_clause_set.add(clause_id)
-                continue
-
-            variable_set.update(map(lambda l: abs(l), clause_temp))
-
-        clause_id_set.difference_update(satisfied_clause_set)
+        # Variable set
+        variable_set = self.__cnf.get_variable_in_clauses(clause_id_set)
         variable_set.difference_update(ignored_variable_set)
 
         cut_set = set()
         self.__set_dynamic_weights(clause_id_set, ignored_literal_set)
 
-        # TODO Cache
+        # TODO Subsumed / Identical (with respect to variables)
+
+        variable_clause_id_dictionary: Dict[int, Set[int]] = dict()  # key: variable, value: a set of clauses (from the clause_id_set) which contain the variable
+        for variable in variable_set:
+            clause_set_temp = (self.__cnf._get_clause_set_variable(variable)).intersection(clause_id_set)
+            variable_clause_id_dictionary[variable] = clause_set_temp
+
+        self.__generate_key_cache(clause_id_set, variable_clause_id_dictionary)
 
         # Windows -> hMETIS.exe
         if env.is_windows():
-            cut_set = self.__get_cut_set_hmetis_exe(clause_id_set, variable_set, ignored_variable_set)
+            cut_set = self.__get_cut_set_hmetis_exe(variable_clause_id_dictionary, ignored_variable_set)
 
         # TODO Cache
 
