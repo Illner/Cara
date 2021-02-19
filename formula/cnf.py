@@ -233,6 +233,25 @@ class Cnf:
             raise f_exception.ClauseDoesNotExistException(clause_id)
 
         return self.__cnf[clause_id]
+
+    def _get_variable_in_clause(self, clause_id: int, copy: bool = False) -> Set[int]:
+        """
+        Return a set of variables which appear in the clause.
+        If the clause does not exist, raise an exception (ClauseDoesNotExistException).
+        :param clause_id: the identifier of the clause
+        :param copy: True if a copy is returned
+        :return: a set of variables
+        """
+
+        try:
+            variable_set = self.__cnf_variable[clause_id]
+        except IndexError:
+            raise f_exception.ClauseDoesNotExistException(clause_id)
+
+        if copy:
+            return variable_set.copy()
+
+        return variable_set
     # endregion
 
     # region Public method

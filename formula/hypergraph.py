@@ -4,7 +4,7 @@ import subprocess
 from pathlib import Path
 from formula.cnf import Cnf
 import other.environment as env
-from typing import Set, Dict, List, Tuple
+from typing import Set, Dict, List, Tuple, Union
 
 # Import exception
 import exception.cara_exception as c_exception
@@ -12,8 +12,8 @@ import exception.formula.hypergraph_exception as h_exception
 
 # Import enum
 import formula.hypergraph_cache_enum as hc_enum
-import formula.hypergraph_weight_type_enum as hw_enum
 import formula.hypergraph_software_enum as hs_enum
+import formula.hypergraph_weight_type_enum as hw_enum
 
 
 class Hypergraph:
@@ -32,6 +32,11 @@ class Hypergraph:
     Private HypergraphHyperedgeWeightEnum hyperedge_weight_enum
     Private HypergraphSoftwareEnum software_enum
     
+    Private Dict<str, Set<int>> cut_set_cache           # key = {number}+
+    
+    Private Tuple<int, int> limit_number_of_clauses_cache    # (lower_bound, upper_bound) - None = no limit
+    Private Tuple<int, int> limit_number_of_variables_cache  # (lower_bound, upper_bound) - None = no limit
+    
     Private Dict<int, int> node_weight_dictionary       # key: node = clause's id, value: the weight of the clause
     Private Dict<int, int> hyperedge_weight_dictionary  # key: edge = variable, value: the weight of the variable
     
@@ -44,7 +49,10 @@ class Hypergraph:
     OUTPUT_FILE_EXE_HMETIS_PATH = INPUT_FILE_EXE_HMETIS_PATH + ".part.2"
     WIN_PROGRAM_EXE_HMETIS_PATH = os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe")
 
-    def __init__(self, cnf: Cnf, ub_factor: float = 0.10, cache_enum: hc_enum.HypergraphCacheEnum = hc_enum.HypergraphCacheEnum.NONE,
+    def __init__(self, cnf: Cnf, ub_factor: float = 0.10,
+                 limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
+                 limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
+                 cache_enum: hc_enum.HypergraphCacheEnum = hc_enum.HypergraphCacheEnum.NONE,
                  node_weight_enum: hw_enum.HypergraphNodeWeightEnum = hw_enum.HypergraphNodeWeightEnum.NONE,
                  hyperedge_weight_enum: hw_enum.HypergraphHyperedgeWeightEnum = hw_enum.HypergraphHyperedgeWeightEnum.NONE,
                  software_enum: hs_enum.HypergraphSoftwareEnum = hs_enum.HypergraphSoftwareEnum.HMETIS):
@@ -56,6 +64,22 @@ class Hypergraph:
         self.__number_of_nodes: int = cnf.real_number_of_clauses
         self.__number_of_hyperedges: int = cnf.number_of_variables
         self.__variable_set: Set[int] = cnf._get_variable_set(copy=True)
+
+        self.__cut_set_cache: Dict[str, Set[int]] = dict()
+
+        # limit_number_of_clauses_cache
+        lnocc_l_temp = limit_number_of_clauses_cache[0]
+        lnocc_u_temp = limit_number_of_clauses_cache[1]
+        if (lnocc_l_temp is not None) and (lnocc_u_temp is not None) and (lnocc_l_temp > lnocc_u_temp):
+            raise h_exception.InvalidLimitCacheException(lnocc_l_temp, lnocc_u_temp, "limit_number_of_clauses_cache")
+        self.__limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = limit_number_of_clauses_cache
+
+        # limit_number_of_variables_cache
+        lnovc_l_temp = limit_number_of_variables_cache[0]
+        lnovc_u_temp = limit_number_of_variables_cache[1]
+        if (lnovc_l_temp is not None) and (lnovc_u_temp is not None) and (lnovc_l_temp > lnovc_u_temp):
+            raise h_exception.InvalidLimitCacheException(lnovc_l_temp, lnovc_u_temp, "limit_number_of_variables_cache")
+        self.__limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = limit_number_of_variables_cache
 
         # UBfactor
         ub_factor = round(ub_factor, 2)
@@ -203,16 +227,31 @@ class Hypergraph:
         raise c_exception.FunctionNotImplementedException("check_files_and_folders", f"not implemented for this OS ({env.get_os().name})")
 
     def __generate_key_cache(self, clause_id_set: Set[int], variable_clause_id_dictionary: Dict[int, Set[int]],
-                             use_variance: bool = True) -> Tuple[str, Dict[int, int]]:
+                             use_variance: bool = True) -> Union[Tuple[str, Tuple[Dict[int, int], Dict[int, int]]], None]:
         """
         Generate a key for caching
         Variable property: occurrence, mean, variance (optional)
         :param clause_id_set: the subset of clauses
         :param variable_clause_id_dictionary: the hypergraph structure
         :param use_variance: True if variances can be used for generating the key
-        :return: the generated key based on the variable_clause_id_dictionary and the mapping between variables
+        :return: The generated key based on the variable_clause_id_dictionary and both mappings between variables
+        (variable_id -> order_id, order_id -> variable_id).
+        In case some limit (number of clauses/variables) is not satisfied, return None.
         """
 
+        # Check limits - number of clauses
+        number_of_clauses = len(clause_id_set)
+        if ((self.__limit_number_of_clauses_cache[0] is not None) and (number_of_clauses < self.__limit_number_of_clauses_cache[0])) or \
+           ((self.__limit_number_of_clauses_cache[1] is not None) and (number_of_clauses > self.__limit_number_of_clauses_cache[1])):
+            return None
+
+        # Check limits - number of variables
+        number_of_variables = len(variable_clause_id_dictionary)
+        if ((self.__limit_number_of_variables_cache[0] is not None) and (number_of_variables < self.__limit_number_of_variables_cache[0])) or \
+           ((self.__limit_number_of_variables_cache[1] is not None) and (number_of_variables > self.__limit_number_of_variables_cache[1])):
+            return None
+
+        # Initialize
         occurrence_dictionary: Dict[int, int] = dict()
         mean_dictionary: Dict[int, float] = dict()
         variance_dictionary: Dict[int, float] = dict()
@@ -274,6 +313,7 @@ class Hypergraph:
         variable_id_order_id_dictionary: Dict[int, int] = dict()    # Mapping variable_id -> order_id
         order_id_variable_id_dictionary: Dict[int, int] = dict()    # Mapping order_id -> variable_id
         counter_temp = 0
+
         # Create an ordering
         for group in variable_ordering:
             for var in sorted(group):
@@ -283,7 +323,7 @@ class Hypergraph:
 
         key_list = []
         for clause_id in clause_id_set:
-            variable_set_temp = self.__cnf.get_variable_in_clauses({clause_id})
+            variable_set_temp = self.__cnf._get_variable_in_clause(clause_id)
             key_clause = 0
             for v in variable_set_temp:
                 if v in variable_clause_id_dictionary:
@@ -293,9 +333,42 @@ class Hypergraph:
 
         key_string = ""
         for key in sorted(key_list):
-            key_string = "-".join(str(key))
+            key_string = "-".join((key_string, str(key)))
 
-        return key_string, order_id_variable_id_dictionary
+        return key_string, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
+
+    def __add_cut_set_cache(self, key: str, cut_set: Set[int]) -> None:
+        """
+        Add a new record to the cache.
+        If the record already exists in the cache, the value of the record will be updated.
+        :param key: the key
+        :param cut_set: the value
+        :return: None
+        """
+
+        self.__cut_set_cache[key] = cut_set
+
+    def __get_cut_set_cache(self, key: str) -> Union[Set[int], None]:
+        """
+        Return the value of the record with the key from the cache.
+        If the record does not exist in the cache, None is returned.
+        :param key: the key
+        :return: The record's value if the record exists. Otherwise, None is returned.
+        """
+
+        # The record does not exist
+        if key not in self.__cut_set_cache:
+            return None
+
+        return self.__cut_set_cache[key]
+
+    def _clear_cut_set_cache(self) -> None:
+        """
+        Clear the cache
+        :return: None
+        """
+
+        self.__cut_set_cache = dict()
 
     # region hMETIS
     def __create_hypergraph_hmetis_exe(self, variable_clause_id_dictionary: Dict[int, Set[int]]) -> Tuple[str, Dict[int, int]]:
@@ -399,12 +472,13 @@ class Hypergraph:
     # endregion
 
     # region Public method
-    def get_cut_set(self, clause_id_set: Set[int], ignored_literal_list: List[int]) -> Set[int]:
+    def get_cut_set(self, clause_id_set: Set[int], ignored_literal_list: List[int], use_cache: bool = True) -> Set[int]:
         """
         Create a hypergraph, where nodes (clauses) are restricted to the clause_id_set and
         hyperedges (variables) are restricted to all variables except those in the ignored_literal_list.
         :param clause_id_set: the subset of clauses
         :param ignored_literal_list: the ignored literals (a partial assignment)
+        :param use_cache: True if the cache can be used
         :return: a cut set of the hypergraph
         """
 
@@ -432,13 +506,31 @@ class Hypergraph:
             clause_set_temp = (self.__cnf._get_clause_set_variable(variable)).intersection(clause_id_set)
             variable_clause_id_dictionary[variable] = clause_set_temp
 
-        self.__generate_key_cache(clause_id_set, variable_clause_id_dictionary)
+        # Cache
+        key = ""  # initialization
+        variable_id_order_id_dictionary = None
+        if use_cache:
+            key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary) = self.__generate_key_cache(clause_id_set, variable_clause_id_dictionary)
+            value = self.__get_cut_set_cache(key)
+            if value is not None:
+                cut_set = set()
+                for var in value:
+                    cut_set.add(order_id_variable_id_dictionary[var])
+
+                print("Cache!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                return cut_set
 
         # Windows -> hMETIS.exe
         if env.is_windows():
             cut_set = self.__get_cut_set_hmetis_exe(variable_clause_id_dictionary, ignored_variable_set)
 
-        # TODO Cache
+        # Cache
+        if use_cache:
+            cut_set_cache = set()
+            for var in cut_set:
+                cut_set_cache.add(variable_id_order_id_dictionary[var])
+
+            self.__add_cut_set_cache(key, cut_set_cache)
 
         return cut_set
     # endregion

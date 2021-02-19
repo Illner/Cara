@@ -63,3 +63,13 @@ class InvalidUBfactorException(HypergraphException):
     def __init__(self, ub_factor: float):
         self.message = f"The UBfactor ({ub_factor}) has to be a real number between 0.01 (1%) and 0.49 (49%)!"
         super().__init__(self.message)
+
+
+class InvalidLimitCacheException(HypergraphException):
+    """
+    Invalid limits for caching
+    """
+
+    def __init__(self, lower_bound: int, upper_bound: int, type_of_limit: str):
+        self.message = f"Invalid lower bound ({lower_bound}) and upper bound ({upper_bound}) for {type_of_limit}!"
+        super().__init__(self.message)
