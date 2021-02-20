@@ -1,9 +1,11 @@
 Component
 Variables
-1) set[int] clause_id_set
-2) list[int] assignment_list
-
-3) Lazy structure
+0) Compiler (Cnf, Solver)
+1) set[int] clause_id_set (n)
+2) list[int] assignment_list (s)
+3) Watch-literals (n)
+4) Graph components (n)
+5) Satisfied clauses (n)
 
 Functions
 1) BCP
@@ -20,23 +22,6 @@ Functions
 8) Get_key_cache
 
 
-HyperGraph
-V -> clause
-E -> variable
-
-Variables
-1) CNF
-2) HyperGraph representation (fixed)
-dict<int, set[int]> - key - variable, value - a set of clause's id where the variable appears
-3) weights (node + edge) (AS-IS)
-
-4) Cache
-
-Function
-1) get_hyperGraph(clause_id_set: set[int], ignored_variable_set: set[int]) -> nodes and hyperEdges
-2) get_cutSet(clause_id_set: set[int], ignored_variable_set: set[int]) -> cutSet
-
-
 CNF
 Variables
 hyperGraph HyperGraph
@@ -51,6 +36,7 @@ dimacs(clause_id_set: set[int], ignored_variable_set: set[int]) -> str
 Solver
 Variables
 1) Learned clauses
+2) Cnf
 
 
 

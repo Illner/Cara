@@ -500,6 +500,7 @@ class Hypergraph:
         self.__set_dynamic_weights(clause_id_set, ignored_literal_set)
 
         # TODO Subsumed / Identical (with respect to variables)
+        # TODO equivSimpl
 
         variable_clause_id_dictionary: Dict[int, Set[int]] = dict()  # key: variable, value: a set of clauses (from the clause_id_set) which contain the variable
         for variable in variable_set:
