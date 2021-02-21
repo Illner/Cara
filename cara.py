@@ -10,7 +10,7 @@ import exception.cara_exception as c_exception
 import compiler.base_class_enum as bc_enum
 import circuit.circuit_type_enum as ct_enum
 import compiler.implied_literals_enum as il_enum
-import external.sat_solver.sat_solver_enum as ss_enum
+import compiler.sat_solver_enum as ss_enum
 import compiler.component_caching.component_caching_enum as cc_enum
 
 # Constant

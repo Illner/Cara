@@ -1,5 +1,7 @@
-# Import enum
+# Import
 from typing import Set
+
+# Import enum
 import circuit.node.node_type_enum as nt_enum
 
 

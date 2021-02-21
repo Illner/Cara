@@ -20,28 +20,3 @@ Functions
 7) Remove a literal from the assignment
 
 8) Get_key_cache
-
-
-CNF
-Variables
-hyperGraph HyperGraph
-
-cache ??
-
-Function
-clause_to_dimacs(ignored_variable_list: list[int]) -> str
-dimacs(clause_id_set: set[int], ignored_variable_set: set[int]) -> str
-
-
-Solver
-Variables
-1) Learned clauses
-2) Cnf
-
-
-
-Others
-Second, the hypergraph
-partitioning algorithm requires a balance factor, which
-is used to enforce the balance constraint. We have found that
-a balance factor of 3/1 seems to generate good results
