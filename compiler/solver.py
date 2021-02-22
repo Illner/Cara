@@ -2,8 +2,9 @@
 import itertools
 from formula.cnf import Cnf
 from pysat.formula import CNF
-from pysat.solvers import Minisat22, Glucose4, Lingeling, Cadical
+from other.sorted_list import SortedList
 from typing import Set, Dict, List, Tuple, Union
+from pysat.solvers import Minisat22, Glucose4, Lingeling, Cadical
 
 # Import exception
 import exception.compiler.compiler_exception as c_exception
@@ -22,12 +23,13 @@ class Solver:
     Private Set<int> variable_set
     
     Private SatSolverEnum sat_solver_enum
-    Private Solver sat_main                 # main SAT solver
-    Private Solver sat_unit_propagation     # for unit propagation
+    Private Solver sat_main                     # main SAT solver
+    Private Solver sat_unit_propagation         # for unit propagation
+    
+    Private Dict<str, Dict<int, Tuple<List<int>, List<int>>>> implicit_bcp_dictionary_cache   # key = {number}+
     """
 
-    def __init__(self, cnf: Cnf, clause_id_set: Set[int],
-                 sat_solver_enum: ss_enum.SatSolverEnum = ss_enum.SatSolverEnum.MiniSAT):
+    def __init__(self, cnf: Cnf, clause_id_set: Set[int], sat_solver_enum: ss_enum.SatSolverEnum):
         self.__cnf: CNF = CNF()
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
 
@@ -36,6 +38,8 @@ class Solver:
             self.__cnf.append(cnf._get_clause(clause_id))
 
         self.__variable_set: Set[int] = cnf.get_variable_in_clauses(clause_id_set)
+        self.__implicit_bcp_dictionary_cache: \
+            Dict[str, Union[Dict[int, Tuple[Union[List[int], None], Union[List[int], None]]], None]] = dict()
 
         # Create SAT solvers
         self.__sat_main = None
@@ -89,7 +93,8 @@ class Solver:
 
         return implied_literals
 
-    def implicit_unit_propagation(self, assignment: List[int]) -> Union[Dict[int, Tuple[Union[List[int], None], Union[List[int], None]]], None]:
+    def implicit_unit_propagation(self, assignment: List[int]) -> \
+            Union[Dict[int, Tuple[Union[List[int], None], Union[List[int], None]]], None, Dict[int, Tuple[Set[int], Set[int]]]]:
         """
         Do implicit unit propagation (implicit boolean constraint propagation).
         If the formula for the assignment is unsatisfiable, return None.
@@ -99,10 +104,17 @@ class Solver:
         If the formula is unsatisfiable after setting a variable, None will appear in the tuple instead of a list.
         """
 
+        # Cache
+        key = self.__generate_key_cache(assignment)
+        exist, value = self.__get_implicit_bcp_dictionary_cache(key)
+        if exist:
+            return value
+
         implied_literal_set = self.unit_propagation(assignment)
 
         # The formula is unsatisfiable
         if implied_literal_set is None:
+            self.__add_implicit_bcp_dictionary_cache(key, None)
             return None
 
         temp_set = set(map(lambda l: abs(l), itertools.chain(assignment, implied_literal_set)))
@@ -120,9 +132,54 @@ class Solver:
             temp_negative = self.unit_propagation(assignment)
             assignment.pop()
 
+            # The formula is unsatisfiable
+            if (temp_positive is None) and (temp_negative is None):
+                self.__add_implicit_bcp_dictionary_cache(key, None)
+                return None
+
             result_dictionary[var] = (temp_positive, temp_negative)
 
+        self.__add_implicit_bcp_dictionary_cache(key, result_dictionary)
         return result_dictionary
+    # endregion
+
+    # region Private method
+    def __generate_key_cache(self, assignment: List[int]) -> str:
+        """
+        Generate a key for caching.
+        Cache: implicit_bcp_dictionary_cache
+        :param assignment: the assignment (can be empty)
+        :return: the generated key based on the assignment
+        """
+
+        assignment_sorted_list = SortedList(assignment)
+        return assignment_sorted_list.str_delimiter("-")
+
+    def __add_implicit_bcp_dictionary_cache(self, key: str, implicit_bcp_dictionary) -> None:
+        """
+        Add a new record to the cache.
+        If the record already exists in the cache, the value of the record will be updated.
+        :param key: the key
+        :param implicit_bcp_dictionary: the value
+        :return: None
+        """
+
+        self.__implicit_bcp_dictionary_cache[key] = implicit_bcp_dictionary
+
+    def __get_implicit_bcp_dictionary_cache(self, key: str) -> \
+            Tuple[bool, Union[Dict[int, Tuple[Union[List[int], None], Union[List[int], None]]], None]]:
+        """
+        Return the value of the record with the key from the cache.
+        If the record does not exist in the cache, (False, None) is returned.
+        :param key: the key
+        :return: (True, the record's value) if the record exists. Otherwise, (False, None) is returned.
+        """
+
+        # The record does not exist
+        if key not in self.__implicit_bcp_dictionary_cache:
+            return False, None
+
+        return True, self.__implicit_bcp_dictionary_cache[key]
     # endregion
 
     # region Magic function

@@ -3,7 +3,6 @@ Variables
 0) Compiler (Cnf, Solver)
 1) set[int] clause_id_set (n)
 2) list[int] assignment_list (s)
-3) Watch-literals (n)
 4) Graph components (n)
 5) Satisfied clauses (n)
 
