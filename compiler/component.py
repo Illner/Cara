@@ -3,6 +3,7 @@ from formula.cnf import Cnf
 from compiler.solver import Solver
 from circuit.circuit import Circuit
 from compiler.compiler import Compiler
+from other.dynamic_graph import DynamicGraph
 from typing import Set, Dict, List, Tuple, Union
 
 # Import exception
@@ -23,6 +24,7 @@ class Component:
     Private Solver solver
     Private Circuit circuit
     Private Compiler compiler
+    Private DynamicGraph dynamic_graph
     
     Private Set[int] variable_set
     Private Set[int] clause_id_set
@@ -37,13 +39,14 @@ class Component:
     Private Dict<int, Set<int>> adjacency_literal_dictionary    # key: literal, value: a set of clauses where the literal appears
     """
 
-    # TODO Graph
+    # TODO CopyComponent
 
     def __init__(self, compiler: Compiler, clause_id_set: Set[int], assignment_list: List[int]):
         self.__compiler: Compiler = compiler
         self.__cnf: Cnf = self.__compiler.cnf
         self.__circuit: Circuit = self.__compiler.circuit
         self.__solver: Solver = Solver(self.__cnf, clause_id_set, self.__compiler.sat_solver_enum)
+        self.__dynamic_graph: DynamicGraph = DynamicGraph()
 
         self.__clause_id_set: Set[int] = clause_id_set
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = self.__compiler.implied_literals_enum

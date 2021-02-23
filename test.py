@@ -85,7 +85,7 @@ graph.insert_node(3)
 graph.insert_edge(1, 2)
 graph.insert_edge(2, 3)
 graph.insert_edge(3, 1)
-# graph.insert_edge(4, 5)
+graph.insert_edge(4, 5)
 
 n = graph.is_connected()
 
