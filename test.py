@@ -62,14 +62,22 @@ import random
 #     s += (end - start)
 # print(s / 500)
 
-import formula.cnf
-import compiler.solver
-import compiler.sat_solver_enum as ss_emum
+# import formula.cnf
+# import compiler.solver
+# import compiler.sat_solver_enum as ss_emum
 
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\large_cnf_valid.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\large_cnf_valid.cnf"
 
-cnf = Cnf(path)
-compiler = compiler.solver.Solver(cnf, set(range(cnf.real_number_of_clauses)), ss_emum.SatSolverEnum.CaDiCal)
+# cnf = Cnf(path)
+# compiler = compiler.solver.Solver(cnf, set(range(cnf.real_number_of_clauses)), ss_emum.SatSolverEnum.CaDiCal)
 
-n = compiler.implicit_unit_propagation([])
-print(n)
+# n = compiler.implicit_unit_propagation([])
+# print(n)
+
+from hdtgraph.DynamicGraph import Graph
+
+graph = Graph()
+
+graph.insert_edge(1, 2)
+graph.insert_edge(2, 3)
+# graph.insert_edge(4, 5)
