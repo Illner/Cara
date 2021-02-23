@@ -10,8 +10,7 @@ import exception.cara_exception as ca_exception
 import exception.compiler.compiler_exception as c_exception
 
 # Import enum
-import compiler.sat_solver_enum as ss_enum
-import compiler.implied_literals_enum as il_enum
+import compiler.enum.implied_literals_enum as il_enum
 
 
 class Component:

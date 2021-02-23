@@ -1,11 +1,10 @@
 # Import
 from formula.cnf import Cnf
 from circuit.circuit import Circuit
-from typing import Set, Dict, List, Tuple, Union
 
 # Import enum
-import compiler.sat_solver_enum as ss_enum
-import compiler.implied_literals_enum as il_enum
+import compiler.enum.sat_solver_enum as ss_enum
+import compiler.enum.implied_literals_enum as il_enum
 
 
 class Compiler:

@@ -11,9 +11,9 @@ import exception.cara_exception as c_exception
 import exception.formula.hypergraph_exception as h_exception
 
 # Import enum
-import formula.hypergraph_cache_enum as hc_enum
-import formula.hypergraph_software_enum as hs_enum
-import formula.hypergraph_weight_type_enum as hw_enum
+import formula.enum.hypergraph_cache_enum as hc_enum
+import formula.enum.hypergraph_software_enum as hs_enum
+import formula.enum.hypergraph_weight_type_enum as hw_enum
 
 
 class Hypergraph:

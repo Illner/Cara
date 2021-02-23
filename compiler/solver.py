@@ -10,7 +10,7 @@ from pysat.solvers import Minisat22, Glucose4, Lingeling, Cadical
 import exception.compiler.compiler_exception as c_exception
 
 # Import enum
-import compiler.sat_solver_enum as ss_enum
+import compiler.enum.sat_solver_enum as ss_enum
 
 
 class Solver:

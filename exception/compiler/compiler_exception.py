@@ -1,5 +1,5 @@
 # Import enum
-import compiler.sat_solver_enum as ss_enum
+import compiler.enum.sat_solver_enum as ss_enum
 
 
 class CompilerException(Exception):
