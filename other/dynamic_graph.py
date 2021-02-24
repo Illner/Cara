@@ -11,7 +11,7 @@ class DynamicGraph(Graph):
     """
     Private Dict<int, Set<int>> neighbour_dictionary        # key: node, value: a set of neighbours
     Private Dict<Tuple<int, int>, int> counter_dictionary   # key: <node, node>, value: the number of edges between the nodes (>0)
-    Private Set<int> isolated_node_set                      # A set that contains all satisfied nodes (does not count into components)
+    Private Set<int> isolated_node_set                      # a set that contains all satisfied nodes (does not count into components)
     """
 
     def __init__(self):
@@ -21,22 +21,21 @@ class DynamicGraph(Graph):
 
         super().__init__()
 
-    # region Private method
-    def __order_nodes(self, node_1: int, node_2: int) -> Tuple[int, int]:
+    # region Protected method
+    def _generate_key(self, node_1: int, node_2: int) -> Tuple[int, int]:
         """
-        Order the nodes
+        Generate a key
+        Structure: counter_dictionary
         :param node_1: the first node
         :param node_2: the second node
-        :return: (node_a, node_b), where node_a < node_b
+        :return: the generated key
         """
 
-        if node_1 > node_2:
-            node_1, node_2 = node_2, node_1
-
+        node_1, node_2 = self.order_nodes(node_1, node_2)
         return node_1, node_2
     # endregion
 
-    # region Public method
+    # region Override method
     def insert_node(self, node: int) -> None:
         # The node already exists
         if node in self.__neighbour_dictionary:
@@ -45,9 +44,7 @@ class DynamicGraph(Graph):
         super().insert_node(node)
         self.__neighbour_dictionary[node] = set()
 
-    def insert_edge(self, node_1: int, node_2: int) -> None:
-        node_1, node_2 = self.__order_nodes(node_1, node_2)
-
+    def insert_edge(self, node_1: int, node_2: int, number_of_edges: int = 1) -> None:
         super().insert_edge(node_1, node_2)     # duplicated edges are ignored
 
         # The nodes are not isolated anymore
@@ -59,27 +56,24 @@ class DynamicGraph(Graph):
         # node_1 has not been seen yet
         if node_1 not in self.__neighbour_dictionary:
             self.__neighbour_dictionary[node_1] = set()
+        self.__neighbour_dictionary[node_1].add(node_2)
 
         # node_2 has not been seen yet
         if node_2 not in self.__neighbour_dictionary:
             self.__neighbour_dictionary[node_2] = set()
-
-        # Update neighbours
-        self.__neighbour_dictionary[node_1].add(node_2)
         self.__neighbour_dictionary[node_2].add(node_1)
 
-        counter_key = (node_1, node_2)
+        counter_key = self._generate_key(node_1, node_2)
         # new edge
         if counter_key not in self.__counter_dictionary:
-            self.__counter_dictionary[counter_key] = 1
+            self.__counter_dictionary[counter_key] = number_of_edges
         # duplicated edge
         else:
-            self.__counter_dictionary[counter_key] += 1
+            self.__counter_dictionary[counter_key] += number_of_edges
 
     def delete_edge(self, node_1: int, node_2: int) -> None:
-        node_1, node_2 = self.__order_nodes(node_1, node_2)
+        counter_key = self._generate_key(node_1, node_2)
 
-        counter_key = (node_1, node_2)
         # The edge does not exist
         if counter_key not in self.__counter_dictionary:
             return
@@ -97,11 +91,26 @@ class DynamicGraph(Graph):
 
         self.__neighbour_dictionary[node_1].remove(node_2)
         self.__neighbour_dictionary[node_2].remove(node_1)
+    # endregion
+
+    # region Public method
+    def order_nodes(self, node_1: int, node_2: int) -> Tuple[int, int]:
+        """
+        Order the nodes
+        :param node_1: the first node
+        :param node_2: the second node
+        :return: (node_a, node_b), where node_a < node_b
+        """
+
+        if node_1 > node_2:
+            node_1, node_2 = node_2, node_1
+
+        return node_1, node_2
 
     def is_connected(self) -> bool:
         """
         Isolated nodes (satisfied clauses) are ignored
-        :return: True if the graph is connected, otherwise False is returned
+        :return: True if the graph is connected. Otherwise, False is returned
         """
 
         if self.get_number_of_components() == 1:
@@ -121,7 +130,7 @@ class DynamicGraph(Graph):
     def get_all_components(self) -> List[Set[int]]:
         """
         Return a list that contains all components.
-        Every component is represented as a set that contains nodes in the component.
+        Every component is represented as a set that includes nodes in the component.
         Isolated nodes (satisfied clauses) are ignored.
         :return: a list of all components
         """
@@ -176,7 +185,7 @@ class DynamicGraph(Graph):
         """
         Delete all edges which are incident with the node.
         If the node does not exist, nothing happens.
-        Isolate the node.
+        Isolate the node (the clause is satisfied).
         :param node: the node
         :return: None
         """
@@ -190,10 +199,31 @@ class DynamicGraph(Graph):
             super().delete_edge(node, neighbour)
             self.__neighbour_dictionary[neighbour].remove(node)
 
-            node_1, node_2 = self.__order_nodes(node, neighbour)
-            counter_key = (node_1, node_2)
+            counter_key = self._generate_key(node, neighbour)
             del self.__counter_dictionary[counter_key]
 
         self.__neighbour_dictionary[node] = set()
         self.__isolated_node_set.add(node)
+
+    def get_number_of_edges(self, node_1: int, node_2: int) -> int:
+        """
+        Return the number of edges between the nodes.
+        If one of the nodes does not exist, 0 is returned.
+        If none edge exists between the nodes, 0 is returned.
+        :param node_1: the first node
+        :param node_2: the second node
+        :return: the number of edges
+        """
+
+        # One of the nodes does not exist
+        if (node_1 not in self.__neighbour_dictionary) or (node_2 not in self.__neighbour_dictionary):
+            return 0
+
+        counter_key = self._generate_key(node_1, node_2)
+
+        # None edge exists
+        if counter_key not in self.__counter_dictionary:
+            return 0
+
+        return self.__counter_dictionary[counter_key]
     # endregion

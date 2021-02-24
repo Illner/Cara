@@ -16,6 +16,10 @@ from tests.circuit.circuit_test import CircuitTest
 # n = CircuitTest()
 # n.save()
 
+from tests.compiler.dynamic_graph_test import DynamicGraphTest
+
+# n = DynamicGraphTest()
+# n.save()
 
 from formula.cnf import Cnf
 from random import randrange
@@ -73,20 +77,3 @@ import random
 
 # n = compiler.implicit_unit_propagation([])
 # print(n)
-
-from other.dynamic_graph import DynamicGraph
-
-graph = DynamicGraph()
-
-graph.insert_node(1)
-graph.insert_node(2)
-graph.insert_node(3)
-
-graph.insert_edge(1, 2)
-graph.insert_edge(2, 3)
-graph.insert_edge(3, 1)
-graph.insert_edge(4, 5)
-
-n = graph.is_connected()
-
-print(n)

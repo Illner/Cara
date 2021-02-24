@@ -46,7 +46,6 @@ class Component:
         self.__cnf: Cnf = self.__compiler.cnf
         self.__circuit: Circuit = self.__compiler.circuit
         self.__solver: Solver = Solver(self.__cnf, clause_id_set, self.__compiler.sat_solver_enum)
-        self.__dynamic_graph: DynamicGraph = DynamicGraph()
 
         self.__clause_id_set: Set[int] = clause_id_set
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = self.__compiler.implied_literals_enum
@@ -75,7 +74,19 @@ class Component:
         self.__assignment_set: Set[int] = set(assignment_list)
         self.__unassigned_variable_set: Set[int] = self.__variable_set.difference(self.__assignment_set)
 
+        self.__dynamic_graph: DynamicGraph = DynamicGraph()
+        self.__create_dynamic_graph()
+
     # region Private method
+    def __create_dynamic_graph(self) -> None:
+        """
+        Create a dynamic graph
+        :return: None
+        """
+
+        # TODO
+        pass
+
     def __get_implied_literals(self) -> Union[Set[int], None]:
         """
         Return a set of implied literals based on the assignment and implied_literals_enum.
