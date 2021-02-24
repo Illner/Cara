@@ -32,7 +32,7 @@ class DynamicGraphTest(TestAbstract):
                     result = "\n".join((result, sorted_component.str_delimiter(', ')))
 
                 result = "\n".join((result, "Number of edges"))
-                edge_list_temp = [(1, 2), (1, 3), (1, 4), (1, 5), (2, 3), (2, 4), (2, 5), (3, 4), (3, 5), (4, 5)]
+                edge_list_temp = [(i, j) for i in range(1, 6) for j in range(1, 6) if i < j]
                 for node_a, node_b in edge_list_temp:
                     result = "\n".join((result, f"({node_a} - {node_b}): {dynamic_graph.get_number_of_edges(node_a, node_b)}"))
 
@@ -74,7 +74,7 @@ class DynamicGraphTest(TestAbstract):
             # Duplicated edges (delete)
             edge_list = [(1, 3), (1, 2), (1, 3), (4, 5), (1, 2), (5, 1), (6, 7)]
             for node_1, node_2 in edge_list:
-                actual_result = "\n".join((actual_result, f"Remove the edge ({node_1} - {node_2})"))
+                actual_result = "\n".join((actual_result, f"Remove an edge ({node_1} - {node_2})"))
                 dynamic_graph.delete_edge(node_1, node_2)
                 actual_result = "\n".join((actual_result, dynamic_graph_str(dynamic_graph)))
 
@@ -91,6 +91,13 @@ class DynamicGraphTest(TestAbstract):
 
             dynamic_graph.insert_edge(1, 6)
             actual_result = "\n".join((actual_result, dynamic_graph_str(dynamic_graph)))
+
+            # Insert more edges at once
+            edge_list = [(1, 2, 3), (1, 2, 2), (4, 5, 2), (4, 5, 1)]
+            for node_1, node_2, number in edge_list:
+                actual_result = "\n".join((actual_result, f"Add {number} edge(s) ({node_1} - {node_2})"))
+                dynamic_graph.insert_edge(node_1, node_2, number_of_edges=number)
+                actual_result = "\n".join((actual_result, dynamic_graph_str(dynamic_graph)))
         except Exception as err:
             actual_result = "\n".join((actual_result, str(err)))
 
