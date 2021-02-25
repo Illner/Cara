@@ -16,8 +16,6 @@ from tests.circuit.circuit_test import CircuitTest
 # n = CircuitTest()
 # n.save()
 
-from tests.compiler.dynamic_graph_test import DynamicGraphTest
-
 # n = DynamicGraphTest()
 # n.save()
 
@@ -77,3 +75,14 @@ import random
 
 # n = compiler.implicit_unit_propagation([])
 # print(n)
+
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\no_comments_valid.cnf"
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
+
+start = time.time()
+cnf = Cnf(path)
+n = cnf.get_incidence_graph()
+print(n.number_of_nodes())
+print(n.number_of_edges())
+end = time.time()
+print(end - start)

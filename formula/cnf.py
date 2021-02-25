@@ -1,5 +1,6 @@
 # Import
 from typing import Set, Dict, List
+from networkx.classes.graph import Graph
 
 # Import exception
 import exception.formula.formula_exception as f_exception
@@ -28,6 +29,7 @@ class Cnf:
     Private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
     Private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with the size k
     
+    Private Graph incidence_graph
     Private Hypergraph hypergraph
     """
 
@@ -51,6 +53,9 @@ class Cnf:
         self.__unused_variable_set: Set[int] = set()
         self.__clause_size_list: List[Set[int]] = []
         # endregion
+
+        # Incidence graph
+        self.__incidence_graph: Graph = Graph()
 
         self.__create_cnf(dimacs_cnf_file_path)
 
@@ -118,6 +123,12 @@ class Cnf:
                     for _ in range(self.__number_of_variables + 1):
                         self.__clause_size_list.append(set())   # initialization
 
+                    # Incidence graph
+                    for v in range(1, self.__number_of_variables + 1):
+                        self.__incidence_graph.add_node(f"v{v}", value=v, bipartite=0)
+                    for c in range(0, self.__number_of_clauses):
+                        self.__incidence_graph.add_node(f"c{c}", value=c, bipartite=1)
+
                     continue
 
                 # P line has not been mentioned
@@ -167,6 +178,9 @@ class Cnf:
                     # Remove the variable from the unused_variable_set
                     if v in self.__unused_variable_set:
                         self.__unused_variable_set.remove(v)
+
+                    # Incidence graph
+                    self.__incidence_graph.add_edge(f"v{v}", f"c{clause_id}", lit=lit)
 
                 self.__clause_size_list[len(clause_set_temp)].add(clause_id)
                 self.__cnf.append(clause_set_temp)
@@ -283,6 +297,18 @@ class Cnf:
                 raise f_exception.ClauseDoesNotExistException(clause_id)
 
         return variable_set
+
+    def get_incidence_graph(self, copy: bool = False) -> Graph:
+        """
+        Return the incidence graph
+        :param copy: True if a copy is returned
+        :return: the incidence graph
+        """
+
+        if copy:
+            return self.__incidence_graph.copy()
+
+        return self.__incidence_graph
     # endregion
 
     # region Magic method

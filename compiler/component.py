@@ -3,7 +3,6 @@ from formula.cnf import Cnf
 from compiler.solver import Solver
 from circuit.circuit import Circuit
 from compiler.compiler import Compiler
-from other.dynamic_graph import DynamicGraph
 from typing import Set, Dict, List, Tuple, Union
 
 # Import exception
@@ -74,7 +73,6 @@ class Component:
         self.__assignment_set: Set[int] = set(assignment_list)
         self.__unassigned_variable_set: Set[int] = self.__variable_set.difference(self.__assignment_set)
 
-        self.__dynamic_graph: DynamicGraph = DynamicGraph()
         self.__create_dynamic_graph()
 
     # region Private method
