@@ -5,7 +5,6 @@ import warnings
 import tests.circuit.node_test as n_test
 import tests.formula.formula_test as f_test
 import tests.circuit.circuit_test as c_test
-import tests.compiler.dynamic_graph_test as d_test
 from tests.test_abstract import TestAbstract
 
 # Import exception
@@ -29,11 +28,6 @@ def main(args):
     if args.circuit_test:
         circuit_test = c_test.CircuitTest()
         result = "\n".join((result, "", test(circuit_test)))
-
-    # Dynamic graph test
-    if args.dynamic_graph_test:
-        dynamic_graph_test = d_test.DynamicGraphTest()
-        result = "\n".join((result, "", test(dynamic_graph_test)))
 
     # Print the result
     if args.output_file is None:
@@ -98,12 +92,6 @@ def create_parser() -> argparse.ArgumentParser:
                         default=True,
                         type=cara.str2bool,
                         help="Test automation for nodes.")
-    parser.add_argument("-dgt",
-                        "--dynamic_graph_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for dynamic graphs.")
 
     return parser
 
