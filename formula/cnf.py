@@ -1,6 +1,6 @@
 # Import
-from typing import Set, Dict, List
-from networkx.classes.graph import Graph
+from typing import Set, Dict, List, Union
+from other.incidence_graph import IncidenceGraph
 
 # Import exception
 import exception.formula.formula_exception as f_exception
@@ -29,7 +29,7 @@ class Cnf:
     Private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
     Private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with the size k
     
-    Private Graph incidence_graph
+    Private IncidenceGraph incidence_graph
     Private Hypergraph hypergraph
     """
 
@@ -55,7 +55,7 @@ class Cnf:
         # endregion
 
         # Incidence graph
-        self.__incidence_graph: Graph = Graph()
+        self.__incidence_graph: Union[IncidenceGraph, None] = None
 
         self.__create_cnf(dimacs_cnf_file_path)
 
@@ -124,10 +124,7 @@ class Cnf:
                         self.__clause_size_list.append(set())   # initialization
 
                     # Incidence graph
-                    for v in range(1, self.__number_of_variables + 1):
-                        self.__incidence_graph.add_node(f"v{v}", value=v, bipartite=0)
-                    for c in range(0, self.__number_of_clauses):
-                        self.__incidence_graph.add_node(f"c{c}", value=c, bipartite=1)
+                    self.__incidence_graph = IncidenceGraph(self.__number_of_variables, self.__number_of_clauses)
 
                     continue
 
@@ -180,7 +177,7 @@ class Cnf:
                         self.__unused_variable_set.remove(v)
 
                     # Incidence graph
-                    self.__incidence_graph.add_edge(f"v{v}", f"c{clause_id}", lit=lit)
+                    self.__incidence_graph.add_edge(lit, clause_id)
 
                 self.__clause_size_list[len(clause_set_temp)].add(clause_id)
                 self.__cnf.append(clause_set_temp)
@@ -298,15 +295,12 @@ class Cnf:
 
         return variable_set
 
-    def get_incidence_graph(self, copy: bool = False) -> Graph:
+    def get_incidence_graph(self, copy: bool = False) -> IncidenceGraph:
         """
         Return the incidence graph
         :param copy: True if a copy is returned
         :return: the incidence graph
         """
-
-        if copy:
-            return self.__incidence_graph.copy()
 
         return self.__incidence_graph
     # endregion
