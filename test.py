@@ -76,8 +76,34 @@ import random
 # n = compiler.implicit_unit_propagation([])
 # print(n)
 
+from other.incidence_graph import IncidenceGraph
+import networkx as nx
+
+incidence_graph = IncidenceGraph()
+incidence_graph.add_variable(1)
+incidence_graph.add_variable(2)
+incidence_graph.add_variable(3)
+incidence_graph.add_clause_id(1)
+incidence_graph.add_clause_id(2)
+incidence_graph.add_clause_id(3)
+
+incidence_graph.add_edge(1, 1)
+incidence_graph.add_edge(1, 2)
+incidence_graph.add_edge(2, 1)
+
+incidence_graph.add_edge(3, 3)
+
+print(incidence_graph.is_connected())
+print(incidence_graph.number_of_components())
+x = incidence_graph.create_incidence_graphs_for_components()
+
+for i in x:
+    for j in i.clause_id_set():
+        print(f"{j}: {i.clause_id_neighbour_set(j)}")
+
+print()
 path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\no_comments_valid.cnf"
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
 
 start = time.time()
 cnf = Cnf(path)

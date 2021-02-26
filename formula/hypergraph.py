@@ -15,6 +15,8 @@ import formula.enum.hypergraph_cache_enum as hc_enum
 import formula.enum.hypergraph_software_enum as hs_enum
 import formula.enum.hypergraph_weight_type_enum as hw_enum
 
+# TODO use incidence graph
+
 
 class Hypergraph:
     """

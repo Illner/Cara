@@ -196,6 +196,7 @@ class Component:
             raise c_exception.InconsistentAssignmentException(f"trying to remove the literal ({literal}) from the empty assignment")
 
         # The literal is not on the top of the stack (assignment)
+        # TODO check len > 0
         if self.__assignment_list[-1] != literal:
             raise c_exception.InconsistentAssignmentException(f"trying to remove the literal ({literal}) which is not on the top of the stack")
 
