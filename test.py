@@ -76,19 +76,19 @@ import random
 # n = compiler.implicit_unit_propagation([])
 # print(n)
 
-print()
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\no_comments_valid.cnf"
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
-
-start = time.time()
-cnf = Cnf(path)
-n = cnf.get_incidence_graph()
-print(n.number_of_nodes())
-n.remove_literal(-1)
-end = time.time()
-print(end - start)
-start = time.time()
-x = n.create_incidence_graphs_for_components()
-print(n.number_of_nodes())
-end = time.time()
-print(end - start)
+# print()
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\no_comments_valid.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
+#
+# start = time.time()
+# cnf = Cnf(path)
+# n = cnf.get_incidence_graph()
+# print(n.number_of_nodes())
+# n.remove_literal(-1)
+# end = time.time()
+# print(end - start)
+# start = time.time()
+# x = n.create_incidence_graphs_for_components()
+# print(n.number_of_nodes())
+# end = time.time()
+# print(end - start)

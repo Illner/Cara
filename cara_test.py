@@ -5,6 +5,7 @@ import warnings
 import tests.circuit.node_test as n_test
 import tests.formula.formula_test as f_test
 import tests.circuit.circuit_test as c_test
+import tests.formula.incidence_graph_test as ig_test
 from tests.test_abstract import TestAbstract
 
 # Import exception
@@ -18,6 +19,11 @@ def main(args):
     if args.formula_test:
         formula_test = f_test.FormulaTest()
         result = "\n".join((result, "", test(formula_test)))
+
+    # Incidence graph test
+    if args.incidence_graph_test:
+        incidence_graph_test = ig_test.IncidenceGraphTest()
+        result = "\n".join((result, "", test(incidence_graph_test)))
 
     # Node test
     if args.node_test:
@@ -80,6 +86,12 @@ def create_parser() -> argparse.ArgumentParser:
                         default=True,
                         type=cara.str2bool,
                         help="Test automation for formulae.")
+    parser.add_argument("-ig",
+                        "--incidence_graph_test",
+                        action="store",
+                        default=True,
+                        type=cara.str2bool,
+                        help="Test automation for incidence graphs.")
     parser.add_argument("-ct",
                         "--circuit_test",
                         action="store",

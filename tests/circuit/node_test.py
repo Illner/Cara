@@ -236,26 +236,26 @@ class NodeTest(TestAbstract):
                 result = "\n".join((result, repr(node)))
 
             # Remove a leaf
+            result = "\n".join((result, "Remove a leaf"))
             node_list[4]._remove_child(node_list[1])
             node_list[1]._remove_parent(node_list[4])
-            result = "\n".join((result, "Remove a leaf"))
             for node in node_list:
                 result = "\n".join((result, repr(node)))
 
             # Add a circuit
+            result = "\n".join((result, "Add a circuit"))
             node_list.append(LiteralLeaf(4, 7))
             node_list.append(ConstantLeaf(True, 8))
             node_list.append(AndInnerNode({node_list[7], node_list[8]}, 9))
             node_list[4]._add_child(node_list[9])
             node_list[9]._add_parent(node_list[4])
-            result = "\n".join((result, "Add a circuit"))
             for node in node_list:
                 result = "\n".join((result, repr(node)))
 
             # Add a child
+            result = "\n".join((result, "Add a child"))
             node_list[5]._add_child(node_list[7])
             node_list[7]._add_parent(node_list[5])
-            result = "\n".join((result, "Add a child"))
             for node in node_list:
                 result = "\n".join((result, repr(node)))
         except c_exception.CircuitException as err:

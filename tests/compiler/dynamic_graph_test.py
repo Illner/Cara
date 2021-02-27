@@ -16,15 +16,15 @@ class DynamicGraphTest(TestAbstract):
         actual_result = ""
 
         try:
-            def dynamic_graph_str(dynamic_graph: DynamicGraph) -> str:
-                is_connected = dynamic_graph.is_connected()
-                number_of_components = dynamic_graph.get_number_of_components()
-                size_of_components = SortedList(dynamic_graph.get_size_components())
+            def dynamic_graph_str(dynamic_graph_func: DynamicGraph) -> str:
+                is_connected = dynamic_graph_func.is_connected()
+                number_of_components = dynamic_graph_func.get_number_of_components()
+                size_of_components = SortedList(dynamic_graph_func.get_size_components())
 
                 result = f"Is connected: {is_connected}, number of components: {number_of_components}, " \
                          f"size of components: {size_of_components.str_delimiter(', ')}"
 
-                components = dynamic_graph.get_all_components()
+                components = dynamic_graph_func.get_all_components()
                 sorted_components = SortedList([SortedList(component) for component in components])
 
                 result = "\n".join((result, "Components"))
@@ -34,12 +34,12 @@ class DynamicGraphTest(TestAbstract):
                 result = "\n".join((result, "Number of edges"))
                 edge_list_temp = [(i, j) for i in range(1, 6) for j in range(1, 6) if i < j]
                 for node_a, node_b in edge_list_temp:
-                    result = "\n".join((result, f"({node_a} - {node_b}): {dynamic_graph.get_number_of_edges(node_a, node_b)}"))
+                    result = "\n".join((result, f"({node_a} - {node_b}): {dynamic_graph_func.get_number_of_edges(node_a, node_b)}"))
 
                 result = "\n".join((result, "Neighbours"))
                 node_list_temp = [1, 2, 3, 4, 5, 6]
                 for node in node_list_temp:
-                    neighbour_sorted_list = SortedList(dynamic_graph.get_neighbour_set(node))
+                    neighbour_sorted_list = SortedList(dynamic_graph_func.get_neighbour_set(node))
                     result = "\n".join((result, f"{node}: {neighbour_sorted_list}"))
 
                 result = "\n".join((result, ""))

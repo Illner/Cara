@@ -202,12 +202,40 @@ class IncidenceGraph(Graph):
 
         return set(self.nodes[n]["value"] for n in self.neighbors(clause_id_hash))
 
+    def number_of_nodes(self) -> int:
+        """
+        :return: the number of nodes
+        """
+
+        return super().number_of_nodes()
+
     def clause_id_set(self) -> Set[int]:
         """
         :return: a set of clauses that are in the incidence graph
         """
 
         return set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 1)
+
+    def number_of_clauses(self) -> int:
+        """
+        :return: the number of clauses in the incidence graph
+        """
+
+        return len(self.clause_id_set())
+
+    def variable_set(self) -> Set[int]:
+        """
+        :return: a set of variables that are in the incidence graph
+        """
+
+        return set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 0)
+
+    def number_of_variables(self) -> int:
+        """
+        :return: the number of variables in the incidence graph
+        """
+
+        return len(self.variable_set())
 
     def remove_literal(self, literal: int) -> None:
         """
