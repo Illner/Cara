@@ -1,7 +1,7 @@
 # Import
 import networkx as nx
 from networkx.classes.graph import Graph
-from typing import Set, Dict, List, Tuple, Union, TypeVar
+from typing import Set, Dict, List, Union, TypeVar
 
 # Import exception
 import exception.formula.incidence_graph_exception as ig_exception
@@ -16,7 +16,7 @@ class IncidenceGraph(Graph):
     """
 
     """
-    Private Dict<int, Set<str>> adjacency_literal_dictionary                # key: a literal, value: a set of clauses (nodes) where the literal appears
+    Private Dict<int, Set<int>> adjacency_literal_dictionary                # key: a literal, value: a set of clauses (nodes) where the literal appears
     
     Private Set<int> variable_backup_set
     Private List<int> literal_backup_list
@@ -95,6 +95,10 @@ class IncidenceGraph(Graph):
         if self.__node_exist(variable_hash):
             raise ig_exception.VariableAlreadyExistsException(variable)
 
+        # adjacency_literal_dictionary
+        self.__adjacency_literal_dictionary[variable] = set()
+        self.__adjacency_literal_dictionary[-variable] = set()
+
         self.add_node(variable_hash, value=variable, bipartite=0)
 
     def add_clause_id(self, clause_id: int) -> None:
@@ -116,8 +120,8 @@ class IncidenceGraph(Graph):
         """
         Add a new edge to the incidence graph (|literal| - clause_id).
         If the edge already exists in the incidence graph, nothing happens.
-        If the variable (|literal|) does not exist in the incidence graph, raise an exception (VariableDoesNotExistException).
-        If the clause's id does not exist in the incidence graph, raise an exception (ClauseIdDoesNotExistException).
+        If the variable (|literal|) does not exist in the incidence graph, raise an exception (VariableDoesNotExistException) (in case create_node = False).
+        If the clause's id does not exist in the incidence graph, raise an exception (ClauseIdDoesNotExistException) (in case create_node = False).
         :param literal: the literal
         :param clause_id: the clause's id
         :param create_node: True - a node will be created if it does not exist in the incidence graph.
@@ -147,11 +151,7 @@ class IncidenceGraph(Graph):
         if self.has_edge(variable_hash, clause_id_hash):
             return
 
-        # adjacency_literal_node_dictionary
-        if literal not in self.__adjacency_literal_dictionary:
-            self.__adjacency_literal_dictionary[literal] = set()
-        if -literal not in self.__adjacency_literal_dictionary:
-            self.__adjacency_literal_dictionary[-literal] = set()
+        # adjacency_literal_dictionary
         self.__adjacency_literal_dictionary[literal].add(clause_id)
 
         super().add_edge(variable_hash, clause_id_hash)
@@ -172,7 +172,7 @@ class IncidenceGraph(Graph):
 
     def variable_neighbour_set(self, variable: int) -> Set[int]:
         """
-        Return a set of clauses (nodes) that are incident with the variable.
+        Return a set of clauses (nodes) that are incident with the variable node.
         If the variable does not exist in the incidence graph, raise an exception (VariableDoesNotExistException).
         :param variable: the variable
         :return: a set of neighbours (clauses) of the variable
@@ -188,7 +188,7 @@ class IncidenceGraph(Graph):
 
     def clause_id_neighbour_set(self, clause_id: int) -> Set[int]:
         """
-        Return a set of variables (nodes) that are incident with the clause.
+        Return a set of variables (nodes) that are incident with the clause node.
         If the clause's id does not exist in the incidence graph, raise an exception (ClauseIdDoesNotExistException).
         :param clause_id: the clause's id
         :return: a set of neighbours (variables) of the clause
@@ -211,9 +211,9 @@ class IncidenceGraph(Graph):
 
     def remove_literal(self, literal: int) -> None:
         """
-        Remove the variable node |literal|.
+        Remove the variable node (|literal|).
         Remove all (satisfied) clauses (nodes), which are incident with the variable node and contain the literal.
-        Everything that will be removed from the incidence graph is saved and can be restored from backups in the future.
+        Everything that will be removed from the incidence graph is saved and can be restored from the backup in the future.
         If the variable does not exist in the incidence graph, raise an exception (VariableDoesNotExistException).
         If the variable has been already removed, raise an exception (VariableHasBeenRemovedException).
         :param literal: the literal
@@ -223,17 +223,13 @@ class IncidenceGraph(Graph):
         variable = abs(literal)
         variable_hash = self.__variable_hash(variable)
 
-        # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
-            raise ig_exception.VariableDoesNotExistException(variable)
-
         # The variable has been already removed from the incidence graph
         if variable in self.__variable_backup_set:
             raise ig_exception.VariableHasBeenRemovedException(variable)
 
-        # Ensure that the value exists
-        if literal not in self.__adjacency_literal_dictionary:
-            self.__adjacency_literal_dictionary[literal] = set()
+        # The variable does not exist in the incidence graph
+        if not self.__node_exist(variable_hash):
+            raise ig_exception.VariableDoesNotExistException(variable)
 
         # Backup
         self.__variable_backup_set.add(variable)
@@ -256,7 +252,7 @@ class IncidenceGraph(Graph):
             clause_node_neighbour_set = set(self.neighbors(clause_id_hash))
             clause_node_dictionary[clause_id] = clause_node_neighbour_set
 
-            # Delete the satisfied clause
+            # Delete the (satisfied) clause
             self.remove_node(clause_id_hash)
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
@@ -265,7 +261,6 @@ class IncidenceGraph(Graph):
         """
         Restore all nodes and edges that are mention in the backup for the variable.
         The backup for the variable will be removed.
-        If the variable does not exist in the incidence graph, raise an exception (VariableDoesNotExistException).
         If the variable has not been removed, raise an exception (TryingRestoreLiteralHasNotBeenRemovedException).
         If the literal is not the last one that was removed, raise an exception (TryingRestoreLiteralIsNotLastOneRemovedException).
         :param literal: the literal
@@ -274,10 +269,6 @@ class IncidenceGraph(Graph):
 
         variable = abs(literal)
         variable_hash = self.__variable_hash(variable)
-
-        # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
-            raise ig_exception.VariableDoesNotExistException(variable)
 
         # The variable has not been removed from the incidence graph
         if variable not in self.__variable_backup_set:
@@ -298,16 +289,16 @@ class IncidenceGraph(Graph):
 
             clause_id_hash = self.__clause_id_hash(clause_id)
             clause_node_neighbour_set = clause_node_dictionary[clause_id]
-            for neighbour in clause_node_neighbour_set:
-                super().add_edge(neighbour, clause_id_hash)
+            for neighbour_hash in clause_node_neighbour_set:
+                super().add_edge(neighbour_hash, clause_id_hash)
 
         del self.__clause_node_backup_dictionary[variable]
 
         # Restore the variable node
         self.add_variable(variable)
         variable_node_neighbour_set = self.__variable_node_backup_dictionary[variable]
-        for neighbour in variable_node_neighbour_set:
-            super().add_edge(variable_hash, neighbour)
+        for neighbour_hash in variable_node_neighbour_set:
+            super().add_edge(variable_hash, neighbour_hash)
 
         del self.__variable_node_backup_dictionary[variable]
 
@@ -327,8 +318,8 @@ class IncidenceGraph(Graph):
                 if not self.__is_node_variable(node_hash):
                     continue
 
+                variable = self.nodes[node_hash]["value"]
                 for neighbour_hash in self.neighbors(node_hash):
-                    variable = self.nodes[node_hash]["value"]
                     clause_id = self.nodes[neighbour_hash]["value"]
 
                     literal = variable  # Positive literal
