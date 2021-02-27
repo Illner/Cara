@@ -1,6 +1,6 @@
 # Import
 from typing import Set, Dict, List, Union
-from other.incidence_graph import IncidenceGraph
+from formula.incidence_graph import IncidenceGraph
 
 # Import exception
 import exception.formula.formula_exception as f_exception
