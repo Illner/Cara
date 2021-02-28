@@ -16,7 +16,7 @@ class SolverTest(TestAbstract):
     __FOLDER: str = os.path.join("compiler", "solver")
 
     def __init__(self):
-        super().__init__(SolverTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Solver test")
+        super().__init__(SolverTest.__FOLDER, test_name="Solver test")
         self._set_files(SolverTest.__FOLDER, "CNF_formulae")
 
     # region Override method

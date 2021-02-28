@@ -12,7 +12,7 @@ class IncidenceGraphTest(TestAbstract):
     __FOLDER: str = os.path.join("formula", "incidence_graph")
 
     def __init__(self):
-        super().__init__(IncidenceGraphTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Incidence graph test")
+        super().__init__(IncidenceGraphTest.__FOLDER, test_name="Incidence graph test")
 
     # region Static method
     @staticmethod

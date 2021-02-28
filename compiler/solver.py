@@ -72,6 +72,7 @@ class Solver:
         else:
             raise c_exception.SatSolverIsNotSupportedException(self.__sat_solver_enum)
 
+        # Implied literals without any assumption
         self.__implied_literal_set: Set[int] = set()
         temp = self.iterative_implicit_unit_propagation([])
         if temp is not None:
@@ -105,7 +106,7 @@ class Solver:
         if not is_sat:
             return None
 
-        implied_literals = self.__implied_literal_set.union(set(implied_literals))
+        implied_literals = (set(implied_literals)).union(self.__implied_literal_set)
         implied_literals.difference_update(set(assignment))
 
         return implied_literals
@@ -119,6 +120,7 @@ class Solver:
         the second element of the tuple contains a set of implied literals if the variable is set to False.
         If the formula is unsatisfiable after setting a variable, None will appear in the tuple instead of a set.
         """
+        # TODO subset of variables
 
         # Cache
         key = self.__generate_key_cache(assignment)
@@ -159,13 +161,13 @@ class Solver:
         :return: a set of implied literals
         """
 
-        assignment_temp = assignment.copy()
         repeat = True
+        assignment_list = assignment.copy()
 
         while repeat:
             repeat = False
 
-            implicit_bcp_dictionary = self.implicit_unit_propagation(assignment_temp)
+            implicit_bcp_dictionary = self.implicit_unit_propagation(assignment_list)
             # The formula is unsatisfiable
             if implicit_bcp_dictionary is None:
                 return None
@@ -175,17 +177,17 @@ class Solver:
 
                 # The negative literal is implied
                 if temp_positive is None:
-                    assignment_temp.append(-variable)
+                    assignment_list.append(-variable)
                     repeat = True
                     continue
 
                 # The positive literal is implied
                 if temp_negative is None:
-                    assignment_temp.append(variable)
+                    assignment_list.append(variable)
                     repeat = True
                     continue
 
-        implied_literals = set(assignment_temp)
+        implied_literals = set(assignment_list)
         implied_literals.difference_update(set(assignment))
 
         return implied_literals

@@ -44,16 +44,24 @@
 #     s += (end - start)
 # print(s / 500)
 
+# import time
 # import formula.cnf as cnf
 # import compiler.solver
+# from other.sorted_list import SortedList
 # import compiler.enum.sat_solver_enum as ss_emum
 #
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 #
+# start = time.time()
 # cnf = cnf.Cnf(path)
 # solver = compiler.solver.Solver(cnf, None, ss_emum.SatSolverEnum.CaDiCal)
 #
-# n = solver.unit_propagation([])
+# n = solver.iterative_implicit_unit_propagation([])
+# n = SortedList(n)
+# print(n)
+# end = time.time()
+# print(end - start)
+
 # print(n)
 #
 # iup = solver.implicit_unit_propagation([])

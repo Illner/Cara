@@ -19,7 +19,7 @@ class NodeTest(TestAbstract):
     __FOLDER: str = os.path.join("circuit", "node")
 
     def __init__(self):
-        super().__init__(NodeTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Node test")
+        super().__init__(NodeTest.__FOLDER, test_name="Node test")
 
     # region Override method
     def _get_actual_result(self) -> str:

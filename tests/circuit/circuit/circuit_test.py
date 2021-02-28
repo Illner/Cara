@@ -12,7 +12,7 @@ class CircuitTest(TestAbstract):
     __FOLDER: str = os.path.join("circuit", "circuit")
 
     def __init__(self):
-        super().__init__(CircuitTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Circuit test")
+        super().__init__(CircuitTest.__FOLDER, test_name="Circuit test")
         self._set_files(CircuitTest.__FOLDER, "NNF_formulae")
 
     # region Override method

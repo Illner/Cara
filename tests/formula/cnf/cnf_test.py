@@ -11,7 +11,7 @@ class CnfTest(TestAbstract):
     __FOLDER: str = os.path.join("formula", "cnf")
 
     def __init__(self):
-        super().__init__(CnfTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Cnf test")
+        super().__init__(CnfTest.__FOLDER, test_name="Cnf test")
         self._set_files(CnfTest.__FOLDER, "CNF_formulae")
 
     # region Override method

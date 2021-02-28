@@ -9,7 +9,7 @@ class DynamicGraphTest(TestAbstract):
     __FOLDER: str = os.path.join("compiler", "dynamic_graph")
 
     def __init__(self):
-        super().__init__(DynamicGraphTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Dynamic graph test")
+        super().__init__(DynamicGraphTest.__FOLDER, test_name="Dynamic graph test")
 
     # region Override method
     def _get_actual_result(self) -> str:

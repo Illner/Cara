@@ -9,11 +9,11 @@ import exception.test.test_exception as t_exception
 
 class TestAbstract(ABC):
     __FOLDER: str = "tests"
-    _ORIGINAL_RESULT_FILE_NAME: str = "original_result.txt"
+    __ORIGINAL_RESULT_FILE_NAME: str = "original_result.txt"
 
     def __init__(self, *dictionaries: str, test_name: str = "Test"):
         self.__test_name: str = test_name
-        self.__original_result_path: str = self._create_path(*dictionaries)
+        self.__original_result_path: str = self._create_path(*dictionaries, TestAbstract.__ORIGINAL_RESULT_FILE_NAME)
 
         # File's variables initialization
         self.__path_dictionary: Union[str, None] = None
