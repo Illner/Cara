@@ -44,17 +44,20 @@
 #     s += (end - start)
 # print(s / 500)
 
-# import formula.cnf
+# import formula.cnf as cnf
 # import compiler.solver
 # import compiler.enum.sat_solver_enum as ss_emum
 #
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\large_cnf_valid.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 #
-# cnf = Cnf(path)
+# cnf = cnf.Cnf(path)
 # solver = compiler.solver.Solver(cnf, None, ss_emum.SatSolverEnum.CaDiCal)
 #
-# n = solver.implicit_unit_propagation([])
+# n = solver.unit_propagation([])
 # print(n)
+#
+# iup = solver.implicit_unit_propagation([])
+# print(iup)
 
 # print()
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\no_comments_valid.cnf"
@@ -72,3 +75,8 @@
 # print(n.number_of_nodes())
 # end = time.time()
 # print(end - start)
+
+# from tests.compiler.solver.solver_test import SolverTest
+#
+# s = SolverTest()
+# s.save()

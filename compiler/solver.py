@@ -1,5 +1,4 @@
 # Import
-import itertools
 from formula.cnf import Cnf
 from pysat.formula import CNF
 from other.sorted_list import SortedList
@@ -21,6 +20,7 @@ class Solver:
     """
     Private CNF cnf
     Private Set<int> variable_set
+    Private Set<int> implied_literal_set        # implied literals (implicit BCP) without any assumption
     Private SatSolverEnum sat_solver_enum
     
     Private Solver sat_main                     # main SAT solver
@@ -72,6 +72,11 @@ class Solver:
         else:
             raise c_exception.SatSolverIsNotSupportedException(self.__sat_solver_enum)
 
+        self.__implied_literal_set: Set[int] = set()
+        temp = self.iterative_implicit_unit_propagation([])
+        if temp is not None:
+            self.__implied_literal_set = temp
+
     # region Public method
     def is_satisfiable(self, assignment: List[int]) -> bool:
         """
@@ -80,7 +85,9 @@ class Solver:
         :return: True if the formula is satisfiable, otherwise False is returned
         """
 
-        return self.__sat_main.solve(assumptions=assignment)
+        assumption_list = list(self.__implied_literal_set.union(set(assignment)))
+
+        return self.__sat_main.solve(assumptions=assumption_list)
 
     def unit_propagation(self, assignment: List[int]) -> Union[Set[int], None]:
         """
@@ -90,13 +97,15 @@ class Solver:
         :return: a list of implied literals or None if the formula is unsatisfiable
         """
 
-        is_sat, implied_literals = self.__sat_unit_propagation.propagate(assumptions=assignment)
+        assumption_list = list(self.__implied_literal_set.union(set(assignment)))
+
+        is_sat, implied_literals = self.__sat_unit_propagation.propagate(assumptions=assumption_list)
 
         # The formula is not satisfiable
         if not is_sat:
             return None
 
-        implied_literals = set(implied_literals)
+        implied_literals = self.__implied_literal_set.union(set(implied_literals))
         implied_literals.difference_update(set(assignment))
 
         return implied_literals
@@ -117,14 +126,7 @@ class Solver:
         if exist:
             return value
 
-        implied_literal_set = self.unit_propagation(assignment)
-
-        # The formula is unsatisfiable
-        if implied_literal_set is None:
-            self.__add_implicit_bcp_dictionary_cache(key, None)
-            return None
-
-        temp_set = set(map(lambda l: abs(l), itertools.chain(assignment, implied_literal_set)))
+        temp_set = set(map(lambda l: abs(l), assignment))
         variable_to_try_set = self.__variable_set.difference(temp_set)
         result_dictionary = dict()
 
@@ -148,6 +150,45 @@ class Solver:
 
         self.__add_implicit_bcp_dictionary_cache(key, result_dictionary)
         return result_dictionary
+
+    def iterative_implicit_unit_propagation(self, assignment: List[int]) -> Union[Set[int], None]:
+        """
+        Repeat implicit unit propagation (implicit boolean constraint propagation) until a new implied literal is not found.
+        If the formula for the assignment is unsatisfiable, return None.
+        :param assignment: the assignment
+        :return: a set of implied literals
+        """
+
+        assignment_temp = assignment.copy()
+        repeat = True
+
+        while repeat:
+            repeat = False
+
+            implicit_bcp_dictionary = self.implicit_unit_propagation(assignment_temp)
+            # The formula is unsatisfiable
+            if implicit_bcp_dictionary is None:
+                return None
+
+            for variable in implicit_bcp_dictionary:
+                temp_positive, temp_negative = implicit_bcp_dictionary[variable]
+
+                # The negative literal is implied
+                if temp_positive is None:
+                    assignment_temp.append(-variable)
+                    repeat = True
+                    continue
+
+                # The positive literal is implied
+                if temp_negative is None:
+                    assignment_temp.append(variable)
+                    repeat = True
+                    continue
+
+        implied_literals = set(assignment_temp)
+        implied_literals.difference_update(set(assignment))
+
+        return implied_literals
     # endregion
 
     # region Private method
