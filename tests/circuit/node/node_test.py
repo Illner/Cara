@@ -1,4 +1,5 @@
 # Import
+import os
 from typing import List, Union
 from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
@@ -15,11 +16,10 @@ import exception.circuit.circuit_exception as c_exception
 
 
 class NodeTest(TestAbstract):
-    __FOLDER: str = "circuit"
-    __ORIGINAL_RESULT_FILE_NAME: str = "original_result_node.txt"
+    __FOLDER: str = os.path.join("circuit", "node")
 
     def __init__(self):
-        super().__init__(NodeTest.__FOLDER, NodeTest.__ORIGINAL_RESULT_FILE_NAME, test_name="Node test")
+        super().__init__(NodeTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Node test")
 
     # region Override method
     def _get_actual_result(self) -> str:

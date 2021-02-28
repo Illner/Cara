@@ -1,4 +1,5 @@
 # Import
+import os
 from formula.cnf import Cnf
 from tests.test_abstract import TestAbstract
 
@@ -6,13 +7,12 @@ from tests.test_abstract import TestAbstract
 import exception.formula.formula_exception as f_exception
 
 
-class FormulaTest(TestAbstract):
-    __FOLDER: str = "formula"
-    __ORIGINAL_RESULT_FILE_NAME: str = "original_result_formula.txt"
+class CnfTest(TestAbstract):
+    __FOLDER: str = os.path.join("formula", "cnf")
 
     def __init__(self):
-        super().__init__(FormulaTest.__FOLDER, FormulaTest.__ORIGINAL_RESULT_FILE_NAME, test_name="Formula test")
-        self._set_files(FormulaTest.__FOLDER, "CNF_formulae")
+        super().__init__(CnfTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Cnf test")
+        self._set_files(CnfTest.__FOLDER, "CNF_formulae")
 
     # region Override method
     def _get_actual_result(self) -> str:

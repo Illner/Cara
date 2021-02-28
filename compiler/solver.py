@@ -21,25 +21,33 @@ class Solver:
     """
     Private CNF cnf
     Private Set<int> variable_set
-    
     Private SatSolverEnum sat_solver_enum
+    
     Private Solver sat_main                     # main SAT solver
     Private Solver sat_unit_propagation         # for unit propagation
     
-    Private Dict<str, Dict<int, Tuple<List<int>, List<int>>>> implicit_bcp_dictionary_cache   # key = {number}+
+    Private Dict<str, Dict<int, Tuple<Set<int>, Set<int>>>> implicit_bcp_dictionary_cache   # key = {number}+, value: implicit_bcp_dictionary
     """
 
-    def __init__(self, cnf: Cnf, clause_id_set: Set[int], sat_solver_enum: ss_enum.SatSolverEnum):
+    def __init__(self, cnf: Cnf, clause_id_set: Union[Set[int], None], sat_solver_enum: ss_enum.SatSolverEnum):
         self.__cnf: CNF = CNF()
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
 
         # Create a subformula
-        for clause_id in clause_id_set:
-            self.__cnf.append(cnf._get_clause(clause_id))
+        # The clause_id_set is implicitly given
+        if clause_id_set is not None:
+            for clause_id in clause_id_set:
+                self.__cnf.append(cnf._get_clause(clause_id))
+            self.__variable_set: Set[int] = cnf.get_variable_in_clauses(clause_id_set)
+        # The whole formula is taken into account
+        else:
+            for clause_id in range(cnf.real_number_of_clauses):
+                self.__cnf.append(cnf._get_clause(clause_id))
+            self.__variable_set: Set[int] = cnf._get_variable_set(copy=True)
 
-        self.__variable_set: Set[int] = cnf.get_variable_in_clauses(clause_id_set)
+        # Cache
         self.__implicit_bcp_dictionary_cache: \
-            Dict[str, Union[Dict[int, Tuple[Union[List[int], None], Union[List[int], None]]], None]] = dict()
+            Dict[str, Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]] = dict()
 
         # Create SAT solvers
         self.__sat_main = None
@@ -93,15 +101,14 @@ class Solver:
 
         return implied_literals
 
-    def implicit_unit_propagation(self, assignment: List[int]) -> \
-            Union[Dict[int, Tuple[Union[List[int], None], Union[List[int], None]]], None, Dict[int, Tuple[Set[int], Set[int]]]]:
+    def implicit_unit_propagation(self, assignment: List[int]) -> Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]:
         """
         Do implicit unit propagation (implicit boolean constraint propagation).
         If the formula for the assignment is unsatisfiable, return None.
         :param assignment: the assignment
         :return: For each variable is returned a tuple. The first element contains a set of implied literals if the variable is set to True,
         the second element of the tuple contains a set of implied literals if the variable is set to False.
-        If the formula is unsatisfiable after setting a variable, None will appear in the tuple instead of a list.
+        If the formula is unsatisfiable after setting a variable, None will appear in the tuple instead of a set.
         """
 
         # Cache
@@ -167,7 +174,7 @@ class Solver:
         self.__implicit_bcp_dictionary_cache[key] = implicit_bcp_dictionary
 
     def __get_implicit_bcp_dictionary_cache(self, key: str) -> \
-            Tuple[bool, Union[Dict[int, Tuple[Union[List[int], None], Union[List[int], None]]], None]]:
+            Tuple[bool, Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]]:
         """
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, (False, None) is returned.

@@ -1,4 +1,5 @@
 # Import
+import os
 from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
 from formula.incidence_graph import IncidenceGraph
@@ -8,11 +9,10 @@ import exception.formula.incidence_graph_exception as ig_exception
 
 
 class IncidenceGraphTest(TestAbstract):
-    __FOLDER: str = "formula"
-    __ORIGINAL_RESULT_FILE_NAME: str = "original_result_incidence_graph.txt"
+    __FOLDER: str = os.path.join("formula", "incidence_graph")
 
     def __init__(self):
-        super().__init__(IncidenceGraphTest.__FOLDER, IncidenceGraphTest.__ORIGINAL_RESULT_FILE_NAME, test_name="Incidence graph test")
+        super().__init__(IncidenceGraphTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Incidence graph test")
 
     # region Static method
     @staticmethod

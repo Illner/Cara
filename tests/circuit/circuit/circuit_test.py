@@ -1,4 +1,5 @@
 # Import
+import os
 from circuit.circuit import Circuit
 from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
@@ -8,11 +9,10 @@ import exception.circuit.circuit_exception as c_exception
 
 
 class CircuitTest(TestAbstract):
-    __FOLDER: str = "circuit"
-    __ORIGINAL_RESULT_FILE_NAME: str = "original_result_circuit.txt"
+    __FOLDER: str = os.path.join("circuit", "circuit")
 
     def __init__(self):
-        super().__init__(CircuitTest.__FOLDER, CircuitTest.__ORIGINAL_RESULT_FILE_NAME, test_name="Circuit test")
+        super().__init__(CircuitTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Circuit test")
         self._set_files(CircuitTest.__FOLDER, "NNF_formulae")
 
     # region Override method

@@ -1,15 +1,15 @@
 # Import
+import os
 from other.sorted_list import SortedList
 from other.dynamic_graph import DynamicGraph
 from tests.test_abstract import TestAbstract
 
 
 class DynamicGraphTest(TestAbstract):
-    __FOLDER: str = "compiler"
-    __ORIGINAL_RESULT_FILE_NAME: str = "original_result_dynamic_graph.txt"
+    __FOLDER: str = os.path.join("compiler", "dynamic_graph")
 
     def __init__(self):
-        super().__init__(DynamicGraphTest.__FOLDER, DynamicGraphTest.__ORIGINAL_RESULT_FILE_NAME, test_name="Dynamic graph test")
+        super().__init__(DynamicGraphTest.__FOLDER, TestAbstract._ORIGINAL_RESULT_FILE_NAME, test_name="Dynamic graph test")
 
     # region Override method
     def _get_actual_result(self) -> str:

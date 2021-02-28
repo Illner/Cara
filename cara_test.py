@@ -2,11 +2,13 @@
 import cara
 import argparse
 import warnings
-import tests.circuit.node_test as n_test
-import tests.formula.formula_test as f_test
-import tests.circuit.circuit_test as c_test
-import tests.formula.incidence_graph_test as ig_test
 from tests.test_abstract import TestAbstract
+
+import tests.formula.cnf.cnf_test as fc_test
+import tests.formula.incidence_graph.incidence_graph_test as fig_test
+
+import tests.circuit.node.node_test as cn_test
+import tests.circuit.circuit.circuit_test as cc_test
 
 # Import exception
 import exception.test.test_exception as t_exception
@@ -15,24 +17,24 @@ import exception.test.test_exception as t_exception
 def main(args):
     result = "Test automation results"
 
-    # Formula test
-    if args.formula_test:
-        formula_test = f_test.FormulaTest()
-        result = "\n".join((result, "", test(formula_test)))
+    # Cnf test
+    if args.formula_cnf_test:
+        cnf_test = fc_test.CnfTest()
+        result = "\n".join((result, "", test(cnf_test)))
 
     # Incidence graph test
-    if args.incidence_graph_test:
-        incidence_graph_test = ig_test.IncidenceGraphTest()
+    if args.formula_incidence_graph_test:
+        incidence_graph_test = fig_test.IncidenceGraphTest()
         result = "\n".join((result, "", test(incidence_graph_test)))
 
     # Node test
-    if args.node_test:
-        node_test = n_test.NodeTest()
+    if args.circuit_node_test:
+        node_test = cn_test.NodeTest()
         result = "\n".join((result, "", test(node_test)))
 
     # Circuit test
-    if args.circuit_test:
-        circuit_test = c_test.CircuitTest()
+    if args.circuit_circuit_test:
+        circuit_test = cc_test.CircuitTest()
         result = "\n".join((result, "", test(circuit_test)))
 
     # Print the result
@@ -80,26 +82,26 @@ def create_parser() -> argparse.ArgumentParser:
                         action="store",
                         type=cara.check_output_file_path,
                         help="The path of the output file where the result of the tests will be saved.")
-    parser.add_argument("-ft",
-                        "--formula_test",
+    parser.add_argument("-fct",
+                        "--formula_cnf_test",
                         action="store",
                         default=True,
                         type=cara.str2bool,
-                        help="Test automation for formulae.")
-    parser.add_argument("-ig",
-                        "--incidence_graph_test",
+                        help="Test automation for CNFs.")
+    parser.add_argument("-figt",
+                        "--formula_incidence_graph_test",
                         action="store",
                         default=True,
                         type=cara.str2bool,
                         help="Test automation for incidence graphs.")
-    parser.add_argument("-ct",
-                        "--circuit_test",
+    parser.add_argument("-cct",
+                        "--circuit_circuit_test",
                         action="store",
                         default=True,
                         type=cara.str2bool,
                         help="Test automation for circuits.")
-    parser.add_argument("-nt",
-                        "--node_test",
+    parser.add_argument("-cnt",
+                        "--circuit_node_test",
                         action="store",
                         default=True,
                         type=cara.str2bool,
