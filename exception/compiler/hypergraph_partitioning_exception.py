@@ -1,9 +1,9 @@
-class HypergraphException(Exception):
+class HypergraphPartitioningException(Exception):
     def __init__(self, message: str):
         super().__init__(message)
 
 
-class SomethingWrongException(HypergraphException):
+class SomethingWrongException(HypergraphPartitioningException):
     """
     Something wrong
     """
@@ -15,7 +15,7 @@ class SomethingWrongException(HypergraphException):
         super().__init__(self.message)
 
 
-class FileIsMissingException(HypergraphException):
+class FileIsMissingException(HypergraphPartitioningException):
     """
     The file is missing
     """
@@ -25,7 +25,7 @@ class FileIsMissingException(HypergraphException):
         super().__init__(self.message)
 
 
-class SoftwareIsNotSupportedOnSystemException(HypergraphException):
+class SoftwareIsNotSupportedOnSystemException(HypergraphPartitioningException):
     """
     The software is not supported on the system
     """
@@ -35,7 +35,7 @@ class SoftwareIsNotSupportedOnSystemException(HypergraphException):
         super().__init__(self.message)
 
 
-class NodeDoesNotExistException(HypergraphException):
+class NodeDoesNotExistException(HypergraphPartitioningException):
     """
     The node does not exist in the hypergraph
     """
@@ -45,7 +45,7 @@ class NodeDoesNotExistException(HypergraphException):
         super().__init__(self.message)
 
 
-class HyperedgeDoesNotExistException(HypergraphException):
+class HyperedgeDoesNotExistException(HypergraphPartitioningException):
     """
     The hyperedge does not exist in the hypergraph
     """
@@ -55,17 +55,17 @@ class HyperedgeDoesNotExistException(HypergraphException):
         super().__init__(self.message)
 
 
-class InvalidUBfactorException(HypergraphException):
+class InvalidUBfactorException(HypergraphPartitioningException):
     """
-    Invalid UBfactor
+    Invalid UB factor
     """
 
     def __init__(self, ub_factor: float):
-        self.message = f"The UBfactor ({ub_factor}) has to be a real number between 0.01 (1%) and 0.49 (49%)!"
+        self.message = f"The UB factor ({ub_factor}) has to be a real number between 0.01 (1%) and 0.49 (49%)!"
         super().__init__(self.message)
 
 
-class InvalidLimitCacheException(HypergraphException):
+class InvalidLimitCacheException(HypergraphPartitioningException):
     """
     Invalid limits for caching
     """

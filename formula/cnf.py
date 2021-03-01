@@ -30,7 +30,6 @@ class Cnf:
     Private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with the size k
     
     Private IncidenceGraph incidence_graph
-    Private Hypergraph hypergraph
     """
 
     def __init__(self, dimacs_cnf_file_path: str):
@@ -58,10 +57,6 @@ class Cnf:
         self.__incidence_graph: Union[IncidenceGraph, None] = None
 
         self.__create_cnf(dimacs_cnf_file_path)
-
-        # Hypergraph
-        from formula.hypergraph import Hypergraph
-        self.__hypergraph: Hypergraph = Hypergraph(self)
 
     # region Private method
     def __create_cnf(self, dimacs_cnf_file_path: str) -> None:
@@ -266,6 +261,16 @@ class Cnf:
     # endregion
 
     # region Public method
+    def get_size_clause(self, clause_id: int) -> int:
+        """
+        Return the size of the clause with the given identifier.
+        If the clause does not exist, raise an exception (ClauseDoesNotExistException).
+        :param clause_id: the identifier of the clause
+        :return: the size of the clause
+        """
+
+        return len(self._get_clause(clause_id))
+
     def get_clause(self, clause_id: int) -> Set[int]:
         """
         Return a clause with the given identifier.
@@ -341,8 +346,4 @@ class Cnf:
         """
 
         return self.__unit_clause_set.copy()
-
-    @property
-    def hypergraph(self):
-        return self.__hypergraph
     # endregion

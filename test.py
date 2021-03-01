@@ -50,7 +50,7 @@
 # from other.sorted_list import SortedList
 # import compiler.enum.sat_solver_enum as ss_emum
 #
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 #
 # start = time.time()
 # cnf = cnf.Cnf(path)
@@ -68,7 +68,7 @@
 # print(iup)
 
 # print()
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\CNF_formulae\no_comments_valid.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\no_comments_valid.cnf"
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
 #
 # start = time.time()
@@ -88,3 +88,16 @@
 #
 # s = SolverTest()
 # s.save()
+
+from formula.cnf import Cnf
+from compiler.hypergraph_partitioning import HypergraphPartitioning
+from formula.incidence_graph import IncidenceGraph
+from compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum import HypergraphPartitioningCacheEnum
+
+cnf = Cnf(path)
+graph = cnf.get_incidence_graph()
+hyper = HypergraphPartitioning(cnf, cache_enum=HypergraphPartitioningCacheEnum.ISOMORFISM)
+c = hyper.get_cut_set(graph, None, None)
+print(c)
+c = hyper.get_cut_set(graph, None, None)
+print(c)
