@@ -187,6 +187,12 @@ class Solver:
                     repeat = True
                     continue
 
+                # l_2 e (BCP u {l_1}) and l_2 e (BCP u {-l_1}) => l_2
+                intersection_temp = temp_positive.intersection(temp_negative)
+                if intersection_temp:
+                    assignment_list.extend(intersection_temp)
+                    repeat = True
+
         implied_literals = set(assignment_list)
         implied_literals.difference_update(set(assignment))
 

@@ -1,5 +1,6 @@
 # Import
 import os
+import random
 import subprocess
 from pathlib import Path
 from formula.cnf import Cnf
@@ -15,7 +16,7 @@ import exception.compiler.hypergraph_partitioning_exception as hp_exception
 # Import enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
-import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_equivSimpl_enum as hpes_enum
+import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
 
 
@@ -32,9 +33,9 @@ class HypergraphPartitioning:
     
     Private HypergraphPartitioningCacheEnum cache_enum
     Private HypergraphPartitioningSoftwareEnum software_enum
-    Private HypergraphPartitioningEquivSimplEnum equivSimpl_enum
     Private HypergraphPartitioningNodeWeightEnum node_weight_enum
     Private HypergraphPartitioningHyperedgeWeightEnum hyperedge_weight_enum
+    Private HypergraphPartitioningVariableSimplificationEnum variable_simplification_enum
     
     Private Tuple<int, int> limit_number_of_clauses_cache    # (lower_bound, upper_bound) - None = no limit
     Private Tuple<int, int> limit_number_of_variables_cache  # (lower_bound, upper_bound) - None = no limit
@@ -57,7 +58,7 @@ class HypergraphPartitioning:
                  cache_enum: hpc_enum.HypergraphPartitioningCacheEnum = hpc_enum.HypergraphPartitioningCacheEnum.NONE,
                  node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum = hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                  hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum = hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
-                 equivSimpl_enum: hpes_enum.HypergraphPartitioningEquivSimplEnum = hpes_enum.HypergraphPartitioningEquivSimplEnum.NONE,
+                 variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum = hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE,
                  software_enum: hps_enum.HypergraphPartitioningSoftwareEnum = hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS):
         self.__cnf: Cnf = cnf
         self.__total_number_of_nodes: int = cnf.real_number_of_clauses
@@ -65,7 +66,7 @@ class HypergraphPartitioning:
 
         self.__cache_enum: hpc_enum.HypergraphPartitioningCacheEnum = cache_enum
         self.__software_enum: hps_enum.HypergraphPartitioningSoftwareEnum = software_enum
-        self.__equivSimpl_enum: hpes_enum.HypergraphPartitioningEquivSimplEnum = equivSimpl_enum
+        self.__variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum = variable_simplification_enum
         self.__node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum = node_weight_enum
         self.__hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum = hyperedge_weight_enum
 
@@ -131,6 +132,57 @@ class HypergraphPartitioning:
         # Undefined
         raise c_exception.FunctionNotImplementedException("check_files_and_folders", f"not implemented for this OS ({env.get_os().name})")
 
+    def __variable_simplification(self, solver: Solver, assignment: List[int]) -> Dict[int, Set[int]]:
+        """
+        Compute variable simplification using implicit unit propagation
+        :param solver: the solver
+        :param assignment: the (partial) assignment (for the solver)
+        :return: a dictionary where a key is a variable (representant),
+        and the value is a set of variables that can be merged with the variable to reduce the hypergraph size
+        """
+
+        # None
+        if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE:
+            return dict()
+
+        implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment)
+
+        # EQUIV_SIMPL
+        if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL:
+            processed_variable_set = set()
+            equivalence_list = []
+
+            for var in implicit_bcp_dictionary:
+                # The variable has been already processed
+                if var in processed_variable_set:
+                    continue
+
+                equivalence = {var}
+                first_temp, second_temp = implicit_bcp_dictionary[var]
+                if len(first_temp) > len(second_temp):
+                    first_temp, second_temp = second_temp, first_temp
+
+                for lit in first_temp:
+                    if -lit in second_temp:
+                        var_temp = abs(lit)
+                        equivalence.add(var_temp)
+                        processed_variable_set.add(var_temp)
+
+                equivalence_list.append(equivalence)
+
+            result_dictionary = dict()
+            for equivalence in equivalence_list:
+                representant = (random.sample(equivalence, 1))[0]
+                equivalence.difference_update([representant])
+
+                if equivalence:
+                    result_dictionary[representant] = equivalence
+
+            return result_dictionary
+
+        raise c_exception.FunctionNotImplementedException("variable_simplification",
+                                                          f"this type of variable simplification ({self.__variable_simplification_enum.name}) is not implemented")
+
     # region Weights
     def __set_static_weights(self) -> None:
         """
@@ -194,7 +246,8 @@ class HypergraphPartitioning:
 
             return self.__node_weight_dictionary[node_id]
 
-        raise c_exception.FunctionNotImplementedException("get_node_weight", f"this type of weights ({self.__node_weight_enum.name}) is not implemented")
+        raise c_exception.FunctionNotImplementedException("get_node_weight",
+                                                          f"this type of weights ({self.__node_weight_enum.name}) is not implemented")
 
     def __get_hyperedge_weight(self, hyperedge_id: int) -> int:
         """
@@ -221,7 +274,8 @@ class HypergraphPartitioning:
 
             return self.__hyperedge_weight_dictionary[hyperedge_id]
 
-        raise c_exception.FunctionNotImplementedException("get_hyperedge_weight", f"this type of weights ({self.__hyperedge_weight_enum.name}) is not implemented")
+        raise c_exception.FunctionNotImplementedException("get_hyperedge_weight",
+                                                          f"this type of weights ({self.__hyperedge_weight_enum.name}) is not implemented")
     # endregion
 
     # region Cache
@@ -261,12 +315,11 @@ class HypergraphPartitioning:
 
         self.__cut_set_cache = dict()
 
-    def __generate_key_cache(self, incidence_graph: IncidenceGraph, use_variance: bool = True) -> Union[Tuple[str, Tuple[Dict[int, int], Dict[int, int]]], None]:
+    def __generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[Tuple[str, Tuple[Dict[int, int], Dict[int, int]]], None]:
         """
         Generate a key for caching
         Variable property: occurrence, mean, variance (optional)
         :param incidence_graph: the incidence graph
-        :param use_variance: True if variances can be used for generating the key
         :return: The generated key based on the incidence graph and both mappings between variables
         (variable_id -> order_id, order_id -> variable_id).
         In case some limit (number of clauses/variables) is not satisfied, return None.
@@ -287,6 +340,11 @@ class HypergraphPartitioning:
         if ((lnovc_l_temp is not None) and (number_of_variables < lnovc_l_temp)) or \
            ((lnovc_u_temp is not None) and (number_of_variables > lnovc_u_temp)):
             return None
+
+        # Variance
+        use_variance = False
+        if self.__cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM_VARIANCE:
+            use_variance = True
 
         # Initialize
         occurrence_dictionary: Dict[int, int] = dict()
@@ -482,14 +540,17 @@ class HypergraphPartitioning:
         Create a hypergraph based on the incidence graph
         :param incidence_graph: the incidence graph
         :param solver: the solver (in case equivSimpl is used)
-        :param assignment: the (partial) assignment (for solver)
+        :param assignment: the (partial) assignment (for the solver)
         :return: a cut set of the hypergraph
         """
 
         self.__set_dynamic_weights(incidence_graph)
 
         # TODO Subsumed
-        # TODO equivSimpl
+
+        # Variable simplification
+        variable_simplification_dictionary = self.__variable_simplification(solver, assignment)
+        # TODO variable simplification
 
         # Cache
         key = None  # initialization
@@ -509,6 +570,8 @@ class HypergraphPartitioning:
         # Windows -> hMETIS.exe
         if env.is_windows():
             cut_set = self.__get_cut_set_hmetis_exe(incidence_graph)
+
+        # TODO variable simplification
 
         # Cache
         if (self.__cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE) and (key is not None):
