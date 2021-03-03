@@ -97,7 +97,7 @@ Neighbours (clauses)
 4: 3 4 5
 
 
-Backups and components
+Components and backups - assignment
 
 Remove literals ([1, -3])
 Remove literal (1)
@@ -236,3 +236,124 @@ Neighbours (clauses)
 1: 1 2
 2: 2 3
 3: 3
+
+Backups - variable simplification
+
+Variable simplification: ({1: {3}})
+Is connected: True, number of components: 1, number of nodes: 6, number of variables: 2, number of clauses: 4
+Neighbours (variables)
+1: 0 1 2 3
+2: 0 1 2
+Neighbours (clauses)
+0: 1 2
+1: 1 2
+2: 1 2
+3: 1
+
+Restore:
+Is connected: True, number of components: 1, number of nodes: 7, number of variables: 3, number of clauses: 4
+Neighbours (variables)
+1: 0 1
+2: 0 1 2
+3: 2 3
+Neighbours (clauses)
+0: 1 2
+1: 1 2
+2: 2 3
+3: 3
+
+
+Variable simplification: ({1: {2}})
+Is connected: True, number of components: 1, number of nodes: 6, number of variables: 2, number of clauses: 4
+Neighbours (variables)
+1: 0 1 2
+3: 2 3
+Neighbours (clauses)
+0: 1
+1: 1
+2: 1 3
+3: 3
+
+Restore:
+Is connected: True, number of components: 1, number of nodes: 7, number of variables: 3, number of clauses: 4
+Neighbours (variables)
+1: 0 1
+2: 0 1 2
+3: 2 3
+Neighbours (clauses)
+0: 1 2
+1: 1 2
+2: 2 3
+3: 3
+
+
+Variable simplification: ({2: {1}})
+Is connected: True, number of components: 1, number of nodes: 6, number of variables: 2, number of clauses: 4
+Neighbours (variables)
+2: 0 1 2
+3: 2 3
+Neighbours (clauses)
+0: 2
+1: 2
+2: 2 3
+3: 3
+
+Restore:
+Is connected: True, number of components: 1, number of nodes: 7, number of variables: 3, number of clauses: 4
+Neighbours (variables)
+1: 0 1
+2: 0 1 2
+3: 2 3
+Neighbours (clauses)
+0: 1 2
+1: 1 2
+2: 2 3
+3: 3
+
+
+Variable simplification: ({2: {3}})
+Is connected: True, number of components: 1, number of nodes: 6, number of variables: 2, number of clauses: 4
+Neighbours (variables)
+1: 0 1
+2: 0 1 2 3
+Neighbours (clauses)
+0: 1 2
+1: 1 2
+2: 2
+3: 2
+
+Restore:
+Is connected: True, number of components: 1, number of nodes: 7, number of variables: 3, number of clauses: 4
+Neighbours (variables)
+1: 0 1
+2: 0 1 2
+3: 2 3
+Neighbours (clauses)
+0: 1 2
+1: 1 2
+2: 2 3
+3: 3
+
+
+Variable simplification: ({3: {1, 2}})
+Is connected: True, number of components: 1, number of nodes: 5, number of variables: 1, number of clauses: 4
+Neighbours (variables)
+3: 0 1 2 3
+Neighbours (clauses)
+0: 3
+1: 3
+2: 3
+3: 3
+
+Restore:
+Is connected: True, number of components: 1, number of nodes: 7, number of variables: 3, number of clauses: 4
+Neighbours (variables)
+1: 0 1
+2: 0 1 2
+3: 2 3
+Neighbours (clauses)
+0: 1 2
+1: 1 2
+2: 2 3
+3: 3
+

@@ -84,26 +84,26 @@ path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\
 # end = time.time()
 # print(end - start)
 
-# from tests.compiler.solver.solver_test import SolverTest
+# from tests.formula.incidence_graph.incidence_graph_test import IncidenceGraphTest
 #
-# s = SolverTest()
-# s.save()
+# t = IncidenceGraphTest()
+# t.save()
 
-from formula.cnf import Cnf
-from compiler.hypergraph_partitioning import HypergraphPartitioning
-from formula.incidence_graph import IncidenceGraph
-from compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum import HypergraphPartitioningCacheEnum
-from compiler.solver import Solver
-from compiler.enum.sat_solver_enum import SatSolverEnum
-from compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum import HypergraphPartitioningVariableSimplificationEnum
-
-cnf = Cnf(path)
-graph = cnf.get_incidence_graph()
-solver = Solver(cnf, None, SatSolverEnum.MiniSAT)
-assignment = list(solver.iterative_implicit_unit_propagation([]))
-hyper = HypergraphPartitioning(cnf, cache_enum=HypergraphPartitioningCacheEnum.NONE,
-                               variable_simplification_enum=HypergraphPartitioningVariableSimplificationEnum.NONE)
-c = hyper.get_cut_set(graph, solver, assignment)
-print(len(c))
-c = hyper.get_cut_set(graph, solver, assignment)
-print(c)
+# from formula.cnf import Cnf
+# from compiler.hypergraph_partitioning import HypergraphPartitioning
+# from formula.incidence_graph import IncidenceGraph
+# from compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum import HypergraphPartitioningCacheEnum
+# from compiler.solver import Solver
+# from compiler.enum.sat_solver_enum import SatSolverEnum
+# from compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum import HypergraphPartitioningVariableSimplificationEnum
+#
+# cnf = Cnf(path)
+# graph = cnf.get_incidence_graph()
+# solver = Solver(cnf, None, SatSolverEnum.MiniSAT)
+# assignment = list(solver.iterative_implicit_unit_propagation([]))
+# hyper = HypergraphPartitioning(cnf, cache_enum=HypergraphPartitioningCacheEnum.NONE,
+#                                variable_simplification_enum=HypergraphPartitioningVariableSimplificationEnum.NONE)
+# c = hyper.get_cut_set(graph, solver, assignment)
+# print(len(c))
+# c = hyper.get_cut_set(graph, solver, assignment)
+# print(c)

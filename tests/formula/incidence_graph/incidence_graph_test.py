@@ -47,7 +47,8 @@ class IncidenceGraphTest(TestAbstract):
 
         actual_result = "\n".join((actual_result, "Creating and connecting nodes", self.__test_1(), ""))    # Test 1
         actual_result = "\n".join((actual_result, "Modification", self.__test_2(), ""))                     # Test 2
-        actual_result = "\n".join((actual_result, "Backups and components", self.__test_3()))               # Test 3
+        actual_result = "\n".join((actual_result, "Components and backups - assignment", self.__test_3()))  # Test 3
+        actual_result = "\n".join((actual_result, "Backups - variable simplification", self.__test_4()))    # Test 4
 
         return actual_result
     # endregion
@@ -137,7 +138,7 @@ class IncidenceGraphTest(TestAbstract):
 
     def __test_3(self) -> str:
         """
-        A test for backups and components.
+        A test for components and backups - assignment.
         Positive
         :return: the result of the test
         """
@@ -174,6 +175,32 @@ class IncidenceGraphTest(TestAbstract):
                     result = "\n".join((result, f"Restore literal ({restore_literal})"))
                     incidence_graph.restore_backup_literal(restore_literal)
                     result = "\n".join((result, self.__incidence_graph_str(incidence_graph), connected_components_str(incidence_graph)))
+        except ig_exception.IncidenceGraphException as err:
+            result = "\n".join((result, str(err)))
+
+        return result
+
+    def __test_4(self) -> str:
+        """
+        A test for backups - variable simplification.
+        Positive
+        :return: the result of the test
+        """
+
+        result = ""
+
+        try:
+            incidence_graph = IncidenceGraphTest.__incidence_graph_1()
+
+            variable_simplification_dictionary_list = [{1: {3}}, {1: {2}}, {2: {1}}, {2: {3}}, {3: {1, 2}}]
+
+            for variable_simplification_dictionary in variable_simplification_dictionary_list:
+                result = "\n".join((result, f"Variable simplification: ({variable_simplification_dictionary})"))
+                incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
+                result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+                result = "\n".join((result, "Restore:"))
+                incidence_graph.restore_backup_variable_simplification()
+                result = "\n".join((result, self.__incidence_graph_str(incidence_graph), ""))
         except ig_exception.IncidenceGraphException as err:
             result = "\n".join((result, str(err)))
 
