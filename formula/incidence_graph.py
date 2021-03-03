@@ -22,6 +22,9 @@ class IncidenceGraph(Graph):
     Private List<int> literal_backup_list
     Private Dict<int, Set<str>> variable_node_backup_dictionary             # key: a variable, value: a set of clauses (nodes) that were incident with the variable node when the variable node was being deleted
     Private Dict<int, Dict<int, Set<str>> clause_node_backup_dictionary     # key: a variable, value: a dictionary, where a key is a clause node that was satisfied because of the variable, and the value is a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
+    
+    Private Dict<int, Set<str>> removed_edge_backup_dictionary              # key: a variable, value: a set of neighbours of the variable that were deleted because of variable simplification
+    Private Dict<str, Set<str>> added_edge_backup_dictionary                # key: a variable, value: a set of neighbours of the variable that were added because of variable simplification
     """
 
     def __init__(self, number_of_variables: Union[int, None] = None, number_of_clauses: Union[int, None] = None):
@@ -29,11 +32,15 @@ class IncidenceGraph(Graph):
 
         self.__adjacency_literal_dictionary: Dict[int, Set[int]] = dict()
 
-        # Backup
+        # Backup - assignment
         self.__variable_backup_set: Set[int] = set()
         self.__literal_backup_list: List[int] = []
         self.__variable_node_backup_dictionary: Dict[int, Set[str]] = dict()
         self.__clause_node_backup_dictionary: Dict[int, Dict[int, Set[str]]] = dict()
+
+        # Backup - variable simplification
+        self.__removed_edge_backup_dictionary: Dict[int, Set[str]] = dict()
+        self.__added_edge_backup_dictionary: Dict[str, Set[str]] = dict()
 
         # Create nodes
         if number_of_variables is not None:
@@ -96,8 +103,9 @@ class IncidenceGraph(Graph):
             raise ig_exception.VariableAlreadyExistsException(variable)
 
         # adjacency_literal_dictionary
-        self.__adjacency_literal_dictionary[variable] = set()
-        self.__adjacency_literal_dictionary[-variable] = set()
+        if variable not in self.__adjacency_literal_dictionary:
+            self.__adjacency_literal_dictionary[variable] = set()
+            self.__adjacency_literal_dictionary[-variable] = set()
 
         self.add_node(variable_hash, value=variable, bipartite=0)
 
@@ -186,6 +194,16 @@ class IncidenceGraph(Graph):
 
         return set(self.nodes[n]["value"] for n in self.neighbors(variable_hash))
 
+    def number_of_neighbours_variable(self, variable: int) -> int:
+        """
+        Return the number of neighbours (clauses) of the variable.
+        If the variable does not exist in the incidence graph, raise an exception (VariableDoesNotExistException).
+        :param variable: the variable
+        :return: the number of neighbours
+        """
+
+        return len(self.variable_neighbour_set(variable))
+
     def clause_id_neighbour_set(self, clause_id: int) -> Set[int]:
         """
         Return a set of variables (nodes) that are incident with the clause node.
@@ -201,6 +219,16 @@ class IncidenceGraph(Graph):
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
         return set(self.nodes[n]["value"] for n in self.neighbors(clause_id_hash))
+
+    def number_of_neighbours_clause_id(self, clause_id: int) -> int:
+        """
+        Return the number of neighbours (variables) of the clause.
+        If the clause's id does not exist in the incidence graph, raise an exception (ClauseIdDoesNotExistException).
+        :param clause_id: the clause's id
+        :return: the number of neighbours
+        """
+
+        return len(self.clause_id_neighbour_set(clause_id))
 
     def number_of_nodes(self) -> int:
         """
@@ -288,7 +316,7 @@ class IncidenceGraph(Graph):
     def restore_backup_literal(self, literal: int) -> None:
         """
         Restore all nodes and edges that are mention in the backup for the variable.
-        The backup for the variable will be removed.
+        The backup for the variable will be cleared.
         If the variable has not been removed, raise an exception (TryingRestoreLiteralHasNotBeenRemovedException).
         If the literal is not the last one that was removed, raise an exception (TryingRestoreLiteralIsNotLastOneRemovedException).
         :param literal: the literal
@@ -359,4 +387,63 @@ class IncidenceGraph(Graph):
                 incidence_graph_set.add(incidence_graph_temp)
 
         return incidence_graph_set
+
+    def merge_variable_simplification(self, variable_simplification_dictionary: Dict[int, Set[int]]) -> None:
+        """
+        Merge variables based on the variable simplification dictionary.
+        Everything that will be changed in the incidence graph is saved and can be restored from the backup in the future.
+        :return: None
+        """
+
+        for representant in variable_simplification_dictionary:
+            representant_hash = self.__variable_hash(representant)
+            equivalence_set = variable_simplification_dictionary[representant]
+            neighbour_hash_set = set()
+
+            # Delete (equivalent) nodes and edges
+            for variable in equivalence_set:
+                variable_hash = self.__variable_hash(variable)
+                neighbour_set_temp = set(self.neighbors(variable_hash))
+
+                self.__removed_edge_backup_dictionary[variable] = neighbour_set_temp
+                neighbour_hash_set.update(neighbour_set_temp)
+
+                self.remove_node(variable_hash)
+
+            # Add edges
+            if representant_hash not in self.__added_edge_backup_dictionary:
+                self.__added_edge_backup_dictionary[representant_hash] = set()
+
+            for neighbour_hash in neighbour_hash_set:
+                # The edge does not exist
+                if not self.has_edge(representant_hash, neighbour_hash):
+                    self.__added_edge_backup_dictionary[representant_hash].add(neighbour_hash)
+                    super().add_edge(representant_hash, neighbour_hash)
+
+    def restore_backup_variable_simplification(self) -> None:
+        """
+        Restore all nodes and edges that are mention in the backup.
+        The backup will be cleared.
+        :return: None
+        """
+
+        # Add nodes and edges
+        for variable in self.__removed_edge_backup_dictionary:
+            variable_hash = self.__variable_hash(variable)
+            neighbour_hash_set = self.__removed_edge_backup_dictionary[variable]
+
+            self.add_variable(variable)
+            for neighbour_hash in neighbour_hash_set:
+                super().add_edge(variable_hash, neighbour_hash)
+
+        self.__removed_edge_backup_dictionary = dict()
+
+        # Remove edges
+        for variable_hash in self.__added_edge_backup_dictionary:
+            neighbour_hash_set = self.__added_edge_backup_dictionary[variable_hash]
+
+            for neighbour_hash in neighbour_hash_set:
+                self.remove_edge(variable_hash, neighbour_hash)
+
+        self.__added_edge_backup_dictionary = dict()
     # endregion

@@ -50,7 +50,6 @@
 # from other.sorted_list import SortedList
 # import compiler.enum.sat_solver_enum as ss_emum
 #
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 #
 # start = time.time()
 # cnf = cnf.Cnf(path)
@@ -70,6 +69,7 @@ path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\
 # print()
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\no_comments_valid.cnf"
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 #
 # start = time.time()
 # cnf = Cnf(path)
@@ -93,11 +93,17 @@ from formula.cnf import Cnf
 from compiler.hypergraph_partitioning import HypergraphPartitioning
 from formula.incidence_graph import IncidenceGraph
 from compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum import HypergraphPartitioningCacheEnum
+from compiler.solver import Solver
+from compiler.enum.sat_solver_enum import SatSolverEnum
+from compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum import HypergraphPartitioningVariableSimplificationEnum
 
 cnf = Cnf(path)
 graph = cnf.get_incidence_graph()
-hyper = HypergraphPartitioning(cnf, cache_enum=HypergraphPartitioningCacheEnum.ISOMORFISM)
-c = hyper.get_cut_set(graph, None, None)
-print(c)
-c = hyper.get_cut_set(graph, None, None)
+solver = Solver(cnf, None, SatSolverEnum.MiniSAT)
+assignment = list(solver.iterative_implicit_unit_propagation([]))
+hyper = HypergraphPartitioning(cnf, cache_enum=HypergraphPartitioningCacheEnum.NONE,
+                               variable_simplification_enum=HypergraphPartitioningVariableSimplificationEnum.NONE)
+c = hyper.get_cut_set(graph, solver, assignment)
+print(len(c))
+c = hyper.get_cut_set(graph, solver, assignment)
 print(c)

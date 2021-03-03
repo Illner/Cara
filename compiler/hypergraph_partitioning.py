@@ -147,6 +147,10 @@ class HypergraphPartitioning:
 
         implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment)
 
+        # The formula is unsatisfiable (it should not happen at all)
+        if implicit_bcp_dictionary is None:
+            return dict()
+
         # EQUIV_SIMPL
         if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL:
             processed_variable_set = set()
@@ -159,6 +163,13 @@ class HypergraphPartitioning:
 
                 equivalence = {var}
                 first_temp, second_temp = implicit_bcp_dictionary[var]
+
+                # var is an implied variable (should not happen if implicit unit propagation is used for implied literals)
+                if first_temp is None:
+                    first_temp = set()
+                if second_temp is None:
+                    second_temp = set()
+
                 if len(first_temp) > len(second_temp):
                     first_temp, second_temp = second_temp, first_temp
 
@@ -172,11 +183,14 @@ class HypergraphPartitioning:
 
             result_dictionary = dict()
             for equivalence in equivalence_list:
+                # Trivial equivalence class
+                if len(equivalence) == 1:
+                    continue
+
                 representant = (random.sample(equivalence, 1))[0]
                 equivalence.difference_update([representant])
 
-                if equivalence:
-                    result_dictionary[representant] = equivalence
+                result_dictionary[representant] = equivalence
 
             return result_dictionary
 
@@ -361,7 +375,7 @@ class HypergraphPartitioning:
             # Mean
             mean_temp = 0
             for clause_id in clause_id_set:
-                mean_temp += self.__cnf.get_size_clause(clause_id)
+                mean_temp += incidence_graph.number_of_neighbours_clause_id(clause_id)
             # mean_temp = mean_temp / len(clause_id_set)
             mean_dictionary[variable] = mean_temp
 
@@ -373,7 +387,7 @@ class HypergraphPartitioning:
 
                 variance_temp = 0
                 for clause_id in clause_id_set:
-                    variance_temp += (self.__cnf.get_size_clause(clause_id) - mean_temp) ** 2
+                    variance_temp += (incidence_graph.number_of_neighbours_clause_id(clause_id) - mean_temp) ** 2
                 # variance_temp = variance_temp / (len(clause_id_set) - 1)
                 variance_dictionary[variable] = variance_temp
 
@@ -419,7 +433,7 @@ class HypergraphPartitioning:
 
         key_list = []
         for clause_id in incidence_graph.clause_id_set():
-            variable_set_temp = self.__cnf._get_variable_in_clause(clause_id)
+            variable_set_temp = incidence_graph.clause_id_neighbour_set(clause_id)
             key_clause = 0
             for v in variable_set_temp:
                 key_clause += 2 ** (variable_id_order_id_dictionary[v])
@@ -550,7 +564,7 @@ class HypergraphPartitioning:
 
         # Variable simplification
         variable_simplification_dictionary = self.__variable_simplification(solver, assignment)
-        # TODO variable simplification
+        incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
 
         # Cache
         key = None  # initialization
@@ -571,8 +585,6 @@ class HypergraphPartitioning:
         if env.is_windows():
             cut_set = self.__get_cut_set_hmetis_exe(incidence_graph)
 
-        # TODO variable simplification
-
         # Cache
         if (self.__cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE) and (key is not None):
             cut_set_cache = set()
@@ -580,6 +592,9 @@ class HypergraphPartitioning:
                 cut_set_cache.add(variable_id_order_id_dictionary[var])
 
             self.__add_cut_set_cache(key, cut_set_cache)
+
+        # Variable simplification
+        incidence_graph.restore_backup_variable_simplification()
 
         return cut_set
     # endregion
