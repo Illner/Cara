@@ -52,14 +52,14 @@ class HypergraphPartitioning:
     OUTPUT_FILE_EXE_HMETIS_PATH = Path(str(INPUT_FILE_EXE_HMETIS_PATH) + ".part.2")
     WIN_PROGRAM_EXE_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe"))
 
-    def __init__(self, cnf: Cnf, ub_factor: float = 0.10,
-                 limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
-                 limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
-                 cache_enum: hpc_enum.HypergraphPartitioningCacheEnum = hpc_enum.HypergraphPartitioningCacheEnum.NONE,
-                 node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum = hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
-                 hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum = hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
-                 variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum = hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE,
-                 software_enum: hps_enum.HypergraphPartitioningSoftwareEnum = hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS):
+    def __init__(self, cnf: Cnf, ub_factor: float,
+                 cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
+                 software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
+                 node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
+                 hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum,
+                 variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
+                 limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]],
+                 limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]]):
         self.__cnf: Cnf = cnf
         self.__total_number_of_nodes: int = cnf.real_number_of_clauses
         self.__total_number_of_hyperedges: int = cnf.number_of_variables

@@ -13,6 +13,8 @@ import exception.compiler.compiler_exception as c_exception
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
+import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
+import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
 
@@ -40,7 +42,15 @@ class HypergraphPartitioningTest(TestAbstract):
                                                        f"cache: {hpc_enum.HypergraphPartitioningCacheEnum(cache_enum).name}, "
                                                        f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum(variable_simplification_enum).name}"))
 
-                            hypergraph_partitioning = HypergraphPartitioning(cnf, cache_enum=cache_enum, variable_simplification_enum=variable_simplification_enum)
+                            hypergraph_partitioning = HypergraphPartitioning(cnf,
+                                                                             cache_enum=cache_enum,
+                                                                             variable_simplification_enum=variable_simplification_enum,
+                                                                             ub_factor=0.10,
+                                                                             software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
+                                                                             node_weight_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
+                                                                             hyperedge_weight_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
+                                                                             limit_number_of_clauses_cache=(None, None),
+                                                                             limit_number_of_variables_cache=(None, None))
 
                             number_of_repetition = 1 if cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE else 2
                             for _ in range(number_of_repetition):
