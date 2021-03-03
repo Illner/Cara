@@ -107,3 +107,8 @@ path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\
 # print(len(c))
 # c = hyper.get_cut_set(graph, solver, assignment)
 # print(c)
+#
+# from tests.compiler.hypergraph_partitioning.hypergraph_partitioning_test import HypergraphPartitioningTest
+#
+# t = HypergraphPartitioningTest()
+# t.save()

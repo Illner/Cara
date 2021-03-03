@@ -15,8 +15,9 @@ import tests.circuit.node.node_test as cn_test
 import tests.circuit.circuit.circuit_test as cc_test
 
 # Compiler
-# import tests.compiler.dynamic_graph.dynamic_graph_test as cdg_test
 import tests.compiler.solver.solver_test as cs_test
+# import tests.compiler.dynamic_graph.dynamic_graph_test as cdg_test
+import tests.compiler.hypergraph_partitioning.hypergraph_partitioning_test as chp_test
 
 # Import exception
 import exception.test.test_exception as t_exception
@@ -66,6 +67,14 @@ def main(args):
         solver_test = cs_test.SolverTest()
         print(solver_test.test_name, end=": ")
         result, log_result = test(solver_test)
+        print(result)
+        log_string = "\n".join((log_string, log_result, ""))
+
+    # Hypergraph partitioning test
+    if args.compiler_hypergraph_partitioning_test:
+        hypergraph_partitioning_test = chp_test.HypergraphPartitioningTest()
+        print(hypergraph_partitioning_test.test_name, end=": ")
+        result, log_result = test(hypergraph_partitioning_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
 
@@ -134,6 +143,12 @@ def create_parser() -> argparse.ArgumentParser:
                         default=True,
                         type=cara.str2bool,
                         help="Test automation for solvers.")
+    parser.add_argument("-chpt",
+                        "--compiler_hypergraph_partitioning_test",
+                        action="store",
+                        default=True,
+                        type=cara.str2bool,
+                        help="Test automation for hypergraph partitioning.")
 
     return parser
 
