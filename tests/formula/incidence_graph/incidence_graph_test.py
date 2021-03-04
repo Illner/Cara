@@ -66,14 +66,16 @@ class IncidenceGraphTest(TestAbstract):
         variable_set = incidence_graph.variable_set()
         for variable in variable_set:
             neighbour_sorted_list = SortedList(incidence_graph.variable_neighbour_set(variable))
-            result = "\n".join((result, f"{variable}: {neighbour_sorted_list}"))
+            number_of_neighbours = incidence_graph.number_of_neighbours_variable(variable)
+            result = "\n".join((result, f"{variable} ({number_of_neighbours}): {neighbour_sorted_list}"))
 
         # Neighbours (clauses)
         result = "\n".join((result, "Neighbours (clauses)"))
         clause_id_set = incidence_graph.clause_id_set()
         for clause_id in clause_id_set:
             neighbour_sorted_list = SortedList(incidence_graph.clause_id_neighbour_set(clause_id))
-            result = "\n".join((result, f"{clause_id}: {neighbour_sorted_list}"))
+            number_of_neighbours = incidence_graph.number_of_neighbours_clause_id(clause_id)
+            result = "\n".join((result, f"{clause_id} ({number_of_neighbours}): {neighbour_sorted_list}"))
 
         result = "\n".join((result, ""))
         return result
@@ -158,7 +160,7 @@ class IncidenceGraphTest(TestAbstract):
 
             incidence_graph = IncidenceGraphTest.__incidence_graph_1()
 
-            remove_literal_list_list = [[1, -3], [2]]
+            remove_literal_list_list = [[1, -3], [2], [-1, 3]]
             for remove_literal_list in remove_literal_list_list:
                 # Remove
                 result = "\n".join((result, f"Remove literals ({remove_literal_list})"))

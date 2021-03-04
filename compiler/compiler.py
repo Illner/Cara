@@ -45,8 +45,8 @@ class Compiler:
                  hp_node_weight_type_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
                  hp_hyperedge_weight_type_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum,
                  hp_variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
-                 hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
-                 hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None)):
+                 hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]],
+                 hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]]):
         self.__cnf: Cnf = cnf
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
@@ -80,7 +80,6 @@ class Compiler:
         node_id_set: Set[int] = set()
         for incidence_graph in incidence_graph_set:
             component = Component(cnf=self.__cnf,
-                                  compiler=self,
                                   circuit=self.__circuit,
                                   incidence_graph=incidence_graph,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,

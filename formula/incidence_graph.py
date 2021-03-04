@@ -21,7 +21,7 @@ class IncidenceGraph(Graph):
     Private Set<int> variable_backup_set
     Private List<int> literal_backup_list
     Private Dict<int, Set<str>> variable_node_backup_dictionary             # key: a variable, value: a set of clauses (nodes) that were incident with the variable node when the variable node was being deleted
-    Private Dict<int, Dict<int, Set<str>> clause_node_backup_dictionary     # key: a variable, value: a dictionary, where a key is a clause node that was satisfied because of the variable, and the value is a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
+    Private Dict<int, Dict<int, Set<int>> clause_node_backup_dictionary     # key: a variable, value: a dictionary, where a key is a clause node that was satisfied because of the variable, and the value is a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
     
     Private Dict<int, Set<str>> removed_edge_backup_dictionary              # key: a variable, value: a set of neighbours of the variable that were deleted because of variable simplification
     Private Dict<str, Set<str>> added_edge_backup_dictionary                # key: a variable, value: a set of neighbours of the variable that were added because of variable simplification
@@ -36,7 +36,7 @@ class IncidenceGraph(Graph):
         self.__variable_backup_set: Set[int] = set()
         self.__literal_backup_list: List[int] = []
         self.__variable_node_backup_dictionary: Dict[int, Set[str]] = dict()
-        self.__clause_node_backup_dictionary: Dict[int, Dict[int, Set[str]]] = dict()
+        self.__clause_node_backup_dictionary: Dict[int, Dict[int, Set[int]]] = dict()
 
         # Backup - variable simplification
         self.__removed_edge_backup_dictionary: Dict[int, Set[str]] = dict()
@@ -202,7 +202,13 @@ class IncidenceGraph(Graph):
         :return: the number of neighbours
         """
 
-        return len(self.variable_neighbour_set(variable))
+        variable_hash = self.__variable_hash(variable)
+
+        # The variable does not exist in the incidence graph
+        if not self.__node_exist(variable_hash):
+            raise ig_exception.VariableDoesNotExistException(variable)
+
+        return len(self[variable_hash])
 
     def clause_id_neighbour_set(self, clause_id: int) -> Set[int]:
         """
@@ -228,7 +234,13 @@ class IncidenceGraph(Graph):
         :return: the number of neighbours
         """
 
-        return len(self.clause_id_neighbour_set(clause_id))
+        clause_id_hash = self.__clause_id_hash(clause_id)
+
+        # The clause's id does not exist in the incidence graph
+        if not self.__node_exist(clause_id_hash):
+            raise ig_exception.ClauseIdDoesNotExistException(clause_id)
+
+        return len(self[clause_id_hash])
 
     def number_of_nodes(self) -> int:
         """
@@ -305,11 +317,16 @@ class IncidenceGraph(Graph):
             if not self.__node_exist(clause_id_hash):
                 continue
 
-            clause_node_neighbour_set = set(self.neighbors(clause_id_hash))
+            clause_node_neighbour_set = self.clause_id_neighbour_set(clause_id)
             clause_node_dictionary[clause_id] = clause_node_neighbour_set
 
             # Delete the (satisfied) clause
             self.remove_node(clause_id_hash)
+
+            # Check if a neighbour is not an isolated node
+            for clause_node_neighbour in clause_node_neighbour_set:
+                if not self.number_of_neighbours_variable(clause_node_neighbour):
+                    self.remove_node(self.__variable_hash(clause_node_neighbour))
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
 
@@ -345,7 +362,13 @@ class IncidenceGraph(Graph):
 
             clause_id_hash = self.__clause_id_hash(clause_id)
             clause_node_neighbour_set = clause_node_dictionary[clause_id]
-            for neighbour_hash in clause_node_neighbour_set:
+            for neighbour_id in clause_node_neighbour_set:
+                neighbour_hash = self.__variable_hash(neighbour_id)
+
+                # The neighbour does not exist
+                if not self.__node_exist(neighbour_hash):
+                    self.add_variable(neighbour_id)
+
                 super().add_edge(neighbour_hash, clause_id_hash)
 
         del self.__clause_node_backup_dictionary[variable]
