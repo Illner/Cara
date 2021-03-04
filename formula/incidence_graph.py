@@ -381,36 +381,6 @@ class IncidenceGraph(Graph):
 
         del self.__variable_node_backup_dictionary[variable]
 
-    def create_incidence_graphs_for_components(self) -> Set[TIncidenceGraph]:
-        """
-        For each connected component will be created a new incidence graph
-        :return: a set of incidence graphs (one for each component)
-        """
-
-        incidence_graph_set = set()
-
-        for component in nx.connected_components(self):
-            incidence_graph_temp = IncidenceGraph()
-
-            for node_hash in component:
-                # The node is not a variable
-                if not self.__is_node_variable(node_hash):
-                    continue
-
-                variable = self.nodes[node_hash]["value"]
-                for neighbour_hash in self.neighbors(node_hash):
-                    clause_id = self.nodes[neighbour_hash]["value"]
-
-                    literal = variable  # Positive literal
-                    if clause_id in self.__adjacency_literal_dictionary[-variable]:     # Negative literal
-                        literal = -variable
-
-                    incidence_graph_temp.add_edge(literal, clause_id, create_node=True)
-
-                incidence_graph_set.add(incidence_graph_temp)
-
-        return incidence_graph_set
-
     def merge_variable_simplification(self, variable_simplification_dictionary: Dict[int, Set[int]]) -> None:
         """
         Merge variables based on the variable simplification dictionary.
@@ -469,4 +439,58 @@ class IncidenceGraph(Graph):
                 self.remove_edge(variable_hash, neighbour_hash)
 
         self.__added_edge_backup_dictionary = dict()
+
+    def create_incidence_graphs_for_components(self) -> Set[TIncidenceGraph]:
+        """
+        For each connected component will be created a new incidence graph
+        :return: a set of incidence graphs (one for each component)
+        """
+
+        incidence_graph_set = set()
+
+        for component in nx.connected_components(self):
+            incidence_graph_temp = IncidenceGraph()
+
+            for node_hash in component:
+                # The node is not a variable
+                if not self.__is_node_variable(node_hash):
+                    continue
+
+                variable = self.nodes[node_hash]["value"]
+                for neighbour_hash in self.neighbors(node_hash):
+                    clause_id = self.nodes[neighbour_hash]["value"]
+
+                    literal = variable  # Positive literal
+                    if clause_id in self.__adjacency_literal_dictionary[-variable]:     # Negative literal
+                        literal = -variable
+
+                    incidence_graph_temp.add_edge(literal, clause_id, create_node=True)
+
+                incidence_graph_set.add(incidence_graph_temp)
+
+        return incidence_graph_set
+
+    def copy(self) -> TIncidenceGraph:
+        """
+        :return: a copy of the incidence graph
+        """
+
+        copy = IncidenceGraph()
+
+        for node_hash in self.nodes:
+            # The node is not a variable
+            if not self.__is_node_variable(node_hash):
+                continue
+
+            variable = self.nodes[node_hash]["value"]
+            for neighbour_hash in self.neighbors(node_hash):
+                clause_id = self.nodes[neighbour_hash]["value"]
+
+                literal = variable  # Positive literal
+                if clause_id in self.__adjacency_literal_dictionary[-variable]:  # Negative literal
+                    literal = -variable
+
+                copy.add_edge(literal, clause_id, create_node=True)
+
+        return copy
     # endregion

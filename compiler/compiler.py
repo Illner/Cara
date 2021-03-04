@@ -80,6 +80,7 @@ class Compiler:
         node_id_set: Set[int] = set()
         for incidence_graph in incidence_graph_set:
             component = Component(cnf=self.__cnf,
+                                  assignment_list=[],
                                   circuit=self.__circuit,
                                   incidence_graph=incidence_graph,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
