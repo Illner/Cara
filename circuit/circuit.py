@@ -511,6 +511,15 @@ class Circuit:
 
         return node.id
 
+    def create_literal_leaf_set(self, literal_set: Set[int], use_unique_node_cache: bool = True) -> Set[int]:
+        node_id_set = set()
+
+        for literal in literal_set:
+            node_id = self.create_literal_leaf(literal, use_unique_node_cache)
+            node_id_set.add(node_id)
+
+        return node_id_set
+
     def create_and_node(self, child_id_set: Set[int], use_unique_node_cache: bool = True) -> int:
         """
         Create a new AND node in the circuit.

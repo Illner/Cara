@@ -155,7 +155,7 @@ class Solver:
 
     def iterative_implicit_unit_propagation(self, assignment: List[int]) -> Union[Set[int], None]:
         """
-        Repeat implicit unit propagation (implicit boolean constraint propagation) until a new implied literal is not found.
+        Repeat implicit unit propagation (implicit boolean constraint propagation) until a new implied literal is found.
         If the formula for the assignment is unsatisfiable, return None.
         :param assignment: the assignment
         :return: a set of implied literals

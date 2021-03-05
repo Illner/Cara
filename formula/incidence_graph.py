@@ -1,4 +1,5 @@
 # Import
+import random
 import networkx as nx
 from networkx.classes.graph import Graph
 from typing import Set, Dict, List, Union, TypeVar
@@ -330,6 +331,10 @@ class IncidenceGraph(Graph):
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
 
+    def remove_literal_set(self, literal_set: Set[int]) -> None:
+        for literal in literal_set:
+            self.remove_literal(literal)
+
     def restore_backup_literal(self, literal: int) -> None:
         """
         Restore all nodes and edges that are mention in the backup for the variable.
@@ -380,6 +385,18 @@ class IncidenceGraph(Graph):
             super().add_edge(variable_hash, neighbour_hash)
 
         del self.__variable_node_backup_dictionary[variable]
+
+    def restore_backup_literal_set(self, literal_set: Set[int]) -> None:
+        while len(literal_set):
+            last_literal = self.__literal_backup_list[-1]
+
+            # The last literal in the backup does not exist in the set => choose any element in the set and cause an exception
+            if last_literal not in literal_set:
+                literal_temp = (random.sample(literal_set, 1))[0]
+                self.restore_backup_literal(literal_temp)
+            else:
+                literal_set.remove(last_literal)
+                self.restore_backup_literal(last_literal)
 
     def merge_variable_simplification(self, variable_simplification_dictionary: Dict[int, Set[int]]) -> None:
         """

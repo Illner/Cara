@@ -57,3 +57,13 @@ class InconsistentAssignmentException(CompilerException):
         if message_extension:
             self.message += f" ({message_extension})"
         super().__init__(self.message)
+
+
+class TryingGetVariableFromEmptyCutSetException(CompilerException):
+    """
+    Trying to get a variable from the empty cut set
+    """
+
+    def __init__(self):
+        self.message = "Trying to get a variable from the empty cut set!"
+        super().__init__(self.message)

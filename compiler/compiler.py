@@ -24,6 +24,7 @@ class Compiler:
     Private Cnf cnf
     Private bool smooth
     Private Circuit circuit
+    Private float new_cut_set_threshold
     Private HypergraphPartitioning hypergraph_partitioning
     
     Private SatSolverEnum sat_solver_enum
@@ -38,6 +39,7 @@ class Compiler:
     def __init__(self, cnf: Cnf,
                  smooth: bool,
                  ub_factor: float,
+                 new_cut_set_threshold: float,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  hp_cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
@@ -45,11 +47,12 @@ class Compiler:
                  hp_node_weight_type_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
                  hp_hyperedge_weight_type_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum,
                  hp_variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
-                 hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]],
-                 hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]]):
+                 hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
+                 hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None)):
         self.__cnf: Cnf = cnf
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
+        self.__new_cut_set_threshold: float = new_cut_set_threshold
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
@@ -82,6 +85,7 @@ class Compiler:
             component = Component(cnf=self.__cnf,
                                   assignment_list=[],
                                   circuit=self.__circuit,
+                                  new_cut_set_threshold=self.__new_cut_set_threshold,
                                   incidence_graph=incidence_graph,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
                                   sat_solver_enum=self.__sat_solver_enum,

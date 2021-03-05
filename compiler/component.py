@@ -1,10 +1,11 @@
 # Import
+import random
 from formula.cnf import Cnf
 from compiler.solver import Solver
 from circuit.circuit import Circuit
+from typing import Set, List, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler.hypergraph_partitioning import HypergraphPartitioning
-from typing import Set, Dict, List, Tuple, Union
 
 # Import exception
 import exception.cara_exception as ca_exception
@@ -14,6 +15,8 @@ import exception.compiler.compiler_exception as c_exception
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 
+# TODO Cut set heuristic
+
 
 class Component:
     """
@@ -21,23 +24,29 @@ class Component:
     """
 
     """
+    Private Cnf cnf
     Private Solver solver
     Private Circuit circuit
+    Private float new_cut_set_threshold
     Private IncidenceGraph incidence_graph
     Private HypergraphPartitioning hypergraph_partitioning
     
+    Private SatSolverEnum sat_solver_enum
     Private ImpliedLiteralsEnum implied_literals_enum
     
-    Private List[int] assignment_list
+    Private List<int> assignment_list
     """
 
-    def __init__(self, cnf: Cnf, assignment_list: List[int], circuit: Circuit,
+    def __init__(self, cnf: Cnf, assignment_list: List[int], circuit: Circuit, new_cut_set_threshold: float,
                  incidence_graph: IncidenceGraph, hypergraph_partitioning: HypergraphPartitioning,
                  sat_solver_enum: ss_enum.SatSolverEnum, implied_literals_enum: il_enum.ImpliedLiteralsEnum):
+        self.__cnf: Cnf = cnf
         self.__circuit: Circuit = circuit
         self.__incidence_graph: IncidenceGraph = incidence_graph
+        self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
 
+        self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
 
         clause_id_set = self.__incidence_graph.clause_id_set()
@@ -51,11 +60,7 @@ class Component:
         :return: the root's id of the created circuit
         """
 
-        # Get a new cut set
-        cut_set = self.__hypergraph_partitioning.get_cut_set(self.__incidence_graph, self.__solver, self.__assignment_list)
-        sorted_cut_set = self.__sort_cut_set(cut_set)
-
-        return self.__create_circuit(sorted_cut_set)
+        return self.__create_circuit(set())
     # endregion
 
     # region Private
@@ -86,16 +91,42 @@ class Component:
         raise ca_exception.FunctionNotImplementedException("get_implied_literals",
                                                            f"this type of getting implied literals ({self.__implied_literals_enum.name}) is not implemented")
 
-    def __sort_cut_set(self, cut_set: Set[int]) -> List[int]:
+    def __get_cut_set(self) -> Set[int]:
         """
-        Sort the cut set based on the heuristic.
-        The list is sorted in increasing order (the best variable is at the end of the list).
-        :param cut_set: the cut set
-        :return: the sorted cut set
+        :return: a new cut set
         """
 
-        # TODO Sort cut set
-        return list(cut_set)
+        return self.__hypergraph_partitioning.get_cut_set(self.__incidence_graph, self.__solver, self.__assignment_list)
+
+    def __is_suggested_new_cut_set(self, cut_set_before_restriction: Set[int], cut_set_after_restriction: Set[int],
+                                   number_of_variables_before_unit_propagation: int, number_of_variables_after_unit_propagation: int) -> bool:
+        """
+        :return: True if creating a new cut set is suggested. Otherwise, False is returned.
+        """
+
+        # The cut set after the restriction is empty
+        if not cut_set_after_restriction:
+            return True
+
+        number_of_removed_variables = number_of_variables_before_unit_propagation - number_of_variables_after_unit_propagation
+        if (number_of_removed_variables / number_of_variables_before_unit_propagation) >= self.__new_cut_set_threshold:
+            return True
+
+        return False
+
+    def __get_suggested_variable_from_cut_set(self, cut_set: Set[int]) -> int:
+        """
+        Return a suggested variable from the cut set based on the heuristic.
+        If the cut set is empty, raise an exception (TryingGetVariableFromEmptyCutSetException).
+        :param cut_set: the cut set
+        :return: a suggested variable (based on the heuristic) from the cut set
+        """
+
+        # The cut set is empty
+        if not cut_set:
+            raise c_exception.TryingGetVariableFromEmptyCutSetException()
+
+        return (random.sample(cut_set, 1))[0]
 
     def __exist_more_components(self) -> bool:
         """
@@ -105,13 +136,94 @@ class Component:
 
         return True if self.__incidence_graph.number_of_components() > 1 else False
 
-    def __create_circuit(self, cut_set: List[int]) -> int:
+    def __create_circuit(self, cut_set: Set[int]) -> int:
         """
         :return: the root's id of the created circuit
         """
 
-        decision_variable = cut_set.pop()
+        def remove_implied_literals(implied_literals_set_func: Set[int]) -> None:
+            """
+            implied_literals_set_func will be destroyed !!!
+            """
 
-        # TODO Create circuit
-        pass
+            for _ in range(len(implied_literals_set_func)):
+                self.__assignment_list.pop()
+            self.__incidence_graph.restore_backup_literal_set(implied_literals_set_func)
+
+        # The formula is unsatisfiable
+        if not self.__solver.is_satisfiable(self.__assignment_list):
+            return self.__circuit.create_constant_leaf(False)
+
+        number_of_variables_before_unit_propagation = self.__incidence_graph.number_of_variables()
+
+        # Implied literals
+        implied_literal_set = self.__get_implied_literals()
+        self.__assignment_list.extend(implied_literal_set)
+        self.__incidence_graph.remove_literal_set(implied_literal_set)
+        implied_literal_id_set = self.__circuit.create_literal_leaf_set(implied_literal_set)
+
+        number_of_variables_after_unit_propagation = self.__incidence_graph.number_of_variables()
+
+        # The formula is empty after the unit propagation
+        if self.__incidence_graph.number_of_nodes() == 0:
+            remove_implied_literals(implied_literal_set)    # Restore the implied literals
+            return self.__circuit.create_and_node(implied_literal_id_set)
+
+        # TODO Formula type
+        # TODO Cache (Key, Get)
+
+        # Check if more components exist
+        if self.__exist_more_components():
+            incidence_graph_set = self.__incidence_graph.create_incidence_graphs_for_components()
+
+            node_id_set = set()
+            for incidence_graph in incidence_graph_set:
+                component_temp = Component(cnf=self.__cnf,
+                                           assignment_list=self.__assignment_list,
+                                           circuit=self.__circuit,
+                                           new_cut_set_threshold=self.__new_cut_set_threshold,
+                                           incidence_graph=incidence_graph,
+                                           hypergraph_partitioning=self.__hypergraph_partitioning,
+                                           sat_solver_enum=self.__sat_solver_enum,
+                                           implied_literals_enum=self.__implied_literals_enum)
+                node_id = component_temp.create_circuit()
+                node_id_set.add(node_id)
+
+            node_id = self.__circuit.create_and_node(node_id_set.union(implied_literal_id_set))
+
+            # TODO Cache (Save)
+
+            remove_implied_literals(implied_literal_set)    # Restore the implied literals
+            return node_id
+
+        # Only one component exists
+        cut_set_restriction = cut_set.difference(map(lambda l: abs(l), implied_literal_set))  # restriction
+
+        # A new cut set is needed
+        if self.__is_suggested_new_cut_set(cut_set, cut_set_restriction, number_of_variables_before_unit_propagation, number_of_variables_after_unit_propagation):
+            cut_set_restriction = self.__get_cut_set()
+
+        decision_variable = self.__get_suggested_variable_from_cut_set(cut_set_restriction)
+        cut_set_restriction.remove(decision_variable)
+
+        node_id_list = []
+        for sign in [+1, -1]:
+            literal = sign * decision_variable
+
+            self.__assignment_list.append(literal)
+            self.__incidence_graph.remove_literal(literal)
+
+            node_id = self.__create_circuit(cut_set_restriction)
+            node_id_list.append(node_id)
+
+            self.__assignment_list.pop()
+            self.__incidence_graph.restore_backup_literal(literal)
+
+        decision_node_id = self.__circuit.create_decision_node(decision_variable, node_id_list[0], node_id_list[1])
+        node_id = self.__circuit.create_and_node({decision_node_id}.union(implied_literal_id_set))
+
+        # TODO Cache (Save)
+
+        remove_implied_literals(implied_literal_set)    # Restore the implied literals
+        return node_id
     # endregion

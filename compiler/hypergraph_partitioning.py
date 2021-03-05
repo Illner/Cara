@@ -570,7 +570,9 @@ class HypergraphPartitioning:
         key = None  # initialization
         variable_id_order_id_dictionary = None
         if self.__cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE:
-            key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary) = self.__generate_key_cache(incidence_graph)
+            result_cache = self.__generate_key_cache(incidence_graph)
+            if result_cache is not None:
+                key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary) = result_cache
             value = self.__get_cut_set_cache(key)
             if value is not None:
                 cut_set_cache = set()
