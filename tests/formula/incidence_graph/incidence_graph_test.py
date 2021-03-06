@@ -39,6 +39,43 @@ class IncidenceGraphTest(TestAbstract):
         incidence_graph.add_edge(-3, 3)
 
         return incidence_graph
+
+    @staticmethod
+    def __incidence_graph_2() -> IncidenceGraph:
+        """
+        Create an incidence graph (incidence_graph_2)
+        """
+
+        incidence_graph = IncidenceGraph(5, 6)
+
+        # clause 1
+        incidence_graph.add_edge(1, 0)
+        incidence_graph.add_edge(4, 0)
+
+        # clause 2
+        incidence_graph.add_edge(1, 1)
+        incidence_graph.add_edge(2, 1)
+        incidence_graph.add_edge(3, 1)
+
+        # clause 3
+        incidence_graph.add_edge(1, 2)
+        incidence_graph.add_edge(2, 2)
+        incidence_graph.add_edge(3, 2)
+        incidence_graph.add_edge(4, 2)
+        incidence_graph.add_edge(-5, 2)
+
+        # clause 4
+        incidence_graph.add_edge(-3, 3)
+
+        # clause 5
+        incidence_graph.add_edge(-3, 4)
+        incidence_graph.add_edge(5, 4)
+
+        # clause 6
+        incidence_graph.add_edge(3, 5)
+        incidence_graph.add_edge(5, 5)
+
+        return incidence_graph
     # endregion
 
     # region Override method
@@ -49,6 +86,7 @@ class IncidenceGraphTest(TestAbstract):
         actual_result = "\n".join((actual_result, "Modification", self.__test_2(), ""))                     # Test 2
         actual_result = "\n".join((actual_result, "Components and backups - assignment", self.__test_3()))  # Test 3
         actual_result = "\n".join((actual_result, "Backups - variable simplification", self.__test_4()))    # Test 4
+        actual_result = "\n".join((actual_result, "Backups - subsumption", self.__test_5()))                # Test 5
 
         return actual_result
     # endregion
@@ -200,9 +238,36 @@ class IncidenceGraphTest(TestAbstract):
                 result = "\n".join((result, f"Variable simplification: ({variable_simplification_dictionary})"))
                 incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
                 result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+
                 result = "\n".join((result, "Restore:"))
                 incidence_graph.restore_backup_variable_simplification()
                 result = "\n".join((result, self.__incidence_graph_str(incidence_graph), ""))
+        except ig_exception.IncidenceGraphException as err:
+            result = "\n".join((result, str(err)))
+
+        return result
+
+    def __test_5(self) -> str:
+        """
+        A test for backups - subsumption.
+        Positive
+        :return: the result of the test
+        """
+
+        result = ""
+
+        try:
+            incidence_graph = IncidenceGraphTest.__incidence_graph_2()
+            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+
+            subsumed_clause_set = {0, 1, 3}
+            result = "\n".join((result, f"Subsumption: ({SortedList(subsumed_clause_set).str_delimiter(', ')})"))
+            incidence_graph.remove_subsumed_clause_set(subsumed_clause_set)
+            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+
+            result = "\n".join((result, "Restore:"))
+            incidence_graph.restore_backup_subsumption()
+            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
         except ig_exception.IncidenceGraphException as err:
             result = "\n".join((result, str(err)))
 

@@ -23,6 +23,16 @@ class ClauseIdAlreadyExistsException(IncidenceGraphException):
         super().__init__(self.message)
 
 
+class ClauseHasBeenRemovedException(IncidenceGraphException):
+    """
+    The clause has been already removed from the incidence graph
+    """
+
+    def __init__(self, clause_id: int):
+        self.message = f"The clause ({clause_id}) has been already removed from the incidence graph!"
+        super().__init__(self.message)
+
+
 class VariableDoesNotExistException(IncidenceGraphException):
     """
     The variable does not exist in the incidence graph

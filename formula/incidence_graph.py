@@ -19,13 +19,18 @@ class IncidenceGraph(Graph):
     """
     Private Dict<int, Set<int>> adjacency_literal_dictionary                # key: a literal, value: a set of clauses (nodes) where the literal appears
     
+    # Assignment
     Private Set<int> variable_backup_set
     Private List<int> literal_backup_list
     Private Dict<int, Set<str>> variable_node_backup_dictionary             # key: a variable, value: a set of clauses (nodes) that were incident with the variable node when the variable node was being deleted
     Private Dict<int, Dict<int, Set<int>> clause_node_backup_dictionary     # key: a variable, value: a dictionary, where a key is a clause node that was satisfied because of the variable, and the value is a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
     
+    # Variable simplification
     Private Dict<int, Set<str>> removed_edge_backup_dictionary              # key: a variable, value: a set of neighbours of the variable that were deleted because of variable simplification
     Private Dict<str, Set<str>> added_edge_backup_dictionary                # key: a variable, value: a set of neighbours of the variable that were added because of variable simplification
+    
+    # Subsumption
+    Private Dict<int, Set<str>> subsumption_backup_dictionary               # key: a clause, value: a set of neighbours of the clause that were deleted because of subsumption
     """
 
     def __init__(self, number_of_variables: Union[int, None] = None, number_of_clauses: Union[int, None] = None):
@@ -42,6 +47,9 @@ class IncidenceGraph(Graph):
         # Backup - variable simplification
         self.__removed_edge_backup_dictionary: Dict[int, Set[str]] = dict()
         self.__added_edge_backup_dictionary: Dict[str, Set[str]] = dict()
+
+        # Backup - subsumption
+        self.__subsumption_backup_dictionary: Dict[int, Set[str]] = dict()
 
         # Create nodes
         if number_of_variables is not None:
@@ -278,6 +286,7 @@ class IncidenceGraph(Graph):
 
         return len(self.variable_set())
 
+    # region Assignment
     def remove_literal(self, literal: int) -> None:
         """
         Remove the variable node (|literal|).
@@ -397,7 +406,9 @@ class IncidenceGraph(Graph):
             else:
                 literal_set.remove(last_literal)
                 self.restore_backup_literal(last_literal)
+    # endregion
 
+    # region Variable simplification
     def merge_variable_simplification(self, variable_simplification_dictionary: Dict[int, Set[int]]) -> None:
         """
         Merge variables based on the variable simplification dictionary.
@@ -462,6 +473,56 @@ class IncidenceGraph(Graph):
                 self.remove_edge(variable_hash, neighbour_hash)
 
         self.__added_edge_backup_dictionary = dict()
+    # endregion
+
+    # region Subsumption
+    def remove_subsumed_clause(self, clause_id: int) -> None:
+        """
+        Remove the clause from the incidence graph.
+        Everything that will be removed from the incidence graph is saved and can be restored from the backup in the future.
+        If the clause does not exist in the incidence graph, raise an exception (ClauseIdDoesNotExistException).
+        If the clause has been already removed, raise an exception (ClauseHasBeenRemovedException).
+        :param clause_id: the clause's id
+        :return: None
+        """
+
+        clause_id_hash = self.__clause_id_hash(clause_id)
+
+        # The clause has been already removed from the incidence graph
+        if clause_id in self.__subsumption_backup_dictionary:
+            raise ig_exception.ClauseHasBeenRemovedException(clause_id)
+
+        # The clause does not exist in the incidence graph
+        if not self.__node_exist(clause_id_hash):
+            raise ig_exception.ClauseIdDoesNotExistException(clause_id)
+
+        clause_neighbour_set = set(self.neighbors(clause_id_hash))
+        self.__subsumption_backup_dictionary[clause_id] = clause_neighbour_set
+
+        # Delete the clause node
+        self.remove_node(clause_id_hash)
+
+    def remove_subsumed_clause_set(self, clause_id_set: Set[int]) -> None:
+        for clause_id in clause_id_set:
+            self.remove_subsumed_clause(clause_id)
+
+    def restore_backup_subsumption(self) -> None:
+        """
+        Restore all nodes and edges that are mention in the backup.
+        The backup will be cleared.
+        :return: None
+        """
+
+        for clause_id in self.__subsumption_backup_dictionary:
+            clause_id_hash = self.__clause_id_hash(clause_id)
+            neighbour_hash_set = self.__subsumption_backup_dictionary[clause_id]
+
+            self.add_clause_id(clause_id)
+            for neighbour_hash in neighbour_hash_set:
+                super().add_edge(neighbour_hash, clause_id_hash)
+
+        self.__subsumption_backup_dictionary = dict()
+    # endregion
 
     def create_incidence_graphs_for_components(self) -> Set[TIncidenceGraph]:
         """
