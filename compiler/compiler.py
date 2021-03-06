@@ -102,6 +102,20 @@ class Compiler:
             root_id = (list(node_id_set))[0]
             self.__circuit.set_root(root_id)
 
+        # Add unused variables
+        node_id_set = set()
+        variable_in_circuit_set = self.__circuit.get_node(self.__circuit.root_id)._get_variable_in_circuit_set()
+        unused_variable_set = self.__cnf._get_variable_set().difference(variable_in_circuit_set)
+
+        for var in unused_variable_set:
+            child_id_set = self.__circuit.create_literal_leaf_set({var, -var})
+            node_id = self.__circuit.create_or_node(child_id_set, decision_variable=var)
+            node_id_set.add(node_id)
+
+        if node_id_set:
+            node_id = self.__circuit.create_and_node({root_id}.union(node_id_set))
+            self.__circuit.set_root(node_id)
+
         # Smooth
         if self.__smooth:
             self.__circuit.smooth()

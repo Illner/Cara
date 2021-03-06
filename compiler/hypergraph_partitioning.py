@@ -1,6 +1,5 @@
 # Import
 import os
-import random
 import subprocess
 from pathlib import Path
 from formula.cnf import Cnf
@@ -153,18 +152,13 @@ class HypergraphPartitioning:
 
         # EQUIV_SIMPL
         if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL:
-            processed_variable_set = set()
-            equivalence_list = []
+            dominated_variable_set = set()
+            equivalence_dictionary: Dict[int, Set[int]] = dict()
 
             for var in implicit_bcp_dictionary:
-                # The variable has been already processed
-                if var in processed_variable_set:
-                    continue
-
-                equivalence = {var}
                 first_temp, second_temp = implicit_bcp_dictionary[var]
 
-                # var is an implied variable (should not happen if implicit unit propagation is used for implied literals)
+                # var is an implied "variable" (should not happen if implicit unit propagation is used for implied literals)
                 if first_temp is None:
                     first_temp = set()
                 if second_temp is None:
@@ -176,23 +170,19 @@ class HypergraphPartitioning:
                 for lit in first_temp:
                     if -lit in second_temp:
                         var_temp = abs(lit)
-                        equivalence.add(var_temp)
-                        processed_variable_set.add(var_temp)
 
-                equivalence_list.append(equivalence)
+                        if var not in equivalence_dictionary:
+                            equivalence_dictionary[var] = {var_temp}
+                        else:
+                            equivalence_dictionary[var].add(var_temp)
 
-            result_dictionary = dict()
-            for equivalence in equivalence_list:
-                # Trivial equivalence class
-                if len(equivalence) == 1:
-                    continue
+                        dominated_variable_set.add(var_temp)
 
-                representant = (random.sample(equivalence, 1))[0]
-                equivalence.difference_update([representant])
+            for var in dominated_variable_set:
+                if var in equivalence_dictionary:
+                    del equivalence_dictionary[var]
 
-                result_dictionary[representant] = equivalence
-
-            return result_dictionary
+            return equivalence_dictionary
 
         raise c_exception.FunctionNotImplementedException("variable_simplification",
                                                           f"this type of variable simplification ({self.__variable_simplification_enum.name}) is not implemented")
@@ -560,15 +550,25 @@ class HypergraphPartitioning:
 
         self.__set_dynamic_weights(incidence_graph)
 
-        # TODO Subsumed
-
         # Variable simplification
         variable_simplification_dictionary = self.__variable_simplification(solver, assignment)
         incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
 
+        # TODO Subsumed
+
+        # Only one clause remains => all variables are in the cut set
+        if incidence_graph.number_of_clauses() == 1:
+            cut_set = incidence_graph.variable_set()
+
+            # Variable simplification
+            incidence_graph.restore_backup_variable_simplification()
+
+            return cut_set
+
         # Cache
         key = None  # initialization
-        variable_id_order_id_dictionary = None
+        variable_id_order_id_dictionary = None  # initialization
+        order_id_variable_id_dictionary = None  # initialization
         if self.__cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE:
             result_cache = self.__generate_key_cache(incidence_graph)
             if result_cache is not None:
@@ -578,6 +578,9 @@ class HypergraphPartitioning:
                 cut_set_cache = set()
                 for var in value:
                     cut_set_cache.add(order_id_variable_id_dictionary[var])
+
+                # Variable simplification
+                incidence_graph.restore_backup_variable_simplification()
 
                 return cut_set_cache
 

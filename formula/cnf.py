@@ -349,4 +349,8 @@ class Cnf:
         """
 
         return self.__unit_clause_set.copy()
+
+    @property
+    def comments(self):
+        return self.__comments
     # endregion

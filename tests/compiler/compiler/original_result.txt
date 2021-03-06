@@ -1,0 +1,1328 @@
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+'int' object has no attribute 'name'
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 86432 (86432)
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+4step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+5step.cnf
+'int' object has no attribute 'name'
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 81300 (81300)
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+5step.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+'int' object has no attribute 'name'
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 1 (1)
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+anomaly.cnf
+Trying to get a variable from the empty cut set!
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+mixdup.cnf
+'int' object has no attribute 'name'
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)
+
+File: mixdup.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
+The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)

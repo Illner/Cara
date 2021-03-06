@@ -21,8 +21,7 @@ class OrInnerNode(InnerNodeAbstract):
     Private int decision_variable
     """
 
-    def __init__(self, child_set: Set[NodeAbstract], id: int = 0,
-                 decision_variable: Union[int, None] = None):
+    def __init__(self, child_set: Set[NodeAbstract], id: int = 0, decision_variable: Union[int, None] = None):
         if decision_variable is None:
             deterministic_temp = self.__is_deterministic_set(child_set)
         else:

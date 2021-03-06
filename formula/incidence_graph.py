@@ -405,12 +405,14 @@ class IncidenceGraph(Graph):
         :return: None
         """
 
+        variable_hash_to_delete_set = set()
+
         for representant in variable_simplification_dictionary:
             representant_hash = self.__variable_hash(representant)
             equivalence_set = variable_simplification_dictionary[representant]
             neighbour_hash_set = set()
 
-            # Delete (equivalent) nodes and edges
+            # Delete edges
             for variable in equivalence_set:
                 variable_hash = self.__variable_hash(variable)
                 neighbour_set_temp = set(self.neighbors(variable_hash))
@@ -418,7 +420,7 @@ class IncidenceGraph(Graph):
                 self.__removed_edge_backup_dictionary[variable] = neighbour_set_temp
                 neighbour_hash_set.update(neighbour_set_temp)
 
-                self.remove_node(variable_hash)
+                variable_hash_to_delete_set.add(variable_hash)
 
             # Add edges
             if representant_hash not in self.__added_edge_backup_dictionary:
@@ -429,6 +431,10 @@ class IncidenceGraph(Graph):
                 if not self.has_edge(representant_hash, neighbour_hash):
                     self.__added_edge_backup_dictionary[representant_hash].add(neighbour_hash)
                     super().add_edge(representant_hash, neighbour_hash)
+
+        # Delete nodes
+        for variable_hash in variable_hash_to_delete_set:
+            self.remove_node(variable_hash)
 
     def restore_backup_variable_simplification(self) -> None:
         """
