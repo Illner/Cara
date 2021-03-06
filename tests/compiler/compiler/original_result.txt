@@ -6,20 +6,16 @@ File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variab
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
 The number of models: 86432 (86432)
@@ -28,20 +24,16 @@ File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: NON
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
 4step.cnf
@@ -74,20 +66,16 @@ File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, varia
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 86432 (86432)
@@ -96,20 +84,16 @@ File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variab
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
 The number of models: 86432 (86432)
@@ -118,20 +102,16 @@ File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: NON
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
 4step.cnf
@@ -164,20 +144,16 @@ File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, varia
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 86432 (86432)
@@ -186,20 +162,16 @@ File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, vari
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
 The number of models: 86432 (86432)
@@ -208,20 +180,16 @@ File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: N
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
 4step.cnf
@@ -254,20 +222,16 @@ File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, var
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 86432 (86432)
@@ -276,20 +240,16 @@ File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variab
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NONE, variable simplification: NONE
 The number of models: 86432 (86432)
@@ -298,20 +258,16 @@ File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: NON
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: BACKBONE, cache: NONE, variable simplification: NONE
 4step.cnf
@@ -344,20 +300,16 @@ File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, varia
 The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 4step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-4step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 86432 (86432)
 
 File: 5step.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 81300 (81300)
@@ -426,20 +378,16 @@ File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, varia
 The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 81300 (81300)
@@ -508,20 +456,16 @@ File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, varia
 The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 81300 (81300)
@@ -590,20 +534,16 @@ File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, var
 The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 81300 (81300)
@@ -672,20 +612,16 @@ File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, varia
 The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: 5step.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-5step.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 81300 (81300)
 
 File: anomaly.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 1 (1)
@@ -754,20 +690,16 @@ File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: NONE, var
 The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: MiniSAT, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Glucose, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 1 (1)
@@ -836,20 +768,16 @@ File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: NONE, var
 The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Glucose, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Lingeling, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 1 (1)
@@ -918,20 +846,16 @@ File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: NONE, v
 The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: Lingeling, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: CaDiCal, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 1 (1)
@@ -1000,20 +924,16 @@ File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: NONE, var
 The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: NONE
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: anomaly.cnf, SAT solver: CaDiCal, implied literals: NONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-anomaly.cnf
-Trying to get a variable from the empty cut set!
+The number of models: 1 (1)
 
 File: mixdup.cnf, SAT solver: MiniSAT, implied literals: BCP, cache: NONE, variable simplification: NONE
 The number of models: 2923003274661805836407369665432566039311865085952 (2923003274661805836407369665432566039311865085952)

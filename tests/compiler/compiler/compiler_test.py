@@ -25,11 +25,16 @@ class CompilerTest(TestAbstract):
         actual_result = ""
 
         for (file_name, file_path) in self._files:
+            print(f"File: {file_name}")
             for sat_solver_enum in ss_enum.sat_solver_enum_values:
                 for implied_literals_enum in il_enum.implied_literals_enum_values:
                     for hp_cache_enum in hpc_enum.hpc_enum_values:
                         for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
                             try:
+                                # Not implemented yet
+                                if implied_literals_enum == il_enum.ImpliedLiteralsEnum.BACKBONE:
+                                    continue
+
                                 actual_result = "\n".join((actual_result,
                                                            f"File: {file_name}, "
                                                            f"SAT solver: {ss_enum.SatSolverEnum(sat_solver_enum).name}, "
@@ -41,6 +46,7 @@ class CompilerTest(TestAbstract):
                                 compiler = Compiler(cnf=cnf,
                                                     smooth=True,
                                                     ub_factor=0.1,
+                                                    subsumed_threshold=None,
                                                     new_cut_set_threshold=0.1,
                                                     sat_solver_enum=sat_solver_enum,
                                                     implied_literals_enum=implied_literals_enum,
@@ -54,8 +60,10 @@ class CompilerTest(TestAbstract):
                                 circuit = compiler.create_circuit()
                                 number_of_models = circuit.model_counting(set(), set())
 
+                                print(f"The number of models: {number_of_models} ({cnf.comments})")
                                 actual_result = "\n".join((actual_result, f"The number of models: {number_of_models} ({cnf.comments})", ""))
                             except Exception as err:
+                                print(err)
                                 actual_result = "\n".join((actual_result, file_name, str(err), ""))
 
         return actual_result

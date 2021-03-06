@@ -4,8 +4,6 @@ from formula.cnf import Cnf
 from circuit.circuit import Circuit
 from compiler.compiler import Compiler
 
-from tests.circuit.circuit.circuit_test import CircuitTest
-
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
@@ -15,8 +13,8 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\no_comments_valid.cnf"
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\ais\ais6.cnf"
 
@@ -24,7 +22,7 @@ start_time = time.time()
 
 cnf = Cnf(path)
 
-compiler = Compiler(cnf, smooth=False, ub_factor=0.1, new_cut_set_threshold=0.1,
+compiler = Compiler(cnf, smooth=False, ub_factor=0.1, new_cut_set_threshold=0.1, subsumed_threshold=1000,
                     sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                     implied_literals_enum=il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP,
                     hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.NONE,

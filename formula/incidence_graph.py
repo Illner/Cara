@@ -30,7 +30,7 @@ class IncidenceGraph(Graph):
     Private Dict<str, Set<str>> added_edge_backup_dictionary                # key: a variable, value: a set of neighbours of the variable that were added because of variable simplification
     
     # Subsumption
-    Private Dict<int, Set<str>> subsumption_backup_dictionary               # key: a clause, value: a set of neighbours of the clause that were deleted because of subsumption
+    Private Dict<int, Set<str>> subsumption_backup_dictionary               # key: a clause, value: a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
     """
 
     def __init__(self, number_of_variables: Union[int, None] = None, number_of_clauses: Union[int, None] = None):
@@ -264,6 +264,13 @@ class IncidenceGraph(Graph):
         """
 
         return set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 1)
+
+    def clause_id_list(self) -> List[int]:
+        """
+        :return: a list of clauses that are in the incidence graph
+        """
+
+        return [self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 1]
 
     def number_of_clauses(self) -> int:
         """

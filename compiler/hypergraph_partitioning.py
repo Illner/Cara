@@ -27,6 +27,7 @@ class HypergraphPartitioning:
     """
     Private Cnf cnf
     Private float ub_factor
+    Private int subsumed_threshold
     Private int total_number_of_nodes
     Private int total_number_of_hyperedges
     
@@ -51,7 +52,7 @@ class HypergraphPartitioning:
     OUTPUT_FILE_EXE_HMETIS_PATH = Path(str(INPUT_FILE_EXE_HMETIS_PATH) + ".part.2")
     WIN_PROGRAM_EXE_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe"))
 
-    def __init__(self, cnf: Cnf, ub_factor: float,
+    def __init__(self, cnf: Cnf, ub_factor: float, subsumed_threshold: Union[int, None],
                  cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                  software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
                  node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
@@ -60,6 +61,7 @@ class HypergraphPartitioning:
                  limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]],
                  limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]]):
         self.__cnf: Cnf = cnf
+        self.__subsumed_threshold: Union[int, None] = subsumed_threshold
         self.__total_number_of_nodes: int = cnf.real_number_of_clauses
         self.__total_number_of_hyperedges: int = cnf.number_of_variables
 
@@ -186,6 +188,64 @@ class HypergraphPartitioning:
 
         raise c_exception.FunctionNotImplementedException("variable_simplification",
                                                           f"this type of variable simplification ({self.__variable_simplification_enum.name}) is not implemented")
+
+    def __subsumption(self, incidence_graph: IncidenceGraph) -> Set[int]:
+        """
+        Return a set of subsumed clauses
+        :param incidence_graph: the incidence graph
+        :return: a set of subsumed clauses
+        """
+
+        subsumed_clause_set = set()
+        neighbour_dictionary = dict()
+        clause_id_list = incidence_graph.clause_id_list()
+
+        for i, clause_a in enumerate(clause_id_list):
+            # Neighbours
+            if clause_a in neighbour_dictionary:
+                variable_set_a = neighbour_dictionary[clause_a]
+            else:
+                variable_set_a = incidence_graph.clause_id_neighbour_set(clause_a)
+                neighbour_dictionary[clause_a] = variable_set_a
+
+            for j in range(i + 1, len(clause_id_list)):
+                clause_b = clause_id_list[j]
+
+                if clause_b in subsumed_clause_set:
+                    continue
+
+                # Neighbours
+                if clause_b in neighbour_dictionary:
+                    variable_set_b = neighbour_dictionary[clause_b]
+                else:
+                    variable_set_b = incidence_graph.clause_id_neighbour_set(clause_b)
+                    neighbour_dictionary[clause_b] = variable_set_b
+
+                a_subset_b = variable_set_a.issubset(variable_set_b)
+                b_subset_a = variable_set_b.issubset(variable_set_a)
+
+                # Clauses are the same
+                if a_subset_b and b_subset_a:
+                    if clause_a < clause_b:
+                        subsumed_clause_set.add(clause_a)
+                    else:
+                        subsumed_clause_set.add(clause_b)
+
+                    continue
+
+                # Clause A is subsumed
+                if a_subset_b:
+                    subsumed_clause_set.add(clause_a)
+
+                    continue
+
+                # Clause B is subsumed
+                if b_subset_a:
+                    subsumed_clause_set.add(clause_b)
+
+                    continue
+
+        return subsumed_clause_set
 
     # region Weights
     def __set_static_weights(self) -> None:
@@ -554,14 +614,17 @@ class HypergraphPartitioning:
         variable_simplification_dictionary = self.__variable_simplification(solver, assignment)
         incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
 
-        # TODO Subsumed
+        # Subsumption
+        if (self.__subsumed_threshold is None) or (incidence_graph.number_of_clauses() <= self.__subsumed_threshold):
+            subsumed_clause_set = self.__subsumption(incidence_graph)
+            incidence_graph.remove_subsumed_clause_set(subsumed_clause_set)
 
         # Only one clause remains => all variables are in the cut set
         if incidence_graph.number_of_clauses() == 1:
             cut_set = incidence_graph.variable_set()
 
-            # Variable simplification
-            incidence_graph.restore_backup_variable_simplification()
+            incidence_graph.restore_backup_subsumption()                # Subsumption
+            incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
             return cut_set
 
@@ -579,8 +642,8 @@ class HypergraphPartitioning:
                 for var in value:
                     cut_set_cache.add(order_id_variable_id_dictionary[var])
 
-                # Variable simplification
-                incidence_graph.restore_backup_variable_simplification()
+                incidence_graph.restore_backup_subsumption()                # Subsumption
+                incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
                 return cut_set_cache
 
@@ -598,8 +661,8 @@ class HypergraphPartitioning:
 
             self.__add_cut_set_cache(key, cut_set_cache)
 
-        # Variable simplification
-        incidence_graph.restore_backup_variable_simplification()
+        incidence_graph.restore_backup_subsumption()                # Subsumption
+        incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
         return cut_set
     # endregion

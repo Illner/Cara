@@ -39,6 +39,7 @@ class Compiler:
     def __init__(self, cnf: Cnf,
                  smooth: bool,
                  ub_factor: float,
+                 subsumed_threshold: Union[int, None],
                  new_cut_set_threshold: float,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
@@ -59,6 +60,7 @@ class Compiler:
 
         self.__hypergraph_partitioning = HypergraphPartitioning(cnf=self.__cnf,
                                                                 ub_factor=ub_factor,
+                                                                subsumed_threshold=subsumed_threshold,
                                                                 cache_enum=hp_cache_enum,
                                                                 software_enum=hp_software_enum,
                                                                 node_weight_enum=hp_node_weight_type_enum,
