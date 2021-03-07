@@ -84,7 +84,7 @@ def main(args):
         compiler_test = c_test.CompilerTest()
         print(compiler_test.test_name, end=": ")
         result, log_result = test(compiler_test)
-        print(result)
+        # print(result)
         log_string = "\n".join((log_string, log_result, ""))
 
     # Save the log
@@ -161,7 +161,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("-ct",
                         "--compiler_test",
                         action="store",
-                        default=True,
+                        default=False,
                         type=cara.str2bool,
                         help="Test automation for compilers.")
 

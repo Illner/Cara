@@ -11,5 +11,3 @@ Circuit test: True
 Solver test: True
 
 Hypergraph partitioning test: True
-
-Compiler test: True
