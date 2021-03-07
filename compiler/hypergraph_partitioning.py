@@ -49,7 +49,8 @@ class HypergraphPartitioning:
     # Static variable - Path
     TEMP_FOLDER_PATH = Path(os.path.join(os.getcwd(), "temp"))
     INPUT_FILE_EXE_HMETIS_PATH = Path(os.path.join(TEMP_FOLDER_PATH, "input_file_hypergraph.graph"))
-    OUTPUT_FILE_EXE_HMETIS_PATH = Path(str(INPUT_FILE_EXE_HMETIS_PATH) + ".part.2")
+    OUTPUT_FILE_1_EXE_HMETIS_PATH = Path(str(INPUT_FILE_EXE_HMETIS_PATH) + ".part.1")
+    OUTPUT_FILE_2_EXE_HMETIS_PATH = Path(str(INPUT_FILE_EXE_HMETIS_PATH) + ".part.2")
     WIN_PROGRAM_EXE_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe"))
 
     def __init__(self, cnf: Cnf, ub_factor: float, subsumed_threshold: Union[int, None],
@@ -197,7 +198,7 @@ class HypergraphPartitioning:
         """
 
         subsumed_clause_set = set()
-        neighbour_dictionary = dict()
+        neighbour_dictionary: [int, Set[int]] = dict()   # Cache
         clause_id_list = incidence_graph.clause_id_list()
 
         for i, clause_a in enumerate(clause_id_list):
@@ -551,7 +552,8 @@ class HypergraphPartitioning:
 
         # Delete temp files
         HypergraphPartitioning.INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
-        HypergraphPartitioning.OUTPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        HypergraphPartitioning.OUTPUT_FILE_1_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        HypergraphPartitioning.OUTPUT_FILE_2_EXE_HMETIS_PATH.unlink(missing_ok=True)
 
         # Save the input file
         with open(HypergraphPartitioning.INPUT_FILE_EXE_HMETIS_PATH, "w", encoding="utf8") as input_file:
@@ -564,14 +566,21 @@ class HypergraphPartitioning:
                        stdout=devnull, stderr=devnull)
         # TODO error => str
 
+        # A cut set does not exist (because of balance etc.)
+        if HypergraphPartitioning.OUTPUT_FILE_1_EXE_HMETIS_PATH.exists():
+            HypergraphPartitioning.INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
+            HypergraphPartitioning.OUTPUT_FILE_1_EXE_HMETIS_PATH.unlink(missing_ok=True)
+
+            return set()
+
         # The output file has not been generated => an error occurred
-        if not HypergraphPartitioning.OUTPUT_FILE_EXE_HMETIS_PATH.exists():
+        if not HypergraphPartitioning.OUTPUT_FILE_2_EXE_HMETIS_PATH.exists():
             raise hp_exception.SomethingWrongException("the output file from hMETIS.exe has not been generated => an error occurred")
 
         # Get the cut set
         variable_partition_0_set = set()
         variable_partition_1_set = set()
-        with open(HypergraphPartitioning.OUTPUT_FILE_EXE_HMETIS_PATH, "r", encoding="utf8") as output_file:
+        with open(HypergraphPartitioning.OUTPUT_FILE_2_EXE_HMETIS_PATH, "r", encoding="utf8") as output_file:
             for line_id, line in enumerate(output_file.readlines()):
                 try:
                     partition_temp = int(line)
@@ -592,7 +601,7 @@ class HypergraphPartitioning:
 
         # Delete temp files
         HypergraphPartitioning.INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
-        HypergraphPartitioning.OUTPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        HypergraphPartitioning.OUTPUT_FILE_2_EXE_HMETIS_PATH.unlink(missing_ok=True)
 
         return cut_set
     # endregion
@@ -652,6 +661,10 @@ class HypergraphPartitioning:
         # Windows -> hMETIS.exe
         if env.is_windows():
             cut_set = self.__get_cut_set_hmetis_exe(incidence_graph)
+
+        # A cut set does not exist (because of balance etc.) => a variable with the most occurrences is selected
+        if not cut_set:
+            cut_set = {incidence_graph.variable_with_most_occurrences()}
 
         # Cache
         if (self.__cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE) and (key is not None):

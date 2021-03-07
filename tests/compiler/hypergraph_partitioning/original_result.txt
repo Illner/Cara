@@ -16,21 +16,21 @@ File: cut_set_1.cnf, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_
 Cut set: 2
 Cut set: 2
 File: disconnected.cnf, cache: NONE, variable simplification: NONE
-Cut set: 
+Cut set: 1
 File: disconnected.cnf, cache: NONE, variable simplification: EQUIV_SIMPL
-Cut set: 
+Cut set: 1
 File: disconnected.cnf, cache: ISOMORFISM, variable simplification: NONE
-Cut set: 
-Cut set: 
+Cut set: 1
+Cut set: 1
 File: disconnected.cnf, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL
-Cut set: 
-Cut set: 
+Cut set: 1
+Cut set: 1
 File: disconnected.cnf, cache: ISOMORFISM_VARIANCE, variable simplification: NONE
-Cut set: 
-Cut set: 
+Cut set: 1
+Cut set: 1
 File: disconnected.cnf, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL
-Cut set: 
-Cut set: 
+Cut set: 1
+Cut set: 1
 File: large.cnf, cache: NONE, variable simplification: NONE
 Cut set: > 5
 File: large.cnf, cache: NONE, variable simplification: EQUIV_SIMPL

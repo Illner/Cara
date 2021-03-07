@@ -159,7 +159,7 @@ class Component:
         # Implied literals
         implied_literal_set = self.__get_implied_literals()
         self.__assignment_list.extend(implied_literal_set)
-        self.__incidence_graph.remove_literal_set(implied_literal_set)
+        isolated_variable_set = self.__incidence_graph.remove_literal_set(implied_literal_set)
         implied_literal_id_set = self.__circuit.create_literal_leaf_set(implied_literal_set)
 
         number_of_variables_after_unit_propagation = self.__incidence_graph.number_of_variables()
@@ -198,6 +198,8 @@ class Component:
 
         # Only one component exists
         cut_set_restriction = cut_set.difference(map(lambda l: abs(l), implied_literal_set))  # restriction
+        cut_set_restriction.difference_update(isolated_variable_set)   # because of isolated variables
+        # cut_set_restriction = cut_set_restriction.intersection(self.__incidence_graph.variable_set())
 
         # A new cut set is needed
         if self.__is_suggested_new_cut_set(cut_set, cut_set_restriction, number_of_variables_before_unit_propagation, number_of_variables_after_unit_propagation):
@@ -211,13 +213,18 @@ class Component:
             literal = sign * decision_variable
 
             self.__assignment_list.append(literal)
-            self.__incidence_graph.remove_literal(literal)
+            isolated_variable_set = self.__incidence_graph.remove_literal(literal)
+
+            # Isolated variables
+            isolated_variable_in_cut_set_restriction_set = isolated_variable_set.intersection(cut_set_restriction)
+            cut_set_restriction.difference_update(isolated_variable_in_cut_set_restriction_set)
 
             node_id = self.__create_circuit(cut_set_restriction)
             node_id_list.append(node_id)
 
             self.__assignment_list.pop()
             self.__incidence_graph.restore_backup_literal(literal)
+            cut_set_restriction.update(isolated_variable_in_cut_set_restriction_set)  # isolated variables
 
         decision_node_id = self.__circuit.create_decision_node(decision_variable, node_id_list[0], node_id_list[1])
         node_id = self.__circuit.create_and_node({decision_node_id}.union(implied_literal_id_set))

@@ -16,6 +16,7 @@ import tests.circuit.circuit.circuit_test as cc_test
 
 # Compiler
 import tests.compiler.solver.solver_test as cs_test
+import tests.compiler.compiler.compiler_test as c_test
 # import tests.compiler.dynamic_graph.dynamic_graph_test as cdg_test
 import tests.compiler.hypergraph_partitioning.hypergraph_partitioning_test as chp_test
 
@@ -55,7 +56,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Circuit test
-    if args.circuit_circuit_test:
+    if args.circuit_test:
         circuit_test = cc_test.CircuitTest()
         print(circuit_test.test_name, end=": ")
         result, log_result = test(circuit_test)
@@ -75,6 +76,14 @@ def main(args):
         hypergraph_partitioning_test = chp_test.HypergraphPartitioningTest()
         print(hypergraph_partitioning_test.test_name, end=": ")
         result, log_result = test(hypergraph_partitioning_test)
+        print(result)
+        log_string = "\n".join((log_string, log_result, ""))
+
+    # Compiler test
+    if args.compiler_test:
+        compiler_test = c_test.CompilerTest()
+        print(compiler_test.test_name, end=": ")
+        result, log_result = test(compiler_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
 
@@ -126,7 +135,7 @@ def create_parser() -> argparse.ArgumentParser:
                         type=cara.str2bool,
                         help="Test automation for incidence graphs.")
     parser.add_argument("-cct",
-                        "--circuit_circuit_test",
+                        "--circuit_test",
                         action="store",
                         default=True,
                         type=cara.str2bool,
@@ -149,6 +158,12 @@ def create_parser() -> argparse.ArgumentParser:
                         default=True,
                         type=cara.str2bool,
                         help="Test automation for hypergraph partitioning.")
+    parser.add_argument("-ct",
+                        "--compiler_test",
+                        action="store",
+                        default=True,
+                        type=cara.str2bool,
+                        help="Test automation for compilers.")
 
     return parser
 

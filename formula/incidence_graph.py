@@ -293,8 +293,25 @@ class IncidenceGraph(Graph):
 
         return len(self.variable_set())
 
+    def variable_with_most_occurrences(self) -> Union[int, None]:
+        """
+        :return: a variable with the most occurrences
+        """
+
+        max_occurrences = 0
+        max_variable = None
+
+        for variable in self.variable_set():
+            temp = self.number_of_neighbours_variable(variable)
+
+            if temp > max_occurrences:
+                max_occurrences = temp
+                max_variable = variable
+
+        return max_variable
+
     # region Assignment
-    def remove_literal(self, literal: int) -> None:
+    def remove_literal(self, literal: int) -> Set[int]:
         """
         Remove the variable node (|literal|).
         Remove all (satisfied) clauses (nodes), which are incident with the variable node and contain the literal.
@@ -302,7 +319,7 @@ class IncidenceGraph(Graph):
         If the variable does not exist in the incidence graph, raise an exception (VariableDoesNotExistException).
         If the variable has been already removed, raise an exception (VariableHasBeenRemovedException).
         :param literal: the literal
-        :return: None
+        :return: a set of isolated variables that have been deleted
         """
 
         variable = abs(literal)
@@ -315,6 +332,8 @@ class IncidenceGraph(Graph):
         # The variable does not exist in the incidence graph
         if not self.__node_exist(variable_hash):
             raise ig_exception.VariableDoesNotExistException(variable)
+
+        isolated_variable_set = set()
 
         # Backup
         self.__variable_backup_set.add(variable)
@@ -344,12 +363,19 @@ class IncidenceGraph(Graph):
             for clause_node_neighbour in clause_node_neighbour_set:
                 if not self.number_of_neighbours_variable(clause_node_neighbour):
                     self.remove_node(self.__variable_hash(clause_node_neighbour))
+                    isolated_variable_set.add(clause_node_neighbour)
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
 
-    def remove_literal_set(self, literal_set: Set[int]) -> None:
+        return isolated_variable_set
+
+    def remove_literal_set(self, literal_set: Set[int]) -> Set[int]:
+        isolated_variable_set = set()
+
         for literal in literal_set:
-            self.remove_literal(literal)
+            isolated_variable_set.update(self.remove_literal(literal))
+
+        return isolated_variable_set
 
     def restore_backup_literal(self, literal: int) -> None:
         """
