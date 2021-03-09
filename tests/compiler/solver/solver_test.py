@@ -32,7 +32,11 @@ class SolverTest(TestAbstract):
                         actual_result = "\n".join((actual_result, f"File: {file_name}, SAT solver: {ss_enum.SatSolverEnum(sat_solver).name}, assumption: {assumption}"))
 
                         cnf = Cnf(file_path)
-                        solver = Solver(cnf, None, sat_solver, b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING)
+                        solver = Solver(cnf=cnf,
+                                        clause_id_set=None,
+                                        backbones_chunk_size=1,
+                                        sat_solver_enum=sat_solver,
+                                        backbones_enum=b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING)
 
                         # Unit propagation
                         unit_propagation = solver.unit_propagation(assumption)

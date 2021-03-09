@@ -33,7 +33,11 @@ class BackbonesTest(TestAbstract):
                                                    f"backbones: {b_enum.BackbonesEnum(backbones_enum).name}"))
 
                         cnf = Cnf(file_path)
-                        solver = Solver(cnf, None, sat_solver_enum, backbones_enum)
+                        solver = Solver(cnf=cnf,
+                                        clause_id_set=None,
+                                        backbones_chunk_size=0.5,
+                                        sat_solver_enum=sat_solver_enum,
+                                        backbones_enum=backbones_enum)
 
                         number_of_backbone_literals = solver.get_backbones([])
                         real_number_of_backbone_literals = int(cnf.comments)

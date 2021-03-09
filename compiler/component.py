@@ -31,6 +31,7 @@ class Component:
     Private float new_cut_set_threshold
     Private BackbonesEnum backbones_enum
     Private IncidenceGraph incidence_graph
+    Private int/float backbones_chunk_size
     Private HypergraphPartitioning hypergraph_partitioning
     
     Private SatSolverEnum sat_solver_enum
@@ -39,8 +40,13 @@ class Component:
     Private List<int> assignment_list
     """
 
-    def __init__(self, cnf: Cnf, assignment_list: List[int], circuit: Circuit, new_cut_set_threshold: float,
-                 incidence_graph: IncidenceGraph, hypergraph_partitioning: HypergraphPartitioning,
+    def __init__(self, cnf: Cnf,
+                 assignment_list: List[int],
+                 circuit: Circuit,
+                 new_cut_set_threshold: float,
+                 incidence_graph: IncidenceGraph,
+                 hypergraph_partitioning: HypergraphPartitioning,
+                 backbones_chunk_size: Union[int, float],
                  backbones_enum: b_enum.BackbonesEnum,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum):
@@ -48,6 +54,7 @@ class Component:
         self.__circuit: Circuit = circuit
         self.__incidence_graph: IncidenceGraph = incidence_graph
         self.__new_cut_set_threshold: float = new_cut_set_threshold
+        self.__backbones_chunk_size: Union[int, float] = backbones_chunk_size
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
 
         self.__backbones_enum: b_enum.BackbonesEnum = backbones_enum
@@ -55,7 +62,7 @@ class Component:
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
 
         clause_id_set = self.__incidence_graph.clause_id_set()
-        self.__solver: Solver = Solver(cnf, clause_id_set, sat_solver_enum, backbones_enum)
+        self.__solver: Solver = Solver(cnf, clause_id_set, backbones_chunk_size, sat_solver_enum, backbones_enum)
 
         self.__assignment_list: List[int] = assignment_list
 
@@ -189,6 +196,7 @@ class Component:
                                            new_cut_set_threshold=self.__new_cut_set_threshold,
                                            incidence_graph=incidence_graph,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
+                                           backbones_chunk_size=self.__backbones_chunk_size,
                                            backbones_enum=self.__backbones_enum,
                                            sat_solver_enum=self.__sat_solver_enum,
                                            implied_literals_enum=self.__implied_literals_enum)

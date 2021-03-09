@@ -33,7 +33,11 @@ class HypergraphPartitioningTest(TestAbstract):
         for (file_name, file_path) in self._files:
             try:
                 cnf = Cnf(file_path)
-                solver = Solver(cnf, None, ss_enum.SatSolverEnum.MiniSAT, b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING)
+                solver = Solver(cnf=cnf,
+                                clause_id_set=None,
+                                backbones_chunk_size=1,
+                                sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
+                                backbones_enum=b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING)
 
                 for cache_enum in hpc_enum.hpc_enum_values:
                     for variable_simplification_enum in hpvs_enum.hpvs_enum_values:

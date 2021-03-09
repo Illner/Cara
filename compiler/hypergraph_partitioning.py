@@ -53,7 +53,9 @@ class HypergraphPartitioning:
     OUTPUT_FILE_2_EXE_HMETIS_PATH = Path(str(INPUT_FILE_EXE_HMETIS_PATH) + ".part.2")
     WIN_PROGRAM_EXE_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe"))
 
-    def __init__(self, cnf: Cnf, ub_factor: float, subsumed_threshold: Union[int, None],
+    def __init__(self, cnf: Cnf,
+                 ub_factor: float,
+                 subsumed_threshold: Union[int, None],
                  cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                  software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
                  node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,

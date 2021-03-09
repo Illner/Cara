@@ -7,7 +7,8 @@ from compiler.solver import Solver
 from typing import Set, Dict, List, Tuple, Union
 
 # Import exception
-import exception.cara_exception as ca_exception
+import exception.cara_exception as c_exception
+import exception.compiler.backbones_exception as b_exception
 
 # Import enum
 import compiler.enum.backbones_enum as b_enum
@@ -21,11 +22,21 @@ class Backbones:
     """
     Private Solver solver
     Private BackbonesEnum backbones_enum
+    Private int/float backbones_chunk_size
     """
 
-    def __init__(self, solver: Solver, backbones_enum: b_enum.BackbonesEnum):
+    def __init__(self, solver: Solver, backbones_enum: b_enum.BackbonesEnum, backbones_chunk_size: Union[int, float]):
         self.__solver: Solver = solver
         self.__backbones_enum: b_enum.BackbonesEnum = backbones_enum
+
+        # Check if the chunk size is valid
+        if backbones_chunk_size <= 0:
+            raise b_exception.InvalidChunkSizeException(backbones_chunk_size)
+
+        if backbones_chunk_size > 1:
+            backbones_chunk_size = int(backbones_chunk_size)
+
+        self.__backbones_chunk_size: Union[int, float] = backbones_chunk_size
 
     # region Public method
     def get_backbones(self, assignment_list: List[int]) -> Union[Set[int], None]:
@@ -50,7 +61,7 @@ class Backbones:
         if self.__backbones_enum == b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING:
             return self.__get_backbones_core_based_algorithm_with_chunking(assignment_list_temp)
 
-        raise ca_exception.FunctionNotImplementedException("get_backbones",
+        raise c_exception.FunctionNotImplementedException("get_backbones",
                                                            f"this type of getting backbones ({self.__backbones_enum.name}) is not implemented")
     # endregion
 

@@ -32,7 +32,9 @@ class Solver:
     Private Dict<str, Dict<int, Tuple<Set<int>, Set<int>>>> implicit_bcp_dictionary_cache   # key = {number}+, value: implicit_bcp_dictionary
     """
 
-    def __init__(self, cnf: Cnf, clause_id_set: Union[Set[int], None],
+    def __init__(self, cnf: Cnf,
+                 clause_id_set: Union[Set[int], None],
+                 backbones_chunk_size: Union[int, float],
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  backbones_enum: b_enum.BackbonesEnum):
         self.__cnf: CNF = CNF()
@@ -85,7 +87,7 @@ class Solver:
 
         # Backbones
         from compiler.backbones import Backbones
-        self.__backbones = Backbones(self, backbones_enum)
+        self.__backbones = Backbones(self, backbones_enum, backbones_chunk_size)
 
     # region Public method
     def is_satisfiable(self, assignment_list: List[int]) -> bool:

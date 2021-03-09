@@ -26,6 +26,7 @@ class Compiler:
     Private bool smooth
     Private Circuit circuit
     Private float new_cut_set_threshold
+    Private int/float backbones_chunk_size
     Private HypergraphPartitioning hypergraph_partitioning
     
     Private BackbonesEnum backbones_enum
@@ -52,11 +53,13 @@ class Compiler:
                  hp_variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
                  hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
-                 backbones_enum: b_enum.BackbonesEnum = b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING):
+                 backbones_enum: b_enum.BackbonesEnum = b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING,
+                 backbones_chunk_size: Union[int, float] = 0.5):
         self.__cnf: Cnf = cnf
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
         self.__new_cut_set_threshold: float = new_cut_set_threshold
+        self.__backbones_chunk_size: Union[int, float] = backbones_chunk_size
 
         self.__backbones_enum: b_enum.BackbonesEnum = backbones_enum
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
@@ -94,6 +97,7 @@ class Compiler:
                                   new_cut_set_threshold=self.__new_cut_set_threshold,
                                   incidence_graph=incidence_graph,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
+                                  backbones_chunk_size=self.__backbones_chunk_size,
                                   backbones_enum=self.__backbones_enum,
                                   sat_solver_enum=self.__sat_solver_enum,
                                   implied_literals_enum=self.__implied_literals_enum)
