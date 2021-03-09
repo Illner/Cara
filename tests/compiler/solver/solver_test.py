@@ -9,6 +9,7 @@ from tests.test_abstract import TestAbstract
 import exception.compiler.compiler_exception as c_exception
 
 # Import enum
+import compiler.enum.backbones_enum as b_enum
 import compiler.enum.sat_solver_enum as ss_enum
 
 
@@ -31,7 +32,7 @@ class SolverTest(TestAbstract):
                         actual_result = "\n".join((actual_result, f"File: {file_name}, SAT solver: {ss_enum.SatSolverEnum(sat_solver).name}, assumption: {assumption}"))
 
                         cnf = Cnf(file_path)
-                        solver = Solver(cnf, None, sat_solver)
+                        solver = Solver(cnf, None, sat_solver, b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING)
 
                         # Unit propagation
                         unit_propagation = solver.unit_propagation(assumption)

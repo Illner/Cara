@@ -24,14 +24,14 @@ cnf = Cnf(path)
 
 compiler = Compiler(cnf, smooth=False, ub_factor=0.1, new_cut_set_threshold=0.1, subsumed_threshold=1000,
                     sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                    implied_literals_enum=il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP,
+                    implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                     hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.NONE,
                     hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
                     hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                     hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                     hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
-                    hp_limit_number_of_clauses_cache=(None, None),
-                    hp_limit_number_of_variables_cache=(None, None))
+                    hp_limit_number_of_clauses_cache=(None, 300),
+                    hp_limit_number_of_variables_cache=(None, 300))
 
 circuit = compiler.create_circuit()
 
@@ -39,5 +39,5 @@ end_time = time.time()
 
 
 print("Time: ", end_time-start_time)
-print(circuit)
+# print(circuit)
 print("Number of models: ", circuit.model_counting(set(), set()))

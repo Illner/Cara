@@ -12,6 +12,7 @@ import exception.cara_exception as ca_exception
 import exception.compiler.compiler_exception as c_exception
 
 # Import enum
+import compiler.enum.backbones_enum as b_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 
@@ -28,6 +29,7 @@ class Component:
     Private Solver solver
     Private Circuit circuit
     Private float new_cut_set_threshold
+    Private BackbonesEnum backbones_enum
     Private IncidenceGraph incidence_graph
     Private HypergraphPartitioning hypergraph_partitioning
     
@@ -39,18 +41,21 @@ class Component:
 
     def __init__(self, cnf: Cnf, assignment_list: List[int], circuit: Circuit, new_cut_set_threshold: float,
                  incidence_graph: IncidenceGraph, hypergraph_partitioning: HypergraphPartitioning,
-                 sat_solver_enum: ss_enum.SatSolverEnum, implied_literals_enum: il_enum.ImpliedLiteralsEnum):
+                 backbones_enum: b_enum.BackbonesEnum,
+                 sat_solver_enum: ss_enum.SatSolverEnum,
+                 implied_literals_enum: il_enum.ImpliedLiteralsEnum):
         self.__cnf: Cnf = cnf
         self.__circuit: Circuit = circuit
         self.__incidence_graph: IncidenceGraph = incidence_graph
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
 
+        self.__backbones_enum: b_enum.BackbonesEnum = backbones_enum
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
 
         clause_id_set = self.__incidence_graph.clause_id_set()
-        self.__solver: Solver = Solver(cnf, clause_id_set, sat_solver_enum)
+        self.__solver: Solver = Solver(cnf, clause_id_set, sat_solver_enum, backbones_enum)
 
         self.__assignment_list: List[int] = assignment_list
 
@@ -184,6 +189,7 @@ class Component:
                                            new_cut_set_threshold=self.__new_cut_set_threshold,
                                            incidence_graph=incidence_graph,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
+                                           backbones_enum=self.__backbones_enum,
                                            sat_solver_enum=self.__sat_solver_enum,
                                            implied_literals_enum=self.__implied_literals_enum)
                 node_id = component_temp.create_circuit()
