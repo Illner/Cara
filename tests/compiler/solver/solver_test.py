@@ -9,7 +9,6 @@ from tests.test_abstract import TestAbstract
 import exception.compiler.compiler_exception as c_exception
 
 # Import enum
-import compiler.enum.backbones_enum as b_enum
 import compiler.enum.sat_solver_enum as ss_enum
 
 
@@ -34,9 +33,7 @@ class SolverTest(TestAbstract):
                         cnf = Cnf(file_path)
                         solver = Solver(cnf=cnf,
                                         clause_id_set=None,
-                                        backbones_chunk_size=1,
-                                        sat_solver_enum=sat_solver,
-                                        backbones_enum=b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING)
+                                        sat_solver_enum=sat_solver)
 
                         # Unit propagation
                         unit_propagation = solver.unit_propagation(assumption)

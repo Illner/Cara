@@ -11,7 +11,6 @@ import exception.formula.formula_exception as f_exception
 import exception.compiler.compiler_exception as c_exception
 
 # Import enum
-import compiler.enum.backbones_enum as b_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
@@ -35,9 +34,7 @@ class HypergraphPartitioningTest(TestAbstract):
                 cnf = Cnf(file_path)
                 solver = Solver(cnf=cnf,
                                 clause_id_set=None,
-                                backbones_chunk_size=1,
-                                sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                                backbones_enum=b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING)
+                                sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT)
 
                 for cache_enum in hpc_enum.hpc_enum_values:
                     for variable_simplification_enum in hpvs_enum.hpvs_enum_values:

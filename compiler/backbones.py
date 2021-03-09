@@ -1,18 +1,6 @@
-# Wang, Zipeng & Bao, Yiping & Xing, Junhao & Chen, Xinyu & Liu, Sihan. (2016).
-# Algorithm for Computing Backbones of Propositional Formulae Based on Solved Backbone Information.
-# 10.2991/amsm-16.2016.8.
-
 # Import
-import random
 from compiler.solver import Solver
-from typing import Set, Dict, List, Tuple, Union
-
-# Import exception
-import exception.cara_exception as c_exception
-import exception.compiler.backbones_exception as b_exception
-
-# Import enum
-import compiler.enum.backbones_enum as b_enum
+from typing import Set, List, Union
 
 
 class Backbones:
@@ -22,25 +10,13 @@ class Backbones:
 
     """
     Private Solver solver
-    Private BackbonesEnum backbones_enum
-    Private int/float backbones_chunk_size
     """
 
-    def __init__(self, solver: Solver, backbones_enum: b_enum.BackbonesEnum, backbones_chunk_size: Union[int, float]):
+    def __init__(self, solver: Solver):
         self.__solver: Solver = solver
-        self.__backbones_enum: b_enum.BackbonesEnum = backbones_enum
-
-        # Check if the chunk size is valid
-        if backbones_chunk_size <= 0:
-            raise b_exception.InvalidChunkSizeException(backbones_chunk_size)
-
-        if backbones_chunk_size > 1:
-            backbones_chunk_size = int(backbones_chunk_size)
-
-        self.__backbones_chunk_size: Union[int, float] = backbones_chunk_size
 
     # region Public method
-    def get_backbones(self, assignment_list: List[int]) -> Union[Set[int], None]:
+    def get_backbone_literals(self, assignment_list: List[int]) -> Union[Set[int], None]:
         """
         Return a set of backbone literals for the assignment.
         If the formula is unsatisfiable, None is returned.
@@ -50,22 +26,13 @@ class Backbones:
 
         assignment_list_temp = assignment_list.copy()
 
-        # Iterative algorithm
-        if self.__backbones_enum == b_enum.BackbonesEnum.ITERATIVE_ALGORITHM:
-            return self.__get_backbones_iterative_algorithm(assignment_list_temp)
-
-        # Core-based Algorithm with Chunking
-        if self.__backbones_enum == b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING:
-            return self.__get_backbones_core_based_algorithm_with_chunking(assignment_list_temp)
-
-        raise c_exception.FunctionNotImplementedException("get_backbones",
-                                                          f"this type of getting backbones ({self.__backbones_enum.name}) is not implemented")
+        return self.__get_backbone_literal_iterative_algorithm(assignment_list_temp)
     # endregion
 
     # region Private method
-    def __get_backbones_iterative_algorithm(self, assignment_list: List[int]) -> Union[Set[int], None]:
+    def __get_backbone_literal_iterative_algorithm(self, assignment_list: List[int]) -> Union[Set[int], None]:
         """
-        Algorithm 3: Iterative algorithm (one test per variable)
+        Iterative algorithm (one test per variable)
         """
 
         result = self.__solver.get_model(assignment_list)
@@ -92,11 +59,4 @@ class Backbones:
                 literal_to_try_set.intersection_update(result)
 
         return backbone_literal_set
-
-    def __get_backbones_core_based_algorithm_with_chunking(self, assignment_list: List[int]) -> Union[Set[int], None]:
-        """
-        Algorithm 7: Core-based Algorithm with Chunking
-        """
-
-        return None
     # endregion

@@ -35,10 +35,6 @@ class CompilerTest(TestAbstract):
                         for subsumed_threshold in [100, None]:
                             for new_cut_set_threshold in [0, 0.5, 1]:
                                 try:
-                                    # Not implemented yet
-                                    if implied_literals_enum == il_enum.ImpliedLiteralsEnum.BACKBONE:
-                                        continue
-
                                     count += 1
 
                                     actual_result = "\n".join((actual_result,

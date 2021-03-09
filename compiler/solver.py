@@ -9,7 +9,6 @@ from pysat.solvers import Minisat22, Glucose4, Lingeling, Cadical
 import exception.compiler.compiler_exception as c_exception
 
 # Import enum
-import compiler.enum.backbones_enum as b_enum
 import compiler.enum.sat_solver_enum as ss_enum
 
 
@@ -34,9 +33,7 @@ class Solver:
 
     def __init__(self, cnf: Cnf,
                  clause_id_set: Union[Set[int], None],
-                 backbones_chunk_size: Union[int, float],
-                 sat_solver_enum: ss_enum.SatSolverEnum,
-                 backbones_enum: b_enum.BackbonesEnum):
+                 sat_solver_enum: ss_enum.SatSolverEnum):
         self.__cnf: CNF = CNF()
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
 
@@ -87,7 +84,7 @@ class Solver:
 
         # Backbones
         from compiler.backbones import Backbones
-        self.__backbones = Backbones(self, backbones_enum, backbones_chunk_size)
+        self.__backbones = Backbones(self)
 
     # region Public method
     def is_satisfiable(self, assignment_list: List[int]) -> bool:
@@ -216,7 +213,7 @@ class Solver:
 
         return implied_literals
 
-    def get_backbones(self, assignment_list: List[int]) -> Union[Set[int], None]:
+    def get_backbone_literals(self, assignment_list: List[int]) -> Union[Set[int], None]:
         """
         Return a set of backbone literals for the assignment.
         If the formula is unsatisfiable, None is returned.
@@ -224,7 +221,7 @@ class Solver:
         :return: a set of backbone literals or None if the formula is unsatisfiable
         """
 
-        backbone_literal_set = self.__backbones.get_backbones(assignment_list)
+        backbone_literal_set = self.__backbones.get_backbone_literals(assignment_list)
 
         if backbone_literal_set is None:
             return None

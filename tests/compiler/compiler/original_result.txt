@@ -215,6 +215,114 @@ Correct
 File: 4step.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
 Correct
 
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 4step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
 File: 4step.cnf, implied literals: NONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
 Correct
 
@@ -537,6 +645,114 @@ File: 5step.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, var
 Correct
 
 File: 5step.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: 5step.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
 Correct
 
 File: 5step.cnf, implied literals: NONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
@@ -863,6 +1079,114 @@ Correct
 File: D1119_M20.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
 Correct
 
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: D1119_M20.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
 File: D1119_M20.cnf, implied literals: NONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
 Correct
 
@@ -1185,6 +1509,114 @@ File: ais6.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, vari
 Correct
 
 File: ais6.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: ais6.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
 Correct
 
 File: ais6.cnf, implied literals: NONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
@@ -1511,6 +1943,114 @@ Correct
 File: anomaly.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
 Correct
 
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: anomaly.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
 File: anomaly.cnf, implied literals: NONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
 Correct
 
@@ -1833,6 +2373,114 @@ File: cnt06.shuffled.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARI
 Correct
 
 File: cnt06.shuffled.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: cnt06.shuffled.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
 Correct
 
 File: cnt06.shuffled.cnf, implied literals: NONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
@@ -2159,6 +2807,114 @@ Correct
 File: mixdup.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
 Correct
 
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: mixdup.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
 File: mixdup.cnf, implied literals: NONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
 Correct
 
@@ -2483,6 +3239,114 @@ Correct
 File: s400.bench.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
 Correct
 
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: s400.bench.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
 File: s400.bench.cnf, implied literals: NONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
 Correct
 
@@ -2805,6 +3669,114 @@ File: wff.3.75.315.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIAN
 Correct
 
 File: wff.3.75.315.cnf, implied literals: IMPLICIT_BCP, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: NONE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: NONE, subsumed threshold: None, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: 100, new cut set threshold: 1
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 0.5
+Correct
+
+File: wff.3.75.315.cnf, implied literals: BACKBONE, cache: ISOMORFISM_VARIANCE, variable simplification: EQUIV_SIMPL, subsumed threshold: None, new cut set threshold: 1
 Correct
 
 File: wff.3.75.315.cnf, implied literals: NONE, cache: NONE, variable simplification: NONE, subsumed threshold: 100, new cut set threshold: 0
