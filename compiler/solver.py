@@ -222,7 +222,15 @@ class Solver:
         :return: a set of backbone literals or None if the formula is unsatisfiable
         """
 
-        return self.__backbones.get_backbones(assignment_list)
+        backbone_literal_set = self.__backbones.get_backbones(assignment_list)
+
+        if backbone_literal_set is None:
+            return None
+
+        backbone_literal_set.update(self.__implied_literal_set)
+        backbone_literal_set.difference_update(set(assignment_list))
+
+        return backbone_literal_set
     # endregion
 
     # region Private method
