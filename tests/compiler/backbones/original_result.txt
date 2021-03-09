@@ -2,17 +2,11 @@
 File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: MiniSAT, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: MiniSAT, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
-
 File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: MiniSAT, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: Glucose, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: Glucose, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: Glucose, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
@@ -20,17 +14,11 @@ Incorrect: 0 vs 10
 File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: Lingeling, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: Lingeling, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
-
 File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: Lingeling, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: CaDiCal, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: CaDiCal, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_0.cnf, SAT solver: CaDiCal, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
@@ -38,17 +26,11 @@ Incorrect: 0 vs 10
 File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: MiniSAT, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: MiniSAT, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
-
 File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: MiniSAT, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: Glucose, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: Glucose, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: Glucose, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
@@ -56,17 +38,11 @@ Incorrect: 0 vs 10
 File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: Lingeling, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: Lingeling, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
-
 File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: Lingeling, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: CaDiCal, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: CaDiCal, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_1.cnf, SAT solver: CaDiCal, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
@@ -74,17 +50,11 @@ Incorrect: 0 vs 10
 File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: MiniSAT, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: MiniSAT, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
-
 File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: MiniSAT, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: Glucose, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: Glucose, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: Glucose, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
@@ -92,17 +62,11 @@ Incorrect: 0 vs 10
 File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: Lingeling, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: Lingeling, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
-
 File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: Lingeling, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: CaDiCal, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: CaDiCal, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 10
 
 File: CBS_k3_n100_m403_b10_2.cnf, SAT solver: CaDiCal, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 10
@@ -110,17 +74,11 @@ Incorrect: 0 vs 10
 File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: MiniSAT, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: MiniSAT, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
-
 File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: MiniSAT, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: Glucose, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: Glucose, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: Glucose, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
@@ -128,17 +86,11 @@ Incorrect: 0 vs 30
 File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: Lingeling, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: Lingeling, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
-
 File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: Lingeling, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: CaDiCal, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: CaDiCal, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_0.cnf, SAT solver: CaDiCal, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
@@ -146,17 +98,11 @@ Incorrect: 0 vs 30
 File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: MiniSAT, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: MiniSAT, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
-
 File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: MiniSAT, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: Glucose, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: Glucose, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: Glucose, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
@@ -164,17 +110,11 @@ Incorrect: 0 vs 30
 File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: Lingeling, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: Lingeling, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
-
 File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: Lingeling, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: CaDiCal, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: CaDiCal, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_1.cnf, SAT solver: CaDiCal, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
@@ -182,17 +122,11 @@ Incorrect: 0 vs 30
 File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: MiniSAT, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: MiniSAT, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
-
 File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: MiniSAT, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: Glucose, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: Glucose, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: Glucose, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
@@ -200,17 +134,11 @@ Incorrect: 0 vs 30
 File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: Lingeling, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: Lingeling, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
-
 File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: Lingeling, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: CaDiCal, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: CaDiCal, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 30
 
 File: CBS_k3_n100_m403_b30_2.cnf, SAT solver: CaDiCal, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 30
@@ -218,17 +146,11 @@ Incorrect: 0 vs 30
 File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: MiniSAT, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: MiniSAT, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
-
 File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: MiniSAT, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: Glucose, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: Glucose, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: Glucose, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
@@ -236,17 +158,11 @@ Incorrect: 0 vs 50
 File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: Lingeling, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: Lingeling, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
-
 File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: Lingeling, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: CaDiCal, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: CaDiCal, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_0.cnf, SAT solver: CaDiCal, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
@@ -254,17 +170,11 @@ Incorrect: 0 vs 50
 File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: MiniSAT, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: MiniSAT, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
-
 File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: MiniSAT, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: Glucose, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: Glucose, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: Glucose, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
@@ -272,17 +182,11 @@ Incorrect: 0 vs 50
 File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: Lingeling, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: Lingeling, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
-
 File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: Lingeling, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: CaDiCal, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: CaDiCal, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_1.cnf, SAT solver: CaDiCal, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
@@ -290,17 +194,11 @@ Incorrect: 0 vs 50
 File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: MiniSAT, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: MiniSAT, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
-
 File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: MiniSAT, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: Glucose, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: Glucose, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: Glucose, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
@@ -308,17 +206,11 @@ Incorrect: 0 vs 50
 File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: Lingeling, backbones: ITERATIVE_ALGORITHM
 Correct
 
-File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: Lingeling, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
-
 File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: Lingeling, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: CaDiCal, backbones: ITERATIVE_ALGORITHM
 Correct
-
-File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: CaDiCal, backbones: CHUNKING_ALGORITHM
-Incorrect: 0 vs 50
 
 File: CBS_k3_n100_m403_b50_2.cnf, SAT solver: CaDiCal, backbones: CORE_BASED_ALGORITHM_WITH_CHUNKING
 Incorrect: 0 vs 50

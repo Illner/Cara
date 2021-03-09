@@ -3,6 +3,7 @@
 # 10.2991/amsm-16.2016.8.
 
 # Import
+import random
 from compiler.solver import Solver
 from typing import Set, Dict, List, Tuple, Union
 
@@ -53,16 +54,12 @@ class Backbones:
         if self.__backbones_enum == b_enum.BackbonesEnum.ITERATIVE_ALGORITHM:
             return self.__get_backbones_iterative_algorithm(assignment_list_temp)
 
-        # Chunking algorithm
-        if self.__backbones_enum == b_enum.BackbonesEnum.CHUNKING_ALGORITHM:
-            return self.__get_backbones_chunking_algorithm(assignment_list_temp)
-
         # Core-based Algorithm with Chunking
         if self.__backbones_enum == b_enum.BackbonesEnum.CORE_BASED_ALGORITHM_WITH_CHUNKING:
             return self.__get_backbones_core_based_algorithm_with_chunking(assignment_list_temp)
 
         raise c_exception.FunctionNotImplementedException("get_backbones",
-                                                           f"this type of getting backbones ({self.__backbones_enum.name}) is not implemented")
+                                                          f"this type of getting backbones ({self.__backbones_enum.name}) is not implemented")
     # endregion
 
     # region Private method
@@ -87,7 +84,7 @@ class Backbones:
             result = self.__solver.get_model(assignment_list)
             assignment_list.pop()
 
-            # A backbone has been found
+            # A backbone literal has been found
             if result is None:
                 backbone_literal_set.add(literal)
                 assignment_list.append(literal)
@@ -96,17 +93,10 @@ class Backbones:
 
         return backbone_literal_set
 
-    def __get_backbones_chunking_algorithm(self, assignment_list: List[int]) -> Union[Set[int], None]:
-        """
-        Algorithm 5: Chunking algorithm
-        """
-
-        pass
-
     def __get_backbones_core_based_algorithm_with_chunking(self, assignment_list: List[int]) -> Union[Set[int], None]:
         """
         Algorithm 7: Core-based Algorithm with Chunking
         """
 
-        pass
+        return None
     # endregion
