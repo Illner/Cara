@@ -251,6 +251,25 @@ class IncidenceGraph(Graph):
 
         return len(self[clause_id_hash])
 
+    def get_clause(self, clause_id: int) -> Set[int]:
+        """
+        Return a clause with the given identifier.
+        If the clause's id does not exist in the incidence graph, raise an exception (ClauseIdDoesNotExistException).
+        :param clause_id: the clause's id
+        :return: the clause (a set of literals)
+        """
+
+        variable_set = self.clause_id_neighbour_set(clause_id)
+        literal_set = set()
+
+        for variable in variable_set:
+            if clause_id in self.__adjacency_literal_dictionary[variable]:
+                literal_set.add(variable)
+            else:
+                literal_set.add(-variable)
+
+        return literal_set
+
     def number_of_nodes(self) -> int:
         """
         :return: the number of nodes

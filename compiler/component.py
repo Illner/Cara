@@ -6,6 +6,7 @@ from circuit.circuit import Circuit
 from typing import Set, List, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler.hypergraph_partitioning import HypergraphPartitioning
+from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
 
 # Import exception
 import exception.cara_exception as ca_exception
@@ -29,6 +30,7 @@ class Component:
     Private Circuit circuit
     Private float new_cut_set_threshold
     Private IncidenceGraph incidence_graph
+    Private ComponentCachingAbstract component_caching
     Private HypergraphPartitioning hypergraph_partitioning
     
     Private SatSolverEnum sat_solver_enum
@@ -42,6 +44,7 @@ class Component:
                  circuit: Circuit,
                  new_cut_set_threshold: float,
                  incidence_graph: IncidenceGraph,
+                 component_caching: ComponentCachingAbstract,
                  hypergraph_partitioning: HypergraphPartitioning,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum):
@@ -49,6 +52,7 @@ class Component:
         self.__circuit: Circuit = circuit
         self.__incidence_graph: IncidenceGraph = incidence_graph
         self.__new_cut_set_threshold: float = new_cut_set_threshold
+        self.__component_caching: ComponentCachingAbstract = component_caching
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
@@ -174,7 +178,15 @@ class Component:
             return self.__circuit.create_and_node(implied_literal_id_set)
 
         # TODO Formula type
-        # TODO Cache (Key, Get)
+
+        # Component caching
+        key = self.__component_caching.generate_key_cache(self.__incidence_graph)
+        value = self.__component_caching.get(key)
+        if value is not None:
+            node_id = self.__circuit.create_and_node({value}.union(implied_literal_id_set))
+            remove_implied_literals(implied_literal_set)    # Restore the implied literals
+
+            return node_id
 
         # Check if more components exist
         if self.__exist_more_components():
@@ -187,15 +199,18 @@ class Component:
                                            circuit=self.__circuit,
                                            new_cut_set_threshold=self.__new_cut_set_threshold,
                                            incidence_graph=incidence_graph,
+                                           component_caching=self.__component_caching,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
                                            sat_solver_enum=self.__sat_solver_enum,
                                            implied_literals_enum=self.__implied_literals_enum)
                 node_id = component_temp.create_circuit()
                 node_id_set.add(node_id)
 
-            node_id = self.__circuit.create_and_node(node_id_set.union(implied_literal_id_set))
+            node_id_cache = self.__circuit.create_and_node(node_id_set)
+            node_id = self.__circuit.create_and_node({node_id_cache}.union(implied_literal_id_set))
 
-            # TODO Cache (Save)
+            # Component caching
+            self.__component_caching.add(key, node_id_cache)
 
             remove_implied_literals(implied_literal_set)    # Restore the implied literals
             return node_id
@@ -233,7 +248,8 @@ class Component:
         decision_node_id = self.__circuit.create_decision_node(decision_variable, node_id_list[0], node_id_list[1])
         node_id = self.__circuit.create_and_node({decision_node_id}.union(implied_literal_id_set))
 
-        # TODO Cache (Save)
+        # Component caching
+        self.__component_caching.add(key, decision_node_id)
 
         remove_implied_literals(implied_literal_set)    # Restore the implied literals
         return node_id

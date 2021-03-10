@@ -7,6 +7,7 @@ from tests.test_abstract import TestAbstract
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
+import compiler.component_caching.component_caching_enum as cc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
@@ -53,6 +54,7 @@ class CompilerTest(TestAbstract):
                                                         new_cut_set_threshold=new_cut_set_threshold,
                                                         sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                                                         implied_literals_enum=implied_literals_enum,
+                                                        component_caching_enum=cc_enum.ComponentCachingEnum.STANDARD_CACHING_SCHEME,
                                                         hp_cache_enum=hp_cache_enum,
                                                         hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
                                                         hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,

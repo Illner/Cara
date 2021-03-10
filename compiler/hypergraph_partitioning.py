@@ -493,9 +493,7 @@ class HypergraphPartitioning:
 
             key_list.append(key_clause)
 
-        key_string = ""
-        for key in sorted(key_list):
-            key_string = "-".join((key_string, str(key)))
+        key_string = "-".join(map(str, sorted(key_list)))
 
         return key_string, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
     # endregion
@@ -518,6 +516,7 @@ class HypergraphPartitioning:
         string_weight = "% Weights"
 
         # Hyperedges
+        line_hyperedge = []
         for variable in incidence_graph.variable_set():
             clause_id_set = incidence_graph.variable_neighbour_set(variable)
 
@@ -531,11 +530,16 @@ class HypergraphPartitioning:
 
                 line_temp.append(clause_id_node_id_dictionary[clause_id])
 
-            string_hyperedge = "\n".join((string_hyperedge, " ".join(map(str, line_temp))))
+            line_hyperedge.append(line_temp)
+
+        string_hyperedge = "\n".join([" ".join(map(str, hyperedge)) for hyperedge in line_hyperedge])
 
         # Weights
+        line_weight = []
         for node_id in range(1, number_of_nodes + 1):
-            string_weight = "\n".join((string_weight, str(self.__get_node_weight(node_id_clause_id_dictionary[node_id]))))
+            line_weight.append(self.__get_node_weight(node_id_clause_id_dictionary[node_id]))
+
+        string_weight = "\n".join(map(str, line_weight))
 
         string_result = "\n".join((f"{number_of_hyperedges} {number_of_nodes} 11",
                                    string_hyperedge,

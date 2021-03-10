@@ -6,9 +6,17 @@ from compiler.component import Component
 from formula.incidence_graph import IncidenceGraph
 from compiler.hypergraph_partitioning import HypergraphPartitioning
 
+# Import component caching
+from compiler.component_caching.none_caching import NoneCaching
+from compiler.component_caching.standard_caching_scheme import StandardCachingScheme
+
+# Import exception
+import exception.cara_exception as c_exception
+
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
+import compiler.component_caching.component_caching_enum as cc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
@@ -25,6 +33,7 @@ class Compiler:
     Private bool smooth
     Private Circuit circuit
     Private float new_cut_set_threshold
+    Private ComponentCachingAbstract component_caching
     Private HypergraphPartitioning hypergraph_partitioning
     
     Private SatSolverEnum sat_solver_enum
@@ -43,6 +52,7 @@ class Compiler:
                  new_cut_set_threshold: float,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
+                 component_caching_enum: cc_enum.ComponentCachingEnum,
                  hp_cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                  hp_software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
                  hp_node_weight_type_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
@@ -58,6 +68,9 @@ class Compiler:
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
 
+        # Component caching
+        self.__set_component_caching(component_caching_enum)
+
         self.__hypergraph_partitioning = HypergraphPartitioning(cnf=self.__cnf,
                                                                 ub_factor=ub_factor,
                                                                 subsumed_threshold=subsumed_threshold,
@@ -69,7 +82,23 @@ class Compiler:
                                                                 limit_number_of_clauses_cache=hp_limit_number_of_clauses_cache,
                                                                 limit_number_of_variables_cache=hp_limit_number_of_variables_cache)
 
-    # region Public
+    # region Private method
+    def __set_component_caching(self, component_caching_enum: cc_enum.ComponentCachingEnum):
+        # None
+        if component_caching_enum == cc_enum.ComponentCachingEnum.NONE:
+            self.__component_caching = NoneCaching()
+            return
+
+        # STANDARD_CACHING_SCHEME
+        if component_caching_enum == cc_enum.ComponentCachingEnum.STANDARD_CACHING_SCHEME:
+            self.__component_caching = StandardCachingScheme()
+            return
+
+        raise c_exception.FunctionNotImplementedException("set_component_caching",
+                                                          f"this type of component caching ({component_caching_enum.name}) is not implemented")
+    # endregion
+
+    # region Public method
     def create_circuit(self) -> Circuit:
         """
         :return: the created circuit
@@ -89,6 +118,7 @@ class Compiler:
                                   circuit=self.__circuit,
                                   new_cut_set_threshold=self.__new_cut_set_threshold,
                                   incidence_graph=incidence_graph,
+                                  component_caching=self.__component_caching,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
                                   sat_solver_enum=self.__sat_solver_enum,
                                   implied_literals_enum=self.__implied_literals_enum)

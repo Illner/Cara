@@ -363,9 +363,7 @@ class NodeAbstract(ABC):
             else:
                 exist_quantification_list_temp.append("-")
 
-        assumption_str_temp = ''.join(assumption_list_temp)
-        exist_quantification_str_temp = ''.join(exist_quantification_list_temp)
-        str_temp = ''.join((assumption_str_temp, exist_quantification_str_temp))
+        str_temp = ''.join((''.join(assumption_list_temp), ''.join(exist_quantification_list_temp)))
 
         return str_temp
     # endregion

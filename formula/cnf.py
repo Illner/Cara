@@ -315,12 +315,12 @@ class Cnf:
 
     # region Magic method
     def __str__(self):
-        string_temp = "".join(f"Number of clauses: {self.__number_of_clauses}")
-        string_temp = "\n".join((string_temp, f"Real number of clauses: {self.real_number_of_clauses}"))
-        string_temp = "\n".join((string_temp, f"Number of variables: {self.number_of_variables}"))
-        string_temp = "\n".join((string_temp, f"Unit clauses: {self.__unit_clause_set}"))
-        string_temp = "\n".join((string_temp, f"Unused variables: {self.__unused_variable_set}"))
-        string_temp = "\n".join((string_temp, "\nComments: ", self.__comments))
+        string_temp = "\n".join((f"Number of clauses: {self.__number_of_clauses}",
+                                 f"Real number of clauses: {self.real_number_of_clauses}",
+                                 f"Number of variables: {self.number_of_variables}",
+                                 f"Unit clauses: {self.__unit_clause_set}",
+                                 f"Unused variables: {self.__unused_variable_set}",
+                                 "\nComments: ", self.__comments))
 
         return string_temp
     # endregion

@@ -4,8 +4,10 @@ from enum import IntEnum, unique
 
 @unique
 class ComponentCachingEnum(IntEnum):
-    C2D = 1
-    NONE = 2
+    NONE = 1
+    STANDARD_CACHING_SCHEME = 2     # Cachet
+    HYBRID_CACHING_SCHEME = 3       # sharpSAT
+    D4 = 4                          # D4
 
 
 component_caching_enum_names = [cc.name for cc in ComponentCachingEnum]
