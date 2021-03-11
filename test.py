@@ -14,11 +14,11 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\no_comments_valid.cnf"
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\compiler\compiler\CNF_formulae\D1119_M20.cnf"
-
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Planning\pddlXpSym\coins_p04_p_t5.cnf"
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
 start_time = time.time()
 
 cnf = Cnf(path)
@@ -26,14 +26,14 @@ cnf = Cnf(path)
 compiler = Compiler(cnf, smooth=False, ub_factor=0.1, new_cut_set_threshold=0.1, subsumed_threshold=1000,
                     sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                     implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
-                    component_caching_enum=cc_enum.ComponentCachingEnum.STANDARD_CACHING_SCHEME,
+                    component_caching_enum=cc_enum.ComponentCachingEnum.NONE,
                     hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.NONE,
                     hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
                     hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                     hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                     hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
-                    hp_limit_number_of_clauses_cache=(None, 300),
-                    hp_limit_number_of_variables_cache=(None, 300))
+                    hp_limit_number_of_clauses_cache=(None, 200),
+                    hp_limit_number_of_variables_cache=(None, 200))
 
 circuit = compiler.create_circuit()
 
@@ -41,5 +41,6 @@ end_time = time.time()
 
 
 print("Time: ", end_time-start_time)
-# print(circuit)
+circuit.smooth()
+print(circuit.size)
 print("Number of models: ", circuit.model_counting(set(), set()))

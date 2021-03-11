@@ -14,11 +14,19 @@ class ComponentCachingAbstract(ABC):
     """
 
     """
-    Private Dict<int, int> cache
+    Private Dict<int, int> cache    key: hash, value: identifier of a node
+    
+    Protected str delimiter
+    Protected str end_delimiter
+    Protected str end_delimiter_2
     """
 
     def __init__(self):
         self.__cache: Dict[int, int] = dict()
+
+        self._delimiter = ","
+        self._end_delimiter = f"{self._delimiter}0{self._delimiter}"
+        self._end_delimiter_2 = f"{self._delimiter}00{self._delimiter}"
 
     # region Abstract method
     @abstractmethod

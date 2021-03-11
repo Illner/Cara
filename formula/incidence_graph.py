@@ -1,4 +1,5 @@
 # Import
+import mmh3
 import random
 import networkx as nx
 from networkx.classes.graph import Graph
@@ -277,12 +278,40 @@ class IncidenceGraph(Graph):
 
         return super().number_of_nodes()
 
-    def clause_id_set(self) -> Set[int]:
+    def clause_id_set(self, multi_occurrence: bool = True) -> Set[int]:
         """
+        :param multi_occurrence: should be multi-occurrent clauses kept
         :return: a set of clauses that are in the incidence graph
         """
 
-        return set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 1)
+        clause_id_set = set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 1)
+
+        if multi_occurrence:
+            return clause_id_set
+
+        # Multi-occurrent clauses are not kept
+        cache: Dict[int, int] = dict()
+        clause_id_set_without_multi_occurrence = set()
+
+        for clause_id in clause_id_set:
+            clause_key_string = ",".join(map(str, sorted(self.get_clause(clause_id))))
+            clause_key = mmh3.hash(clause_key_string)
+
+            if clause_key not in cache:
+                cache[clause_key] = clause_id
+                clause_id_set_without_multi_occurrence.add(clause_id)
+            else:
+                value = cache[clause_key]
+
+                # determinism
+                if value < clause_id:
+                    continue
+
+                clause_id_set_without_multi_occurrence.remove(value)
+                clause_id_set_without_multi_occurrence.add(clause_id)
+                cache[clause_key] = clause_id
+
+        return clause_id_set_without_multi_occurrence
 
     def clause_id_list(self) -> List[int]:
         """

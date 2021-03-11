@@ -486,12 +486,12 @@ class HypergraphPartitioning:
                 counter_temp += 1
 
         variable_clause_list = []
-        for clause_id in incidence_graph.clause_id_set():
+        for clause_id in incidence_graph.clause_id_set(multi_occurrence=False):
             variable_set = incidence_graph.clause_id_neighbour_set(clause_id)
-            variable_ordered_list = sorted(map(lambda v: variable_id_order_id_dictionary[v], variable_set))
-            variable_clause_list.append(variable_ordered_list)
+            variable_sorted_list = sorted(map(lambda v: variable_id_order_id_dictionary[v], variable_set))
+            variable_clause_list.append(variable_sorted_list)
 
-        key_string = ",0,".join([",".join(map(str, variable_clause)) for variable_clause in variable_clause_list])
+        key_string = ",0,".join([",".join(map(str, variable_clause)) for variable_clause in sorted(variable_clause_list)])
         key = mmh3.hash(key_string)
 
         return key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)

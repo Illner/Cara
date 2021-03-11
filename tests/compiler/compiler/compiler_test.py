@@ -54,7 +54,7 @@ class CompilerTest(TestAbstract):
                                                         new_cut_set_threshold=new_cut_set_threshold,
                                                         sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                                                         implied_literals_enum=implied_literals_enum,
-                                                        component_caching_enum=cc_enum.ComponentCachingEnum.STANDARD_CACHING_SCHEME,
+                                                        component_caching_enum=cc_enum.ComponentCachingEnum.HYBRID_CACHING_SCHEME,
                                                         hp_cache_enum=hp_cache_enum,
                                                         hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
                                                         hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
