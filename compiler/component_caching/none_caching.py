@@ -13,6 +13,6 @@ class NoneCaching(ComponentCachingAbstract):
         super().__init__()
 
     # region Override method
-    def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[str, None]:
+    def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[int, None]:
         return None
     # endregion

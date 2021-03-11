@@ -8,6 +8,7 @@ Python 3.8.7 (64 bit)
 * <a href="https://pypi.org/project/sortedcontainers/" target="_blank">sortedcontainers</a> 2.3.0 (Windows / Linux / Mac)
 * <a href="https://pypi.org/project/python-sat/" target="_blank">python-sat</a> 0.1.6.dev11 (Windows / Linux / Mac)
 * <a href="https://pypi.org/project/hypernetx/" target="_blank">hypernetx</a> 0.3.7 (Windows / Linux / Mac)
+* <a href="https://pypi.org/project/mmh3/" target="_blank">mmh3</a> 3.0.0 (Windows / Linux / Mac)
 
 ## Software
 * <a href="http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview" target="_blank">hMETIS</a> 1.5.3 (Windows / Linux)
