@@ -1,5 +1,6 @@
 # Import
 import os
+import mmh3
 import subprocess
 from pathlib import Path
 from formula.cnf import Cnf
@@ -43,7 +44,7 @@ class HypergraphPartitioning:
     Private Dict<int, int> node_weight_dictionary       # key: node = clause's id, value: the weight of the clause
     Private Dict<int, int> hyperedge_weight_dictionary  # key: edge = variable, value: the weight of the variable
     
-    Private Dict<str, Set<int>> cut_set_cache           # key = {number}+, value = a cut set
+    Private Dict<int, Set<int>> cut_set_cache           # key = hash, value = a cut set
     """
 
     # Static variable - Path
@@ -74,7 +75,7 @@ class HypergraphPartitioning:
         self.__node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum = node_weight_enum
         self.__hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum = hyperedge_weight_enum
 
-        self.__cut_set_cache: Dict[str, Set[int]] = dict()
+        self.__cut_set_cache: Dict[int, Set[int]] = dict()
 
         # limit_number_of_clauses_cache
         lnocc_l_temp = limit_number_of_clauses_cache[0]
@@ -346,7 +347,7 @@ class HypergraphPartitioning:
     # endregion
 
     # region Cache
-    def __add_cut_set_cache(self, key: str, cut_set: Set[int]) -> None:
+    def __add_cut_set_cache(self, key: int, cut_set: Set[int]) -> None:
         """
         Add a new record to the cache.
         If the record already exists in the cache, the value of the record will be updated.
@@ -358,7 +359,7 @@ class HypergraphPartitioning:
 
         self.__cut_set_cache[key] = cut_set
 
-    def __get_cut_set_cache(self, key: str) -> Union[Set[int], None]:
+    def __get_cut_set_cache(self, key: int) -> Union[Set[int], None]:
         """
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
@@ -382,7 +383,7 @@ class HypergraphPartitioning:
 
         self.__cut_set_cache = dict()
 
-    def __generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[Tuple[str, Tuple[Dict[int, int], Dict[int, int]]], None]:
+    def __generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[Tuple[int, Tuple[Dict[int, int], Dict[int, int]]], None]:
         """
         Generate a key for caching
         Variable property: occurrence, mean, variance (optional)
@@ -484,18 +485,16 @@ class HypergraphPartitioning:
                 order_id_variable_id_dictionary[counter_temp] = var
                 counter_temp += 1
 
-        key_list = []
+        variable_clause_list = []
         for clause_id in incidence_graph.clause_id_set():
-            variable_set_temp = incidence_graph.clause_id_neighbour_set(clause_id)
-            key_clause = 0
-            for v in variable_set_temp:
-                key_clause += 2 ** (variable_id_order_id_dictionary[v])
+            variable_set = incidence_graph.clause_id_neighbour_set(clause_id)
+            variable_ordered_list = sorted(map(lambda v: variable_id_order_id_dictionary[v], variable_set))
+            variable_clause_list.append(variable_ordered_list)
 
-            key_list.append(key_clause)
+        key_string = ",0,".join([",".join(map(str, variable_clause)) for variable_clause in variable_clause_list])
+        key = mmh3.hash(key_string)
 
-        key_string = "-".join(map(str, sorted(key_list)))
-
-        return key_string, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
+        return key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
     # endregion
 
     # region hMETIS.exe
@@ -512,8 +511,6 @@ class HypergraphPartitioning:
 
         number_of_nodes = 0  # incidence_graph.number_of_clauses()
         number_of_hyperedges = incidence_graph.number_of_variables()
-        string_hyperedge = "% Hyperedges"
-        string_weight = "% Weights"
 
         # Hyperedges
         line_hyperedge = []
