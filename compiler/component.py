@@ -134,7 +134,17 @@ class Component:
         if not cut_set:
             raise c_exception.TryingGetVariableFromEmptyCutSetException()
 
-        return (random.sample(cut_set, 1))[0]
+        max = 0
+        max_variable = None
+
+        for variable in cut_set:
+            temp = self.__incidence_graph.number_of_neighbours_variable(variable)
+
+            if temp > max:
+                max = temp
+                max_variable = variable
+
+        return max_variable
 
     def __exist_more_components(self) -> bool:
         """
