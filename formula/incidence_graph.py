@@ -60,21 +60,25 @@ class IncidenceGraph(Graph):
             for clause_id in range(0, number_of_clauses):
                 self.add_clause_id(clause_id)
 
-    # region Private method
-    def __variable_hash(self, variable: int) -> str:
+    # region Static method
+    @staticmethod
+    def __variable_hash(variable: int) -> str:
         """
         :return: a hash key for the variable
         """
 
         return f"v{variable}"
 
-    def __clause_id_hash(self, clause_id: int) -> str:
+    @staticmethod
+    def __clause_id_hash(clause_id: int) -> str:
         """
         :return: a hash key for the clause's id
         """
 
         return f"c{clause_id}"
+    # endregion
 
+    # region Private method
     def __node_exist(self, node_hash: str) -> bool:
         """
         :return: True if the node exists in the incidence graph. Otherwise, False is returned.
@@ -635,7 +639,7 @@ class IncidenceGraph(Graph):
 
         return incidence_graph_set
 
-    def copy(self) -> TIncidenceGraph:
+    def copy_incidence_graph(self) -> TIncidenceGraph:
         """
         :return: a copy of the incidence graph
         """

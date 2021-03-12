@@ -6,7 +6,7 @@ from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
 
 # Import exception
-import exception.compiler.compiler_exception as c_exception
+import exception.cara_exception as c_exception
 
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
@@ -28,7 +28,7 @@ class SolverTest(TestAbstract):
                 assumption_list = [[], [1]]
                 for assumption in assumption_list:
                     try:
-                        actual_result = "\n".join((actual_result, f"File: {file_name}, SAT solver: {ss_enum.SatSolverEnum(sat_solver).name}, assumption: {assumption}"))
+                        actual_result = "\n".join((actual_result, f"File: {file_name}, SAT solver: {ss_enum.SatSolverEnum._value2member_map_[sat_solver].name}, assumption: {assumption}"))
 
                         cnf = Cnf(file_path)
                         solver = Solver(cnf=cnf,
@@ -53,7 +53,7 @@ class SolverTest(TestAbstract):
                                                    f"Unit propagation: {unit_propagation}",
                                                    f"Implicit unit propagation: {implicit_unit_propagation}",
                                                    ""))
-                    except c_exception.CompilerException as err:
+                    except (c_exception.CaraException, Exception) as err:
                         actual_result = "\n".join((actual_result, file_name, str(err), ""))
 
         return actual_result

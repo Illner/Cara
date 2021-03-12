@@ -308,7 +308,7 @@ class Cnf:
         """
 
         if copy:
-            return self.__incidence_graph.copy()
+            return self.__incidence_graph.copy_incidence_graph()
 
         return self.__incidence_graph
     # endregion

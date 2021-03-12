@@ -5,7 +5,7 @@ from tests.test_abstract import TestAbstract
 from formula.incidence_graph import IncidenceGraph
 
 # Import exception
-import exception.formula.incidence_graph_exception as ig_exception
+import exception.cara_exception as c_exception
 
 
 class IncidenceGraphTest(TestAbstract):
@@ -76,23 +76,9 @@ class IncidenceGraphTest(TestAbstract):
         incidence_graph.add_edge(5, 5)
 
         return incidence_graph
-    # endregion
 
-    # region Override method
-    def _get_actual_result(self) -> str:
-        actual_result = ""
-
-        actual_result = "\n".join((actual_result, "Creating and connecting nodes", self.__test_1(), ""))    # Test 1
-        actual_result = "\n".join((actual_result, "Modification", self.__test_2(), ""))                     # Test 2
-        actual_result = "\n".join((actual_result, "Components and backups - assignment", self.__test_3()))  # Test 3
-        actual_result = "\n".join((actual_result, "Backups - variable simplification", self.__test_4()))    # Test 4
-        actual_result = "\n".join((actual_result, "Backups - subsumption", self.__test_5()))                # Test 5
-
-        return actual_result
-    # endregion
-
-    # region Private method
-    def __incidence_graph_str(self, incidence_graph: IncidenceGraph) -> str:
+    @staticmethod
+    def __incidence_graph_str(incidence_graph: IncidenceGraph) -> str:
         result = f"Is connected: {incidence_graph.is_connected()}, " \
                  f"number of components: {incidence_graph.number_of_components()}, " \
                  f"number of nodes: {incidence_graph.number_of_nodes()}, " \
@@ -117,7 +103,27 @@ class IncidenceGraphTest(TestAbstract):
 
         result = "\n".join((result, ""))
         return result
+    # endregion
 
+    # region Override method
+    def _get_actual_result(self) -> str:
+        actual_result = ""
+        test_list = [("Creating and connecting nodes", self.__test_1),
+                     ("Modification", self.__test_2),
+                     ("Components and backups - assignment", self.__test_3),
+                     ("Backups - variable simplification", self.__test_4),
+                     ("Backups - subsumption", self.__test_5)]
+
+        for test_name, test in test_list:
+            try:
+                actual_result = "\n".join((actual_result, test_name, test(), ""))
+            except Exception as err:
+                actual_result = "\n".join((actual_result, test_name, str(err), ""))
+
+        return actual_result
+    # endregion
+
+    # region Private method
     def __test_1(self) -> str:
         """
         A test for creating and connecting nodes.
@@ -130,7 +136,7 @@ class IncidenceGraphTest(TestAbstract):
         try:
             incidence_graph = IncidenceGraphTest.__incidence_graph_1()
             result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
-        except ig_exception.IncidenceGraphException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -171,7 +177,7 @@ class IncidenceGraphTest(TestAbstract):
             result = "\n".join((result, "Add an edge (5 - 4)"))
             incidence_graph.add_edge(5, 4, create_node=True)
             result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
-        except ig_exception.IncidenceGraphException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -215,7 +221,7 @@ class IncidenceGraphTest(TestAbstract):
                     result = "\n".join((result, f"Restore literal ({restore_literal})"))
                     incidence_graph.restore_backup_literal(restore_literal)
                     result = "\n".join((result, self.__incidence_graph_str(incidence_graph), connected_components_str(incidence_graph)))
-        except ig_exception.IncidenceGraphException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -242,7 +248,7 @@ class IncidenceGraphTest(TestAbstract):
                 result = "\n".join((result, "Restore:"))
                 incidence_graph.restore_backup_variable_simplification()
                 result = "\n".join((result, self.__incidence_graph_str(incidence_graph), ""))
-        except ig_exception.IncidenceGraphException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -268,7 +274,7 @@ class IncidenceGraphTest(TestAbstract):
             result = "\n".join((result, "Restore:"))
             incidence_graph.restore_backup_subsumption()
             result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
-        except ig_exception.IncidenceGraphException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result

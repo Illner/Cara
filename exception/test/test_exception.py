@@ -1,4 +1,8 @@
-class TestException(Exception):
+# Import
+from exception.cara_exception import CaraException
+
+
+class TestException(CaraException):
     def __init__(self, message: str):
         super().__init__(message)
 

@@ -4,7 +4,7 @@ from formula.cnf import Cnf
 from tests.test_abstract import TestAbstract
 
 # Import exception
-import exception.formula.formula_exception as f_exception
+import exception.cara_exception as c_exception
 
 
 class CnfTest(TestAbstract):
@@ -23,7 +23,7 @@ class CnfTest(TestAbstract):
                 c = Cnf(file_path)
                 clause = c.get_clause(1)
                 actual_result = "\n".join((actual_result, file_name, str(c), f"The second clause: {clause}", ""))
-            except f_exception.FormulaException as err:
+            except (c_exception.CaraException, Exception) as err:
                 actual_result = "\n".join((actual_result, file_name, str(err), ""))
 
         return actual_result

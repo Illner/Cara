@@ -104,6 +104,67 @@ class HypergraphPartitioning:
         self.__check_files_and_folders()
         self.__set_static_weights()
 
+    # region Static method
+    @staticmethod
+    def __subsumption(incidence_graph: IncidenceGraph) -> Set[int]:
+        """
+        Return a set of subsumed clauses
+        :param incidence_graph: the incidence graph
+        :return: a set of subsumed clauses
+        """
+
+        subsumed_clause_set = set()
+        neighbour_dictionary: [int, Set[int]] = dict()   # Cache
+        clause_id_list = incidence_graph.clause_id_list()
+
+        for i, clause_a in enumerate(clause_id_list):
+            # Neighbours
+            if clause_a in neighbour_dictionary:
+                variable_set_a = neighbour_dictionary[clause_a]
+            else:
+                variable_set_a = incidence_graph.clause_id_neighbour_set(clause_a)
+                neighbour_dictionary[clause_a] = variable_set_a
+
+            for j in range(i + 1, len(clause_id_list)):
+                clause_b = clause_id_list[j]
+
+                if clause_b in subsumed_clause_set:
+                    continue
+
+                # Neighbours
+                if clause_b in neighbour_dictionary:
+                    variable_set_b = neighbour_dictionary[clause_b]
+                else:
+                    variable_set_b = incidence_graph.clause_id_neighbour_set(clause_b)
+                    neighbour_dictionary[clause_b] = variable_set_b
+
+                a_subset_b = variable_set_a.issubset(variable_set_b)
+                b_subset_a = variable_set_b.issubset(variable_set_a)
+
+                # Clauses are the same
+                if a_subset_b and b_subset_a:
+                    if clause_a < clause_b:
+                        subsumed_clause_set.add(clause_a)
+                    else:
+                        subsumed_clause_set.add(clause_b)
+
+                    continue
+
+                # Clause A is subsumed
+                if a_subset_b:
+                    subsumed_clause_set.add(clause_a)
+
+                    continue
+
+                # Clause B is subsumed
+                if b_subset_a:
+                    subsumed_clause_set.add(clause_b)
+
+                    continue
+
+        return subsumed_clause_set
+    # endregion
+
     # region Private method
     def __check_files_and_folders(self) -> None:
         """
@@ -192,64 +253,6 @@ class HypergraphPartitioning:
 
         raise c_exception.FunctionNotImplementedException("variable_simplification",
                                                           f"this type of variable simplification ({self.__variable_simplification_enum.name}) is not implemented")
-
-    def __subsumption(self, incidence_graph: IncidenceGraph) -> Set[int]:
-        """
-        Return a set of subsumed clauses
-        :param incidence_graph: the incidence graph
-        :return: a set of subsumed clauses
-        """
-
-        subsumed_clause_set = set()
-        neighbour_dictionary: [int, Set[int]] = dict()   # Cache
-        clause_id_list = incidence_graph.clause_id_list()
-
-        for i, clause_a in enumerate(clause_id_list):
-            # Neighbours
-            if clause_a in neighbour_dictionary:
-                variable_set_a = neighbour_dictionary[clause_a]
-            else:
-                variable_set_a = incidence_graph.clause_id_neighbour_set(clause_a)
-                neighbour_dictionary[clause_a] = variable_set_a
-
-            for j in range(i + 1, len(clause_id_list)):
-                clause_b = clause_id_list[j]
-
-                if clause_b in subsumed_clause_set:
-                    continue
-
-                # Neighbours
-                if clause_b in neighbour_dictionary:
-                    variable_set_b = neighbour_dictionary[clause_b]
-                else:
-                    variable_set_b = incidence_graph.clause_id_neighbour_set(clause_b)
-                    neighbour_dictionary[clause_b] = variable_set_b
-
-                a_subset_b = variable_set_a.issubset(variable_set_b)
-                b_subset_a = variable_set_b.issubset(variable_set_a)
-
-                # Clauses are the same
-                if a_subset_b and b_subset_a:
-                    if clause_a < clause_b:
-                        subsumed_clause_set.add(clause_a)
-                    else:
-                        subsumed_clause_set.add(clause_b)
-
-                    continue
-
-                # Clause A is subsumed
-                if a_subset_b:
-                    subsumed_clause_set.add(clause_a)
-
-                    continue
-
-                # Clause B is subsumed
-                if b_subset_a:
-                    subsumed_clause_set.add(clause_b)
-
-                    continue
-
-        return subsumed_clause_set
 
     # region Weights
     def __set_static_weights(self) -> None:

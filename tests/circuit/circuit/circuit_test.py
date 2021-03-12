@@ -5,7 +5,7 @@ from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
 
 # Import exception
-import exception.circuit.circuit_exception as c_exception
+import exception.cara_exception as c_exception
 
 
 class CircuitTest(TestAbstract):
@@ -18,15 +18,20 @@ class CircuitTest(TestAbstract):
     # region Override method
     def _get_actual_result(self) -> str:
         actual_result = ""
+        test_list = [("Parsing", self.__test_1),
+                     ("Creating circuits", self.__test_2),
+                     ("Modification", self.__test_3),
+                     ("Operations", self.__test_4),
+                     ("Properties", self.__test_5),
+                     ("Checking an assumption set and exist quantification set", self.__test_6),
+                     ("Smoothness", self.__test_7),
+                     ("Leaf as root", self.__test_8)]
 
-        actual_result = "\n".join((actual_result, "Parsing", self.__test_1(), ""))              # Test 1
-        actual_result = "\n".join((actual_result, "Creating circuits", self.__test_2(), ""))    # Test 2
-        actual_result = "\n".join((actual_result, "Modification", self.__test_3(), ""))         # Test 3
-        actual_result = "\n".join((actual_result, "Operations", self.__test_4(), ""))           # Test 4
-        actual_result = "\n".join((actual_result, "Properties", self.__test_5(), ""))           # Test 5
-        actual_result = "\n".join((actual_result, "Checking an assumption set and exist quantification set", self.__test_6(), ""))  # Test 6
-        actual_result = "\n".join((actual_result, "Smoothness", self.__test_7(), ""))           # Test 7
-        actual_result = "\n".join((actual_result, "Leaf as root", self.__test_8(), ""))         # Test 8
+        for test_name, test in test_list:
+            try:
+                actual_result = "\n".join((actual_result, test_name, test(), ""))
+            except Exception as err:
+                actual_result = "\n".join((actual_result, test_name, str(err), ""))
 
         return actual_result
     # endregion
@@ -192,7 +197,7 @@ class CircuitTest(TestAbstract):
             try:
                 c = Circuit(file_path)
                 result = "\n".join((result, file_name, str(c), ""))
-            except c_exception.CircuitException as err:
+            except c_exception.CaraException as err:
                 result = "\n".join((result, file_name, str(err), ""))
 
         return result
@@ -214,7 +219,7 @@ class CircuitTest(TestAbstract):
             try:
                 c, _ = circuit()
                 result = "\n".join((result, str(c), ""))
-            except c_exception.CircuitException as err:
+            except c_exception.CaraException as err:
                 result = "\n".join((result, str(err), ""))
 
         return result
@@ -238,7 +243,7 @@ class CircuitTest(TestAbstract):
                 try:
                     circuit.set_root(root_id)
                     result = "\n".join((result, f"Root is set ({root_id})", str(circuit.root_id)))
-                except c_exception.CircuitException as err:
+                except c_exception.CaraException as err:
                     result = "\n".join((result, f"Root is set ({root_id})", str(err)))
 
             # id_exist, node_exist, get_node
@@ -304,9 +309,9 @@ class CircuitTest(TestAbstract):
                     result = "\n".join((result, f"Add edge ({edge_from} -> {edge_to})"))
                     circuit.add_edge(edge_from, edge_to)
                     result = "\n".join((result, f"is connected: {circuit.is_circuit_connected()}", f"{repr(circuit)}", ""))
-                except c_exception.CircuitException as err:
+                except c_exception.CaraException as err:
                     result = "\n".join((result, str(err), ""))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -340,9 +345,9 @@ class CircuitTest(TestAbstract):
                             temp = operation(assumption_set, exist_quantification_set)
 
                             result = "\n".join((result, str(temp)))
-                        except c_exception.CircuitException as err:
+                        except c_exception.CaraException as err:
                             result = "\n".join((result, str(err)))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -375,7 +380,7 @@ class CircuitTest(TestAbstract):
             # Change the root
             circuit.set_root(20)
             result = "\n".join((result, f"Decomposability: {circuit.is_decomposable()}, determinism: {circuit.is_deterministic()}, smoothness: {circuit.is_smooth()}, circuit type: {circuit.circuit_type.name}"))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -397,9 +402,9 @@ class CircuitTest(TestAbstract):
                 try:
                     result = "\n".join((result, f"Assumption set: {SortedList(assumption_set)}, exist quantification set: {SortedList(exist_quantification_set)}"))
                     circuit.is_satisfiable(assumption_set, exist_quantification_set)
-                except c_exception.CircuitException as err:
+                except c_exception.CaraException as err:
                     result = "\n".join((result, str(err)))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -423,7 +428,7 @@ class CircuitTest(TestAbstract):
                 result = "\n".join((result, f"Smooth: {c.is_smooth()}", ""))
                 c.smooth()
                 result = "\n".join((result, f"Smooth: {c.is_smooth()}", ""))
-            except c_exception.CircuitException as err:
+            except c_exception.CaraException as err:
                 result = "\n".join((result, str(err), ""))
 
         return result
@@ -457,7 +462,7 @@ class CircuitTest(TestAbstract):
             result = "\n".join((result, f"Decomposability: {circuit.is_decomposable()}, determinism: {circuit.is_deterministic()}, smoothness: {circuit.is_smooth()}, circuit type: {circuit.circuit_type.name}"))
             result = "\n".join((result, f"is connected: {circuit.is_circuit_connected()}"))
 
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result

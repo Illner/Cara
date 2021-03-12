@@ -1,4 +1,5 @@
 # Import
+import mmh3
 import warnings
 from sortedcontainers import SortedDict
 from other.sorted_list import SortedList
@@ -36,8 +37,8 @@ class Circuit:
 
     Private Dict<int, NodeAbstract> literal_unique_node_cache       # key: literal, value: node
     Private List<NodeAbstract> constant_unique_node_cache           # [False: node, True: node]
-    Private Dict<str, NodeAbstract> and_unique_node_cache           # key = {number >= 0}+
-    Private Dict<str, NodeAbstract> or_unique_node_cache            # key = {number >= 0}+
+    Private Dict<int, NodeAbstract> and_unique_node_cache           # key = hash, value: node
+    Private Dict<int, NodeAbstract> or_unique_node_cache            # key = hash, value: node
     """
 
     def __init__(self, dimacs_nnf_file_path: str = None, circuit_name: str = "Circuit"):
@@ -53,8 +54,8 @@ class Circuit:
 
         self.__literal_unique_node_cache: Dict[int, NodeAbstract] = dict()
         self.__constant_unique_node_cache: List[Union[NodeAbstract, None]] = [None, None]
-        self.__and_unique_node_cache: Dict[str, NodeAbstract] = dict()
-        self.__or_unique_node_cache: Dict[str, NodeAbstract] = dict()
+        self.__and_unique_node_cache: Dict[int, NodeAbstract] = dict()
+        self.__or_unique_node_cache: Dict[int, NodeAbstract] = dict()
         # endregion
 
         # The file with the circuit was given
@@ -351,39 +352,6 @@ class Circuit:
 
         for node in node_set:
             self.__size += node.node_size()
-
-    def __add_edge(self, from_node: NodeAbstract, to_node: NodeAbstract, call_update: bool = True) -> None:
-        """
-        Add an oriented edge (from_node -> to_node) in the circuit.
-        :param call_update: True for calling the update function after this modification.
-        If the parameter is set to False, then the circuit may be inconsistent after this modification.
-        :return: None
-        """
-
-        to_node._add_parent(from_node)
-        from_node._add_child(to_node, call_update)
-
-    def __remove_edge(self, from_node: NodeAbstract, to_node: NodeAbstract, call_update: bool = True) -> None:
-        """
-        Remove an oriented edge (from_node -> to_node) in the circuit.
-        :param call_update: True for calling the update function after this modification.
-        If the parameter is set to False, then the circuit may be inconsistent after this modification.
-        :return: None
-        """
-
-        to_node._remove_parent(from_node)
-        from_node._remove_child(to_node, call_update)
-
-    def __generate_key_cache(self, child_id_set: Set[int]) -> str:
-        """
-        Generate a key for caching based on the children set.
-        Cache: and_unique_node_cache, or_unique_node_cache
-        :param child_id_set: the set of child's id
-        :return: the generated key based on the child_id_set
-        """
-
-        child_id_sorted_list = SortedList(child_id_set)
-        return child_id_sorted_list.str_delimiter("-")
     # endregion
 
     # region Static method
@@ -439,6 +407,45 @@ class Circuit:
                 return False
 
         return True
+
+    @staticmethod
+    def __add_edge(from_node: NodeAbstract, to_node: NodeAbstract, call_update: bool = True) -> None:
+        """
+        Add an oriented edge (from_node -> to_node) in the circuit.
+        :param call_update: True for calling the update function after this modification.
+        If the parameter is set to False, then the circuit may be inconsistent after this modification.
+        :return: None
+        """
+
+        to_node._add_parent(from_node)
+        from_node._add_child(to_node, call_update)
+
+    @staticmethod
+    def __remove_edge(from_node: NodeAbstract, to_node: NodeAbstract, call_update: bool = True) -> None:
+        """
+        Remove an oriented edge (from_node -> to_node) in the circuit.
+        :param call_update: True for calling the update function after this modification.
+        If the parameter is set to False, then the circuit may be inconsistent after this modification.
+        :return: None
+        """
+
+        to_node._remove_parent(from_node)
+        from_node._remove_child(to_node, call_update)
+
+    @staticmethod
+    def __generate_key_cache(child_id_set: Set[int]) -> int:
+        """
+        Generate a key for caching based on the children set.
+        Cache: and_unique_node_cache, or_unique_node_cache
+        :param child_id_set: the set of child's id
+        :return: the generated key based on the child_id_set
+        """
+
+        child_id_sorted_list = SortedList(child_id_set)
+        key_string = child_id_sorted_list.str_delimiter("-")
+        key = mmh3.hash(key_string)
+
+        return key
     # endregion
 
     # region Public method

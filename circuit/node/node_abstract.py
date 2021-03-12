@@ -1,4 +1,5 @@
 # Import
+import mmh3
 from abc import ABC, abstractmethod
 from other.sorted_list import SortedList
 from typing import Set, Dict, Union, TypeVar
@@ -23,9 +24,9 @@ class NodeAbstract(ABC):
     Private SortedList<int> variable_in_circuit_sorted_list
     Private Set<int> literal_in_circuit_set
 
-    Private Dict<str, bool> satisfiable_cache                   # key = {0|1}+
-    Private Dict<str, int> model_counting_cache                 # key = {0|1}+
-    Private Dict<str, float> minimal_default_cardinality_cache  # key = {0|1}+
+    Private Dict<int, bool> satisfiable_cache                   
+    Private Dict<int, int> model_counting_cache
+    Private Dict<int, float> minimal_default_cardinality_cache
     """
 
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
@@ -43,9 +44,9 @@ class NodeAbstract(ABC):
         self._set_literal_in_circuit_set(literal_in_circuit_set)
 
         # Cache
-        self.__satisfiable_cache: Dict[str, bool] = dict()                      # initialization
-        self.__model_counting_cache: Dict[str, int] = dict()                    # initialization
-        self.__minimal_default_cardinality_cache: Dict[str, float] = dict()     # initialization
+        self.__satisfiable_cache: Dict[int, bool] = dict()                      # initialization
+        self.__model_counting_cache: Dict[int, int] = dict()                    # initialization
+        self.__minimal_default_cardinality_cache: Dict[int, float] = dict()     # initialization
 
     # region Abstract method
     @abstractmethod
@@ -223,7 +224,7 @@ class NodeAbstract(ABC):
 
         return node in self.__node_in_circuit_set
 
-    def _add_satisfiable_cache(self, key: str, satisfiable: bool) -> None:
+    def _add_satisfiable_cache(self, key: int, satisfiable: bool) -> None:
         """
         Add a new record to the cache.
         If the record already exists in the cache, the value of the record will be updated.
@@ -234,7 +235,7 @@ class NodeAbstract(ABC):
 
         self.__satisfiable_cache[key] = satisfiable
 
-    def _get_satisfiable_cache(self, key: str) -> Union[bool, None]:
+    def _get_satisfiable_cache(self, key: int) -> Union[bool, None]:
         """
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
@@ -256,7 +257,7 @@ class NodeAbstract(ABC):
 
         self.__satisfiable_cache = dict()
 
-    def _add_model_counting_cache(self, key: str, model_count: int) -> None:
+    def _add_model_counting_cache(self, key: int, model_count: int) -> None:
         """
         Add a new record to the cache.
         If the record already exists in the cache, the value of the record will be updated.
@@ -267,7 +268,7 @@ class NodeAbstract(ABC):
 
         self.__model_counting_cache[key] = model_count
 
-    def _get_model_counting_cache(self, key: str) -> Union[int, None]:
+    def _get_model_counting_cache(self, key: int) -> Union[int, None]:
         """
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
@@ -289,7 +290,7 @@ class NodeAbstract(ABC):
 
         self.__model_counting_cache = dict()
 
-    def _add_minimal_default_cardinality_cache(self, key: str, minimal_default_cardinality: float) -> None:
+    def _add_minimal_default_cardinality_cache(self, key: int, minimal_default_cardinality: float) -> None:
         """
         Add a new record to the cache.
         If the record already exists in the cache, the value of the record will be updated.
@@ -300,7 +301,7 @@ class NodeAbstract(ABC):
 
         self.__minimal_default_cardinality_cache[key] = minimal_default_cardinality
 
-    def _get_minimal_default_cardinality_cache(self, key: str) -> Union[float, None]:
+    def _get_minimal_default_cardinality_cache(self, key: int) -> Union[float, None]:
         """
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
@@ -333,7 +334,7 @@ class NodeAbstract(ABC):
         self._clear_model_counting_cache()
         self._clear_minimal_default_cardinality_cache()
 
-    def _generate_key_cache(self, assumption_set: Set[int], exist_quantification_set: Set[int]) -> str:
+    def _generate_key_cache(self, assumption_set: Set[int], exist_quantification_set: Set[int]) -> int:
         """
         Generate a key for caching.
         Cache: satisfiable_cache, model_counting_cache, minimal_default_cardinality_cache
@@ -363,9 +364,10 @@ class NodeAbstract(ABC):
             else:
                 exist_quantification_list_temp.append("-")
 
-        str_temp = ''.join((''.join(assumption_list_temp), ''.join(exist_quantification_list_temp)))
+        key_string = ''.join((''.join(assumption_list_temp), ''.join(exist_quantification_list_temp)))
+        key = mmh3.hash(key_string)
 
-        return str_temp
+        return key
     # endregion
 
     # region Magic method

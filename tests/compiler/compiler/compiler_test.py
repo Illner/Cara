@@ -4,6 +4,9 @@ from formula.cnf import Cnf
 from compiler.compiler import Compiler
 from tests.test_abstract import TestAbstract
 
+# Import exception
+import exception.cara_exception as c_exception
+
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
@@ -40,9 +43,9 @@ class CompilerTest(TestAbstract):
 
                                     actual_result = "\n".join((actual_result,
                                                                f"File: {file_name}, "
-                                                               f"implied literals: {il_enum.ImpliedLiteralsEnum(implied_literals_enum).name}, "
-                                                               f"cache: {hpc_enum.HypergraphPartitioningCacheEnum(hp_cache_enum).name}, "
-                                                               f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum(hp_variable_simplification_enum).name}, "
+                                                               f"implied literals: {il_enum.ImpliedLiteralsEnum._value2member_map_[implied_literals_enum].name}, "
+                                                               f"cache: {hpc_enum.HypergraphPartitioningCacheEnum._value2member_map_[hp_cache_enum].name}, "
+                                                               f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum._value2member_map_[hp_variable_simplification_enum].name}, "
                                                                f"subsumed threshold: {subsumed_threshold}, "
                                                                f"new cut set threshold: {new_cut_set_threshold}"))
 
@@ -54,14 +57,14 @@ class CompilerTest(TestAbstract):
                                                         new_cut_set_threshold=new_cut_set_threshold,
                                                         sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                                                         implied_literals_enum=implied_literals_enum,
-                                                        component_caching_enum=cc_enum.ComponentCachingEnum.HYBRID_CACHING_SCHEME,
+                                                        component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
                                                         hp_cache_enum=hp_cache_enum,
                                                         hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
                                                         hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                                         hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                                                         hp_variable_simplification_enum=hp_variable_simplification_enum,
-                                                        hp_limit_number_of_clauses_cache=(None, 100),
-                                                        hp_limit_number_of_variables_cache=(None, 100))
+                                                        hp_limit_number_of_clauses_cache=(None, 200),
+                                                        hp_limit_number_of_variables_cache=(None, 200))
                                     circuit = compiler.create_circuit()
                                     number_of_models = circuit.model_counting(set(), set())
                                     real_number_of_models = int(cnf.comments)
@@ -73,7 +76,7 @@ class CompilerTest(TestAbstract):
                                         actual_result = "\n".join((actual_result, f"Incorrect: {number_of_models} vs {real_number_of_models}", ""))
                                         print("X", end="" if count % 10 != 0 else " ")
 
-                                except Exception as err:
+                                except (c_exception.CaraException, Exception) as err:
                                     print("E", end="" if count % 10 != 0 else " ")
                                     actual_result = "\n".join((actual_result, str(err), ""))
 

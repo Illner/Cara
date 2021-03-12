@@ -8,6 +8,4 @@ explicit (clause) x implicit (index)
 
 
 ) Hypergraph partitioning - cache
-) tests - exception
 ) comments - exception
-) circuit - cache

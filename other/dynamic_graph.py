@@ -94,8 +94,9 @@ class DynamicGraph(Graph):
         self.__neighbour_dictionary[node_2].remove(node_1)
     # endregion
 
-    # region Public method
-    def order_nodes(self, node_1: int, node_2: int) -> Tuple[int, int]:
+    # region Static method
+    @staticmethod
+    def order_nodes(node_1: int, node_2: int) -> Tuple[int, int]:
         """
         Order the nodes
         :param node_1: the first node
@@ -107,7 +108,9 @@ class DynamicGraph(Graph):
             node_1, node_2 = node_2, node_1
 
         return node_1, node_2
+    # endregion
 
+    # region Public method
     def is_connected(self) -> bool:
         """
         Isolated nodes (satisfied clauses) are ignored

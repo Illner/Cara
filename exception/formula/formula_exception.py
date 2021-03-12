@@ -1,4 +1,8 @@
-class FormulaException(Exception):
+# Import
+from exception.cara_exception import CaraException
+
+
+class FormulaException(CaraException):
     def __init__(self, message: str):
         super().__init__(message)
 

@@ -12,7 +12,7 @@ from circuit.node.inner_node.or_inner_node import OrInnerNode
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
 # Import exception
-import exception.circuit.circuit_exception as c_exception
+import exception.cara_exception as c_exception
 
 
 class NodeTest(TestAbstract):
@@ -24,17 +24,22 @@ class NodeTest(TestAbstract):
     # region Override method
     def _get_actual_result(self) -> str:
         actual_result = ""
+        test_list = [("Creating and connecting nodes", self.__test_1),
+                     ("Modification", self.__test_2),
+                     ("Detecting a cycle", self.__test_3),
+                     ("Satisfiability", self.__test_4),
+                     ("Satisfiability (negative)", self.__test_5),
+                     ("Model counting", self.__test_6),
+                     ("Model counting (negative)", self.__test_7),
+                     ("Minimum default-cardinality", self.__test_8),
+                     ("Minimum default-cardinality (negative)", self.__test_9),
+                     ("Caches", self.__test_10)]
 
-        actual_result = "\n".join((actual_result, "Creating and connecting nodes", self.__test_1(), ""))            # Test 1
-        actual_result = "\n".join((actual_result, "Modification", self.__test_2(), ""))                             # Test 2
-        actual_result = "\n".join((actual_result, "Detecting a cycle", self.__test_3(), ""))                        # Test 3
-        actual_result = "\n".join((actual_result, "Satisfiability", self.__test_4(), ""))                           # Test 4
-        actual_result = "\n".join((actual_result, "Satisfiability (negative)", self.__test_5(), ""))                # Test 5
-        actual_result = "\n".join((actual_result, "Model counting", self.__test_6(), ""))                           # Test 6
-        actual_result = "\n".join((actual_result, "Model counting (negative)", self.__test_7(), ""))                # Test 7
-        actual_result = "\n".join((actual_result, "Minimum default-cardinality", self.__test_8(), ""))              # Test 8
-        actual_result = "\n".join((actual_result, "Minimum default-cardinality (negative)", self.__test_9(), ""))   # Test 9
-        actual_result = "\n".join((actual_result, "Caches", self.__test_10(), ""))                                  # Test 10
+        for test_name, test in test_list:
+            try:
+                actual_result = "\n".join((actual_result, test_name, test(), ""))
+            except Exception as err:
+                actual_result = "\n".join((actual_result, test_name, str(err), ""))
 
         return actual_result
     # endregion
@@ -215,7 +220,7 @@ class NodeTest(TestAbstract):
 
                 for node in node_list:
                     result = "\n".join((result, repr(node)))
-            except c_exception.CircuitException as err:
+            except c_exception.CaraException as err:
                 result = "\n".join((result, str(err)))
 
         return result
@@ -258,7 +263,7 @@ class NodeTest(TestAbstract):
             node_list[7]._add_parent(node_list[5])
             for node in node_list:
                 result = "\n".join((result, repr(node)))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -276,7 +281,7 @@ class NodeTest(TestAbstract):
 
             node_list[2]._add_child(node_list[8])
             node_list[8]._add_parent(node_list[2])
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -311,7 +316,7 @@ class NodeTest(TestAbstract):
                 list_temp = [({3}, {1, 2}), ({3}, {1}), ({-1}, {3})]
                 for assumption, exist_quantification in list_temp:
                     result = "\n".join((result, f"Assumption: {SortedList(assumption)}, exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, sat: {root.is_satisfiable(assumption, exist_quantification, use_caches=bool(cache))}"))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -328,7 +333,7 @@ class NodeTest(TestAbstract):
             node_list = NodeTest.__create_circuit_2()
             root = node_list[-1]
             root.is_satisfiable(set(), set())
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -363,7 +368,7 @@ class NodeTest(TestAbstract):
                 list_temp = [({-1}, {2, 3}), ({1}, {2, 3}), ({1, 2}, {3, 4})]
                 for assumption, exist_quantification in list_temp:
                     result = "\n".join((result, f"Assumption: {SortedList(assumption)}, exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, count of models: {root.model_counting(assumption, exist_quantification, use_caches=bool(cache))}"))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -385,7 +390,7 @@ class NodeTest(TestAbstract):
                 node_list = circuit()
                 root = node_list[-1]
                 root.model_counting(set(), set())
-            except c_exception.CircuitException as err:
+            except c_exception.CaraException as err:
                 result = "\n".join((result, str(err)))
 
         return result
@@ -416,7 +421,7 @@ class NodeTest(TestAbstract):
                 list_temp = [({-1, 3}, {4, 5}), ({1, -3}, {4, 5}), ({1, 3}, {4, 5})]
                 for observation, default in list_temp:
                     result = "\n".join((result, f"Observation: {SortedList(observation)}, default: {SortedList(default)}, cache: {bool(cache)}, minimum cardinality: {root.minimum_default_cardinality(observation, default, use_caches=bool(cache))}"))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -433,7 +438,7 @@ class NodeTest(TestAbstract):
             node_list = NodeTest.__create_circuit_2()
             root = node_list[-1]
             root.minimum_default_cardinality(set(), set())
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result
@@ -490,7 +495,7 @@ class NodeTest(TestAbstract):
             node_list[7]._add_child(node_list[11])
             node_list[11]._add_parent(node_list[7])
             result = "\n".join((result, f"Sat: {root.is_satisfiable({-1, -2}, set())}"))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         # minimum_default_cardinality
@@ -528,7 +533,7 @@ class NodeTest(TestAbstract):
             node_list[17]._remove_parent(node_list[13])
             result = "\n".join((result, f"Minimum cardinality: {root.minimum_default_cardinality({-1, 3}, {5, 6})}"))
             result = "\n".join((result, f"Minimum cardinality: {root.minimum_default_cardinality({-1, 3}, {4, 5})}"))
-        except c_exception.CircuitException as err:
+        except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
         return result

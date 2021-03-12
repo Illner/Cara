@@ -1,11 +1,12 @@
 # Import
 from typing import Set
+from exception.cara_exception import CaraException
 
 # Import enum
 import circuit.node.node_type_enum as nt_enum
 
 
-class CircuitException(Exception):
+class CircuitException(CaraException):
     def __init__(self, message: str):
         super().__init__(message)
 

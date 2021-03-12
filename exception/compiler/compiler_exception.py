@@ -1,8 +1,9 @@
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
+from exception.cara_exception import CaraException
 
 
-class CompilerException(Exception):
+class CompilerException(CaraException):
     def __init__(self, message: str):
         super().__init__(message)
 

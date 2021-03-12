@@ -5,7 +5,7 @@ from compiler.solver import Solver
 from tests.test_abstract import TestAbstract
 
 # Import exception
-import exception.compiler.compiler_exception as c_exception
+import exception.cara_exception as c_exception
 
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
@@ -27,7 +27,7 @@ class BackbonesTest(TestAbstract):
                 try:
                     actual_result = "\n".join((actual_result,
                                                f"File: {file_name}, "
-                                               f"SAT solver: {ss_enum.SatSolverEnum(sat_solver_enum).name}"))
+                                               f"SAT solver: {ss_enum.SatSolverEnum._value2member_map_[sat_solver_enum].name}"))
 
                     cnf = Cnf(file_path)
                     solver = Solver(cnf=cnf,
@@ -43,7 +43,7 @@ class BackbonesTest(TestAbstract):
                         actual_result = "\n".join((actual_result, f"Correct", ""))
                     else:
                         actual_result = "\n".join((actual_result, f"Incorrect: {number_of_backbone_literals} vs {real_number_of_backbone_literals}", ""))
-                except c_exception.CompilerException as err:
+                except (c_exception.CaraException, Exception) as err:
                     actual_result = "\n".join((actual_result, str(err), ""))
 
         return actual_result

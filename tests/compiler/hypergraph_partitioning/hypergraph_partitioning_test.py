@@ -7,8 +7,7 @@ from tests.test_abstract import TestAbstract
 from compiler.hypergraph_partitioning import HypergraphPartitioning
 
 # Import exception
-import exception.formula.formula_exception as f_exception
-import exception.compiler.compiler_exception as c_exception
+import exception.cara_exception as c_exception
 
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
@@ -41,8 +40,8 @@ class HypergraphPartitioningTest(TestAbstract):
                         try:
                             actual_result = "\n".join((actual_result,
                                                        f"File: {file_name}, "
-                                                       f"cache: {hpc_enum.HypergraphPartitioningCacheEnum(cache_enum).name}, "
-                                                       f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum(variable_simplification_enum).name}"))
+                                                       f"cache: {hpc_enum.HypergraphPartitioningCacheEnum._value2member_map_[cache_enum].name}, "
+                                                       f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum._value2member_map_[variable_simplification_enum].name}"))
 
                             hypergraph_partitioning = HypergraphPartitioning(cnf,
                                                                              cache_enum=cache_enum,
@@ -65,9 +64,9 @@ class HypergraphPartitioningTest(TestAbstract):
                                     cut_set = "> 5"
 
                                 actual_result = "\n".join((actual_result, f"Cut set: {cut_set}"))
-                        except c_exception.CompilerException as err:
+                        except (c_exception.CaraException, Exception) as err:
                             actual_result = "\n".join((actual_result, str(err), ""))
-            except (f_exception.FormulaException, c_exception.CompilerException) as err:
+            except (c_exception.CaraException, Exception) as err:
                 actual_result = "\n".join((actual_result, file_name, str(err), ""))
 
         return actual_result
