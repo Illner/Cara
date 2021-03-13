@@ -49,7 +49,7 @@ class Compiler:
     Private HypergraphPartitioningVariableSimplificationEnum hp_variable_simplification_enum
     """
 
-    def __init__(self, cnf: Cnf,
+    def __init__(self, cnf: Union[Cnf, str],
                  smooth: bool,
                  ub_factor: float,
                  subsumed_threshold: Union[int, None],
@@ -64,15 +64,21 @@ class Compiler:
                  hp_variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
                  hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None)):
-        self.__cnf: Cnf = cnf
+        # Statistics
+        self.__statistics: Statistics = Statistics()
+
+        # CNF
+        if isinstance(cnf, Cnf):
+            self.__cnf: Cnf = cnf
+        else:
+            self.__cnf: Cnf = Cnf(cnf, self.__statistics.cnf_statistics)
+
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
         self.__new_cut_set_threshold: float = new_cut_set_threshold
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
-
-        self.__statistics: Statistics = Statistics()
 
         # Component caching
         self.__set_component_caching(component_caching_enum)

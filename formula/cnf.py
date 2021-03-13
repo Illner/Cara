@@ -1,6 +1,7 @@
 # Import
 from typing import Set, Dict, List, Union
 from formula.incidence_graph import IncidenceGraph
+from compiler_statistics.formula.cnf_statistics import CnfStatistics
 
 # Import exception
 import exception.formula.formula_exception as f_exception
@@ -29,10 +30,13 @@ class Cnf:
     Private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
     Private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with the size k
     
+    Private CnfStatistics statistics
+    
     Private IncidenceGraph incidence_graph
     """
 
-    def __init__(self, dimacs_cnf_file_path: str):
+    def __init__(self, dimacs_cnf_file_path: str,
+                 statistics: Union[CnfStatistics, None] = None):
         # region Initialization
         self.__comments: str = ""
         self.__number_of_clauses: int = 0
@@ -53,6 +57,12 @@ class Cnf:
         self.__clause_size_list: List[Set[int]] = []
         # endregion
 
+        # Statistics
+        if statistics is None:
+            self.__statistics: CnfStatistics = CnfStatistics()
+        else:
+            self.__statistics: CnfStatistics = statistics
+
         # Incidence graph
         self.__incidence_graph: Union[IncidenceGraph, None] = None
 
@@ -65,6 +75,8 @@ class Cnf:
         :param dimacs_cnf_file_path: the file which is in the DIMACS CNF format
         :return: None
         """
+
+        self.__statistics.create.start_stopwatch()      # time (start)
 
         with open(dimacs_cnf_file_path, "r") as file:
             clause_id = 0
@@ -185,6 +197,8 @@ class Cnf:
             raise f_exception.InvalidDimacsCnfFormatException("file does not contain any clause")
 
         self.__unit_clause_set = self.__clause_size_list[1].copy()  # get unit clauses
+
+        self.__statistics.create.stop_stopwatch()   # time (end)
     # endregion
 
     # region Protected method

@@ -22,11 +22,12 @@ class Solver:
     """
     Private CNF cnf
     Private Set<int> variable_set
-    Private SolverStatistics statistics
     Private Set<int> implied_literal_set        # implied literals (implicit BCP) without any assumption
     Private SatSolverEnum sat_solver_enum
 
     Private Backbones backbones
+    
+    Private SolverStatistics statistics
 
     Private Solver sat_main                     # main SAT solver
     Private Solver sat_unit_propagation         # for unit propagation

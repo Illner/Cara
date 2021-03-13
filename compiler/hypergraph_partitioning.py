@@ -32,6 +32,7 @@ class HypergraphPartitioning:
     Private int subsumed_threshold
     Private int total_number_of_nodes
     Private int total_number_of_hyperedges
+    
     Private HypergraphPartitioningStatistics statistics
     
     Private HypergraphPartitioningCacheEnum cache_enum

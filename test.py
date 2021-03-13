@@ -21,9 +21,9 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
 start_time = time.time()
 
-cnf = Cnf(path)
+# cnf = Cnf(path)
 
-compiler = Compiler(cnf, smooth=False, ub_factor=0.1, new_cut_set_threshold=0.1, subsumed_threshold=1000,
+compiler = Compiler(path, smooth=False, ub_factor=0.1, new_cut_set_threshold=0.1, subsumed_threshold=1000,
                     sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                     implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                     component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
