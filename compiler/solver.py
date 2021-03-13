@@ -37,8 +37,12 @@ class Solver:
     def __init__(self, cnf: Cnf,
                  clause_id_set: Union[Set[int], None],
                  sat_solver_enum: ss_enum.SatSolverEnum,
-                 statistics: SolverStatistics):
-        self.__statistics: SolverStatistics = statistics
+                 statistics: Union[SolverStatistics, None] = None):
+        # Statistics
+        if statistics is None:
+            self.__statistics: SolverStatistics = SolverStatistics("")
+        else:
+            self.__statistics: SolverStatistics = statistics
 
         self.__statistics.initialize.start_stopwatch()  # timer (start - initialize)
 
