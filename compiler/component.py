@@ -1,10 +1,10 @@
 # Import
-import random
 from formula.cnf import Cnf
 from compiler.solver import Solver
 from circuit.circuit import Circuit
 from typing import Set, List, Union
 from formula.incidence_graph import IncidenceGraph
+from compiler_statistics.statistics import Statistics
 from compiler.hypergraph_partitioning import HypergraphPartitioning
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
 
@@ -28,6 +28,7 @@ class Component:
     Private Cnf cnf
     Private Solver solver
     Private Circuit circuit
+    Private Statistics statistics
     Private float new_cut_set_threshold
     Private IncidenceGraph incidence_graph
     Private ComponentCachingAbstract component_caching
@@ -47,7 +48,8 @@ class Component:
                  component_caching: ComponentCachingAbstract,
                  hypergraph_partitioning: HypergraphPartitioning,
                  sat_solver_enum: ss_enum.SatSolverEnum,
-                 implied_literals_enum: il_enum.ImpliedLiteralsEnum):
+                 implied_literals_enum: il_enum.ImpliedLiteralsEnum,
+                 statistics: Statistics):
         self.__cnf: Cnf = cnf
         self.__circuit: Circuit = circuit
         self.__incidence_graph: IncidenceGraph = incidence_graph
@@ -58,8 +60,13 @@ class Component:
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
 
+        self.__statistics: Statistics = statistics
+
         clause_id_set = self.__incidence_graph.clause_id_set()
-        self.__solver: Solver = Solver(cnf, clause_id_set, sat_solver_enum)
+        self.__solver: Solver = Solver(cnf=cnf,
+                                       clause_id_set=clause_id_set,
+                                       sat_solver_enum=sat_solver_enum,
+                                       statistics=self.__statistics.solver_statistics)
 
         self.__assignment_list: List[int] = assignment_list
 
@@ -212,7 +219,8 @@ class Component:
                                            component_caching=self.__component_caching,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
                                            sat_solver_enum=self.__sat_solver_enum,
-                                           implied_literals_enum=self.__implied_literals_enum)
+                                           implied_literals_enum=self.__implied_literals_enum,
+                                           statistics=self.__statistics)
                 node_id = component_temp.create_circuit()
                 node_id_set.add(node_id)
 

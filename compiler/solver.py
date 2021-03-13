@@ -5,6 +5,7 @@ from pysat.formula import CNF
 from other.sorted_list import SortedList
 from typing import Set, Dict, List, Tuple, Union
 from pysat.solvers import Minisat22, Glucose4, Lingeling, Cadical
+from compiler_statistics.compiler.solver_statistics import SolverStatistics
 
 # Import exception
 import exception.compiler.compiler_exception as c_exception
@@ -21,6 +22,7 @@ class Solver:
     """
     Private CNF cnf
     Private Set<int> variable_set
+    Private SolverStatistics statistics
     Private Set<int> implied_literal_set        # implied literals (implicit BCP) without any assumption
     Private SatSolverEnum sat_solver_enum
 
@@ -34,7 +36,12 @@ class Solver:
 
     def __init__(self, cnf: Cnf,
                  clause_id_set: Union[Set[int], None],
-                 sat_solver_enum: ss_enum.SatSolverEnum):
+                 sat_solver_enum: ss_enum.SatSolverEnum,
+                 statistics: SolverStatistics):
+        self.__statistics: SolverStatistics = statistics
+
+        self.__statistics.initialize.start_stopwatch()  # time (start - initialize)
+
         self.__cnf: CNF = CNF()
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
 
@@ -77,15 +84,21 @@ class Solver:
         else:
             raise c_exception.SatSolverIsNotSupportedException(self.__sat_solver_enum)
 
+        self.__statistics.first_implied_literals.start_stopwatch()  # time (start - first_implied_literals)
+
         # Implied literals without any assumption
         self.__implied_literal_set: Set[int] = set()
         temp = self.iterative_implicit_unit_propagation([])
         if temp is not None:
             self.__implied_literal_set = temp
 
+        self.__statistics.first_implied_literals.stop_stopwatch()   # time (end - first_implied_literals)
+
         # Backbones
         from compiler.backbones import Backbones
         self.__backbones = Backbones(self)
+
+        self.__statistics.initialize.stop_stopwatch()   # time (end - initialize)
 
     # region Public method
     def is_satisfiable(self, assignment_list: List[int]) -> bool:
@@ -95,7 +108,12 @@ class Solver:
         :return: True if the formula is satisfiable, otherwise False is returned
         """
 
-        return self.__sat_main.solve(assumptions=self.__create_assumption_list(assignment_list))
+        self.__statistics.is_satisfiable.start_stopwatch()  # time (start)
+
+        is_sat = self.__sat_main.solve(assumptions=self.__create_assumption_list(assignment_list))
+
+        self.__statistics.is_satisfiable.stop_stopwatch()   # time (end)
+        return is_sat
 
     def get_model(self, assignment_list: List[int]) -> Union[List[int], None]:
         """
@@ -105,7 +123,11 @@ class Solver:
         :return: a complete assignment or None if the formula is unsatisfiable
         """
 
+        self.__statistics.is_satisfiable.start_stopwatch()  # time (start)
+
         self.__sat_main.solve(assumptions=self.__create_assumption_list(assignment_list))
+
+        self.__statistics.is_satisfiable.stop_stopwatch()   # time (end)
         return self.__sat_main.get_model()
 
     def unit_propagation(self, assignment_list: List[int]) -> Union[Set[int], None]:
@@ -116,7 +138,11 @@ class Solver:
         :return: a set of implied literals or None if the formula is unsatisfiable
         """
 
+        self.__statistics.unit_propagation.start_stopwatch()    # time (start)
+
         is_sat, implied_literals = self.__sat_unit_propagation.propagate(assumptions=self.__create_assumption_list(assignment_list))
+
+        self.__statistics.unit_propagation.stop_stopwatch()     # time (end)
 
         # The formula is not satisfiable
         if not is_sat:
@@ -144,6 +170,8 @@ class Solver:
         if exist:
             return value
 
+        self.__statistics.implicit_unit_propagation.start_stopwatch()   # time (start)
+
         temp_set = set(map(lambda l: abs(l), assignment_list))
         variable_to_try_set = self.__variable_set.difference(temp_set)
         result_dictionary = dict()
@@ -162,11 +190,15 @@ class Solver:
             # The formula is unsatisfiable
             if (temp_positive is None) and (temp_negative is None):
                 self.__add_implicit_bcp_dictionary_cache(key, None)
+
+                self.__statistics.implicit_unit_propagation.stop_stopwatch()    # time (end)
                 return None
 
             result_dictionary[var] = (temp_positive, temp_negative)
 
         self.__add_implicit_bcp_dictionary_cache(key, result_dictionary)
+
+        self.__statistics.implicit_unit_propagation.stop_stopwatch()  # time (end)
         return result_dictionary
 
     def iterative_implicit_unit_propagation(self, assignment_list: List[int]) -> Union[Set[int], None]:
@@ -177,6 +209,8 @@ class Solver:
         :return: a set of implied literals
         """
 
+        self.__statistics.iterative_implicit_unit_propagation.start_stopwatch()     # time (start)
+
         repeat = True
         assignment_list_temp = assignment_list.copy()
 
@@ -186,6 +220,7 @@ class Solver:
             implicit_bcp_dictionary = self.implicit_unit_propagation(assignment_list_temp)
             # The formula is unsatisfiable
             if implicit_bcp_dictionary is None:
+                self.__statistics.iterative_implicit_unit_propagation.stop_stopwatch()  # time (end)
                 return None
 
             for variable in implicit_bcp_dictionary:
@@ -212,6 +247,7 @@ class Solver:
         implied_literals = set(assignment_list_temp)
         implied_literals.difference_update(set(assignment_list))
 
+        self.__statistics.iterative_implicit_unit_propagation.stop_stopwatch()      # time (end)
         return implied_literals
 
     def get_backbone_literals(self, assignment_list: List[int]) -> Union[Set[int], None]:
@@ -222,7 +258,11 @@ class Solver:
         :return: a set of backbone literals or None if the formula is unsatisfiable
         """
 
+        self.__statistics.backbone_literals.start_stopwatch()   # time (start)
+
         backbone_literal_set = self.__backbones.get_backbone_literals(assignment_list)
+
+        self.__statistics.backbone_literals.stop_stopwatch()    # time (end)
 
         if backbone_literal_set is None:
             return None
@@ -254,6 +294,7 @@ class Solver:
     def __create_assumption_list(self, assignment_list: List[int]) -> List[int]:
         return list(self.__implied_literal_set.union(set(assignment_list)))
 
+    # region Cache
     def __add_implicit_bcp_dictionary_cache(self, key: int, implicit_bcp_dictionary) -> None:
         """
         Add a new record to the cache.
@@ -279,6 +320,7 @@ class Solver:
             return False, None
 
         return True, self.__implicit_bcp_dictionary_cache[key]
+    # endregion
     # endregion
 
     # region Magic function

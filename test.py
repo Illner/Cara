@@ -17,13 +17,13 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg4-09.cnf"
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg4-09.cnf"
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
 start_time = time.time()
 
 cnf = Cnf(path)
 
-compiler = Compiler(cnf, smooth=False, ub_factor=0.2, new_cut_set_threshold=0.1, subsumed_threshold=1000,
+compiler = Compiler(cnf, smooth=False, ub_factor=0.1, new_cut_set_threshold=0.1, subsumed_threshold=1000,
                     sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                     implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                     component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
@@ -43,3 +43,5 @@ end_time = time.time()
 print("Time: ", end_time-start_time)
 print(circuit.size)
 print("Number of models: ", circuit.model_counting(set(), set()))
+
+print(compiler.statistics)

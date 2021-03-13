@@ -4,6 +4,7 @@ from circuit.circuit import Circuit
 from typing import Set, Tuple, Union
 from compiler.component import Component
 from formula.incidence_graph import IncidenceGraph
+from compiler_statistics.statistics import Statistics
 from compiler.hypergraph_partitioning import HypergraphPartitioning
 
 # Import component caching
@@ -34,6 +35,7 @@ class Compiler:
     Private Cnf cnf
     Private bool smooth
     Private Circuit circuit
+    Private Statistics statistics
     Private float new_cut_set_threshold
     Private ComponentCachingAbstract component_caching
     Private HypergraphPartitioning hypergraph_partitioning
@@ -69,6 +71,8 @@ class Compiler:
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
+
+        self.__statistics: Statistics = Statistics()
 
         # Component caching
         self.__set_component_caching(component_caching_enum)
@@ -133,7 +137,8 @@ class Compiler:
                                   component_caching=self.__component_caching,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
                                   sat_solver_enum=self.__sat_solver_enum,
-                                  implied_literals_enum=self.__implied_literals_enum)
+                                  implied_literals_enum=self.__implied_literals_enum,
+                                  statistics=self.__statistics)
             node_id = component.create_circuit()
             node_id_set.add(node_id)
 
@@ -171,4 +176,8 @@ class Compiler:
     @property
     def circuit(self):
         return self.__circuit
+
+    @property
+    def statistics(self):
+        return self.__statistics
     # endregion

@@ -1,11 +1,2 @@
-Component caching
-
-explicit (clause) x implicit (index)
-
-1) s - standard caching scheme (Cachet)
-2) h - hybrid caching scheme (sharpSAT)
-3) i - implicit standard caching scheme (D4)
-
-
 ) Hypergraph partitioning - cache
 ) comments - exception
