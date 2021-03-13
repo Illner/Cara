@@ -10,18 +10,18 @@ class SolverStatistics(StatisticsTemplateAbstract):
     """
 
     """
-    Private StatisticsComponentTime initialize
-    Private StatisticsComponentTime first_implied_literals
-    Private StatisticsComponentTime is_satisfiable
-    Private StatisticsComponentTime unit_propagation
-    Private StatisticsComponentTime implicit_unit_propagation
-    Private StatisticsComponentTime iterative_implicit_unit_propagation
+    Private StatisticsComponentTimer initialize
+    Private StatisticsComponentTimer first_implied_literals
+    Private StatisticsComponentTimer is_satisfiable
+    Private StatisticsComponentTimer unit_propagation
+    Private StatisticsComponentTimer implicit_unit_propagation
+    Private StatisticsComponentTimer iterative_implicit_unit_propagation
     Private StatisticsComponentCounter iterative_implicit_unit_propagation_iteration
-    Private StatisticsComponentTime backbone_literals
+    Private StatisticsComponentTimer backbone_literals
     """
 
-    def __init__(self, name: str):
-        super().__init__(name)
+    def __init__(self):
+        super().__init__("Solver")
 
         self.__initialize: StatisticsComponentTimer = StatisticsComponentTimer("initialize")
         self._component_list.append(self.__initialize)

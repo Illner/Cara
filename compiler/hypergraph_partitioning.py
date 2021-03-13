@@ -8,6 +8,7 @@ import other.environment as env
 from compiler.solver import Solver
 from typing import Set, Dict, List, Tuple, Union
 from formula.incidence_graph import IncidenceGraph
+from compiler_statistics.compiler.hypergraph_partitioning_statistics import HypergraphPartitioningStatistics
 
 # Import exception
 import exception.cara_exception as c_exception
@@ -31,6 +32,7 @@ class HypergraphPartitioning:
     Private int subsumed_threshold
     Private int total_number_of_nodes
     Private int total_number_of_hyperedges
+    Private HypergraphPartitioningStatistics statistics
     
     Private HypergraphPartitioningCacheEnum cache_enum
     Private HypergraphPartitioningSoftwareEnum software_enum
@@ -63,7 +65,14 @@ class HypergraphPartitioning:
                  hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum,
                  variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
                  limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]],
-                 limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]]):
+                 limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]],
+                 statistics: Union[HypergraphPartitioningStatistics, None] = None):
+        # Statistics
+        if statistics is None:
+            self.__statistics: HypergraphPartitioningStatistics = HypergraphPartitioningStatistics()
+        else:
+            self.__statistics: HypergraphPartitioningStatistics = statistics
+
         self.__cnf: Cnf = cnf
         self.__subsumed_threshold: Union[int, None] = subsumed_threshold
         self.__total_number_of_nodes: int = cnf.real_number_of_clauses
@@ -104,14 +113,108 @@ class HypergraphPartitioning:
         self.__check_files_and_folders()
         self.__set_static_weights()
 
-    # region Static method
-    @staticmethod
-    def __subsumption(incidence_graph: IncidenceGraph) -> Set[int]:
+    # region Private method
+    def __check_files_and_folders(self) -> None:
+        """
+        Check if all necessary files and folders exist.
+        If some file is missing, raise an exception (FileIsMissingException).
+        If the chosen software is not supported on the system, raise an exception (SoftwareIsNotSupportedOnSystemException).
+        :return: None
+        """
+
+        # Windows
+        if env.is_windows():
+            # hMETIS
+            if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:
+                HypergraphPartitioning.TEMP_FOLDER_PATH.mkdir(exist_ok=True)
+
+                # The exe has not been found
+                if not HypergraphPartitioning.WIN_PROGRAM_EXE_HMETIS_PATH.exists():
+                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.WIN_PROGRAM_EXE_HMETIS_PATH)
+                return
+
+            raise hp_exception.SoftwareIsNotSupportedOnSystemException(self.__software_enum.name)
+
+        # Linux
+        elif env.is_linux():
+            pass    # TODO Linux
+
+        # Mac
+        elif env.is_mac():
+            pass    # TODO Mac
+
+        # Undefined
+        raise c_exception.FunctionNotImplementedException("check_files_and_folders", f"not implemented for this OS ({env.get_os().name})")
+
+    def __variable_simplification(self, solver: Solver, assignment: List[int]) -> Dict[int, Set[int]]:
+        """
+        Compute variable simplification using implicit unit propagation
+        :param solver: the solver
+        :param assignment: the (partial) assignment (for the solver)
+        :return: a dictionary where a key is a variable (representant),
+        and the value is a set of variables that can be merged with the variable to reduce the hypergraph size
+        """
+
+        # None
+        if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE:
+            return dict()
+
+        self.__statistics.variable_simplification.start_stopwatch()     # time (start)
+
+        implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment)
+
+        # The formula is unsatisfiable (it should not happen at all)
+        if implicit_bcp_dictionary is None:
+            self.__statistics.variable_simplification.stop_stopwatch()  # time (end)
+            return dict()
+
+        # EQUIV_SIMPL
+        if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL:
+            dominated_variable_set = set()
+            equivalence_dictionary: Dict[int, Set[int]] = dict()
+
+            for var in implicit_bcp_dictionary:
+                first_temp, second_temp = implicit_bcp_dictionary[var]
+
+                # var is an implied "variable" (should not happen if implicit unit propagation is used for implied literals)
+                if first_temp is None:
+                    first_temp = set()
+                if second_temp is None:
+                    second_temp = set()
+
+                if len(first_temp) > len(second_temp):
+                    first_temp, second_temp = second_temp, first_temp
+
+                for lit in first_temp:
+                    if -lit in second_temp:
+                        var_temp = abs(lit)
+
+                        if var not in equivalence_dictionary:
+                            equivalence_dictionary[var] = {var_temp}
+                        else:
+                            equivalence_dictionary[var].add(var_temp)
+
+                        dominated_variable_set.add(var_temp)
+
+            for var in dominated_variable_set:
+                if var in equivalence_dictionary:
+                    del equivalence_dictionary[var]
+
+            self.__statistics.variable_simplification.stop_stopwatch()  # time (end)
+            return equivalence_dictionary
+
+        self.__statistics.variable_simplification.stop_stopwatch()  # time (end)
+        raise c_exception.FunctionNotImplementedException("variable_simplification",
+                                                          f"this type of variable simplification ({self.__variable_simplification_enum.name}) is not implemented")
+
+    def __subsumption(self, incidence_graph: IncidenceGraph) -> Set[int]:
         """
         Return a set of subsumed clauses
         :param incidence_graph: the incidence graph
         :return: a set of subsumed clauses
         """
+
+        self.__statistics.subsumption.start_stopwatch()     # time (start)
 
         subsumed_clause_set = set()
         neighbour_dictionary: [int, Set[int]] = dict()   # Cache
@@ -162,97 +265,8 @@ class HypergraphPartitioning:
 
                     continue
 
+        self.__statistics.subsumption.stop_stopwatch()      # time (end)
         return subsumed_clause_set
-    # endregion
-
-    # region Private method
-    def __check_files_and_folders(self) -> None:
-        """
-        Check if all necessary files and folders exist.
-        If some file is missing, raise an exception (FileIsMissingException).
-        If the chosen software is not supported on the system, raise an exception (SoftwareIsNotSupportedOnSystemException).
-        :return: None
-        """
-
-        # Windows
-        if env.is_windows():
-            # hMETIS
-            if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:
-                HypergraphPartitioning.TEMP_FOLDER_PATH.mkdir(exist_ok=True)
-
-                # The exe has not been found
-                if not HypergraphPartitioning.WIN_PROGRAM_EXE_HMETIS_PATH.exists():
-                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.WIN_PROGRAM_EXE_HMETIS_PATH)
-                return
-
-            raise hp_exception.SoftwareIsNotSupportedOnSystemException(self.__software_enum.name)
-
-        # Linux
-        elif env.is_linux():
-            pass    # TODO Linux
-
-        # Mac
-        elif env.is_mac():
-            pass    # TODO Mac
-
-        # Undefined
-        raise c_exception.FunctionNotImplementedException("check_files_and_folders", f"not implemented for this OS ({env.get_os().name})")
-
-    def __variable_simplification(self, solver: Solver, assignment: List[int]) -> Dict[int, Set[int]]:
-        """
-        Compute variable simplification using implicit unit propagation
-        :param solver: the solver
-        :param assignment: the (partial) assignment (for the solver)
-        :return: a dictionary where a key is a variable (representant),
-        and the value is a set of variables that can be merged with the variable to reduce the hypergraph size
-        """
-
-        # None
-        if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE:
-            return dict()
-
-        implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment)
-
-        # The formula is unsatisfiable (it should not happen at all)
-        if implicit_bcp_dictionary is None:
-            return dict()
-
-        # EQUIV_SIMPL
-        if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL:
-            dominated_variable_set = set()
-            equivalence_dictionary: Dict[int, Set[int]] = dict()
-
-            for var in implicit_bcp_dictionary:
-                first_temp, second_temp = implicit_bcp_dictionary[var]
-
-                # var is an implied "variable" (should not happen if implicit unit propagation is used for implied literals)
-                if first_temp is None:
-                    first_temp = set()
-                if second_temp is None:
-                    second_temp = set()
-
-                if len(first_temp) > len(second_temp):
-                    first_temp, second_temp = second_temp, first_temp
-
-                for lit in first_temp:
-                    if -lit in second_temp:
-                        var_temp = abs(lit)
-
-                        if var not in equivalence_dictionary:
-                            equivalence_dictionary[var] = {var_temp}
-                        else:
-                            equivalence_dictionary[var].add(var_temp)
-
-                        dominated_variable_set.add(var_temp)
-
-            for var in dominated_variable_set:
-                if var in equivalence_dictionary:
-                    del equivalence_dictionary[var]
-
-            return equivalence_dictionary
-
-        raise c_exception.FunctionNotImplementedException("variable_simplification",
-                                                          f"this type of variable simplification ({self.__variable_simplification_enum.name}) is not implemented")
 
     # region Weights
     def __set_static_weights(self) -> None:
@@ -262,6 +276,8 @@ class HypergraphPartitioning:
         Variable: node_weight_dictionary, hyperedge_weight_dictionary
         :return: None
         """
+
+        self.__statistics.set_static_weights.start_stopwatch()  # time (start)
 
         # Node's weight
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.STATIC:
@@ -273,6 +289,8 @@ class HypergraphPartitioning:
             for hyperedge_id in range(1, self.__total_number_of_hyperedges + 1):
                 self.__hyperedge_weight_dictionary[hyperedge_id] = 1    # TODO STATIC
 
+        self.__statistics.set_static_weights.stop_stopwatch()   # time (end)
+
     def __set_dynamic_weights(self, incidence_graph: IncidenceGraph) -> None:
         """
         Initialize the dynamic weights based on the incidence graph.
@@ -281,6 +299,8 @@ class HypergraphPartitioning:
         :param incidence_graph: the incidence graph
         :return: None
         """
+
+        self.__statistics.set_dynamic_weights.start_stopwatch()     # time (start)
 
         # Node's weight
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.DYNAMIC:
@@ -291,6 +311,8 @@ class HypergraphPartitioning:
         if self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.DYNAMIC:
             self.__hyperedge_weight_dictionary = dict()
             pass    # TODO DYNAMIC
+
+        self.__statistics.set_dynamic_weights.stop_stopwatch()      # time (end)
 
     def __get_node_weight(self, node_id: int) -> int:
         """
@@ -412,6 +434,8 @@ class HypergraphPartitioning:
            ((lnovc_u_temp is not None) and (number_of_variables > lnovc_u_temp)):
             return None
 
+        self.__statistics.generate_key_cache.start_stopwatch()      # time (start)
+
         # Variance
         use_variance = False
         if self.__cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM_VARIANCE:
@@ -497,6 +521,7 @@ class HypergraphPartitioning:
         key_string = ",0,".join([",".join(map(str, variable_clause)) for variable_clause in sorted(variable_clause_list)])
         key = mmh3.hash(key_string)
 
+        self.__statistics.generate_key_cache.stop_stopwatch()       # time (end)
         return key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
     # endregion
 
@@ -623,6 +648,8 @@ class HypergraphPartitioning:
         :return: a cut set of the hypergraph
         """
 
+        self.__statistics.get_cut_set.start_stopwatch()     # time (start)
+
         self.__set_dynamic_weights(incidence_graph)
 
         # Variable simplification
@@ -641,6 +668,7 @@ class HypergraphPartitioning:
             incidence_graph.restore_backup_subsumption()                # Subsumption
             incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
+            self.__statistics.get_cut_set.stop_stopwatch()      # time (end)
             return cut_set
 
         # Cache
@@ -660,6 +688,8 @@ class HypergraphPartitioning:
                 incidence_graph.restore_backup_subsumption()                # Subsumption
                 incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
+                self.__statistics.cache.add_count(1)
+                self.__statistics.get_cut_set.stop_stopwatch()  # time (end)
                 return cut_set_cache
 
         cut_set = set()
@@ -683,5 +713,6 @@ class HypergraphPartitioning:
         incidence_graph.restore_backup_subsumption()                # Subsumption
         incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
+        self.__statistics.get_cut_set.stop_stopwatch()  # time (end)
         return cut_set
     # endregion

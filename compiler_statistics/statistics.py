@@ -2,7 +2,8 @@
 from typing import List
 from compiler_statistics.statistics_template_abstract import StatisticsTemplateAbstract
 
-import compiler_statistics.compiler.solver_statistics as s_statistics
+from compiler_statistics.compiler.solver_statistics import SolverStatistics
+from compiler_statistics.compiler.hypergraph_partitioning_statistics import HypergraphPartitioningStatistics
 
 
 class Statistics:
@@ -14,14 +15,19 @@ class Statistics:
     Private List<StatisticsTemplateAbstract> template_list
     
     Private SolverStatistics solver_statistics
+    Private HypergraphPartitioningStatistics hypergraph_partitioning_statistics
     """
 
     def __init__(self):
         self.__template_list: List[StatisticsTemplateAbstract] = []
 
         # Solver
-        self.__solver_statistics = s_statistics.SolverStatistics("Solver")
+        self.__solver_statistics: SolverStatistics = SolverStatistics()
         self.__template_list.append(self.__solver_statistics)
+
+        # Hypergraph partitioning
+        self.__hypergraph_partitioning_statistics: HypergraphPartitioningStatistics = HypergraphPartitioningStatistics()
+        self.__template_list.append(self.__hypergraph_partitioning_statistics)
 
     # region Magic method
     def __str__(self):
@@ -37,4 +43,8 @@ class Statistics:
     @property
     def solver_statistics(self):
         return self.__solver_statistics
+
+    @property
+    def hypergraph_partitioning_statistics(self):
+        return self.__hypergraph_partitioning_statistics
     # endregion

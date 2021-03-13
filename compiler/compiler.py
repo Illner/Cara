@@ -86,7 +86,8 @@ class Compiler:
                                                                 hyperedge_weight_enum=hp_hyperedge_weight_type_enum,
                                                                 variable_simplification_enum=hp_variable_simplification_enum,
                                                                 limit_number_of_clauses_cache=hp_limit_number_of_clauses_cache,
-                                                                limit_number_of_variables_cache=hp_limit_number_of_variables_cache)
+                                                                limit_number_of_variables_cache=hp_limit_number_of_variables_cache,
+                                                                statistics=self.__statistics.hypergraph_partitioning_statistics)
 
     # region Private method
     def __set_component_caching(self, component_caching_enum: cc_enum.ComponentCachingEnum):

@@ -40,7 +40,7 @@ class Solver:
                  statistics: Union[SolverStatistics, None] = None):
         # Statistics
         if statistics is None:
-            self.__statistics: SolverStatistics = SolverStatistics("")
+            self.__statistics: SolverStatistics = SolverStatistics()
         else:
             self.__statistics: SolverStatistics = statistics
 
