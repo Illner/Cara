@@ -41,7 +41,7 @@ class StatisticsComponentCounter:
 
     # region Magic method
     def __str__(self):
-        string_temp = "\n".join((f"\tName: {self.name}",
+        string_temp = "\n".join((f"\tName: {self.name} (counter)",
                                  f"\t\tNumber of calls: {self.number_of_calls}",
                                  f"\t\tAverage count: {self.average_count}",
                                  f"\t\tSum count: {self.sum_count}",

@@ -1,6 +1,6 @@
 # Import
 from abc import ABC
-from typing import List
+from typing import List, Union
 from compiler_statistics.statistics_component_timer import StatisticsComponentTimer
 from compiler_statistics.statistics_component_counter import StatisticsComponentCounter
 
@@ -17,7 +17,7 @@ class StatisticsTemplateAbstract(ABC):
 
     def __init__(self, name: str):
         self.__name: str = name
-        self._component_list: List[StatisticsComponentTimer, StatisticsComponentCounter] = []
+        self._component_list: List[Union[StatisticsComponentTimer, StatisticsComponentCounter]] = []
 
     # region Magic function
     def __str__(self):

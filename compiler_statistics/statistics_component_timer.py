@@ -104,7 +104,7 @@ class StatisticsComponentTimer:
 
     # region Magic function
     def __str__(self):
-        string_temp = "\n".join((f"\tName: {self.name}",
+        string_temp = "\n".join((f"\tName: {self.name} (timer)",
                                  f"\t\tNumber of calls: {self.number_of_calls}",
                                  f"\t\tAverage time: {self.convert_to_datetime(self.average_time)}",
                                  f"\t\tSum time: {self.convert_to_datetime(self.sum_time)}",
