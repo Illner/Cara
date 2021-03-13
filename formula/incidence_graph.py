@@ -4,6 +4,7 @@ import random
 import networkx as nx
 from networkx.classes.graph import Graph
 from typing import Set, Dict, List, Union, TypeVar
+from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 
 # Import exception
 import exception.formula.incidence_graph_exception as ig_exception
@@ -20,6 +21,8 @@ class IncidenceGraph(Graph):
     """
     Private Dict<int, Set<int>> adjacency_literal_dictionary                # key: a literal, value: a set of clauses (nodes) where the literal appears
     
+    Private IncidenceGraphStatistics statistics
+    
     # Assignment
     Private Set<int> variable_backup_set
     Private List<int> literal_backup_list
@@ -34,10 +37,17 @@ class IncidenceGraph(Graph):
     Private Dict<int, Set<str>> subsumption_backup_dictionary               # key: a clause, value: a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
     """
 
-    def __init__(self, number_of_variables: Union[int, None] = None, number_of_clauses: Union[int, None] = None):
+    def __init__(self, number_of_variables: Union[int, None] = None, number_of_clauses: Union[int, None] = None,
+                 statistics: Union[IncidenceGraphStatistics, None] = None):
         super().__init__()
 
         self.__adjacency_literal_dictionary: Dict[int, Set[int]] = dict()
+
+        # Statistics
+        if statistics is None:
+            self.__statistics: IncidenceGraphStatistics = IncidenceGraphStatistics()
+        else:
+            self.__statistics: IncidenceGraphStatistics = statistics
 
         # Backup - assignment
         self.__variable_backup_set: Set[int] = set()
@@ -385,6 +395,8 @@ class IncidenceGraph(Graph):
         if not self.__node_exist(variable_hash):
             raise ig_exception.VariableDoesNotExistException(variable)
 
+        self.__statistics.remove_literal.start_stopwatch()      # timer (start)
+
         isolated_variable_set = set()
 
         # Backup
@@ -419,6 +431,7 @@ class IncidenceGraph(Graph):
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
 
+        self.__statistics.remove_literal.stop_stopwatch()       # timer (stop)
         return isolated_variable_set
 
     def remove_literal_set(self, literal_set: Set[int]) -> Set[int]:
@@ -451,6 +464,8 @@ class IncidenceGraph(Graph):
         if last_literal != literal:
             raise ig_exception.TryingRestoreLiteralIsNotLastOneRemovedException(literal, last_literal)
 
+        self.__statistics.restore_backup_literal.start_stopwatch()      # timer (start)
+
         self.__variable_backup_set.remove(variable)
         self.__literal_backup_list.pop()
 
@@ -480,6 +495,8 @@ class IncidenceGraph(Graph):
 
         del self.__variable_node_backup_dictionary[variable]
 
+        self.__statistics.restore_backup_literal.stop_stopwatch()       # timer (stop)
+
     def restore_backup_literal_set(self, literal_set: Set[int]) -> None:
         while len(literal_set):
             last_literal = self.__literal_backup_list[-1]
@@ -500,6 +517,8 @@ class IncidenceGraph(Graph):
         Everything that will be changed in the incidence graph is saved and can be restored from the backup in the future.
         :return: None
         """
+
+        self.__statistics.merge_variable_simplification.start_stopwatch()   # timer (start)
 
         variable_hash_to_delete_set = set()
 
@@ -532,12 +551,16 @@ class IncidenceGraph(Graph):
         for variable_hash in variable_hash_to_delete_set:
             self.remove_node(variable_hash)
 
+        self.__statistics.merge_variable_simplification.stop_stopwatch()    # timer (stop)
+
     def restore_backup_variable_simplification(self) -> None:
         """
         Restore all nodes and edges that are mention in the backup.
         The backup will be cleared.
         :return: None
         """
+
+        self.__statistics.restore_backup_variable_simplification.start_stopwatch()  # timer (start)
 
         # Add nodes and edges
         for variable in self.__removed_edge_backup_dictionary:
@@ -558,6 +581,8 @@ class IncidenceGraph(Graph):
                 self.remove_edge(variable_hash, neighbour_hash)
 
         self.__added_edge_backup_dictionary = dict()
+
+        self.__statistics.restore_backup_variable_simplification.stop_stopwatch()   # timer (stop)
     # endregion
 
     # region Subsumption
@@ -581,11 +606,15 @@ class IncidenceGraph(Graph):
         if not self.__node_exist(clause_id_hash):
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
+        self.__statistics.remove_subsumed_clause.start_stopwatch()  # timer (start)
+
         clause_neighbour_set = set(self.neighbors(clause_id_hash))
         self.__subsumption_backup_dictionary[clause_id] = clause_neighbour_set
 
         # Delete the clause node
         self.remove_node(clause_id_hash)
+
+        self.__statistics.remove_subsumed_clause.stop_stopwatch()   # timer (stop)
 
     def remove_subsumed_clause_set(self, clause_id_set: Set[int]) -> None:
         for clause_id in clause_id_set:
@@ -598,6 +627,8 @@ class IncidenceGraph(Graph):
         :return: None
         """
 
+        self.__statistics.restore_backup_subsumption.start_stopwatch()  # timer (start)
+
         for clause_id in self.__subsumption_backup_dictionary:
             clause_id_hash = self.__clause_id_hash(clause_id)
             neighbour_hash_set = self.__subsumption_backup_dictionary[clause_id]
@@ -607,6 +638,8 @@ class IncidenceGraph(Graph):
                 super().add_edge(neighbour_hash, clause_id_hash)
 
         self.__subsumption_backup_dictionary = dict()
+
+        self.__statistics.restore_backup_subsumption.stop_stopwatch()   # timer (stop)
     # endregion
 
     def create_incidence_graphs_for_components(self) -> Set[TIncidenceGraph]:
@@ -615,10 +648,12 @@ class IncidenceGraph(Graph):
         :return: a set of incidence graphs (one for each component)
         """
 
+        self.__statistics.create_incidence_graphs_for_components.start_stopwatch()  # timer (start)
+
         incidence_graph_set = set()
 
         for component in nx.connected_components(self):
-            incidence_graph_temp = IncidenceGraph()
+            incidence_graph_temp = IncidenceGraph(statistics=self.__statistics)
 
             for node_hash in component:
                 # The node is not a variable
@@ -637,6 +672,7 @@ class IncidenceGraph(Graph):
 
                 incidence_graph_set.add(incidence_graph_temp)
 
+        self.__statistics.create_incidence_graphs_for_components.stop_stopwatch()   # timer (stop)
         return incidence_graph_set
 
     def copy_incidence_graph(self) -> TIncidenceGraph:
@@ -644,7 +680,9 @@ class IncidenceGraph(Graph):
         :return: a copy of the incidence graph
         """
 
-        copy = IncidenceGraph()
+        self.__statistics.copy_incidence_graph.start_stopwatch()    # timer (start)
+
+        copy = IncidenceGraph(statistics=self.__statistics)
 
         for node_hash in self.nodes:
             # The node is not a variable
@@ -661,5 +699,6 @@ class IncidenceGraph(Graph):
 
                 copy.add_edge(literal, clause_id, create_node=True)
 
+        self.__statistics.copy_incidence_graph.stop_stopwatch()     # timer (stop)
         return copy
     # endregion

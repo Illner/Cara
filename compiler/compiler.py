@@ -71,7 +71,9 @@ class Compiler:
         if isinstance(cnf, Cnf):
             self.__cnf: Cnf = cnf
         else:
-            self.__cnf: Cnf = Cnf(cnf, self.__statistics.cnf_statistics)
+            self.__cnf: Cnf = Cnf(dimacs_cnf_file_path=cnf,
+                                  cnf_statistics=self.__statistics.cnf_statistics,
+                                  incidence_graph_statistics=self.__statistics.incidence_graph_statistics)
 
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
@@ -127,6 +129,8 @@ class Compiler:
         :return: the created circuit
         """
 
+        self.__statistics.compiler_statistics.create_circuit.start_stopwatch()  # timer (start)
+
         incidence_graph: IncidenceGraph = self.__cnf.get_incidence_graph()
         incidence_graph_set: Set[IncidenceGraph] = {incidence_graph}
 
@@ -172,10 +176,15 @@ class Compiler:
             node_id = self.__circuit.create_and_node({root_id}.union(node_id_set))
             self.__circuit.set_root(node_id)
 
+        self.__statistics.compiler_statistics.smooth.start_stopwatch()  # timer (start)
+
         # Smooth
         if self.__smooth:
             self.__circuit.smooth()
 
+        self.__statistics.compiler_statistics.smooth.stop_stopwatch()   # timer (stop)
+
+        self.__statistics.compiler_statistics.create_circuit.stop_stopwatch()   # timer (stop)
         return self.circuit
     # endregion
 

@@ -160,13 +160,13 @@ class HypergraphPartitioning:
         if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE:
             return dict()
 
-        self.__statistics.variable_simplification.start_stopwatch()     # time (start)
+        self.__statistics.variable_simplification.start_stopwatch()     # timer (start)
 
         implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment)
 
         # The formula is unsatisfiable (it should not happen at all)
         if implicit_bcp_dictionary is None:
-            self.__statistics.variable_simplification.stop_stopwatch()  # time (end)
+            self.__statistics.variable_simplification.stop_stopwatch()  # timer (stop)
             return dict()
 
         # EQUIV_SIMPL
@@ -201,10 +201,10 @@ class HypergraphPartitioning:
                 if var in equivalence_dictionary:
                     del equivalence_dictionary[var]
 
-            self.__statistics.variable_simplification.stop_stopwatch()  # time (end)
+            self.__statistics.variable_simplification.stop_stopwatch()  # timer (stop)
             return equivalence_dictionary
 
-        self.__statistics.variable_simplification.stop_stopwatch()  # time (end)
+        self.__statistics.variable_simplification.stop_stopwatch()  # timer (stop)
         raise c_exception.FunctionNotImplementedException("variable_simplification",
                                                           f"this type of variable simplification ({self.__variable_simplification_enum.name}) is not implemented")
 
@@ -215,7 +215,7 @@ class HypergraphPartitioning:
         :return: a set of subsumed clauses
         """
 
-        self.__statistics.subsumption.start_stopwatch()     # time (start)
+        self.__statistics.subsumption.start_stopwatch()     # timer (start)
 
         subsumed_clause_set = set()
         neighbour_dictionary: [int, Set[int]] = dict()   # Cache
@@ -266,7 +266,7 @@ class HypergraphPartitioning:
 
                     continue
 
-        self.__statistics.subsumption.stop_stopwatch()      # time (end)
+        self.__statistics.subsumption.stop_stopwatch()      # timer (stop)
         return subsumed_clause_set
 
     # region Weights
@@ -278,7 +278,7 @@ class HypergraphPartitioning:
         :return: None
         """
 
-        self.__statistics.set_static_weights.start_stopwatch()  # time (start)
+        self.__statistics.set_static_weights.start_stopwatch()  # timer (start)
 
         # Node's weight
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.STATIC:
@@ -290,7 +290,7 @@ class HypergraphPartitioning:
             for hyperedge_id in range(1, self.__total_number_of_hyperedges + 1):
                 self.__hyperedge_weight_dictionary[hyperedge_id] = 1    # TODO STATIC
 
-        self.__statistics.set_static_weights.stop_stopwatch()   # time (end)
+        self.__statistics.set_static_weights.stop_stopwatch()   # timer (stop)
 
     def __set_dynamic_weights(self, incidence_graph: IncidenceGraph) -> None:
         """
@@ -301,7 +301,7 @@ class HypergraphPartitioning:
         :return: None
         """
 
-        self.__statistics.set_dynamic_weights.start_stopwatch()     # time (start)
+        self.__statistics.set_dynamic_weights.start_stopwatch()     # timer (start)
 
         # Node's weight
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.DYNAMIC:
@@ -313,7 +313,7 @@ class HypergraphPartitioning:
             self.__hyperedge_weight_dictionary = dict()
             pass    # TODO DYNAMIC
 
-        self.__statistics.set_dynamic_weights.stop_stopwatch()      # time (end)
+        self.__statistics.set_dynamic_weights.stop_stopwatch()      # timer (stop)
 
     def __get_node_weight(self, node_id: int) -> int:
         """
@@ -435,7 +435,7 @@ class HypergraphPartitioning:
            ((lnovc_u_temp is not None) and (number_of_variables > lnovc_u_temp)):
             return None
 
-        self.__statistics.generate_key_cache.start_stopwatch()      # time (start)
+        self.__statistics.generate_key_cache.start_stopwatch()      # timer (start)
 
         # Variance
         use_variance = False
@@ -522,7 +522,7 @@ class HypergraphPartitioning:
         key_string = ",0,".join([",".join(map(str, variable_clause)) for variable_clause in sorted(variable_clause_list)])
         key = mmh3.hash(key_string)
 
-        self.__statistics.generate_key_cache.stop_stopwatch()       # time (end)
+        self.__statistics.generate_key_cache.stop_stopwatch()       # timer (stop)
         return key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
     # endregion
 
@@ -649,7 +649,7 @@ class HypergraphPartitioning:
         :return: a cut set of the hypergraph
         """
 
-        self.__statistics.get_cut_set.start_stopwatch()     # time (start)
+        self.__statistics.get_cut_set.start_stopwatch()     # timer (start)
 
         self.__set_dynamic_weights(incidence_graph)
 
@@ -669,7 +669,7 @@ class HypergraphPartitioning:
             incidence_graph.restore_backup_subsumption()                # Subsumption
             incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
-            self.__statistics.get_cut_set.stop_stopwatch()      # time (end)
+            self.__statistics.get_cut_set.stop_stopwatch()      # timer (stop)
             return cut_set
 
         # Cache
@@ -690,7 +690,7 @@ class HypergraphPartitioning:
                 incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
                 self.__statistics.cache.add_count(1)
-                self.__statistics.get_cut_set.stop_stopwatch()  # time (end)
+                self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
                 return cut_set_cache
 
         cut_set = set()
@@ -714,6 +714,6 @@ class HypergraphPartitioning:
         incidence_graph.restore_backup_subsumption()                # Subsumption
         incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
-        self.__statistics.get_cut_set.stop_stopwatch()  # time (end)
+        self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
         return cut_set
     # endregion

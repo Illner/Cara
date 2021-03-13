@@ -25,19 +25,19 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
         self.__subsumption: StatisticsComponentTimer = StatisticsComponentTimer("subsumption")
         self._component_list.append(self.__subsumption)
 
-        self.__variable_simplification: StatisticsComponentTimer = StatisticsComponentTimer("variable_simplification")
+        self.__variable_simplification: StatisticsComponentTimer = StatisticsComponentTimer("variable simplification")
         self._component_list.append(self.__variable_simplification)
 
-        self.__set_static_weights: StatisticsComponentTimer = StatisticsComponentTimer("set_static_weights")
+        self.__set_static_weights: StatisticsComponentTimer = StatisticsComponentTimer("set static weights")
         self._component_list.append(self.__set_static_weights)
 
-        self.__set_dynamic_weights: StatisticsComponentTimer = StatisticsComponentTimer("set_dynamic_weights")
+        self.__set_dynamic_weights: StatisticsComponentTimer = StatisticsComponentTimer("set dynamic weights")
         self._component_list.append(self.__set_dynamic_weights)
 
-        self.__generate_key_cache: StatisticsComponentTimer = StatisticsComponentTimer("generate_key_cache")
+        self.__generate_key_cache: StatisticsComponentTimer = StatisticsComponentTimer("generate key cache")
         self._component_list.append(self.__generate_key_cache)
 
-        self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get_cut_set")
+        self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get cut set")
         self._component_list.append(self.__get_cut_set)
 
         self.__cache: StatisticsComponentCounter = StatisticsComponentCounter("cache")

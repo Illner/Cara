@@ -2,6 +2,7 @@
 from typing import Set, Dict, List, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler_statistics.formula.cnf_statistics import CnfStatistics
+from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 
 # Import exception
 import exception.formula.formula_exception as f_exception
@@ -30,13 +31,15 @@ class Cnf:
     Private Set<int> unused_variable_set                # a set which contains all unused variables (variables which do not appear in any clause)
     Private List<Set<int>> clause_size_list             # key: 0, 1, .., |variables|, value: a set contains all clauses with the size k
     
-    Private CnfStatistics statistics
+    Private CnfStatistics cnf_statistics
+    Private IncidenceGraphStatistics incidence_graph_statistics
     
     Private IncidenceGraph incidence_graph
     """
 
     def __init__(self, dimacs_cnf_file_path: str,
-                 statistics: Union[CnfStatistics, None] = None):
+                 cnf_statistics: Union[CnfStatistics, None] = None,
+                 incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = None):
         # region Initialization
         self.__comments: str = ""
         self.__number_of_clauses: int = 0
@@ -57,11 +60,16 @@ class Cnf:
         self.__clause_size_list: List[Set[int]] = []
         # endregion
 
-        # Statistics
-        if statistics is None:
-            self.__statistics: CnfStatistics = CnfStatistics()
+        # Statistics - CNF
+        if cnf_statistics is None:
+            self.__cnf_statistics: CnfStatistics = CnfStatistics()
         else:
-            self.__statistics: CnfStatistics = statistics
+            self.__cnf_statistics: CnfStatistics = cnf_statistics
+        # Statistics - incidence graph
+        if incidence_graph_statistics is None:
+            self.__incidence_graph_statistics: IncidenceGraphStatistics = IncidenceGraphStatistics()
+        else:
+            self.__incidence_graph_statistics: IncidenceGraphStatistics = incidence_graph_statistics
 
         # Incidence graph
         self.__incidence_graph: Union[IncidenceGraph, None] = None
@@ -76,7 +84,7 @@ class Cnf:
         :return: None
         """
 
-        self.__statistics.create.start_stopwatch()      # time (start)
+        self.__cnf_statistics.create.start_stopwatch()      # timer (start)
 
         with open(dimacs_cnf_file_path, "r") as file:
             clause_id = 0
@@ -131,7 +139,9 @@ class Cnf:
                         self.__clause_size_list.append(set())   # initialization
 
                     # Incidence graph
-                    self.__incidence_graph = IncidenceGraph(self.__number_of_variables, self.__number_of_clauses)
+                    self.__incidence_graph = IncidenceGraph(number_of_variables=self.__number_of_variables,
+                                                            number_of_clauses=self.__number_of_clauses,
+                                                            statistics=self.__incidence_graph_statistics)
 
                     continue
 
@@ -198,7 +208,7 @@ class Cnf:
 
         self.__unit_clause_set = self.__clause_size_list[1].copy()  # get unit clauses
 
-        self.__statistics.create.stop_stopwatch()   # time (end)
+        self.__cnf_statistics.create.stop_stopwatch()   # timer (stop)
     # endregion
 
     # region Protected method
