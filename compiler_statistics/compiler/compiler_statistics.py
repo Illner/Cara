@@ -16,10 +16,10 @@ class CompilerStatistics(StatisticsTemplateAbstract):
     def __init__(self):
         super().__init__("Compiler")
 
-        self.__create_circuit: StatisticsComponentTimer = StatisticsComponentTimer("create circuit")
+        self.__create_circuit: StatisticsComponentTimer = StatisticsComponentTimer("create circuit", True)
         self._component_list.append(self.__create_circuit)
 
-        self.__smooth: StatisticsComponentTimer = StatisticsComponentTimer("smooth")
+        self.__smooth: StatisticsComponentTimer = StatisticsComponentTimer("smooth", True)
         self._component_list.append(self.__smooth)
 
     # region Property

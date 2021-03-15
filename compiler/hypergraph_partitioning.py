@@ -689,9 +689,11 @@ class HypergraphPartitioning:
                 incidence_graph.restore_backup_subsumption()                # Subsumption
                 incidence_graph.restore_backup_variable_simplification()    # Variable simplification
 
-                self.__statistics.cache.add_count(1)
+                self.__statistics.cached.add_count(1)   # counter
                 self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
                 return cut_set_cache
+            else:
+                self.__statistics.cached.add_count(0)   # counter
 
         cut_set = set()
 

@@ -16,7 +16,7 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer set_dynamic_weights
     Private StatisticsComponentTimer generate_key_cache
     Private StatisticsComponentTimer get_cut_set
-    Private StatisticsComponentCounter cache
+    Private StatisticsComponentCounter cached
     """
 
     def __init__(self):
@@ -28,7 +28,7 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
         self.__variable_simplification: StatisticsComponentTimer = StatisticsComponentTimer("variable simplification")
         self._component_list.append(self.__variable_simplification)
 
-        self.__set_static_weights: StatisticsComponentTimer = StatisticsComponentTimer("set static weights")
+        self.__set_static_weights: StatisticsComponentTimer = StatisticsComponentTimer("set static weights", True)
         self._component_list.append(self.__set_static_weights)
 
         self.__set_dynamic_weights: StatisticsComponentTimer = StatisticsComponentTimer("set dynamic weights")
@@ -40,8 +40,8 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
         self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get cut set")
         self._component_list.append(self.__get_cut_set)
 
-        self.__cache: StatisticsComponentCounter = StatisticsComponentCounter("cache")
-        self._component_list.append(self.__cache)
+        self.__cached: StatisticsComponentCounter = StatisticsComponentCounter("cached")
+        self._component_list.append(self.__cached)
 
     # region Property
     @property
@@ -69,6 +69,6 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
         return self.__get_cut_set
 
     @property
-    def cache(self):
-        return self.__cache
+    def cached(self):
+        return self.__cached
     # endregion

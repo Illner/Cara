@@ -17,6 +17,9 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer restore_backup_subsumption
     Private StatisticsComponentTimer create_incidence_graphs_for_components
     Private StatisticsComponentTimer copy_incidence_graph
+    Private StatisticsComponentTimer clause_id_set
+    Private StatisticsComponentTimer number_of_components
+    Private StatisticsComponentTimer variable_set
     """
 
     def __init__(self):
@@ -45,6 +48,15 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
         self.__copy_incidence_graph: StatisticsComponentTimer = StatisticsComponentTimer("copy")
         self._component_list.append(self.__copy_incidence_graph)
+
+        self.__number_of_components: StatisticsComponentTimer = StatisticsComponentTimer("get number of components")
+        self._component_list.append(self.__number_of_components)
+
+        self.__clause_id_set: StatisticsComponentTimer = StatisticsComponentTimer("get clauses")
+        self._component_list.append(self.__clause_id_set)
+
+        self.__variable_set: StatisticsComponentTimer = StatisticsComponentTimer("get variables")
+        self._component_list.append(self.__variable_set)
 
     # region Property
     @property
@@ -78,4 +90,16 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     @property
     def copy_incidence_graph(self):
         return self.__copy_incidence_graph
+
+    @property
+    def clause_id_set(self):
+        return self.__clause_id_set
+
+    @property
+    def number_of_components(self):
+        return self.__number_of_components
+
+    @property
+    def variable_set(self):
+        return self.__variable_set
     # endregion

@@ -66,10 +66,7 @@ class Cnf:
         else:
             self.__cnf_statistics: CnfStatistics = cnf_statistics
         # Statistics - incidence graph
-        if incidence_graph_statistics is None:
-            self.__incidence_graph_statistics: IncidenceGraphStatistics = IncidenceGraphStatistics()
-        else:
-            self.__incidence_graph_statistics: IncidenceGraphStatistics = incidence_graph_statistics
+        self.__incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = incidence_graph_statistics
 
         # Incidence graph
         self.__incidence_graph: Union[IncidenceGraph, None] = None

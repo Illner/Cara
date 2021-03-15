@@ -15,7 +15,7 @@ class CnfStatistics(StatisticsTemplateAbstract):
     def __init__(self):
         super().__init__("CNF")
 
-        self.__create: StatisticsComponentTimer = StatisticsComponentTimer("create")
+        self.__create: StatisticsComponentTimer = StatisticsComponentTimer("create", True)
         self._component_list.append(self.__create)
 
     # region Property

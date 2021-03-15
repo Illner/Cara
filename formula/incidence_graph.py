@@ -200,7 +200,12 @@ class IncidenceGraph(Graph):
         :return: the number of connected components
         """
 
-        return nx.number_connected_components(self)
+        self.__statistics.number_of_components.start_stopwatch()    # timer (start)
+
+        number_of_components = nx.number_connected_components(self)
+
+        self.__statistics.number_of_components.stop_stopwatch()     # timer (stop)
+        return number_of_components
 
     def variable_neighbour_set(self, variable: int) -> Set[int]:
         """
@@ -298,9 +303,12 @@ class IncidenceGraph(Graph):
         :return: a set of clauses that are in the incidence graph
         """
 
+        self.__statistics.clause_id_set.start_stopwatch()   # timer (start)
+
         clause_id_set = set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 1)
 
         if multi_occurrence:
+            self.__statistics.clause_id_set.stop_stopwatch()    # timer (stop)
             return clause_id_set
 
         # Multi-occurrent clauses are not kept
@@ -325,6 +333,7 @@ class IncidenceGraph(Graph):
                 clause_id_set_without_multi_occurrence.add(clause_id)
                 cache[clause_key] = clause_id
 
+        self.__statistics.clause_id_set.stop_stopwatch()    # timer (stop)
         return clause_id_set_without_multi_occurrence
 
     def clause_id_list(self) -> List[int]:
@@ -346,7 +355,12 @@ class IncidenceGraph(Graph):
         :return: a set of variables that are in the incidence graph
         """
 
-        return set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 0)
+        self.__statistics.variable_set.start_stopwatch()    # timer (start)
+
+        variable_set = set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 0)
+
+        self.__statistics.variable_set.stop_stopwatch()     # timer (stop)
+        return variable_set
 
     def number_of_variables(self) -> int:
         """

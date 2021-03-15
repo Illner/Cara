@@ -14,6 +14,7 @@ class StatisticsComponentTimer:
 
     """
     Private str name
+    Private bool show_only_sum_time
 
     Private int number_of_calls
     Private float sum_time          # nanoseconds
@@ -23,8 +24,9 @@ class StatisticsComponentTimer:
     Private float stopwatch_time    # nanoseconds
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, show_only_sum_time: bool = False):
         self.__name: str = name
+        self.__show_only_sum_time: bool = show_only_sum_time
 
         self.__number_of_calls: int = 0
         self.__sum_time: float = 0
@@ -104,12 +106,17 @@ class StatisticsComponentTimer:
 
     # region Magic function
     def __str__(self):
-        string_temp = "\n".join((f"\tName: {self.name} (timer)",
-                                 f"\t\tNumber of calls: {self.number_of_calls}",
-                                 f"\t\tAverage time: {self.convert_to_datetime(self.average_time)}",
-                                 f"\t\tSum time: {self.convert_to_datetime(self.sum_time)}",
-                                 f"\t\tMin time: {self.convert_to_datetime(self.min_time)}",
-                                 f"\t\tMax time: {self.convert_to_datetime(self.max_time)}"))
+        if self.__show_only_sum_time:
+            string_temp = "\n".join((f"\tName: {self.name} (timer)",
+                                     f"\t\tTime: {self.convert_to_datetime(self.sum_time)}"))
+
+        else:
+            string_temp = "\n".join((f"\tName: {self.name} (timer)",
+                                     f"\t\tNumber of calls: {self.number_of_calls}",
+                                     f"\t\tAverage time: {self.convert_to_datetime(self.average_time)}",
+                                     f"\t\tSum time: {self.convert_to_datetime(self.sum_time)}",
+                                     f"\t\tMin time: {self.convert_to_datetime(self.min_time)}",
+                                     f"\t\tMax time: {self.convert_to_datetime(self.max_time)}"))
 
         return string_temp
     # endregion

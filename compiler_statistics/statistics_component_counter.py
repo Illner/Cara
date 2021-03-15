@@ -9,6 +9,7 @@ class StatisticsComponentCounter:
 
     """
     Private str name
+    Private bool show_only_number_of_calls
     
     Private int number_of_calls
     Private int sum_count
@@ -16,8 +17,9 @@ class StatisticsComponentCounter:
     Private int max_count
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, show_only_number_of_calls: bool = False):
         self.__name: str = name
+        self.__show_only_number_of_calls: bool = show_only_number_of_calls
 
         self.__number_of_calls: int = 0
         self.__sum_count: int = 0
@@ -41,12 +43,17 @@ class StatisticsComponentCounter:
 
     # region Magic method
     def __str__(self):
-        string_temp = "\n".join((f"\tName: {self.name} (counter)",
-                                 f"\t\tNumber of calls: {self.number_of_calls}",
-                                 f"\t\tAverage count: {self.average_count}",
-                                 f"\t\tSum count: {self.sum_count}",
-                                 f"\t\tMin count: {self.min_count}",
-                                 f"\t\tMax count: {self.max_count}"))
+        if self.__show_only_number_of_calls:
+            string_temp = "\n".join((f"\tName: {self.name} (counter)",
+                                     f"\t\tNumber: {self.number_of_calls}"))
+
+        else:
+            string_temp = "\n".join((f"\tName: {self.name} (counter)",
+                                     f"\t\tNumber of calls: {self.number_of_calls}",
+                                     f"\t\tAverage count: {self.average_count}",
+                                     f"\t\tSum count: {self.sum_count}",
+                                     f"\t\tMin count: {self.min_count}",
+                                     f"\t\tMax count: {self.max_count}"))
 
         return string_temp
     # endregion

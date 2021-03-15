@@ -16,8 +16,6 @@ import exception.compiler.compiler_exception as c_exception
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 
-# TODO Cut set heuristic
-
 
 class Component:
     """
@@ -91,18 +89,30 @@ class Component:
         if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.NONE:
             return set()
 
+        self.__statistics.component_statistics.get_implied_literals.start_stopwatch()  # timer (start)
+
         # BCP
         if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.BCP:
-            return self.__solver.unit_propagation(self.__assignment_list)
+            result = self.__solver.unit_propagation(self.__assignment_list)
+
+            self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()    # timer (stop)
+            return result
 
         # IMPLICIT_BCP
         if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP:
-            return self.__solver.iterative_implicit_unit_propagation(self.__assignment_list)
+            result = self.__solver.iterative_implicit_unit_propagation(self.__assignment_list)
+
+            self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop)
+            return result
 
         # BACKBONE
         if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.BACKBONE:
-            return self.__solver.get_backbone_literals(self.__assignment_list)
+            result = self.__solver.get_backbone_literals(self.__assignment_list)
 
+            self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop)
+            return result
+
+        self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop)
         raise ca_exception.FunctionNotImplementedException("get_implied_literals",
                                                            f"this type of getting implied literals ({self.__implied_literals_enum.name}) is not implemented")
 
@@ -111,7 +121,12 @@ class Component:
         :return: a new cut set
         """
 
-        return self.__hypergraph_partitioning.get_cut_set(self.__incidence_graph, self.__solver, self.__assignment_list)
+        self.__statistics.component_statistics.get_cut_set.start_stopwatch()    # timer (start)
+
+        result = self.__hypergraph_partitioning.get_cut_set(self.__incidence_graph, self.__solver, self.__assignment_list)
+
+        self.__statistics.component_statistics.get_cut_set.stop_stopwatch()     # timer (stop)
+        return result
 
     def __is_suggested_new_cut_set(self, cut_set_before_restriction: Set[int], cut_set_after_restriction: Set[int],
                                    number_of_variables_before_unit_propagation: int, number_of_variables_after_unit_propagation: int) -> bool:
@@ -136,6 +151,9 @@ class Component:
         :param cut_set: the cut set
         :return: a suggested variable (based on the heuristic) from the cut set
         """
+        # TODO Cut set heuristic
+
+        self.__statistics.component_statistics.get_suggested_variable_from_cut_set.start_stopwatch()    # timer (start)
 
         # The cut set is empty
         if not cut_set:
@@ -151,6 +169,7 @@ class Component:
                 max = temp
                 max_variable = variable
 
+        self.__statistics.component_statistics.get_suggested_variable_from_cut_set.stop_stopwatch()     # timer (stop)
         return max_variable
 
     def __exist_more_components(self) -> bool:
@@ -177,14 +196,17 @@ class Component:
 
         # The formula is unsatisfiable
         if not self.__solver.is_satisfiable(self.__assignment_list):
+            self.__statistics.component_statistics.unsatisfiable.add_count(1)   # counter
             return self.__circuit.create_constant_leaf(False)
 
         number_of_variables_before_unit_propagation = self.__incidence_graph.number_of_variables()
 
         # Implied literals
         implied_literal_set = self.__get_implied_literals()
+        self.__statistics.component_statistics.implied_literal.add_count(len(implied_literal_set))  # counter
         self.__assignment_list.extend(implied_literal_set)
         isolated_variable_set = self.__incidence_graph.remove_literal_set(implied_literal_set)
+        self.__statistics.component_statistics.isolated_variable.add_count(len(isolated_variable_set))  # counter
         implied_literal_id_set = self.__circuit.create_literal_leaf_set(implied_literal_set)
 
         number_of_variables_after_unit_propagation = self.__incidence_graph.number_of_variables()
@@ -192,21 +214,28 @@ class Component:
         # The formula is empty after the unit propagation
         if self.__incidence_graph.number_of_nodes() == 0:
             remove_implied_literals(implied_literal_set)    # Restore the implied literals
+
+            self.__statistics.component_statistics.empty_incidence_graph.add_count(1)   # counter
             return self.__circuit.create_and_node(implied_literal_id_set)
 
         # TODO Formula type
 
         # Component caching
         key = self.__component_caching.generate_key_cache(self.__incidence_graph)
+        self.__statistics.component_statistics.generate_key_cache.add_count(1)      # counter
         value = self.__component_caching.get(key)
         if value is not None:
             node_id = self.__circuit.create_and_node({value}.union(implied_literal_id_set))
             remove_implied_literals(implied_literal_set)    # Restore the implied literals
 
+            self.__statistics.component_statistics.cached.add_count(1)      # counter
             return node_id
+        else:
+            self.__statistics.component_statistics.cached.add_count(0)      # counter
 
         # Check if more components exist
         if self.__exist_more_components():
+            self.__statistics.component_statistics.disjoint.add_count(1)    # counter
             incidence_graph_set = self.__incidence_graph.create_incidence_graphs_for_components()
 
             node_id_set = set()
@@ -241,9 +270,13 @@ class Component:
         # A new cut set is needed
         if self.__is_suggested_new_cut_set(cut_set, cut_set_restriction, number_of_variables_before_unit_propagation, number_of_variables_after_unit_propagation):
             cut_set_restriction = self.__get_cut_set()
+            self.__statistics.component_statistics.recompute_cut_set.add_count(1)   # counter
+        else:
+            self.__statistics.component_statistics.recompute_cut_set.add_count(0)   # counter
 
         decision_variable = self.__get_suggested_variable_from_cut_set(cut_set_restriction)
         cut_set_restriction.remove(decision_variable)
+        self.__statistics.component_statistics.decision_variable.add_count(1)   # counter
 
         node_id_list = []
         for sign in [+1, -1]:
@@ -251,6 +284,7 @@ class Component:
 
             self.__assignment_list.append(literal)
             isolated_variable_set = self.__incidence_graph.remove_literal(literal)
+            self.__statistics.component_statistics.isolated_variable.add_count(len(isolated_variable_set))  # counter
 
             # Isolated variables
             isolated_variable_in_cut_set_restriction_set = isolated_variable_set.intersection(cut_set_restriction)

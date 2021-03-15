@@ -5,6 +5,7 @@ from compiler_statistics.statistics_template_abstract import StatisticsTemplateA
 from compiler_statistics.formula.cnf_statistics import CnfStatistics
 from compiler_statistics.compiler.solver_statistics import SolverStatistics
 from compiler_statistics.compiler.compiler_statistics import CompilerStatistics
+from compiler_statistics.compiler.component_statistics import ComponentStatistics
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 from compiler_statistics.compiler.hypergraph_partitioning_statistics import HypergraphPartitioningStatistics
 
@@ -20,6 +21,7 @@ class Statistics:
     Private CnfStatistics cnf_statistics
     Private SolverStatistics solver_statistics
     Private CompilerStatistics compiler_statistics
+    Private ComponentStatistics component_statistics
     Private IncidenceGraphStatistics incidence_graph_statistics
     Private HypergraphPartitioningStatistics hypergraph_partitioning_statistics
     """
@@ -46,6 +48,10 @@ class Statistics:
         # Hypergraph partitioning
         self.__hypergraph_partitioning_statistics: HypergraphPartitioningStatistics = HypergraphPartitioningStatistics()
         self.__template_list.append(self.__hypergraph_partitioning_statistics)
+
+        # Component
+        self.__component_statistics: ComponentStatistics = ComponentStatistics()
+        self.__template_list.append(self.__component_statistics)
 
     # region Magic method
     def __str__(self):
@@ -77,4 +83,8 @@ class Statistics:
     @property
     def hypergraph_partitioning_statistics(self):
         return self.__hypergraph_partitioning_statistics
+
+    @property
+    def component_statistics(self):
+        return self.__component_statistics
     # endregion
