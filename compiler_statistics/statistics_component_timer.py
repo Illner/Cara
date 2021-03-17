@@ -1,7 +1,7 @@
 # Import
-import datetime
 import time as sys_time
 from typing import Union
+from datetime import timedelta
 
 # Import exception
 import exception.compiler_statistics.statistics_exception as s_exception
@@ -93,7 +93,7 @@ class StatisticsComponentTimer:
 
     # region Static method
     @staticmethod
-    def convert_to_datetime(time: Union[float, None]) -> Union[datetime.timedelta, None]:
+    def convert_to_datetime(time: Union[float, None]) -> Union[timedelta, None]:
         """
         It is assumed that the time is in nanoseconds!
         """
@@ -101,7 +101,7 @@ class StatisticsComponentTimer:
         if time is None:
             return None
 
-        return datetime.timedelta(microseconds=time * 0.001)
+        return timedelta(microseconds=time * 0.001)
     # endregion
 
     # region Magic function

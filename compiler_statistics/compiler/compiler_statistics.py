@@ -1,4 +1,5 @@
 # Import
+from datetime import timedelta
 from compiler_statistics.statistics_component_timer import StatisticsComponentTimer
 from compiler_statistics.statistics_template_abstract import StatisticsTemplateAbstract
 
@@ -21,6 +22,15 @@ class CompilerStatistics(StatisticsTemplateAbstract):
 
         self.__smooth: StatisticsComponentTimer = StatisticsComponentTimer("smooth", True)
         self._component_list.append(self.__smooth)
+
+    # region Public method
+    def get_time(self) -> timedelta:
+        """
+        :return: the time of creating the circuit
+        """
+
+        return StatisticsComponentTimer.convert_to_datetime(self.__create_circuit.sum_time)
+    # endregion
 
     # region Property
     @property

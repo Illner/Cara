@@ -1,8 +1,7 @@
-# Import
-import time
-from formula.cnf import Cnf
-from circuit.circuit import Circuit
-from compiler.compiler import Compiler
+from pathlib import Path
+import os
+from datetime import timedelta
+from experiment.experiment_abstract import ExperimentAbstract
 
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
@@ -13,35 +12,26 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_en
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\no_comments_valid.cnf"
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
-
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg4-09.cnf"
+dictionary_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae"
 path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
-start_time = time.time()
+name = "sum.32.cnf"
+p = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\temp"
+timeout_experiment = timedelta(seconds=10)
 
-# cnf = Cnf(path)
-
-compiler = Compiler(path, smooth=False, ub_factor=0.1, new_cut_set_threshold=0.1, subsumed_threshold=1000,
-                    sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                    implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
-                    component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
-                    hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM,
-                    hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
-                    hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
-                    hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
-                    hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
-                    hp_limit_number_of_clauses_cache=(None, 200),
-                    hp_limit_number_of_variables_cache=(None, 200))
-
-circuit = compiler.create_circuit()
-
-end_time = time.time()
+a = ExperimentAbstract(directory_path=dictionary_path, experiment_name="name", timeout_experiment=None, log_directory_path=p, save_circuit=False)
 
 
-print("Time: ", end_time-start_time)
-print(circuit.size)
-print("Number of models: ", circuit.model_counting(set(), set()))
+result = a._experiment(name, path, smooth=False, ub_factor=0.1, new_cut_set_threshold=0.1, subsumed_threshold=1000,
+                       sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
+                       implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
+                       component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                       hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM,
+                       hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
+                       hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
+                       hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
+                       hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
+                       hp_limit_number_of_clauses_cache=(None, 200),
+                       hp_limit_number_of_variables_cache=(None, 200))
 
-print(compiler.statistics)
+print(result)
+print(a.total_time)
