@@ -12,9 +12,9 @@ class StatisticsComponentCounter:
     Private bool show_only_number_of_calls
     
     Private int number_of_calls
-    Private int sum_count
-    Private int min_count
-    Private int max_count
+    Private float sum_count
+    Private float min_count
+    Private float max_count
     """
 
     def __init__(self, name: str, show_only_number_of_calls: bool = False):
@@ -22,12 +22,12 @@ class StatisticsComponentCounter:
         self.__show_only_number_of_calls: bool = show_only_number_of_calls
 
         self.__number_of_calls: int = 0
-        self.__sum_count: int = 0
-        self.__min_count: Union[int, None] = None
-        self.__max_count: Union[int, None] = None
+        self.__sum_count: float = 0
+        self.__min_count: Union[float, None] = None
+        self.__max_count: Union[float, None] = None
 
     # region Public method
-    def add_count(self, count: int) -> None:
+    def add_count(self, count: float) -> None:
 
         self.__number_of_calls += 1
         self.__sum_count += count

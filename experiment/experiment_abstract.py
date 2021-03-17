@@ -81,13 +81,18 @@ class ExperimentAbstract(ABC):
                     hp_hyperedge_weight_type_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum,
                     hp_variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
                     hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
-                    hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None)) -> \
+                    hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
+                    file_name_extension: str = "") -> \
             Tuple[bool, bool, Union[int, None], Statistics]:
         """
         :return: (timeout exceeded, exception, size of the circuit, statistics)
         """
 
-        print(f"File name: {file_name}")
+        print("----------------------------------------------------------")
+        if file_name_extension == "":
+            print(f"File name: {file_name}")
+        else:
+            print(f"File name: {file_name}, params: {file_name_extension}")
 
         compiler = Compiler(cnf=file_path,
                             smooth=smooth,
@@ -138,10 +143,10 @@ class ExperimentAbstract(ABC):
                 print("Timeout exceeded")
             else:
                 print(f"Done ({str(statistics.compiler_statistics.get_time())})")
-        print()
 
         # Log - directory
-        directory_path_temp: Path = Path(os.path.join(self.__log_directory_path, file_name))
+        file_name_temp = file_name if file_name_extension == "" else f"{file_name}_{file_name_extension}"
+        directory_path_temp: Path = Path(os.path.join(self.__log_directory_path, file_name_temp))
         directory_path_temp.mkdir(exist_ok=True)
 
         # Log - statistics
