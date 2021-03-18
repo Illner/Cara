@@ -5,6 +5,7 @@ from pathlib import Path
 from datetime import timedelta
 from typing import Dict, List, Union
 from experiment.experiment_abstract import ExperimentAbstract
+from compiler_statistics.statistics_component_timer import StatisticsComponentTimer
 from compiler_statistics.statistics_component_counter import StatisticsComponentCounter
 
 # Import enum
@@ -39,10 +40,11 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
     def experiment(self):
         hp_cache_enum_value_list = hpc_enum.hpc_enum_values
         hp_cache_enum_name_list = hpc_enum.hpc_enum_names
-        limit_list = [100, 200, 300, 400, 500]
+        limit_list = [100, 300, 500]
 
         file_dictionary: Dict[str, List[Union[timedelta, None]]] = dict()
         cache_performance_dictionary: Dict[str, StatisticsComponentCounter] = dict()
+        generate_key_cache_dictionary: Dict[str, StatisticsComponentTimer] = dict()
 
         for file_name, file_path in self._files:
             for i_c, hp_cache_enum in enumerate(hp_cache_enum_value_list):
@@ -92,6 +94,14 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
 
                         print(f"Cache performance: {cache_performance}")
 
+                    # Generate key
+                    if hp_cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE:
+                        if key not in generate_key_cache_dictionary:
+                            generate_key_cache_dictionary[key] = StatisticsComponentTimer(f"generate key {cache_name} {limit}")
+                        generate_key = statistics.hypergraph_partitioning_statistics.generate_key_cache.average_time
+                        generate_key = 0 if generate_key is None else generate_key
+                        generate_key_cache_dictionary[key].add_call(generate_key)
+
             # Total timeout
             if self.__total_timeout_experiments is not None:
                 if self.total_time >= self.__total_timeout_experiments:
@@ -107,6 +117,15 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         cache_performance_dictionary_path_temp: Path = Path(os.path.join(self.log_directory_path, "cache_performance_dictionary.pkl"))
         with open(cache_performance_dictionary_path_temp, "wb") as file:
             pickle.dump(cache_performance_dictionary, file, pickle.HIGHEST_PROTOCOL)
+
+        # generate_key_cache_dictionary - pickle
+        generate_key_cache_dictionary_path_temp: Path = Path(os.path.join(self.log_directory_path, "generate_key_cache_dictionary.pkl"))
+        with open(generate_key_cache_dictionary_path_temp, "wb") as file:
+            pickle.dump(generate_key_cache_dictionary, file, pickle.HIGHEST_PROTOCOL)
+
+        for key in cache_performance_dictionary:
+            print(key)
+            print(str(cache_performance_dictionary[key]))
     # endregion
 
     # region Static method

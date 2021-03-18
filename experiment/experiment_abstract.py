@@ -1,5 +1,6 @@
 # Import
 import os
+import gc
 import pickle
 import ctypes
 import warnings
@@ -119,17 +120,19 @@ class ExperimentAbstract(ABC):
         else:
             thread.join()
 
-        # Timeout exceeded
+        # Total time
         if thread.is_alive():
-            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread.native_id, ctypes.py_object(TimeoutError))
-            thread.join()
-
             self.__total_time += self.__timeout_experiment
         else:
             statistics: Statistics = experiment_thread.compiler.statistics
 
             self.__total_time += statistics.compiler_statistics.get_time()  # compiler
             self.__total_time += statistics.cnf_statistics.get_time()       # CNF
+
+        # Timeout exceeded
+        while thread.is_alive():
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread.native_id, ctypes.py_object(TimeoutError))
+            thread.join(1)
 
         timeout_exceeded: bool = experiment_thread.timeout_exceeded
         exception: bool = False if experiment_thread.exception is None else True
@@ -163,8 +166,8 @@ class ExperimentAbstract(ABC):
             with open(circuit_path_temp, "w", encoding="utf8") as file:
                 file.write(str(experiment_thread.compiler.circuit))
 
-        del experiment_thread
         del compiler
+        gc.collect()
 
         return timeout_exceeded, exception, size, statistics
     # endregion
