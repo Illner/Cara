@@ -36,10 +36,14 @@ class StatisticsComponentTimer:
         self.__stopwatch_time: Union[float, None] = None
 
     # region Public method
-    def add_call(self, time: float) -> None:
+    def add_call(self, time: Union[float, None]) -> None:
         """
         It is assumed that the time is in nanoseconds!
+        None is considered as 0.
         """
+
+        if time is None:
+            time = 0
 
         self.__number_of_calls += 1
         self.__sum_time += time

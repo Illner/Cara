@@ -1,9 +1,7 @@
 # Import
-import os
-import pickle
 from pathlib import Path
 from datetime import timedelta
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Tuple
 from experiment.experiment_abstract import ExperimentAbstract
 from compiler_statistics.statistics_component_timer import StatisticsComponentTimer
 from compiler_statistics.statistics_component_counter import StatisticsComponentCounter
@@ -40,67 +38,72 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
     def experiment(self):
         hp_cache_enum_value_list = hpc_enum.hpc_enum_values
         hp_cache_enum_name_list = hpc_enum.hpc_enum_names
-        limit_list = [100, 300, 500]
+        limit_clause_list = [100, 300, 500]
+        limit_variable_list = [100, 300, 500]
 
         file_dictionary: Dict[str, List[Union[timedelta, None]]] = dict()
-        cache_performance_dictionary: Dict[str, StatisticsComponentCounter] = dict()
+        hypergraph_partitioning_dictionary: Dict[str, StatisticsComponentTimer] = dict()
         generate_key_cache_dictionary: Dict[str, StatisticsComponentTimer] = dict()
+        cache_performance_dictionary: Dict[str, StatisticsComponentCounter] = dict()
 
         for file_name, file_path in self._files:
             for i_c, hp_cache_enum in enumerate(hp_cache_enum_value_list):
-                for i_l, limit in enumerate(limit_list):
-                    cache_name = hp_cache_enum_name_list[i_c]
-                    file_name_extension = cache_name if hp_cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE else f"{cache_name}_{limit}"
+                for i_lc, limit_clause in enumerate(limit_clause_list):
+                    for i_lv, limit_variable in enumerate(limit_variable_list):
+                        cache_name = hp_cache_enum_name_list[i_c]
 
-                    if (hp_cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE) and (i_l > 0):
-                        break
+                        if (hp_cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE) and not(i_lc == 0 and i_lv == 0):
+                            break
 
-                    limit_temp = None if hp_cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE else limit
-                    key = self.__generate_key_cache(cache_name, limit_temp)
+                        limit_temp = None if hp_cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE else (limit_clause, limit_variable)
+                        key = self.__generate_key_cache(cache_name, limit_temp)     # key, file_name_extension
 
-                    timeout_exceeded, exception, _, statistics = self._experiment(file_name=file_name, file_path=file_path,
-                                                                                  smooth=False,
-                                                                                  ub_factor=0.1,
-                                                                                  subsumed_threshold=1000,
-                                                                                  new_cut_set_threshold=0.1,
-                                                                                  sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                                                                                  implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
-                                                                                  component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
-                                                                                  hp_cache_enum=hp_cache_enum,
-                                                                                  hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
-                                                                                  hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
-                                                                                  hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
-                                                                                  hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
-                                                                                  hp_limit_number_of_clauses_cache=(None, limit),
-                                                                                  hp_limit_number_of_variables_cache=(None, limit),
-                                                                                  file_name_extension=file_name_extension)
+                        timeout_exceeded, exception, _, statistics = self._experiment(file_name=file_name, file_path=file_path,
+                                                                                      smooth=False,
+                                                                                      ub_factor=0.1,
+                                                                                      subsumed_threshold=1000,
+                                                                                      new_cut_set_threshold=0.1,
+                                                                                      sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
+                                                                                      implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
+                                                                                      component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                                                                                      hp_cache_enum=hp_cache_enum,
+                                                                                      hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
+                                                                                      hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
+                                                                                      hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
+                                                                                      hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
+                                                                                      hp_limit_number_of_clauses_cache=(None, limit_clause),
+                                                                                      hp_limit_number_of_variables_cache=(None, limit_variable),
+                                                                                      file_name_extension=key)
 
-                    # Files
-                    if timeout_exceeded or exception:
-                        result = None
-                    else:
-                        result = statistics.compiler_statistics.get_time()
-                    if key not in file_dictionary:
-                        file_dictionary[key] = []
-                    file_dictionary[key].append(result)
+                        # File - file_dictionary
+                        if timeout_exceeded or exception:
+                            result = None
+                        else:
+                            result = statistics.compiler_statistics.get_time()
+                        if key not in file_dictionary:
+                            file_dictionary[key] = []
+                        file_dictionary[key].append(result)
 
-                    # Cache performance
-                    if hp_cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE:
-                        if key not in cache_performance_dictionary:
-                            cache_performance_dictionary[key] = StatisticsComponentCounter(f"cache performance {cache_name} {limit}")
-                        cache_performance = statistics.hypergraph_partitioning_statistics.cached.average_count
-                        cache_performance = 0 if cache_performance is None else cache_performance
-                        cache_performance_dictionary[key].add_count(cache_performance)
+                        # Time consumed with hypergraph partitioning - hypergraph_partitioning_dictionary
+                        if key not in hypergraph_partitioning_dictionary:
+                            hypergraph_partitioning_dictionary[key] = StatisticsComponentTimer(f"hypergraph partitioning - {key}")
+                        hypergraph_partitioning_time = statistics.component_statistics.get_cut_set.average_time
+                        hypergraph_partitioning_dictionary[key].add_call(hypergraph_partitioning_time)
 
-                        print(f"Cache performance: {cache_performance}")
+                        if hp_cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE:
+                            # Generate key - generate_key_cache_dictionary
+                            if key not in generate_key_cache_dictionary:
+                                generate_key_cache_dictionary[key] = StatisticsComponentTimer(f"generate key - {key}")
+                            generate_key = statistics.hypergraph_partitioning_statistics.generate_key_cache.average_time
+                            generate_key_cache_dictionary[key].add_call(generate_key)
 
-                    # Generate key
-                    if hp_cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE:
-                        if key not in generate_key_cache_dictionary:
-                            generate_key_cache_dictionary[key] = StatisticsComponentTimer(f"generate key {cache_name} {limit}")
-                        generate_key = statistics.hypergraph_partitioning_statistics.generate_key_cache.average_time
-                        generate_key = 0 if generate_key is None else generate_key
-                        generate_key_cache_dictionary[key].add_call(generate_key)
+                            # Cache performance - cache_performance_dictionary
+                            if key not in cache_performance_dictionary:
+                                cache_performance_dictionary[key] = StatisticsComponentCounter(f"cache performance - {key}")
+                            cache_performance = statistics.hypergraph_partitioning_statistics.cached.average_count
+                            cache_performance_dictionary[key].add_count(cache_performance)
+
+                            print(f"Cache performance: {cache_performance}")
 
             # Total timeout
             if self.__total_timeout_experiments is not None:
@@ -108,31 +111,18 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                     print("Total timeout exceeded!")
                     break
 
-        # file_dictionary - pickle
-        file_dictionary_path_temp: Path = Path(os.path.join(self.log_directory_path, "file_dictionary.pkl"))
-        with open(file_dictionary_path_temp, "wb") as file:
-            pickle.dump(file_dictionary, file, pickle.HIGHEST_PROTOCOL)
-
-        # cache_performance_dictionary - pickle
-        cache_performance_dictionary_path_temp: Path = Path(os.path.join(self.log_directory_path, "cache_performance_dictionary.pkl"))
-        with open(cache_performance_dictionary_path_temp, "wb") as file:
-            pickle.dump(cache_performance_dictionary, file, pickle.HIGHEST_PROTOCOL)
-
-        # generate_key_cache_dictionary - pickle
-        generate_key_cache_dictionary_path_temp: Path = Path(os.path.join(self.log_directory_path, "generate_key_cache_dictionary.pkl"))
-        with open(generate_key_cache_dictionary_path_temp, "wb") as file:
-            pickle.dump(generate_key_cache_dictionary, file, pickle.HIGHEST_PROTOCOL)
-
-        for key in cache_performance_dictionary:
-            print(key)
-            print(str(cache_performance_dictionary[key]))
+        # Pickle
+        self._pickle_object("file_dictionary", file_dictionary)
+        self._pickle_object("hypergraph_partitioning_dictionary", hypergraph_partitioning_dictionary)
+        self._pickle_object("generate_key_cache_dictionary", generate_key_cache_dictionary)
+        self._pickle_object("cache_performance_dictionary", cache_performance_dictionary)
     # endregion
 
     # region Static method
     @staticmethod
-    def __generate_key_cache(hp_cache_name: str, limit: Union[int, None]) -> str:
+    def __generate_key_cache(hp_cache_name: str, limit: Union[Tuple[int, int], None]) -> str:
         if limit is None:
             return hp_cache_name
         else:
-            return "-".join((hp_cache_name, str(limit)))
+            return "_".join((hp_cache_name, str(limit[0]), str(limit[1])))
     # endregion

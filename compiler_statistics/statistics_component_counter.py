@@ -27,7 +27,13 @@ class StatisticsComponentCounter:
         self.__max_count: Union[float, None] = None
 
     # region Public method
-    def add_count(self, count: float) -> None:
+    def add_count(self, count: Union[float, None]) -> None:
+        """
+        None is considered as 0.
+        """
+
+        if count is None:
+            count = 0
 
         self.__number_of_calls += 1
         self.__sum_count += count

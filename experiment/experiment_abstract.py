@@ -9,7 +9,7 @@ from abc import ABC
 from pathlib import Path
 from datetime import timedelta
 from compiler.compiler import Compiler
-from typing import List, Tuple, Union, TypeVar
+from typing import Dict, List, Tuple, Union, TypeVar
 from compiler_statistics.statistics import Statistics
 
 # Import exception
@@ -170,6 +170,11 @@ class ExperimentAbstract(ABC):
         gc.collect()
 
         return timeout_exceeded, exception, size, statistics
+
+    def _pickle_object(self, file_name: str, object_to_save: Union[Dict]) -> None:
+        path_temp: Path = Path(os.path.join(self.log_directory_path, f"{file_name}.pkl"))
+        with open(path_temp, "wb") as file:
+            pickle.dump(object_to_save, file, pickle.HIGHEST_PROTOCOL)
     # endregion
 
     # region Static method
