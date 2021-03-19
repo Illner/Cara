@@ -38,8 +38,8 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
     def experiment(self):
         hp_cache_enum_value_list = hpc_enum.hpc_enum_values
         hp_cache_enum_name_list = hpc_enum.hpc_enum_names
-        limit_clause_list = [100, 300, 500]
-        limit_variable_list = [100, 300, 500]
+        limit_clause_list = [100, 300, 500, 700]
+        limit_variable_list = [100, 300, 500, 700]
 
         file_dictionary: Dict[str, List[Union[timedelta, None]]] = dict()
         hypergraph_partitioning_dictionary: Dict[str, StatisticsComponentTimer] = dict()

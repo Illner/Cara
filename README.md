@@ -9,12 +9,18 @@ Python 3.8.7 (64 bit)
 * <a href="https://pypi.org/project/python-sat/" target="_blank">python-sat</a> 0.1.6.dev11 (Windows / Linux / Mac)
 * <a href="https://pypi.org/project/hypernetx/" target="_blank">hypernetx</a> 0.3.7 (Windows / Linux / Mac)
 * <a href="https://pypi.org/project/mmh3/" target="_blank">mmh3</a> 3.0.0 (Windows / Linux / Mac)
+* <a href="https://pypi.org/project/matplotlib/" target="_blank">matplotlib</a> 3.3.4 (Windows / Linux / Mac)
 
 ## Software
 * <a href="http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview" target="_blank">hMETIS</a> 1.5.3 (Windows / Linux)
-* <a href="https://www.cc.gatech.edu/~umit/software.html" target="_blank">PaToH</a> 3.3 (Linux / Mac)
+* ~~-<a href="https://www.cc.gatech.edu/~umit/software.html" target="_blank">PaToH</a> 3.3 (Linux / Mac)-~~
 
-You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11 hypernetx==0.3.7**
+You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11 hypernetx==0.3.7 matplotlib==3.3.4**
+
+## TODO
+- [ ] hMETIS - Linux
+- [ ] PaToH - Mac, Linux
+- [ ] Installation script
 
 ## Arguments
 **Cara [-h] [-ct {D_BDMC,SD_BDMC}] [-ss {MiniSAT,Glucose,Lingeling,CaDiCal}] [-cc {C2D,NONE}] [-il {BCP,IMPLICIT_BCP,BACKBONE,NONE}] [-bc {LITERAL,QUADRATIC,MATCHED,HORN,HIDDEN_HORN,Q_HORN}] [-dd | -sd] [-v]
