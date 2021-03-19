@@ -4,7 +4,6 @@ from datetime import timedelta
 from typing import Dict, List, Union, Tuple
 from experiment.experiment_abstract import ExperimentAbstract
 from compiler_statistics.statistics_component_timer import StatisticsComponentTimer
-from compiler_statistics.statistics_component_counter import StatisticsComponentCounter
 
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
@@ -42,9 +41,9 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         limit_variable_list = [100, 300, 500, 700]
 
         file_dictionary: Dict[str, List[Union[timedelta, None]]] = dict()
-        hypergraph_partitioning_dictionary: Dict[str, StatisticsComponentTimer] = dict()
-        generate_key_cache_dictionary: Dict[str, StatisticsComponentTimer] = dict()
-        cache_performance_dictionary: Dict[str, StatisticsComponentCounter] = dict()
+        hypergraph_partitioning_dictionary: Dict[str, List[Union[timedelta]]] = dict()
+        generate_key_cache_dictionary: Dict[str, List[Union[timedelta]]] = dict()
+        cache_performance_dictionary: Dict[str, List[Union[float]]] = dict()
 
         for file_name, file_path in self._files:
             for i_c, hp_cache_enum in enumerate(hp_cache_enum_value_list):
@@ -84,24 +83,27 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                             file_dictionary[key] = []
                         file_dictionary[key].append(result)
 
+                        def convert_none_to_0(variable):
+                            return 0 if variable is None else variable
+
                         # Time consumed with hypergraph partitioning - hypergraph_partitioning_dictionary
                         if key not in hypergraph_partitioning_dictionary:
-                            hypergraph_partitioning_dictionary[key] = StatisticsComponentTimer(f"hypergraph partitioning - {key}")
-                        hypergraph_partitioning_time = statistics.component_statistics.get_cut_set.average_time
-                        hypergraph_partitioning_dictionary[key].add_call(hypergraph_partitioning_time)
+                            hypergraph_partitioning_dictionary[key] = []
+                        hypergraph_partitioning_time = convert_none_to_0(statistics.component_statistics.get_cut_set.average_time)
+                        hypergraph_partitioning_dictionary[key].append(StatisticsComponentTimer.convert_to_datetime(hypergraph_partitioning_time))
 
                         if hp_cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE:
                             # Generate key - generate_key_cache_dictionary
                             if key not in generate_key_cache_dictionary:
-                                generate_key_cache_dictionary[key] = StatisticsComponentTimer(f"generate key - {key}")
-                            generate_key = statistics.hypergraph_partitioning_statistics.generate_key_cache.average_time
-                            generate_key_cache_dictionary[key].add_call(generate_key)
+                                generate_key_cache_dictionary[key] = []
+                            generate_key_time = convert_none_to_0(statistics.hypergraph_partitioning_statistics.generate_key_cache.average_time)
+                            generate_key_cache_dictionary[key].append(StatisticsComponentTimer.convert_to_datetime(generate_key_time))
 
                             # Cache performance - cache_performance_dictionary
                             if key not in cache_performance_dictionary:
-                                cache_performance_dictionary[key] = StatisticsComponentCounter(f"cache performance - {key}")
-                            cache_performance = statistics.hypergraph_partitioning_statistics.cached.average_count
-                            cache_performance_dictionary[key].add_count(cache_performance)
+                                cache_performance_dictionary[key] = []
+                            cache_performance = convert_none_to_0(statistics.hypergraph_partitioning_statistics.cached.average_count)
+                            cache_performance_dictionary[key].append(cache_performance)
 
                             print(f"Cache performance: {cache_performance}")
 

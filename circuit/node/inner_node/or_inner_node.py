@@ -49,7 +49,7 @@ class OrInnerNode(InnerNodeAbstract):
         if not len(child_set) or len(child_set) == 1:
             return True
 
-        warnings.warn("Warning: __is_deterministic_set is not implemented. Deterministic was set to True!", category=ResourceWarning)
+        warnings.warn("__is_deterministic_set is not implemented. Deterministic was set to True!", category=ResourceWarning)
         return True
 
     @staticmethod
