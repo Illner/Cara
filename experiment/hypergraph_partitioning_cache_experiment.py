@@ -51,7 +51,8 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
 
     # region Public method
     def experiment(self, limit_clause_list: List[int], limit_variable_list: List[int]):
-        hp_cache_enum_list = list(zip(hpc_enum.hpc_enum_values, hpc_enum.hpc_enum_names))
+        hp_cache_name_list = hpc_enum.hpc_enum_names
+        hp_cache_enum_list = list(zip(hpc_enum.hpc_enum_values, hp_cache_name_list))
 
         file_dictionary: Dict[str, List[Union[timedelta, None]]] = dict()
         hypergraph_partitioning_dictionary: Dict[str, List[timedelta]] = dict()
@@ -133,11 +134,32 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         # Plot
         if self.__save_plot or self.__show_plot:
             print("\n")
+
+            # file_dictionary
             self.__file_dictionary_plot(file_dictionary)
+
+            # hypergraph_partitioning_dictionary
+            self.__boxplot(dictionary=hypergraph_partitioning_dictionary, hp_cache_name_list=hp_cache_name_list,
+                           limit_clause_list=limit_clause_list, limit_variable_list=limit_variable_list, y_label="Time [s]",
+                           title="Hypergraph partitioning (time)", directory_name="hypergraph_partitioning_dictionary")
+
+            # generate_key_cache_dictionary
+            self.__boxplot(dictionary=generate_key_cache_dictionary, hp_cache_name_list=hp_cache_name_list,
+                           limit_clause_list=limit_clause_list, limit_variable_list=limit_variable_list, y_label="Time [s]",
+                           title="Generate key (time)", directory_name="generate_key_cache_dictionary")
+
+            # cache_performance_dictionary
+            self.__boxplot(dictionary=cache_performance_dictionary, hp_cache_name_list=hp_cache_name_list,
+                           limit_clause_list=limit_clause_list, limit_variable_list=limit_variable_list, y_label="Performance [%]",
+                           title="Cache performance (%)", directory_name="cache_performance_dictionary", percentage_value=True)
     # endregion
 
     # region Private method
     def __file_dictionary_plot(self, file_dictionary: Dict[str, List[Union[timedelta, None]]]) -> None:
+        """
+        file_dictionary
+        """
+
         print("Plot - file_dictionary: ", end="")
 
         # Valid indices
@@ -147,11 +169,13 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
             valid_value = [i for i, v in enumerate(value) if v is not None]
             valid_index_dictionary[key] = set(valid_value)
 
+        # Directory
         file_dictionary_path: Union[Path, None] = None
         if self.__save_plot:
             file_dictionary_path = Path(os.path.join(self.__plot_directory_path, "file_dictionary"))
             file_dictionary_path.mkdir(parents=True, exist_ok=True)
 
+        # None
         key_none = self.__generate_key_cache(hp_cache_name=hpc_enum.HypergraphPartitioningCacheEnum.NONE.name, limit=None)
         value_none = file_dictionary[key_none]
         label_none = self.__key_to_label(key_none)
@@ -160,8 +184,6 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         for key in file_dictionary.keys():
             if key == key_none:
                 continue
-
-            count_temp += 1
 
             value = file_dictionary[key]
             label = self.__key_to_label(key)
@@ -175,10 +197,94 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
             if self.__save_plot:
                 path_temp = Path(os.path.join(file_dictionary_path, f"{key}.png"))
 
+            count_temp += 1
             plot.scatter(data_x=valid_value, data_y=valid_value_none, title=f"{label}\nvs\n{label_none}\n\nTIME [s]",
                          x_label=label, y_label=label_none, save_path=path_temp, show=self.__show_plot)
-
             print("|", end="" if count_temp % 10 != 0 else " ")
+
+        print()
+
+    def __boxplot(self, dictionary: Union[Dict[str, List[timedelta]], Dict[str, List[float]]],
+                  hp_cache_name_list: List[str], limit_clause_list: List[int], limit_variable_list: List[int],
+                  y_label: str, title: str, directory_name: str, percentage_value: bool = False):
+        """
+        hypergraph_partitioning_dictionary, generate_key_cache_dictionary and cache_performance_dictionary
+        """
+
+        print(f"Plot - {directory_name}: ", end="")
+
+        # Directory
+        dictionary_path: Union[Path, None] = None
+        if self.__save_plot:
+            dictionary_path = Path(os.path.join(self.__plot_directory_path, directory_name))
+            dictionary_path.mkdir(parents=True, exist_ok=True)
+
+        def convert_value_to_int(value_func: Union[List[float], List[timedelta]]):
+            return [v.total_seconds() if isinstance(v, timedelta) else (v * 100 if percentage_value else v) for v in value_func]
+
+        def replace_space(var_func: str):
+            return var_func.replace(" ", "_")
+
+        # None
+        key_none = self.__generate_key_cache(hpc_enum.HypergraphPartitioningCacheEnum.NONE.name, limit=None)
+        value_none, label_none = None, None
+        if key_none in dictionary:
+            value_none = convert_value_to_int(dictionary[key_none])
+            label_none = self.__key_to_label(key_none)
+
+        count_temp = 0
+
+        # [iterators, names of iterators, ordering (cache, limit clause, limit variable)]
+        iteration_list: List[List[List[Union[List[str], List[int]]], List[str], List[int]]] = \
+            [[[hp_cache_name_list, limit_clause_list, limit_variable_list], ["cache", "limit clauses", "limit variables"], [0, 1, 2]],
+             [[hp_cache_name_list, limit_variable_list, limit_clause_list], ["cache", "limit variables", "limit clauses"], [0, 2, 1]],
+             [[limit_clause_list, limit_variable_list, hp_cache_name_list], ["limit clauses", "limit variables", "cache"], [2, 0, 1]],
+             [[limit_variable_list, limit_clause_list, hp_cache_name_list], ["limit variables", "limit clauses", "cache"], [2, 1, 0]]]
+
+        for iteration in iteration_list:
+            for first in iteration[0][0]:
+                for second in iteration[0][1]:
+                    for use_none in [False] if value_none is None else [True, False]:
+                        data: List[List[List[float]]] = [[value_none], []] if use_none else [[]]
+                        labels: List[List[str]] = [[label_none], []] if use_none else [[]]
+                        legend: List[str] = [label_none] if use_none else []
+
+                        # Group
+                        for third in iteration[0][2]:
+                            temp = [first, second, third]
+
+                            cache_name = temp[iteration[2][0]]
+                            limit_clause = temp[iteration[2][1]]
+                            limit_variable = temp[iteration[2][2]]
+
+                            if cache_name == hpc_enum.HypergraphPartitioningCacheEnum.NONE.name:
+                                continue
+
+                            key = self.__generate_key_cache(cache_name, (limit_clause, limit_variable))
+                            value = convert_value_to_int(dictionary[key])
+
+                            data[-1].append(value)
+                            labels[-1].append(str(third))
+
+                        # Because of None
+                        if (labels == [[label_none], []]) or (labels == [[]]):
+                            continue
+
+                        legend_temp = f"{iteration[1][0]}: {str(first)}, {iteration[1][1]}: {str(second)}"
+                        legend.append(legend_temp)
+
+                        path_temp: Union[Path, None] = None
+                        if self.__save_plot:
+                            temp = f"_with_{label_none}" if use_none else ""
+                            path_temp = Path(os.path.join(dictionary_path,
+                                                          f"{replace_space(iteration[1][0])}_{str(first)}_{replace_space(iteration[1][1])}_{str(second)}{temp}.png"))
+
+                        title_temp = "\n".join((title, legend_temp))
+
+                        count_temp += 1
+                        plot.boxplot(data=data, labels=labels, title=title_temp, x_label=(iteration[1][2]).capitalize(), y_label=y_label,
+                                     legend=legend, save_path=path_temp, show=self.__show_plot)
+                        print("|", end="" if count_temp % 10 != 0 else " ")
 
         print()
     # endregion
