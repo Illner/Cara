@@ -12,9 +12,9 @@ COLOUR_LIST: List[str] = ["cornflowerblue", "green", "orange", "magenta", "gold"
 def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
             x_label: Union[str, None] = None, y_label: Union[str, None] = None, legend: Union[List[str], None] = None,
             save_path: [str, Path, None] = None, show: bool = True) -> None:
-    try:
-        _, ax = plt.subplots()
+    fig, ax = plt.subplots()
 
+    try:
         # Boxplot
         position_temp = 1
         for i, group in enumerate(data):
@@ -61,31 +61,39 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
         warnings.warn("boxplot - invalid data!", category=Warning)
     except:
         warnings.warn("boxplot - something wrong!", category=Warning)
+    finally:
+        plt.close(fig)
 
 
 def scatter(data_x: List[float], data_y: List[float], title: str,
             x_label: Union[str, None] = None, y_label: Union[str, None] = None,
             save_path: [str, Path, None] = None, show: bool = True) -> None:
-    _, ax = plt.subplots()
-    ax.scatter(x=data_x, y=data_y,
-               s=50,
-               color=COLOUR_LIST[0],
-               edgecolors="black")
+    fig, ax = plt.subplots()
 
-    # Diagonal line
-    ax.plot([0, 1], [0, 1], transform=ax.transAxes, color="red", ls='--')
+    try:
+        ax.scatter(x=data_x, y=data_y,
+                   s=50,
+                   color=COLOUR_LIST[0],
+                   edgecolors="black")
 
-    # Title and labels
-    ax.set_title(title)
-    if x_label is not None:
-        ax.set_xlabel(x_label)
-    if y_label is not None:
-        ax.set_ylabel(y_label)
+        # Diagonal line
+        ax.axline((1, 1), slope=1, color="red", ls='--')
 
-    plt.tight_layout()
+        # Title and labels
+        ax.set_title(title)
+        if x_label is not None:
+            ax.set_xlabel(x_label)
+        if y_label is not None:
+            ax.set_ylabel(y_label)
 
-    if save_path is not None:
-        plt.savefig(save_path, dpi=1000)
+        plt.tight_layout()
 
-    if show:
-        plt.show()
+        if save_path is not None:
+            plt.savefig(save_path, dpi=1000)
+
+        if show:
+            plt.show()
+    except:
+        warnings.warn("scatter - something wrong!", category=Warning)
+    finally:
+        plt.close(fig)
