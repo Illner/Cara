@@ -9,11 +9,11 @@ import exception.cara_exception as c_exception
 
 
 class CircuitTest(TestAbstract):
-    __FOLDER: str = os.path.join("circuit", "circuit")
+    __DIRECTORY: str = os.path.join("circuit", "circuit")
 
     def __init__(self):
-        super().__init__(CircuitTest.__FOLDER, test_name="Circuit test")
-        self._set_files(CircuitTest.__FOLDER, "NNF_formulae")
+        super().__init__(CircuitTest.__DIRECTORY, test_name="Circuit test")
+        self._set_files(CircuitTest.__DIRECTORY, "NNF_formulae")
 
     # region Override method
     def _get_actual_result(self) -> str:

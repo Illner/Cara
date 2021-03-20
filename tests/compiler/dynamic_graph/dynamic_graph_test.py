@@ -9,10 +9,10 @@ import exception.cara_exception as c_exception
 
 
 class DynamicGraphTest(TestAbstract):
-    __FOLDER: str = os.path.join("compiler", "dynamic_graph")
+    __DIRECTORY: str = os.path.join("compiler", "dynamic_graph")
 
     def __init__(self):
-        super().__init__(DynamicGraphTest.__FOLDER, test_name="Dynamic graph test")
+        super().__init__(DynamicGraphTest.__DIRECTORY, test_name="Dynamic graph test")
 
     # region Static method
     @staticmethod

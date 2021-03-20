@@ -8,11 +8,11 @@ import exception.cara_exception as c_exception
 
 
 class CnfTest(TestAbstract):
-    __FOLDER: str = os.path.join("formula", "cnf")
+    __DIRECTORY: str = os.path.join("formula", "cnf")
 
     def __init__(self):
-        super().__init__(CnfTest.__FOLDER, test_name="Cnf test")
-        self._set_files(CnfTest.__FOLDER, "CNF_formulae")
+        super().__init__(CnfTest.__DIRECTORY, test_name="Cnf test")
+        self._set_files(CnfTest.__DIRECTORY, "CNF_formulae")
 
     # region Override method
     def _get_actual_result(self) -> str:

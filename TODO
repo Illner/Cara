@@ -1,6 +1,3 @@
 ) Hypergraph partitioning - cache
 ) comments - exception
-) statistics - datetime
-) directory
 ) suggest cut-set
-) hypergraph partitioning - private static variable

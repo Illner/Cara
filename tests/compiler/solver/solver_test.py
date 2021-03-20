@@ -13,11 +13,11 @@ import compiler.enum.sat_solver_enum as ss_enum
 
 
 class SolverTest(TestAbstract):
-    __FOLDER: str = os.path.join("compiler", "solver")
+    __DIRECTORY: str = os.path.join("compiler", "solver")
 
     def __init__(self):
-        super().__init__(SolverTest.__FOLDER, test_name="Solver test")
-        self._set_files(SolverTest.__FOLDER, "CNF_formulae")
+        super().__init__(SolverTest.__DIRECTORY, test_name="Solver test")
+        self._set_files(SolverTest.__DIRECTORY, "CNF_formulae")
 
     # region Override method
     def _get_actual_result(self) -> str:

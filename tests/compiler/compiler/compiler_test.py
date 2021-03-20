@@ -18,11 +18,11 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 
 
 class CompilerTest(TestAbstract):
-    __FOLDER: str = os.path.join("compiler", "compiler")
+    __DIRECTORY: str = os.path.join("compiler", "compiler")
 
     def __init__(self):
-        super().__init__(CompilerTest.__FOLDER, test_name="Compiler test")
-        self._set_files(CompilerTest.__FOLDER, "CNF_formulae")
+        super().__init__(CompilerTest.__DIRECTORY, test_name="Compiler test")
+        self._set_files(CompilerTest.__DIRECTORY, "CNF_formulae")
 
     # region Override method
     def _get_actual_result(self) -> str:

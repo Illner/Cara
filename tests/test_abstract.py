@@ -8,15 +8,15 @@ import exception.test.test_exception as t_exception
 
 
 class TestAbstract(ABC):
-    __FOLDER: str = "tests"
+    __DIRECTORY: str = "tests"
     __ORIGINAL_RESULT_FILE_NAME: str = "original_result.txt"
 
-    def __init__(self, *dictionaries: str, test_name: str = "Test"):
+    def __init__(self, *directories: str, test_name: str = "Test"):
         self.__test_name: str = test_name
-        self.__original_result_path: str = self._create_path(*dictionaries, TestAbstract.__ORIGINAL_RESULT_FILE_NAME)
+        self.__original_result_path: str = self._create_path(*directories, TestAbstract.__ORIGINAL_RESULT_FILE_NAME)
 
         # File's variables initialization
-        self.__path_dictionary: Union[str, None] = None
+        self.__path_directory: Union[str, None] = None
         self._files: Union[List[Tuple[str, str]], None] = None
 
     # region Abstract method
@@ -56,12 +56,12 @@ class TestAbstract(ABC):
 
     # region Static method
     @staticmethod
-    def _create_path(*dictionaries: str) -> str:
-        path_dictionary = os.path.join(os.getcwd(), TestAbstract.__FOLDER)
-        for dictionary in dictionaries:
-            path_dictionary = os.path.join(path_dictionary, dictionary)
+    def _create_path(*directories: str) -> str:
+        path_directory = os.path.join(os.getcwd(), TestAbstract.__DIRECTORY)
+        for directory in directories:
+            path_directory = os.path.join(path_directory, directory)
 
-        return path_dictionary
+        return path_directory
 
     @staticmethod
     def _exists_file(file_path: str) -> bool:
@@ -94,22 +94,22 @@ class TestAbstract(ABC):
     # region Private method
     def __get_files(self) -> List[Tuple[str, str]]:
         """
-        Return a list of all files (name, path) in the dictionary (_path_dictionary)
+        Return a list of all files (name, path) in the directory (_path_directory)
         :return: list of files
         """
 
-        return [(file, file_path) for file in os.listdir(self.__path_dictionary)
-                if (os.path.isfile(file_path := os.path.join(self.__path_dictionary, file)))]
+        return [(file, file_path) for file in os.listdir(self.__path_directory)
+                if (os.path.isfile(file_path := os.path.join(self.__path_directory, file)))]
     # endregion
 
     # region Protected method
-    def _set_files(self, *dictionaries: str) -> None:
+    def _set_files(self, *directories: str) -> None:
         """
-        Get the files from the dictionary and save them to the _files
+        Get the files from the directory and save them to the _files
         :return: None
         """
 
-        self.__path_dictionary = self._create_path(*dictionaries)
+        self.__path_directory = self._create_path(*directories)
         self._files = self.__get_files()
         self._files.sort()  # deterministic
     # endregion

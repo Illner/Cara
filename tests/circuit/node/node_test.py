@@ -16,10 +16,10 @@ import exception.cara_exception as c_exception
 
 
 class NodeTest(TestAbstract):
-    __FOLDER: str = os.path.join("circuit", "node")
+    __DIRECTORY: str = os.path.join("circuit", "node")
 
     def __init__(self):
-        super().__init__(NodeTest.__FOLDER, test_name="Node test")
+        super().__init__(NodeTest.__DIRECTORY, test_name="Node test")
 
     # region Override method
     def _get_actual_result(self) -> str:

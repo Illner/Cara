@@ -51,11 +51,11 @@ class HypergraphPartitioning:
     """
 
     # Static variable - Path
-    TEMP_FOLDER_PATH = Path(os.path.join(os.getcwd(), "temp"))
-    INPUT_FILE_EXE_HMETIS_PATH = Path(os.path.join(TEMP_FOLDER_PATH, "input_file_hypergraph.graph"))
-    OUTPUT_FILE_1_EXE_HMETIS_PATH = Path(str(INPUT_FILE_EXE_HMETIS_PATH) + ".part.1")
-    OUTPUT_FILE_2_EXE_HMETIS_PATH = Path(str(INPUT_FILE_EXE_HMETIS_PATH) + ".part.2")
-    WIN_PROGRAM_EXE_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe"))
+    __TEMP_DIRECTORY_PATH = Path(os.path.join(os.getcwd(), "temp"))
+    __INPUT_FILE_EXE_HMETIS_PATH = Path(os.path.join(__TEMP_DIRECTORY_PATH, "input_file_hypergraph.graph"))
+    __OUTPUT_FILE_1_EXE_HMETIS_PATH = Path(str(__INPUT_FILE_EXE_HMETIS_PATH) + ".part.1")
+    __OUTPUT_FILE_2_EXE_HMETIS_PATH = Path(str(__INPUT_FILE_EXE_HMETIS_PATH) + ".part.2")
+    __WIN_PROGRAM_EXE_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe"))
 
     def __init__(self, cnf: Cnf,
                  ub_factor: float,
@@ -111,13 +111,13 @@ class HypergraphPartitioning:
         self.__node_weight_dictionary: Dict[int, int] = dict()
         self.__hyperedge_weight_dictionary: Dict[int, int] = dict()
 
-        self.__check_files_and_folders()
+        self.__check_files_and_directories()
         self.__set_static_weights()
 
     # region Private method
-    def __check_files_and_folders(self) -> None:
+    def __check_files_and_directories(self) -> None:
         """
-        Check if all necessary files and folders exist.
+        Check if all necessary files and directories exist.
         If some file is missing, raise an exception (FileIsMissingException).
         If the chosen software is not supported on the system, raise an exception (SoftwareIsNotSupportedOnSystemException).
         :return: None
@@ -127,11 +127,11 @@ class HypergraphPartitioning:
         if env.is_windows():
             # hMETIS
             if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:
-                HypergraphPartitioning.TEMP_FOLDER_PATH.mkdir(exist_ok=True)
+                HypergraphPartitioning.__TEMP_DIRECTORY_PATH.mkdir(exist_ok=True)
 
                 # The exe has not been found
-                if not HypergraphPartitioning.WIN_PROGRAM_EXE_HMETIS_PATH.exists():
-                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.WIN_PROGRAM_EXE_HMETIS_PATH)
+                if not HypergraphPartitioning.__WIN_PROGRAM_EXE_HMETIS_PATH.exists():
+                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__WIN_PROGRAM_EXE_HMETIS_PATH)
                 return
 
             raise hp_exception.SoftwareIsNotSupportedOnSystemException(self.__software_enum.name)
@@ -145,7 +145,7 @@ class HypergraphPartitioning:
             pass    # TODO Mac
 
         # Undefined
-        raise c_exception.FunctionNotImplementedException("check_files_and_folders", f"not implemented for this OS ({env.get_os().name})")
+        raise c_exception.FunctionNotImplementedException("check_files_and_directories", f"not implemented for this OS ({env.get_os().name})")
 
     def __variable_simplification(self, solver: Solver, assignment: List[int]) -> Dict[int, Set[int]]:
         """
@@ -583,36 +583,36 @@ class HypergraphPartitioning:
         file_string, node_id_clause_id_dictionary = self.__create_hypergraph_hmetis_exe(incidence_graph)
 
         # Delete temp files
-        HypergraphPartitioning.INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
-        HypergraphPartitioning.OUTPUT_FILE_1_EXE_HMETIS_PATH.unlink(missing_ok=True)
-        HypergraphPartitioning.OUTPUT_FILE_2_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        HypergraphPartitioning.__OUTPUT_FILE_1_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH.unlink(missing_ok=True)
 
         # Save the input file
-        with open(HypergraphPartitioning.INPUT_FILE_EXE_HMETIS_PATH, "w", encoding="utf8") as input_file:
+        with open(HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH, "w", encoding="utf8") as input_file:
             input_file.write(file_string)
 
         devnull = open(os.devnull, 'w')
-        subprocess.run([HypergraphPartitioning.WIN_PROGRAM_EXE_HMETIS_PATH,
-                        HypergraphPartitioning.INPUT_FILE_EXE_HMETIS_PATH,
+        subprocess.run([HypergraphPartitioning.__WIN_PROGRAM_EXE_HMETIS_PATH,
+                        HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH,
                         str(2), str(100 * self.__ub_factor)],
                        stdout=devnull, stderr=devnull)
         # TODO error => str
 
         # A cut set does not exist (because of balance etc.)
-        if HypergraphPartitioning.OUTPUT_FILE_1_EXE_HMETIS_PATH.exists():
-            HypergraphPartitioning.INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
-            HypergraphPartitioning.OUTPUT_FILE_1_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        if HypergraphPartitioning.__OUTPUT_FILE_1_EXE_HMETIS_PATH.exists():
+            HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
+            HypergraphPartitioning.__OUTPUT_FILE_1_EXE_HMETIS_PATH.unlink(missing_ok=True)
 
             return set()
 
         # The output file has not been generated => an error occurred
-        if not HypergraphPartitioning.OUTPUT_FILE_2_EXE_HMETIS_PATH.exists():
+        if not HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH.exists():
             raise hp_exception.SomethingWrongException("the output file from hMETIS.exe has not been generated => an error occurred")
 
         # Get the cut set
         variable_partition_0_set = set()
         variable_partition_1_set = set()
-        with open(HypergraphPartitioning.OUTPUT_FILE_2_EXE_HMETIS_PATH, "r", encoding="utf8") as output_file:
+        with open(HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH, "r", encoding="utf8") as output_file:
             for line_id, line in enumerate(output_file.readlines()):
                 try:
                     partition_temp = int(line)
@@ -632,8 +632,8 @@ class HypergraphPartitioning:
         cut_set = variable_partition_0_set.intersection(variable_partition_1_set)
 
         # Delete temp files
-        HypergraphPartitioning.INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
-        HypergraphPartitioning.OUTPUT_FILE_2_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH.unlink(missing_ok=True)
 
         return cut_set
     # endregion

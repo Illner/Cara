@@ -9,10 +9,10 @@ import exception.cara_exception as c_exception
 
 
 class IncidenceGraphTest(TestAbstract):
-    __FOLDER: str = os.path.join("formula", "incidence_graph")
+    __DIRECTORY: str = os.path.join("formula", "incidence_graph")
 
     def __init__(self):
-        super().__init__(IncidenceGraphTest.__FOLDER, test_name="Incidence graph test")
+        super().__init__(IncidenceGraphTest.__DIRECTORY, test_name="Incidence graph test")
 
     # region Static method
     @staticmethod

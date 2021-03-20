@@ -18,11 +18,11 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 
 
 class HypergraphPartitioningTest(TestAbstract):
-    __FOLDER: str = os.path.join("compiler", "hypergraph_partitioning")
+    __DIRECTORY: str = os.path.join("compiler", "hypergraph_partitioning")
 
     def __init__(self):
-        super().__init__(HypergraphPartitioningTest.__FOLDER, test_name="Hypergraph partitioning test")
-        self._set_files(HypergraphPartitioningTest.__FOLDER, "CNF_formulae")
+        super().__init__(HypergraphPartitioningTest.__DIRECTORY, test_name="Hypergraph partitioning test")
+        self._set_files(HypergraphPartitioningTest.__DIRECTORY, "CNF_formulae")
 
     # region Override method
     def _get_actual_result(self) -> str:

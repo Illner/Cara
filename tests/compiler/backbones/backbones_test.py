@@ -12,11 +12,11 @@ import compiler.enum.sat_solver_enum as ss_enum
 
 
 class BackbonesTest(TestAbstract):
-    __FOLDER: str = os.path.join("compiler", "backbones")
+    __DIRECTORY: str = os.path.join("compiler", "backbones")
 
     def __init__(self):
-        super().__init__(BackbonesTest.__FOLDER, test_name="Backbones test")
-        self._set_files(BackbonesTest.__FOLDER, "CNF_formulae")
+        super().__init__(BackbonesTest.__DIRECTORY, test_name="Backbones test")
+        self._set_files(BackbonesTest.__DIRECTORY, "CNF_formulae")
 
     # region Override method
     def _get_actual_result(self) -> str:
