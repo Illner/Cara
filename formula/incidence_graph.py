@@ -20,6 +20,8 @@ class IncidenceGraph(Graph):
 
     """
     Private Dict<int, Set<int>> adjacency_literal_dictionary                # key: a literal, value: a set of clauses (nodes) where the literal appears
+    Private Set<int> variable_set
+    Private Set<int> clause_id_set
     
     Private IncidenceGraphStatistics statistics
     
@@ -42,6 +44,8 @@ class IncidenceGraph(Graph):
         super().__init__()
 
         self.__adjacency_literal_dictionary: Dict[int, Set[int]] = dict()
+        self.__variable_set: Set[int] = set()
+        self.__clause_id_set: Set[int] = set()
 
         # Statistics
         if statistics is None:
@@ -110,6 +114,38 @@ class IncidenceGraph(Graph):
             return None
 
         return self.nodes[node_hash]["bipartite"] == 0
+
+    def __temporarily_remove_variable(self, variable: int) -> None:
+        """
+        Temporarily remove the variable.
+        If the variable does not exist in the incidence graph, raise an exception (VariableDoesNotExistException).
+        :return: None
+        """
+
+        variable_hash = self.__variable_hash(variable)
+
+        # Check if the variable exists in the incidence graph
+        if not self.__node_exist(variable_hash):
+            raise ig_exception.VariableDoesNotExistException(variable)
+
+        self.__variable_set.remove(variable)
+        self.remove_node(variable_hash)
+
+    def __temporarily_remove_clause_id(self, clause_id: int) -> None:
+        """
+        Temporarily remove the clause.
+        If the clause does not exist in the incidence graph, raise an exception (ClauseIdDoesNotExistException).
+        :return: None
+        """
+
+        clause_id_hash = self.__clause_id_hash(clause_id)
+
+        # Check if the clause exists in the incidence graph
+        if not self.__node_exist(clause_id_hash):
+            raise ig_exception.ClauseIdDoesNotExistException(clause_id)
+
+        self.__clause_id_set.remove(clause_id)
+        self.remove_node(clause_id_hash)
     # endregion
 
     # region Public method
@@ -131,6 +167,7 @@ class IncidenceGraph(Graph):
             self.__adjacency_literal_dictionary[variable] = set()
             self.__adjacency_literal_dictionary[-variable] = set()
 
+        self.__variable_set.add(variable)
         self.add_node(variable_hash, value=variable, bipartite=0)
 
     def add_clause_id(self, clause_id: int) -> None:
@@ -146,6 +183,7 @@ class IncidenceGraph(Graph):
         if self.__node_exist(clause_id_hash):
             raise ig_exception.ClauseIdAlreadyExistsException(clause_id)
 
+        self.__clause_id_set.add(clause_id)
         self.add_node(clause_id_hash, value=clause_id, bipartite=1)
 
     def add_edge(self, literal: int, clause_id: int, create_node: bool = False) -> None:
@@ -297,15 +335,17 @@ class IncidenceGraph(Graph):
 
         return super().number_of_nodes()
 
-    def clause_id_set(self, multi_occurrence: bool = True) -> Set[int]:
+    def clause_id_set(self, multi_occurrence: bool = True, copy: bool = False) -> Set[int]:
         """
-        :param multi_occurrence: should be multi-occurrent clauses kept
+        :param multi_occurrence: should be multi-occurrent clauses kept (a copy is returned)
+        :param copy: True if a copy is returned
         :return: a set of clauses that are in the incidence graph
         """
 
         self.__statistics.clause_id_set.start_stopwatch()   # timer (start)
 
-        clause_id_set = set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 1)
+        # clause_id_set = set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 1)
+        clause_id_set = self.__clause_id_set.copy() if copy else self.__clause_id_set
 
         if multi_occurrence:
             self.__statistics.clause_id_set.stop_stopwatch()    # timer (stop)
@@ -341,7 +381,7 @@ class IncidenceGraph(Graph):
         :return: a list of clauses that are in the incidence graph
         """
 
-        return [self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 1]
+        return list(self.clause_id_set())
 
     def number_of_clauses(self) -> int:
         """
@@ -350,17 +390,26 @@ class IncidenceGraph(Graph):
 
         return len(self.clause_id_set())
 
-    def variable_set(self) -> Set[int]:
+    def variable_set(self, copy: bool = False) -> Set[int]:
         """
+        :param copy: True if a copy is returned
         :return: a set of variables that are in the incidence graph
         """
 
         self.__statistics.variable_set.start_stopwatch()    # timer (start)
 
-        variable_set = set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 0)
+        # variable_set = set(self.nodes[n]["value"] for n, d in self.nodes(data=True) if d["bipartite"] == 0)
+        variable_set = self.__variable_set.copy() if copy else self.__variable_set
 
         self.__statistics.variable_set.stop_stopwatch()     # timer (stop)
         return variable_set
+
+    def variable_list(self) -> List[int]:
+        """
+        :return: a list of variables that are in the incidence graph
+        """
+
+        return list(self.variable_set())
 
     def number_of_variables(self) -> int:
         """
@@ -421,7 +470,7 @@ class IncidenceGraph(Graph):
         self.__variable_node_backup_dictionary[variable] = variable_node_neighbour_set
 
         # Delete the variable node
-        self.remove_node(variable_hash)
+        self.__temporarily_remove_variable(variable)
 
         clause_node_dictionary = dict()
         for clause_id in self.__adjacency_literal_dictionary[literal]:
@@ -435,12 +484,12 @@ class IncidenceGraph(Graph):
             clause_node_dictionary[clause_id] = clause_node_neighbour_set
 
             # Delete the (satisfied) clause
-            self.remove_node(clause_id_hash)
+            self.__temporarily_remove_clause_id(clause_id)
 
             # Check if a neighbour is not an isolated node
             for clause_node_neighbour in clause_node_neighbour_set:
                 if not self.number_of_neighbours_variable(clause_node_neighbour):
-                    self.remove_node(self.__variable_hash(clause_node_neighbour))
+                    self.__temporarily_remove_variable(clause_node_neighbour)
                     isolated_variable_set.add(clause_node_neighbour)
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
@@ -534,7 +583,7 @@ class IncidenceGraph(Graph):
 
         self.__statistics.merge_variable_simplification.start_stopwatch()   # timer (start)
 
-        variable_hash_to_delete_set = set()
+        variable_to_delete_set = set()
 
         for representant in variable_simplification_dictionary:
             representant_hash = self.__variable_hash(representant)
@@ -549,7 +598,7 @@ class IncidenceGraph(Graph):
                 self.__removed_edge_backup_dictionary[variable] = neighbour_set_temp
                 neighbour_hash_set.update(neighbour_set_temp)
 
-                variable_hash_to_delete_set.add(variable_hash)
+                variable_to_delete_set.add(variable)
 
             # Add edges
             if representant_hash not in self.__added_edge_backup_dictionary:
@@ -562,8 +611,8 @@ class IncidenceGraph(Graph):
                     super().add_edge(representant_hash, neighbour_hash)
 
         # Delete nodes
-        for variable_hash in variable_hash_to_delete_set:
-            self.remove_node(variable_hash)
+        for variable in variable_to_delete_set:
+            self.__temporarily_remove_variable(variable)
 
         self.__statistics.merge_variable_simplification.stop_stopwatch()    # timer (stop)
 
@@ -626,7 +675,7 @@ class IncidenceGraph(Graph):
         self.__subsumption_backup_dictionary[clause_id] = clause_neighbour_set
 
         # Delete the clause node
-        self.remove_node(clause_id_hash)
+        self.__temporarily_remove_clause_id(clause_id)
 
         self.__statistics.remove_subsumed_clause.stop_stopwatch()   # timer (stop)
 

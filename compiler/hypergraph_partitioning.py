@@ -495,7 +495,7 @@ class HypergraphPartitioning:
 
             return result_ordering
 
-        variable_ordering = [list(incidence_graph.variable_set())]
+        variable_ordering = [incidence_graph.variable_list()]
         variable_ordering = variable_order(variable_ordering, occurrence_dictionary)
         variable_ordering = variable_order(variable_ordering, mean_dictionary)
         if use_variance:
@@ -664,7 +664,7 @@ class HypergraphPartitioning:
 
         # Only one clause remains => all variables are in the cut set
         if incidence_graph.number_of_clauses() == 1:
-            cut_set = incidence_graph.variable_set()
+            cut_set = incidence_graph.variable_set(copy=True)
 
             incidence_graph.restore_backup_subsumption()                # Subsumption
             incidence_graph.restore_backup_variable_simplification()    # Variable simplification
