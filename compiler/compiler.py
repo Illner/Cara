@@ -36,7 +36,9 @@ class Compiler:
     Private bool smooth
     Private Circuit circuit
     Private Statistics statistics
+    Private bool cut_set_try_cache
     Private float new_cut_set_threshold
+    Private float new_cut_set_threshold_reduction   # when cut set cache can be used
     Private ComponentCachingAbstract component_caching
     Private HypergraphPartitioning hypergraph_partitioning
     
@@ -63,7 +65,9 @@ class Compiler:
                  hp_hyperedge_weight_type_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum,
                  hp_variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
                  hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
-                 hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None)):
+                 hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
+                 cut_set_try_cache: bool = False,
+                 new_cut_set_threshold_reduction: float = 1):
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -78,7 +82,9 @@ class Compiler:
 
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
+        self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__new_cut_set_threshold: float = new_cut_set_threshold
+        self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
@@ -145,6 +151,8 @@ class Compiler:
                                   assignment_list=[],
                                   circuit=self.__circuit,
                                   new_cut_set_threshold=self.__new_cut_set_threshold,
+                                  new_cut_set_threshold_reduction=self.__new_cut_set_threshold_reduction,
+                                  cut_set_try_cache=self.__cut_set_try_cache,
                                   incidence_graph=incidence_graph,
                                   component_caching=self.__component_caching,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,

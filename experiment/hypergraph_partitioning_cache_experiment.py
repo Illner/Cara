@@ -50,7 +50,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         self.__plot_directory_path: Path = Path(os.path.join(self.log_directory_path, "plot"))
 
     # region Public method
-    def experiment(self, limit_clause_list: List[int], limit_variable_list: List[int]):
+    def experiment(self, limit_clause_list: List[int], limit_variable_list: List[int], cut_set_try_cache: bool, new_cut_set_threshold_reduction: float):
         hp_cache_name_list = hpc_enum.hpc_enum_names
         hp_cache_enum_list = list(zip(hpc_enum.hpc_enum_values, hp_cache_name_list))
 
@@ -84,6 +84,8 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                                                                                       hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
                                                                                       hp_limit_number_of_clauses_cache=(None, limit_clause),
                                                                                       hp_limit_number_of_variables_cache=(None, limit_variable),
+                                                                                      cut_set_try_cache=cut_set_try_cache,
+                                                                                      new_cut_set_threshold_reduction=new_cut_set_threshold_reduction,
                                                                                       file_name_extension=key)
 
                         # File - file_dictionary

@@ -83,6 +83,8 @@ class ExperimentAbstract(ABC):
                     hp_variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
                     hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                     hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
+                    cut_set_try_cache: bool = False,
+                    new_cut_set_threshold_reduction: float = 1,
                     file_name_extension: str = "") -> \
             Tuple[bool, bool, Union[int, None], Statistics]:
         """
@@ -109,7 +111,9 @@ class ExperimentAbstract(ABC):
                             hp_hyperedge_weight_type_enum=hp_hyperedge_weight_type_enum,
                             hp_variable_simplification_enum=hp_variable_simplification_enum,
                             hp_limit_number_of_clauses_cache=hp_limit_number_of_clauses_cache,
-                            hp_limit_number_of_variables_cache=hp_limit_number_of_variables_cache)
+                            hp_limit_number_of_variables_cache=hp_limit_number_of_variables_cache,
+                            cut_set_try_cache=cut_set_try_cache,
+                            new_cut_set_threshold_reduction=new_cut_set_threshold_reduction)
 
         experiment_thread: TExperimentThread = self.__ExperimentThread(compiler)
         thread = threading.Thread(target=self.__experiment, args=(experiment_thread,))

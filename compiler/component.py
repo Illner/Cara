@@ -27,7 +27,9 @@ class Component:
     Private Solver solver
     Private Circuit circuit
     Private Statistics statistics
+    Private bool cut_set_try_cache
     Private float new_cut_set_threshold
+    Private float new_cut_set_threshold_reduction
     Private IncidenceGraph incidence_graph
     Private ComponentCachingAbstract component_caching
     Private HypergraphPartitioning hypergraph_partitioning
@@ -42,6 +44,8 @@ class Component:
                  assignment_list: List[int],
                  circuit: Circuit,
                  new_cut_set_threshold: float,
+                 new_cut_set_threshold_reduction: float,
+                 cut_set_try_cache: bool,
                  incidence_graph: IncidenceGraph,
                  component_caching: ComponentCachingAbstract,
                  hypergraph_partitioning: HypergraphPartitioning,
@@ -50,8 +54,11 @@ class Component:
                  statistics: Statistics):
         self.__cnf: Cnf = cnf
         self.__circuit: Circuit = circuit
+        self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__incidence_graph: IncidenceGraph = incidence_graph
         self.__new_cut_set_threshold: float = new_cut_set_threshold
+        self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
+
         self.__component_caching: ComponentCachingAbstract = component_caching
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
 
@@ -116,14 +123,15 @@ class Component:
         raise ca_exception.FunctionNotImplementedException("get_implied_literals",
                                                            f"this type of getting implied literals ({self.__implied_literals_enum.name}) is not implemented")
 
-    def __get_cut_set(self) -> Set[int]:
+    def __get_cut_set(self, incidence_graph_is_reduced: bool) -> Set[int]:
         """
+        :param incidence_graph_is_reduced: True if the incidence graph is already reduced
         :return: a new cut set
         """
 
         self.__statistics.component_statistics.get_cut_set.start_stopwatch()    # timer (start)
 
-        result = self.__hypergraph_partitioning.get_cut_set(self.__incidence_graph, self.__solver, self.__assignment_list)
+        result = self.__hypergraph_partitioning.get_cut_set(self.__incidence_graph, self.__solver, self.__assignment_list, incidence_graph_is_reduced)
 
         self.__statistics.component_statistics.get_cut_set.stop_stopwatch()     # timer (stop)
         return result
@@ -140,10 +148,9 @@ class Component:
 
         new_cut_set_threshold_temp = self.__new_cut_set_threshold
 
-        # Cache can be used
+        # Cut set cache can be used
         if self.__hypergraph_partitioning.cache_can_be_used(self.__incidence_graph):
-            pass
-            # new_cut_set_threshold_temp /= 2
+            new_cut_set_threshold_temp *= self.__new_cut_set_threshold_reduction
 
         number_of_removed_variables = number_of_variables_before_unit_propagation - number_of_variables_after_unit_propagation
         if (number_of_removed_variables / number_of_variables_before_unit_propagation) >= new_cut_set_threshold_temp:
@@ -251,6 +258,8 @@ class Component:
                                            assignment_list=self.__assignment_list,
                                            circuit=self.__circuit,
                                            new_cut_set_threshold=self.__new_cut_set_threshold,
+                                           new_cut_set_threshold_reduction=self.__new_cut_set_threshold_reduction,
+                                           cut_set_try_cache=self.__cut_set_try_cache,
                                            incidence_graph=incidence_graph,
                                            component_caching=self.__component_caching,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
@@ -275,18 +284,21 @@ class Component:
         # cut_set_restriction = cut_set_restriction.intersection(self.__incidence_graph.variable_set())
 
         # Cache
+        incidence_graph_is_reduced: bool = False
         result_cache_cut_set: Union[Set[int], None] = None
-        if self.__hypergraph_partitioning.cache_can_be_used(self.__incidence_graph):
+        if self.__cut_set_try_cache and self.__hypergraph_partitioning.cache_can_be_used(self.__incidence_graph):
             self.__statistics.component_statistics.cut_set_try_cache.start_stopwatch()  # timer (start)
 
+            incidence_graph_is_reduced = True
             self.__hypergraph_partitioning.reduce_incidence_graph(self.__incidence_graph, self.__solver, self.__assignment_list)
             result_cache_cut_set, _ = self.__hypergraph_partitioning.check_cache(self.__incidence_graph)
-            self.__hypergraph_partitioning.remove_reduction_incidence_graph(self.__incidence_graph)
 
             # A cut set has been found using the cache
             if result_cache_cut_set is not None:
                 self.__statistics.component_statistics.cut_set_try_cache_cached.add_count(1)    # counter
                 self.__statistics.hypergraph_partitioning_statistics.cached.add_count(1)        # counter
+
+                self.__hypergraph_partitioning.remove_reduction_incidence_graph(self.__incidence_graph)
                 cut_set_restriction = result_cache_cut_set
             else:
                 self.__statistics.component_statistics.cut_set_try_cache_cached.add_count(0)    # counter
@@ -297,9 +309,10 @@ class Component:
         if result_cache_cut_set is None:
             # A new cut set is needed
             if self.__is_suggested_new_cut_set(cut_set, cut_set_restriction, number_of_variables_before_unit_propagation, number_of_variables_after_unit_propagation):
-                cut_set_restriction = self.__get_cut_set()
+                cut_set_restriction = self.__get_cut_set(incidence_graph_is_reduced)
                 self.__statistics.component_statistics.recompute_cut_set.add_count(1)   # counter
             else:
+                self.__hypergraph_partitioning.remove_reduction_incidence_graph(self.__incidence_graph)     # because of cut set - try cache
                 self.__statistics.component_statistics.recompute_cut_set.add_count(0)   # counter
 
         decision_variable = self.__get_suggested_variable_from_cut_set(cut_set_restriction)

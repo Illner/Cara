@@ -621,12 +621,13 @@ class HypergraphPartitioning:
     # endregion
 
     # region Public method
-    def get_cut_set(self, incidence_graph: IncidenceGraph, solver: Solver, assignment: List[int]) -> Set[int]:
+    def get_cut_set(self, incidence_graph: IncidenceGraph, solver: Solver, assignment: List[int], incidence_graph_is_reduced: bool = False) -> Set[int]:
         """
         Create a hypergraph based on the incidence graph
         :param incidence_graph: the incidence graph
         :param solver: the solver (in case equivSimpl is used)
         :param assignment: the (partial) assignment (for the solver)
+        :param incidence_graph_is_reduced: True if the incidence graph is already reduced
         :return: a cut set of the hypergraph
         """
 
@@ -634,7 +635,8 @@ class HypergraphPartitioning:
 
         self.__set_dynamic_weights(incidence_graph)
 
-        self.reduce_incidence_graph(incidence_graph, solver, assignment)
+        if not incidence_graph_is_reduced:
+            self.reduce_incidence_graph(incidence_graph, solver, assignment)
 
         # Only one clause remains => all variables are in the cut set
         if incidence_graph.number_of_clauses() == 1:
