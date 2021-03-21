@@ -13,6 +13,7 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer get_implied_literals
     Private StatisticsComponentTimer get_cut_set
     Private StatisticsComponentTimer get_suggested_variable_from_cut_set
+    Private StatisticsComponentTimer cut_set_try_cache
     
     Private StatisticsComponentCounter unsatisfiable
     Private StatisticsComponentCounter implied_literal
@@ -23,6 +24,7 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter disjoint
     Private StatisticsComponentCounter decision_variable
     Private StatisticsComponentCounter recompute_cut_set
+    Private StatisticsComponentCounter cut_set_try_cache_cached
     """
 
     def __init__(self):
@@ -49,10 +51,10 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__empty_incidence_graph: StatisticsComponentCounter = StatisticsComponentCounter("empty incidence graph", True)
         self._component_list.append(self.__empty_incidence_graph)
 
-        self.__generate_key_cache: StatisticsComponentCounter = StatisticsComponentCounter("generate key cache", True)
+        self.__generate_key_cache: StatisticsComponentCounter = StatisticsComponentCounter("component cache - generate key cache", True)
         self._component_list.append(self.__generate_key_cache)
 
-        self.__cached: StatisticsComponentCounter = StatisticsComponentCounter("cached")
+        self.__cached: StatisticsComponentCounter = StatisticsComponentCounter("component cache - cached")
         self._component_list.append(self.__cached)
 
         self.__disjoint: StatisticsComponentCounter = StatisticsComponentCounter("disjoint", True)
@@ -63,6 +65,12 @@ class ComponentStatistics(StatisticsTemplateAbstract):
 
         self.__recompute_cut_set: StatisticsComponentCounter = StatisticsComponentCounter("recompute cut set")
         self._component_list.append(self.__recompute_cut_set)
+
+        self.__cut_set_try_cache: StatisticsComponentTimer = StatisticsComponentTimer("cut set try cache")
+        self._component_list.append(self.__cut_set_try_cache)
+
+        self.__cut_set_try_cache_cached: StatisticsComponentCounter = StatisticsComponentCounter("cut set try cache - cached")
+        self._component_list.append(self.__cut_set_try_cache_cached)
 
     # region Property
     @property
@@ -112,4 +120,12 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def recompute_cut_set(self):
         return self.__recompute_cut_set
+
+    @property
+    def cut_set_try_cache(self):
+        return self.__cut_set_try_cache
+
+    @property
+    def cut_set_try_cache_cached(self):
+        return self.__cut_set_try_cache_cached
     # endregion

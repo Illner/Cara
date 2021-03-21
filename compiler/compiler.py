@@ -64,13 +64,14 @@ class Compiler:
                  hp_variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
                  hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None)):
-        # Statistics
-        self.__statistics: Statistics = Statistics()
 
         # CNF
         if isinstance(cnf, Cnf):
             self.__cnf: Cnf = cnf
+            self.__statistics: Statistics = Statistics(cnf_statistics=self.__cnf.cnf_statistics,
+                                                       incidence_graph_statistics=self.__cnf.incidence_graph_statistics)   # statistics
         else:
+            self.__statistics: Statistics = Statistics()    # statistics
             self.__cnf: Cnf = Cnf(dimacs_cnf_file_path=cnf,
                                   cnf_statistics=self.__statistics.cnf_statistics,
                                   incidence_graph_statistics=self.__statistics.incidence_graph_statistics)

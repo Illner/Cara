@@ -138,8 +138,15 @@ class Component:
         if not cut_set_after_restriction:
             return True
 
+        new_cut_set_threshold_temp = self.__new_cut_set_threshold
+
+        # Cache can be used
+        if self.__hypergraph_partitioning.cache_can_be_used(self.__incidence_graph):
+            pass
+            # new_cut_set_threshold_temp /= 2
+
         number_of_removed_variables = number_of_variables_before_unit_propagation - number_of_variables_after_unit_propagation
-        if (number_of_removed_variables / number_of_variables_before_unit_propagation) >= self.__new_cut_set_threshold:
+        if (number_of_removed_variables / number_of_variables_before_unit_propagation) >= new_cut_set_threshold_temp:
             return True
 
         return False
@@ -267,12 +274,33 @@ class Component:
         cut_set_restriction.difference_update(isolated_variable_set)   # because of isolated variables
         # cut_set_restriction = cut_set_restriction.intersection(self.__incidence_graph.variable_set())
 
-        # A new cut set is needed
-        if self.__is_suggested_new_cut_set(cut_set, cut_set_restriction, number_of_variables_before_unit_propagation, number_of_variables_after_unit_propagation):
-            cut_set_restriction = self.__get_cut_set()
-            self.__statistics.component_statistics.recompute_cut_set.add_count(1)   # counter
-        else:
-            self.__statistics.component_statistics.recompute_cut_set.add_count(0)   # counter
+        # Cache
+        result_cache_cut_set: Union[Set[int], None] = None
+        if self.__hypergraph_partitioning.cache_can_be_used(self.__incidence_graph):
+            self.__statistics.component_statistics.cut_set_try_cache.start_stopwatch()  # timer (start)
+
+            self.__hypergraph_partitioning.reduce_incidence_graph(self.__incidence_graph, self.__solver, self.__assignment_list)
+            result_cache_cut_set, _ = self.__hypergraph_partitioning.check_cache(self.__incidence_graph)
+            self.__hypergraph_partitioning.remove_reduction_incidence_graph(self.__incidence_graph)
+
+            # A cut set has been found using the cache
+            if result_cache_cut_set is not None:
+                self.__statistics.component_statistics.cut_set_try_cache_cached.add_count(1)    # counter
+                self.__statistics.hypergraph_partitioning_statistics.cached.add_count(1)        # counter
+                cut_set_restriction = result_cache_cut_set
+            else:
+                self.__statistics.component_statistics.cut_set_try_cache_cached.add_count(0)    # counter
+
+            self.__statistics.component_statistics.cut_set_try_cache.stop_stopwatch()   # timer (stop)
+
+        # Cache did not work
+        if result_cache_cut_set is None:
+            # A new cut set is needed
+            if self.__is_suggested_new_cut_set(cut_set, cut_set_restriction, number_of_variables_before_unit_propagation, number_of_variables_after_unit_propagation):
+                cut_set_restriction = self.__get_cut_set()
+                self.__statistics.component_statistics.recompute_cut_set.add_count(1)   # counter
+            else:
+                self.__statistics.component_statistics.recompute_cut_set.add_count(0)   # counter
 
         decision_variable = self.__get_suggested_variable_from_cut_set(cut_set_restriction)
         cut_set_restriction.remove(decision_variable)

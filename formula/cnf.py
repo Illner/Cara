@@ -374,4 +374,12 @@ class Cnf:
     @property
     def comments(self):
         return self.__comments
+
+    @property
+    def cnf_statistics(self):
+        return self.__cnf_statistics
+
+    @property
+    def incidence_graph_statistics(self):
+        return self.get_incidence_graph().statistics
     # endregion

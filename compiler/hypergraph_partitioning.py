@@ -409,31 +409,12 @@ class HypergraphPartitioning:
 
         self.__cut_set_cache = dict()
 
-    def __generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[Tuple[int, Tuple[Dict[int, int], Dict[int, int]]], None]:
+    def __generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[int, Tuple[Dict[int, int], Dict[int, int]]]:
         """
         Generate a key for caching
         Variable property: occurrence, mean, variance (optional)
-        :param incidence_graph: the incidence graph
-        :return: The generated key based on the incidence graph and both mappings between variables
-        (variable_id -> order_id, order_id -> variable_id).
-        In case some limit (number of clauses/variables) is not satisfied, return None.
+        :return: the generated key based on the incidence graph and both mappings between variables (variable_id -> order_id, order_id -> variable_id)
         """
-
-        # Check limits - number of clauses
-        number_of_clauses = incidence_graph.number_of_clauses()
-        lnocc_l_temp = self.__limit_number_of_clauses_cache[0]
-        lnocc_u_temp = self.__limit_number_of_clauses_cache[1]
-        if ((lnocc_l_temp is not None) and (number_of_clauses < lnocc_l_temp)) or \
-           ((lnocc_u_temp is not None) and (number_of_clauses > lnocc_u_temp)):
-            return None
-
-        # Check limits - number of variables
-        number_of_variables = incidence_graph.number_of_variables()
-        lnovc_l_temp = self.__limit_number_of_variables_cache[0]
-        lnovc_u_temp = self.__limit_number_of_variables_cache[1]
-        if ((lnovc_l_temp is not None) and (number_of_variables < lnovc_l_temp)) or \
-           ((lnovc_u_temp is not None) and (number_of_variables > lnovc_u_temp)):
-            return None
 
         self.__statistics.generate_key_cache.start_stopwatch()      # timer (start)
 
@@ -653,47 +634,33 @@ class HypergraphPartitioning:
 
         self.__set_dynamic_weights(incidence_graph)
 
-        # Variable simplification
-        variable_simplification_dictionary = self.__variable_simplification(solver, assignment)
-        incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
-
-        # Subsumption
-        if (self.__subsumed_threshold is None) or (incidence_graph.number_of_clauses() <= self.__subsumed_threshold):
-            subsumed_clause_set = self.__subsumption(incidence_graph)
-            incidence_graph.remove_subsumed_clause_set(subsumed_clause_set)
+        self.reduce_incidence_graph(incidence_graph, solver, assignment)
 
         # Only one clause remains => all variables are in the cut set
         if incidence_graph.number_of_clauses() == 1:
             cut_set = incidence_graph.variable_set(copy=True)
-
-            incidence_graph.restore_backup_subsumption()                # Subsumption
-            incidence_graph.restore_backup_variable_simplification()    # Variable simplification
+            self.remove_reduction_incidence_graph(incidence_graph)
 
             self.__statistics.get_cut_set.stop_stopwatch()      # timer (stop)
             return cut_set
 
         # Cache
-        key = None  # initialization
+        key = None                              # initialization
         variable_id_order_id_dictionary = None  # initialization
-        order_id_variable_id_dictionary = None  # initialization
-        if self.__cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE:
-            result_cache = self.__generate_key_cache(incidence_graph)
-            if result_cache is not None:
-                key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary) = result_cache
-            value = self.__get_cut_set_cache(key)
-            if value is not None:
-                cut_set_cache = set()
-                for var in value:
-                    cut_set_cache.add(order_id_variable_id_dictionary[var])
 
-                incidence_graph.restore_backup_subsumption()                # Subsumption
-                incidence_graph.restore_backup_variable_simplification()    # Variable simplification
+        result_cache_cut_set, result_cache_key = self.check_cache(incidence_graph)
+        # A cut set has been found
+        if result_cache_cut_set is not None:
+            self.remove_reduction_incidence_graph(incidence_graph)
 
-                self.__statistics.cached.add_count(1)   # counter
-                self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
-                return cut_set_cache
-            else:
-                self.__statistics.cached.add_count(0)   # counter
+            self.__statistics.cached.add_count(1)  # counter
+            self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
+            return result_cache_cut_set
+        else:
+            if result_cache_key is not None:
+                key, (variable_id_order_id_dictionary, _) = result_cache_key
+
+            self.__statistics.cached.add_count(0)  # counter
 
         cut_set = set()
 
@@ -706,16 +673,87 @@ class HypergraphPartitioning:
             cut_set = {incidence_graph.variable_with_most_occurrences()}
 
         # Cache
-        if (self.__cache_enum != hpc_enum.HypergraphPartitioningCacheEnum.NONE) and (key is not None):
+        if key is not None:
             cut_set_cache = set()
             for var in cut_set:
                 cut_set_cache.add(variable_id_order_id_dictionary[var])
 
             self.__add_cut_set_cache(key, cut_set_cache)
 
-        incidence_graph.restore_backup_subsumption()                # Subsumption
-        incidence_graph.restore_backup_variable_simplification()    # Variable simplification
+        self.remove_reduction_incidence_graph(incidence_graph)
 
         self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
         return cut_set
+
+    def check_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[Set[int], None], Union[Tuple[int, Tuple[Dict[int, int], Dict[int, int]]], None]]:
+        """
+        Generate a key for caching based on the incidence graph and check if a cut set exists in the cache
+        :return: (cut set, key, (mapping, mapping))
+        """
+
+        if not self.cache_can_be_used(incidence_graph):
+            return None, None
+
+        result_cache = self.__generate_key_cache(incidence_graph)
+        key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary) = result_cache
+        value = self.__get_cut_set_cache(key)
+
+        # A cut set has not been found in the cache
+        if value is None:
+            return None, result_cache
+        # A cut set has been found in the cache
+        else:
+            cut_set_cache = set()
+            for var in value:
+                cut_set_cache.add(order_id_variable_id_dictionary[var])
+
+            return cut_set_cache, result_cache
+
+    def reduce_incidence_graph(self, incidence_graph: IncidenceGraph, solver: Solver, assignment: List[int]) -> None:
+        """
+        Do a variable simplification and subsumption (if the limit is satisfied)
+        :return: None
+        """
+
+        # Variable simplification
+        variable_simplification_dictionary = self.__variable_simplification(solver, assignment)
+        incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
+
+        # Subsumption
+        if (self.__subsumed_threshold is None) or (incidence_graph.number_of_clauses() <= self.__subsumed_threshold):
+            subsumed_clause_set = self.__subsumption(incidence_graph)
+            incidence_graph.remove_subsumed_clause_set(subsumed_clause_set)
+
+    def cache_can_be_used(self, incidence_graph: IncidenceGraph) -> bool:
+        """
+        :return: True if a cache can be used. Otherwise, False is returned.
+        """
+
+        if self.__cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE:
+            return False
+
+        # Check limits - number of clauses
+        number_of_clauses = incidence_graph.number_of_clauses()
+        lnocc_l_temp = self.__limit_number_of_clauses_cache[0]
+        lnocc_u_temp = self.__limit_number_of_clauses_cache[1]
+        if ((lnocc_l_temp is not None) and (number_of_clauses < lnocc_l_temp)) or \
+           ((lnocc_u_temp is not None) and (number_of_clauses > lnocc_u_temp)):
+            return False
+
+        # Check limits - number of variables
+        number_of_variables = incidence_graph.number_of_variables()
+        lnovc_l_temp = self.__limit_number_of_variables_cache[0]
+        lnovc_u_temp = self.__limit_number_of_variables_cache[1]
+        if ((lnovc_l_temp is not None) and (number_of_variables < lnovc_l_temp)) or \
+           ((lnovc_u_temp is not None) and (number_of_variables > lnovc_u_temp)):
+            return False
+
+        return True
+    # endregion
+
+    # region Static method
+    @staticmethod
+    def remove_reduction_incidence_graph(incidence_graph: IncidenceGraph) -> None:
+        incidence_graph.restore_backup_subsumption()                # Subsumption
+        incidence_graph.restore_backup_variable_simplification()    # Variable simplification
     # endregion

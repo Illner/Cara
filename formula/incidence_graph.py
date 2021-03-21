@@ -765,3 +765,9 @@ class IncidenceGraph(Graph):
         self.__statistics.copy_incidence_graph.stop_stopwatch()     # timer (stop)
         return copy
     # endregion
+
+    # region Property
+    @property
+    def statistics(self):
+        return self.__statistics
+    # endregion

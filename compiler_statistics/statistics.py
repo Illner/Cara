@@ -1,5 +1,5 @@
 # Import
-from typing import List
+from typing import List, Union
 from compiler_statistics.statistics_template_abstract import StatisticsTemplateAbstract
 
 from compiler_statistics.formula.cnf_statistics import CnfStatistics
@@ -26,7 +26,8 @@ class Statistics:
     Private HypergraphPartitioningStatistics hypergraph_partitioning_statistics
     """
 
-    def __init__(self):
+    def __init__(self, cnf_statistics: Union[CnfStatistics, None] = None,
+                 incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = None):
         self.__template_list: List[StatisticsTemplateAbstract] = []
 
         # Compiler
@@ -34,11 +35,17 @@ class Statistics:
         self.__template_list.append(self.__compiler_statistics)
 
         # CNF
-        self.__cnf_statistics: CnfStatistics = CnfStatistics()
+        if cnf_statistics is None:
+            self.__cnf_statistics: CnfStatistics = CnfStatistics()
+        else:
+            self.__cnf_statistics: CnfStatistics = cnf_statistics
         self.__template_list.append(self.__cnf_statistics)
 
         # Incidence graph
-        self.__incidence_graph_statistics: IncidenceGraphStatistics = IncidenceGraphStatistics()
+        if incidence_graph_statistics is None:
+            self.__incidence_graph_statistics: IncidenceGraphStatistics = IncidenceGraphStatistics()
+        else:
+            self.__incidence_graph_statistics: IncidenceGraphStatistics = incidence_graph_statistics
         self.__template_list.append(self.__incidence_graph_statistics)
 
         # Solver
