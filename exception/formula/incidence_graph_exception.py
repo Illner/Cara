@@ -85,3 +85,13 @@ class TryingRestoreLiteralIsNotLastOneRemovedException(IncidenceGraphException):
     def __init__(self, literal: int, last_literal: int):
         self.message = f"Trying to restore the variable node (|{literal}|) that is not the last one (|{last_literal}|) that was removed!"
         super().__init__(self.message)
+
+
+class TryingRemoveEdgeDoesNotExistException(IncidenceGraphException):
+    """
+    Trying to remove the edge that does not exist
+    """
+
+    def __init__(self, variable: int, clause_id: int):
+        self.message = f"Trying to remove the edge ({variable} - {clause_id}) that does not exist in the incidence graph!"
+        super().__init__(self.message)

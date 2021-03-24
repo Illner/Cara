@@ -146,6 +146,49 @@ class IncidenceGraph(Graph):
 
         self.__clause_id_set.remove(clause_id)
         self.remove_node(clause_id_hash)
+
+    def __temporarily_remove_edge(self, variable: Union[int, str], clause_id: Union[int, str]) -> None:
+        """
+        Temporarily remove the edge (variable - clause_id).
+        If the variable does not exist in the incidence graph, raise an exception (VariableDoesNotExistException).
+        If the clause's id does not exist in the incidence graph, raise an exception (ClauseIdDoesNotExistException).
+        If the edge does not exist in the incidence graph, raise an exception (TryingRemoveEdgeDoesNotExistException).
+        :param variable: the variable
+        :param clause_id: the clause's id
+        :return: None
+        """
+
+        if isinstance(variable, str):
+            variable_hash = variable
+        else:
+            variable_hash = self.__variable_hash(variable)
+
+        if isinstance(clause_id, str):
+            clause_id_hash = clause_id
+        else:
+            clause_id_hash = self.__clause_id_hash(clause_id)
+
+        # The variable does not exist in the incidence graph
+        if not self.__node_exist(variable_hash):
+            raise ig_exception.VariableDoesNotExistException(variable)
+
+        # The clause's id does not exist in the incidence graph
+        if not self.__node_exist(clause_id_hash):
+            raise ig_exception.ClauseIdDoesNotExistException(clause_id)
+
+        # The edge does not exist in the incidence graph
+        if not self.has_edge(variable_hash, clause_id_hash):
+            raise ig_exception.TryingRemoveEdgeDoesNotExistException(variable, clause_id)
+
+        super().remove_edge(variable_hash, clause_id_hash)
+
+    def __add_edge(self, variable_hash: str, clause_id_hash: str) -> None:
+        """
+        Add the edge to the incidence graph
+        :return: None
+        """
+
+        super().add_edge(variable_hash, clause_id_hash)
     # endregion
 
     # region Public method
@@ -224,7 +267,7 @@ class IncidenceGraph(Graph):
         # adjacency_literal_dictionary
         self.__adjacency_literal_dictionary[literal].add(clause_id)
 
-        super().add_edge(variable_hash, clause_id_hash)
+        self.__add_edge(variable_hash, clause_id_hash)
 
     def is_connected(self) -> bool:
         """
@@ -440,7 +483,7 @@ class IncidenceGraph(Graph):
         """
         Remove the variable node (|literal|).
         Remove all (satisfied) clauses (nodes), which are incident with the variable node and contain the literal.
-        Everything that will be removed from the incidence graph is saved and can be restored from the backup in the future.
+        Everything that will be removed from the incidence graph is saved and can be restored from the backup in future.
         If the variable does not exist in the incidence graph, raise an exception (VariableDoesNotExistException).
         If the variable has been already removed, raise an exception (VariableHasBeenRemovedException).
         :param literal: the literal
@@ -546,7 +589,7 @@ class IncidenceGraph(Graph):
                 if not self.__node_exist(neighbour_hash):
                     self.add_variable(neighbour_id)
 
-                super().add_edge(neighbour_hash, clause_id_hash)
+                self.__add_edge(neighbour_hash, clause_id_hash)
 
         del self.__clause_node_backup_dictionary[variable]
 
@@ -554,7 +597,7 @@ class IncidenceGraph(Graph):
         self.add_variable(variable)
         variable_node_neighbour_set = self.__variable_node_backup_dictionary[variable]
         for neighbour_hash in variable_node_neighbour_set:
-            super().add_edge(variable_hash, neighbour_hash)
+            self.__add_edge(variable_hash, neighbour_hash)
 
         del self.__variable_node_backup_dictionary[variable]
 
@@ -577,7 +620,7 @@ class IncidenceGraph(Graph):
     def merge_variable_simplification(self, variable_simplification_dictionary: Dict[int, Set[int]]) -> None:
         """
         Merge variables based on the variable simplification dictionary.
-        Everything that will be changed in the incidence graph is saved and can be restored from the backup in the future.
+        Everything that will be changed in the incidence graph is saved and can be restored from the backup in future.
         :return: None
         """
 
@@ -608,7 +651,7 @@ class IncidenceGraph(Graph):
                 # The edge does not exist
                 if not self.has_edge(representant_hash, neighbour_hash):
                     self.__added_edge_backup_dictionary[representant_hash].add(neighbour_hash)
-                    super().add_edge(representant_hash, neighbour_hash)
+                    self.__add_edge(representant_hash, neighbour_hash)
 
         # Delete nodes
         for variable in variable_to_delete_set:
@@ -632,7 +675,7 @@ class IncidenceGraph(Graph):
 
             self.add_variable(variable)
             for neighbour_hash in neighbour_hash_set:
-                super().add_edge(variable_hash, neighbour_hash)
+                self.__add_edge(variable_hash, neighbour_hash)
 
         self.__removed_edge_backup_dictionary = dict()
 
@@ -641,7 +684,7 @@ class IncidenceGraph(Graph):
             neighbour_hash_set = self.__added_edge_backup_dictionary[variable_hash]
 
             for neighbour_hash in neighbour_hash_set:
-                self.remove_edge(variable_hash, neighbour_hash)
+                self.__temporarily_remove_edge(variable_hash, neighbour_hash)
 
         self.__added_edge_backup_dictionary = dict()
 
@@ -652,7 +695,7 @@ class IncidenceGraph(Graph):
     def remove_subsumed_clause(self, clause_id: int) -> None:
         """
         Remove the clause from the incidence graph.
-        Everything that will be removed from the incidence graph is saved and can be restored from the backup in the future.
+        Everything that will be removed from the incidence graph is saved and can be restored from the backup in future.
         If the clause does not exist in the incidence graph, raise an exception (ClauseIdDoesNotExistException).
         If the clause has been already removed, raise an exception (ClauseHasBeenRemovedException).
         :param clause_id: the clause's id
@@ -698,7 +741,7 @@ class IncidenceGraph(Graph):
 
             self.add_clause_id(clause_id)
             for neighbour_hash in neighbour_hash_set:
-                super().add_edge(neighbour_hash, clause_id_hash)
+                self.__add_edge(neighbour_hash, clause_id_hash)
 
         self.__subsumption_backup_dictionary = dict()
 
