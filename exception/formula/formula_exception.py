@@ -45,3 +45,15 @@ class PLineIsNotMentionedException(FormulaException):
     def __init__(self):
         self.message = "P line is not mentioned at all or is mentioned after the clauses!"
         super().__init__(self.message)
+
+
+class FormulaIsNot2CnfException(FormulaException):
+    """
+    The formula is not 2-CNF
+    """
+
+    def __init__(self, message_extension: str = ""):
+        self.message = "The formula is not 2-CNF!"
+        if message_extension:
+            self.message += f" ({message_extension})"
+        super().__init__(self.message)

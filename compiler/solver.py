@@ -1,7 +1,7 @@
 # Import
 import mmh3
 from formula.cnf import Cnf
-from other.pysat_cnf import PySatCNF
+from other.pysat_cnf import PySatCnf
 from other.sorted_list import SortedList
 from typing import Set, Dict, List, Tuple, Union
 from pysat.solvers import Minisat22, Glucose4, Lingeling, Cadical
@@ -22,7 +22,7 @@ class Solver:
     """
 
     """
-    Private PySatCNF cnf
+    Private PySatCnf cnf
     Private Set<int> variable_set
     Private Set<int> implied_literal_set        # implied literals (implicit BCP) without any assumption
     Private SatSolverEnum sat_solver_enum
@@ -41,6 +41,7 @@ class Solver:
                  clause_id_set: Union[Set[int], None],
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum = il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP,
+                 propagate_sat_solver_enum: Union[ss_enum.PropagateSatSolverEnum, None] = None,
                  statistics: Union[SolverStatistics, None] = None):
         # Statistics
         if statistics is None:
@@ -50,7 +51,7 @@ class Solver:
 
         self.__statistics.initialize.start_stopwatch()  # timer (start - initialize)
 
-        self.__cnf: PySatCNF = PySatCNF()
+        self.__cnf: PySatCnf = PySatCnf()
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
 
         # Create a subformula
@@ -69,25 +70,35 @@ class Solver:
         self.__implicit_bcp_dictionary_cache: \
             Dict[int, Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]] = dict()
 
-        # Create SAT solvers
-        self.__sat_main = None
+        # Create SAT solver - unit propagation
         self.__sat_unit_propagation = None
+        if propagate_sat_solver_enum == ss_enum.PropagateSatSolverEnum.MiniSAT:
+            self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
+        elif propagate_sat_solver_enum == ss_enum.PropagateSatSolverEnum.Glucose:
+            self.__sat_unit_propagation = Glucose4(bootstrap_with=self.__cnf.clauses, use_timer=True)
+
+        # Create SAT solver - main
+        self.__sat_main = None
         # MiniSat
         if self.__sat_solver_enum == ss_enum.SatSolverEnum.MiniSAT:
             self.__sat_main = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
-            self.__sat_unit_propagation = self.__sat_main
+            if self.__sat_unit_propagation is None:
+                self.__sat_unit_propagation = self.__sat_main
         # Glucose
         elif self.__sat_solver_enum == ss_enum.SatSolverEnum.Glucose:
             self.__sat_main = Glucose4(bootstrap_with=self.__cnf.clauses, use_timer=True)
-            self.__sat_unit_propagation = self.__sat_main
+            if self.__sat_unit_propagation is None:
+                self.__sat_unit_propagation = self.__sat_main
         # Lingeling
         elif self.__sat_solver_enum == ss_enum.SatSolverEnum.Lingeling:
             self.__sat_main = Lingeling(bootstrap_with=self.__cnf.clauses, use_timer=True)
-            self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
+            if self.__sat_unit_propagation is None:
+                self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
         # CaDiCal
         elif self.__sat_solver_enum == ss_enum.SatSolverEnum.CaDiCal:
             self.__sat_main = Cadical(bootstrap_with=self.__cnf.clauses, use_timer=True)
-            self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
+            if self.__sat_unit_propagation is None:
+                self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
         # Not supported
         else:
             raise c_exception.SatSolverIsNotSupportedException(self.__sat_solver_enum)
@@ -109,6 +120,7 @@ class Solver:
         # BACKBONE
         elif first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.BACKBONE:
             temp = self.get_backbone_literals([])
+        # Not supported
         else:
             raise ca_exception.FunctionNotImplementedException("constructor (solver)",
                                                                f"this type of getting first implied literals ({first_implied_literals_enum.name}) is not implemented")
@@ -160,12 +172,12 @@ class Solver:
 
         self.__statistics.unit_propagation.start_stopwatch()    # timer (start)
 
-        is_sat, implied_literals = self.__sat_unit_propagation.propagate(assumptions=self.__create_assumption_list(assignment_list))
+        no_conflict, implied_literals = self.__sat_unit_propagation.propagate(assumptions=self.__create_assumption_list(assignment_list))
 
         self.__statistics.unit_propagation.stop_stopwatch()     # timer (stop)
 
         # The formula is not satisfiable
-        if not is_sat:
+        if not no_conflict:
             return None
 
         implied_literals = (set(implied_literals)).union(self.__implied_literal_set)

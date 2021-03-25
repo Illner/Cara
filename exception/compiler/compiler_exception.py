@@ -1,4 +1,5 @@
 # Import enum
+from typing import Union
 import compiler.enum.sat_solver_enum as ss_enum
 from exception.cara_exception import CaraException
 
@@ -13,7 +14,7 @@ class SatSolverIsNotSupportedException(CompilerException):
     The SAT solver is not supported
     """
 
-    def __init__(self, solver: ss_enum.SatSolverEnum):
+    def __init__(self, solver: Union[ss_enum.SatSolverEnum, ss_enum.PropagateSatSolverEnum]):
         self.message = f"The SAT solver ({solver.name}) is not supported!"
         super().__init__(self.message)
 

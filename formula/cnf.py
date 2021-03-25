@@ -10,7 +10,7 @@ import exception.formula.formula_exception as f_exception
 
 class Cnf:
     """
-    CNF formula representation
+    CNF representation
     """
 
     """
