@@ -1,7 +1,7 @@
 # Import
 import mmh3
 from formula.cnf import Cnf
-from pysat.formula import CNF
+from other.pysat_cnf import PySatCNF
 from other.sorted_list import SortedList
 from typing import Set, Dict, List, Tuple, Union
 from pysat.solvers import Minisat22, Glucose4, Lingeling, Cadical
@@ -22,7 +22,7 @@ class Solver:
     """
 
     """
-    Private CNF cnf
+    Private PySatCNF cnf
     Private Set<int> variable_set
     Private Set<int> implied_literal_set        # implied literals (implicit BCP) without any assumption
     Private SatSolverEnum sat_solver_enum
@@ -50,7 +50,7 @@ class Solver:
 
         self.__statistics.initialize.start_stopwatch()  # timer (start - initialize)
 
-        self.__cnf: CNF = CNF()
+        self.__cnf: PySatCNF = PySatCNF()
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
 
         # Create a subformula

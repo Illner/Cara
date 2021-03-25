@@ -12,12 +12,12 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_en
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\no_comments_valid.cnf"
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\no_comments_valid.cnf"
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg2-08.cnf"
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg4-09.cnf"
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
 start_time = time.time()
 
 cnf: Cnf = Cnf(path)

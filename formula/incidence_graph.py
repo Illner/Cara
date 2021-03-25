@@ -2,6 +2,7 @@
 import mmh3
 import random
 import networkx as nx
+from other.pysat_cnf import PySatCNF
 from networkx.classes.graph import Graph
 from typing import Set, Dict, List, Union, TypeVar
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
@@ -824,6 +825,19 @@ class IncidenceGraph(Graph):
 
         self.__statistics.copy_incidence_graph.stop_stopwatch()     # timer (stop)
         return copy
+
+    def convert_to_cnf(self) -> PySatCNF:
+        """
+        Convert the formula represented by the incidence graph to CNF
+        :return: PySAT CNF
+        """
+
+        cnf: PySatCNF = PySatCNF()
+
+        for clause_id in self.clause_id_set():
+            cnf.append(self.get_clause(clause_id))
+
+        return cnf
     # endregion
 
     # region Property
