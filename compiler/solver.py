@@ -8,10 +8,12 @@ from pysat.solvers import Minisat22, Glucose4, Lingeling, Cadical
 from compiler_statistics.compiler.solver_statistics import SolverStatistics
 
 # Import exception
+import exception.cara_exception as ca_exception
 import exception.compiler.compiler_exception as c_exception
 
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
+import compiler.enum.implied_literals_enum as il_enum
 
 
 class Solver:
@@ -38,6 +40,7 @@ class Solver:
     def __init__(self, cnf: Cnf,
                  clause_id_set: Union[Set[int], None],
                  sat_solver_enum: ss_enum.SatSolverEnum,
+                 first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum = il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP,
                  statistics: Union[SolverStatistics, None] = None):
         # Statistics
         if statistics is None:
@@ -91,17 +94,29 @@ class Solver:
 
         self.__statistics.first_implied_literals.start_stopwatch()  # timer (start - first_implied_literals)
 
-        # Implied literals without any assumption
+        # Backbones
+        from compiler.backbones import Backbones
+        self.__backbones = Backbones(self)
+
+        # First implied literals (without any assumption)
         self.__implied_literal_set: Set[int] = set()
-        temp = self.iterative_implicit_unit_propagation([])
+
+        # IMPLICIT_BCP, IMPLICIT_BCP_ITERATION
+        if first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP or \
+           first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP_ITERATION:
+            only_one_iteration = True if first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP else False
+            temp = self.iterative_implicit_unit_propagation([], only_one_iteration=only_one_iteration)
+        # BACKBONE
+        elif first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.BACKBONE:
+            temp = self.get_backbone_literals([])
+        else:
+            raise ca_exception.FunctionNotImplementedException("constructor (solver)",
+                                                               f"this type of getting first implied literals ({first_implied_literals_enum.name}) is not implemented")
+
         if temp is not None:
             self.__implied_literal_set = temp
 
         self.__statistics.first_implied_literals.stop_stopwatch()   # timer (stop - first_implied_literals)
-
-        # Backbones
-        from compiler.backbones import Backbones
-        self.__backbones = Backbones(self)
 
         self.__statistics.initialize.stop_stopwatch()   # timer (stop - initialize)
 
@@ -206,11 +221,12 @@ class Solver:
         self.__statistics.implicit_unit_propagation.stop_stopwatch()  # timer (stop)
         return result_dictionary
 
-    def iterative_implicit_unit_propagation(self, assignment_list: List[int]) -> Union[Set[int], None]:
+    def iterative_implicit_unit_propagation(self, assignment_list: List[int], only_one_iteration: bool) -> Union[Set[int], None]:
         """
         Repeat implicit unit propagation (implicit boolean constraint propagation) until a new implied literal is found.
         If the formula for the assignment is unsatisfiable, return None.
         :param assignment_list: the assignment
+        :param only_one_iteration: True if only one iteration is processed
         :return: a set of implied literals
         """
 
@@ -251,6 +267,9 @@ class Solver:
                 if intersection_temp:
                     assignment_list_temp.extend(intersection_temp)
                     repeat = True
+
+            if only_one_iteration:
+                repeat = False
 
         implied_literals = set(assignment_list_temp)
         implied_literals.difference_update(set(assignment_list))

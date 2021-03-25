@@ -35,6 +35,7 @@ class Compiler:
     Private Cnf cnf
     Private bool smooth
     Private Circuit circuit
+    Private bool preprocessing
     Private Statistics statistics
     Private bool cut_set_try_cache
     Private float new_cut_set_threshold
@@ -44,6 +45,7 @@ class Compiler:
     
     Private SatSolverEnum sat_solver_enum
     Private ImpliedLiteralsEnum implied_literals_enum
+    Private FirstImpliedLiteralsEnum first_implied_literals_enum
     Private HypergraphPartitioningCacheEnum hp_cache_enum
     Private HypergraphPartitioningSoftwareEnum hp_software_enum
     Private HypergraphPartitioningNodeWeightEnum hp_node_weight_type_enum
@@ -54,10 +56,12 @@ class Compiler:
     def __init__(self, cnf: Union[Cnf, str],
                  smooth: bool,
                  ub_factor: float,
+                 preprocessing: bool,
                  subsumed_threshold: Union[int, None],
                  new_cut_set_threshold: float,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
+                 first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                  component_caching_enum: cc_enum.ComponentCachingEnum,
                  hp_cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                  hp_software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
@@ -82,12 +86,14 @@ class Compiler:
 
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
+        self.__preprocessing: bool = preprocessing
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
+        self.__first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum = first_implied_literals_enum
 
         # Component caching
         self.__set_component_caching(component_caching_enum)
@@ -158,7 +164,9 @@ class Compiler:
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
                                   sat_solver_enum=self.__sat_solver_enum,
                                   implied_literals_enum=self.__implied_literals_enum,
-                                  statistics=self.__statistics)
+                                  first_implied_literals_enum=self.__first_implied_literals_enum,
+                                  statistics=self.__statistics,
+                                  preprocessing=self.__preprocessing)
             node_id = component.create_circuit()
             node_id_set.add(node_id)
 

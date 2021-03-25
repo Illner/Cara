@@ -1,4 +1,3 @@
 ) Hypergraph partitioning - cache
 ) comments - exception
-) Primal formula
-) implied literals - first time
+) is_2_cnf - None - preconditions

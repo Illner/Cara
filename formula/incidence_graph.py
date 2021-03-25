@@ -7,6 +7,7 @@ from typing import Set, Dict, List, Union, TypeVar
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 
 # Import exception
+import exception.cara_exception as c_exception
 import exception.formula.incidence_graph_exception as ig_exception
 
 # Type
@@ -19,9 +20,9 @@ class IncidenceGraph(Graph):
     """
 
     """
-    Private Dict<int, Set<int>> adjacency_literal_dictionary                # key: a literal, value: a set of clauses (nodes) where the literal appears
     Private Set<int> variable_set
     Private Set<int> clause_id_set
+    Private Dict<int, Set<int>> adjacency_literal_dictionary                # key: a literal, value: a set of clauses (nodes) where the literal appears
     
     Private IncidenceGraphStatistics statistics
     
@@ -43,9 +44,9 @@ class IncidenceGraph(Graph):
                  statistics: Union[IncidenceGraphStatistics, None] = None):
         super().__init__()
 
-        self.__adjacency_literal_dictionary: Dict[int, Set[int]] = dict()
         self.__variable_set: Set[int] = set()
         self.__clause_id_set: Set[int] = set()
+        self.__adjacency_literal_dictionary: Dict[int, Set[int]] = dict()
 
         # Statistics
         if statistics is None:
@@ -477,6 +478,22 @@ class IncidenceGraph(Graph):
                 max_variable = variable
 
         return max_variable
+
+    def is_2_cnf(self) -> bool:
+        """
+        Preconditions: no empty or unit clauses!!!
+        :return: True if the incidence graph represents a 2-CNF. Otherwise, False is returned.
+        """
+
+        ratio = self.number_of_edges() / self.number_of_clauses()
+
+        if ratio < 2:
+            raise c_exception.SomethingWrongException(f"Preconditions for the function is_2_cnf are not satisfied (ratio ({ratio}) < 2)!")
+
+        if ratio == 2:
+            return True
+
+        return False
 
     # region Assignment
     def remove_literal(self, literal: int) -> Set[int]:

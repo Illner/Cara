@@ -41,7 +41,7 @@ class SolverTest(TestAbstract):
                             unit_propagation = SortedList(unit_propagation)
 
                         # Implicit unit propagation
-                        implicit_unit_propagation = solver.iterative_implicit_unit_propagation(assumption)
+                        implicit_unit_propagation = solver.iterative_implicit_unit_propagation(assumption, only_one_iteration=False)
                         if implicit_unit_propagation is not None:
                             implicit_unit_propagation = SortedList(implicit_unit_propagation)
 

@@ -31,54 +31,60 @@ class CompilerTest(TestAbstract):
         for (file_name, file_path) in self._files:
             count = 0
             print()
-            print(f"File ({file_name}): ", end="")
+            print(f"File ({file_name}): ")
 
             for implied_literals_enum in il_enum.implied_literals_enum_values:
-                for hp_cache_enum in hpc_enum.hpc_enum_values:
-                    for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
-                        for subsumed_threshold in [100, None]:
-                            for new_cut_set_threshold in [0, 0.5, 1]:
-                                try:
-                                    count += 1
+                for first_implied_literals_enum in il_enum.first_implied_literals_enum_values:
+                    for hp_cache_enum in hpc_enum.hpc_enum_values:
+                        for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
+                            for subsumed_threshold in [100, None]:
+                                for new_cut_set_threshold in [0, 0.5, 1]:
+                                    try:
+                                        count += 1
 
-                                    actual_result = "\n".join((actual_result,
-                                                               f"File: {file_name}, "
-                                                               f"implied literals: {il_enum.ImpliedLiteralsEnum._value2member_map_[implied_literals_enum].name}, "
-                                                               f"cache: {hpc_enum.HypergraphPartitioningCacheEnum._value2member_map_[hp_cache_enum].name}, "
-                                                               f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum._value2member_map_[hp_variable_simplification_enum].name}, "
-                                                               f"subsumed threshold: {subsumed_threshold}, "
-                                                               f"new cut set threshold: {new_cut_set_threshold}"))
+                                        actual_result = "\n".join((actual_result,
+                                                                   f"File: {file_name}, "
+                                                                   f"implied literals: {il_enum.ImpliedLiteralsEnum._value2member_map_[implied_literals_enum].name}, "
+                                                                   f"first implied literals: {il_enum.FirstImpliedLiteralsEnum._value2member_map_[first_implied_literals_enum].name}, "
+                                                                   f"cache: {hpc_enum.HypergraphPartitioningCacheEnum._value2member_map_[hp_cache_enum].name}, "
+                                                                   f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum._value2member_map_[hp_variable_simplification_enum].name}, "
+                                                                   f"subsumed threshold: {subsumed_threshold}, "
+                                                                   f"new cut set threshold: {new_cut_set_threshold}"))
 
-                                    cnf = Cnf(file_path)
-                                    compiler = Compiler(cnf=cnf,
-                                                        smooth=True,
-                                                        ub_factor=0.1,
-                                                        subsumed_threshold=subsumed_threshold,
-                                                        new_cut_set_threshold=new_cut_set_threshold,
-                                                        sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                                                        implied_literals_enum=implied_literals_enum,
-                                                        component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
-                                                        hp_cache_enum=hp_cache_enum,
-                                                        hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
-                                                        hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
-                                                        hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
-                                                        hp_variable_simplification_enum=hp_variable_simplification_enum,
-                                                        hp_limit_number_of_clauses_cache=(None, 200),
-                                                        hp_limit_number_of_variables_cache=(None, 200))
-                                    circuit = compiler.create_circuit()
-                                    number_of_models = circuit.model_counting(set(), set())
-                                    real_number_of_models = int(cnf.comments)
+                                        cnf = Cnf(file_path)
+                                        compiler = Compiler(cnf=cnf,
+                                                            smooth=True,
+                                                            ub_factor=0.1,
+                                                            preprocessing=True,
+                                                            subsumed_threshold=subsumed_threshold,
+                                                            new_cut_set_threshold=new_cut_set_threshold,
+                                                            sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
+                                                            implied_literals_enum=implied_literals_enum,
+                                                            first_implied_literals_enum=first_implied_literals_enum,
+                                                            component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                                                            hp_cache_enum=hp_cache_enum,
+                                                            hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
+                                                            hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
+                                                            hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
+                                                            hp_variable_simplification_enum=hp_variable_simplification_enum,
+                                                            hp_limit_number_of_clauses_cache=(None, 200),
+                                                            hp_limit_number_of_variables_cache=(None, 200))
+                                        circuit = compiler.create_circuit()
+                                        number_of_models = circuit.model_counting(set(), set())
+                                        real_number_of_models = int(cnf.comments)
 
-                                    if number_of_models == real_number_of_models:
-                                        actual_result = "\n".join((actual_result, f"Correct", ""))
-                                        print("|", end="" if count % 10 != 0 else " ")
-                                    else:
-                                        actual_result = "\n".join((actual_result, f"Incorrect: {number_of_models} vs {real_number_of_models}", ""))
-                                        print("X", end="" if count % 10 != 0 else " ")
+                                        if number_of_models == real_number_of_models:
+                                            actual_result = "\n".join((actual_result, f"Correct", ""))
+                                            result_temp = "|"
+                                        else:
+                                            actual_result = "\n".join((actual_result, f"Incorrect: {number_of_models} vs {real_number_of_models}", ""))
+                                            result_temp = "X"
 
-                                except (c_exception.CaraException, Exception) as err:
-                                    print("E", end="" if count % 10 != 0 else " ")
-                                    actual_result = "\n".join((actual_result, str(err), ""))
+                                        print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "))
+
+                                    except (c_exception.CaraException, Exception) as err:
+                                        print("E", end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "))
+                                        actual_result = "\n".join((actual_result, str(err), ""))
 
         print()
         return actual_result

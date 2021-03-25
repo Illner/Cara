@@ -36,6 +36,7 @@ class Component:
     
     Private SatSolverEnum sat_solver_enum
     Private ImpliedLiteralsEnum implied_literals_enum
+    Private FirstImpliedLiteralsEnum first_implied_literals_enum
     
     Private List<int> assignment_list
     """
@@ -51,7 +52,9 @@ class Component:
                  hypergraph_partitioning: HypergraphPartitioning,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
-                 statistics: Statistics):
+                 first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
+                 statistics: Statistics,
+                 preprocessing: bool = False):
         self.__cnf: Cnf = cnf
         self.__circuit: Circuit = circuit
         self.__cut_set_try_cache: bool = cut_set_try_cache
@@ -64,6 +67,7 @@ class Component:
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
+        self.__first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum = first_implied_literals_enum
 
         self.__statistics: Statistics = statistics
 
@@ -71,6 +75,7 @@ class Component:
         self.__solver: Solver = Solver(cnf=cnf,
                                        clause_id_set=clause_id_set,
                                        sat_solver_enum=sat_solver_enum,
+                                       first_implied_literals_enum=self.__first_implied_literals_enum if not preprocessing else il_enum.FirstImpliedLiteralsEnum.BACKBONE,
                                        statistics=self.__statistics.solver_statistics)
 
         self.__assignment_list: List[int] = assignment_list
@@ -105,9 +110,11 @@ class Component:
             self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()    # timer (stop)
             return result
 
-        # IMPLICIT_BCP
-        if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP:
-            result = self.__solver.iterative_implicit_unit_propagation(self.__assignment_list)
+        # IMPLICIT_BCP, IMPLICIT_BCP_ITERATION
+        if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP or \
+           self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP_ITERATION:
+            only_one_iteration = True if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP else False
+            result = self.__solver.iterative_implicit_unit_propagation(self.__assignment_list, only_one_iteration=only_one_iteration)
 
             self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop)
             return result
@@ -265,6 +272,7 @@ class Component:
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
                                            sat_solver_enum=self.__sat_solver_enum,
                                            implied_literals_enum=self.__implied_literals_enum,
+                                           first_implied_literals_enum=self.__first_implied_literals_enum,
                                            statistics=self.__statistics)
                 node_id = component_temp.create_circuit()
                 node_id_set.add(node_id)
