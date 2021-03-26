@@ -8,6 +8,7 @@ from tests.test_abstract import TestAbstract
 
 # Formula
 import tests.formula.cnf.cnf_test as fc_test
+import tests.formula.two_cnf.two_cnf_test as ftc_test
 import tests.formula.incidence_graph.incidence_graph_test as fig_test
 
 # Circuit
@@ -32,11 +33,19 @@ def main(args):
     log_string = "Test automation results\n"
     print(log_string)
 
-    # Cnf test
+    # CNF test
     if args.formula_cnf_test:
         cnf_test = fc_test.CnfTest()
         print(cnf_test.test_name, end=": ")
         result, log_result = test(cnf_test)
+        print(result)
+        log_string = "\n".join((log_string, log_result, ""))
+
+    # 2-CNF test
+    if args.formula_2_cnf_test:
+        two_cnf_test = ftc_test.TwoCnfTest()
+        print(two_cnf_test.test_name, end=": ")
+        result, log_result = test(two_cnf_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
 
@@ -137,6 +146,12 @@ def create_parser() -> argparse.ArgumentParser:
                         default=True,
                         type=cara.str2bool,
                         help="Test automation for CNFs.")
+    parser.add_argument("-f2ct",
+                        "--formula_2_cnf_test",
+                        action="store",
+                        default=True,
+                        type=cara.str2bool,
+                        help="Test automation for 2-CNFs.")
     parser.add_argument("-figt",
                         "--formula_incidence_graph_test",
                         action="store",

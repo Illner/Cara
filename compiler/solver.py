@@ -365,7 +365,7 @@ class Solver:
 
     # region Magic function
     def __del__(self):
-        # Delete the main SAT Solver
+        # Delete the main SAT solver
         if self.__sat_main is not None:
             self.__sat_main.delete()
 

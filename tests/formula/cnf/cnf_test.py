@@ -11,7 +11,7 @@ class CnfTest(TestAbstract):
     __DIRECTORY: str = os.path.join("formula", "cnf")
 
     def __init__(self):
-        super().__init__(CnfTest.__DIRECTORY, test_name="Cnf test")
+        super().__init__(CnfTest.__DIRECTORY, test_name="CNF test")
         self._set_files(CnfTest.__DIRECTORY, "CNF_formulae")
 
     # region Override method

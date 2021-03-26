@@ -59,7 +59,7 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
             plt.show()
     except ValueError:
         warnings.warn("boxplot - invalid data!", category=Warning)
-    except:
+    except Exception:
         warnings.warn("boxplot - something wrong!", category=Warning)
     finally:
         plt.close(fig)
@@ -93,7 +93,7 @@ def scatter(data_x: List[float], data_y: List[float], title: str,
 
         if show:
             plt.show()
-    except:
+    except Exception:
         warnings.warn("scatter - something wrong!", category=Warning)
     finally:
         plt.close(fig)

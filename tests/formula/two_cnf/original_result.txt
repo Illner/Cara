@@ -1,0 +1,68 @@
+
+Satisfiability
+
+elaborate.cnf
+Number of variables: 12, number of clauses: 12, formula length: 24
+
+Assignment: []
+Is satisfiable: True
+
+Assignment: [1]
+Is satisfiable: False
+
+Assignment: [-2, -3]
+Is satisfiable: True
+
+not_2_cnf.cnf
+The formula is not 2-CNF!
+
+trivial.cnf
+Number of variables: 7, number of clauses: 7, formula length: 14
+
+Assignment: []
+Is satisfiable: True
+
+Assignment: [1]
+Is satisfiable: False
+
+Assignment: [-2, -3]
+Is satisfiable: True
+
+unit_clause.cnf
+The formula is not 2-CNF!
+
+unsatisfiable.cnf
+Number of variables: 50, number of clauses: 100, formula length: 200
+
+Assignment: []
+Is satisfiable: False
+
+Assignment: [1]
+Is satisfiable: False
+
+Assignment: [-2, -3]
+Is satisfiable: False
+
+
+Append
+
+Appending the clause: [1, 2]
+Number of variables: 2, number of clauses: 1, formula length: 2
+Is satisfiable: True
+
+Appending the clause: [1, 3]
+Number of variables: 3, number of clauses: 2, formula length: 4
+Is satisfiable: True
+
+Appending the clause: [1, 4]
+Number of variables: 4, number of clauses: 3, formula length: 6
+Is satisfiable: True
+
+Appending the clause: [1, -4]
+Number of variables: 4, number of clauses: 4, formula length: 8
+Is satisfiable: False
+
+Appending the clause: [5, 6]
+Number of variables: 6, number of clauses: 5, formula length: 10
+Is satisfiable: False
+

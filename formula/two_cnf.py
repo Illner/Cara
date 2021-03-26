@@ -25,6 +25,8 @@ class TwoCnf:
 
     def __init__(self, cnf: Union[PySatCnf, None] = None,
                  propagate_sat_solver_enum: ss_enum.PropagateSatSolverEnum = ss_enum.PropagateSatSolverEnum.MiniSAT):
+        self.__sat_solver = None
+
         # CNF
         if cnf is None:
             self.__cnf: PySatCnf = PySatCnf()
@@ -36,7 +38,6 @@ class TwoCnf:
             self.__cnf: PySatCnf = cnf
 
         # Create SAT solver
-        self.__sat_solver = None
         # MiniSAT
         if propagate_sat_solver_enum == ss_enum.PropagateSatSolverEnum.MiniSAT:
             self.__sat_solver = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
@@ -51,7 +52,7 @@ class TwoCnf:
     def append(self, clause: Union[Set[int], List[int]], check_2_cnf: bool = True) -> None:
         """
         Append the clause to the formula.
-        If the clause contains more than two literals, raise an exception (FormulaIsNot2CnfException)
+        If the clause contains more than two literals, raise an exception (FormulaIsNot2CnfException).
         :param clause: the clause
         :param check_2_cnf: True for checking if the modified formula is still 2-CNF
         :return: None
@@ -87,8 +88,8 @@ class TwoCnf:
         while variable_to_try_set:
             var = variable_to_try_set.pop()
 
-            # Negative literal
-            assignment_list_temp.append(-var)
+            # Positive literal
+            assignment_list_temp.append(var)
             no_conflict, implied_literals = self.__sat_solver.propagate(assumptions=assignment_list_temp)
             assignment_list_temp.pop()
 
@@ -98,8 +99,8 @@ class TwoCnf:
 
                 continue
 
-            # Positive literal
-            assignment_list_temp.append(var)
+            # Negative literal
+            assignment_list_temp.append(-var)
             no_conflict, implied_literals = self.__sat_solver.propagate(assumptions=assignment_list_temp)
             assignment_list_temp.pop()
 
@@ -118,6 +119,11 @@ class TwoCnf:
     # region Magic method
     def __str__(self):
         return str(self.__cnf)
+
+    def __del__(self):
+        # Delete the SAT solver
+        if self.__sat_solver is not None:
+            self.__sat_solver.delete()
     # endregion
 
     # region Property
