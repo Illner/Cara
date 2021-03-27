@@ -263,6 +263,11 @@ Neighbours (clauses)
 3 (0): 
 
 Components
+Is connected: True, number of components: 1, number of nodes: 1, number of variables: 0, number of clauses: 1
+Neighbours (variables)
+Neighbours (clauses)
+3 (0): 
+
 Restore literals ([3, -1])
 Restore literal (3)
 Is connected: True, number of components: 1, number of nodes: 4, number of variables: 2, number of clauses: 2

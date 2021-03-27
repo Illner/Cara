@@ -1,6 +1,7 @@
 # Import
 from compiler_statistics.statistics_component_timer import StatisticsComponentTimer
 from compiler_statistics.statistics_template_abstract import StatisticsTemplateAbstract
+from compiler_statistics.statistics_component_counter import StatisticsComponentCounter
 
 
 class IncidenceGraphStatistics(StatisticsTemplateAbstract):
@@ -20,6 +21,11 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer clause_id_set
     Private StatisticsComponentTimer number_of_components
     Private StatisticsComponentTimer variable_set
+    Private StatisticsComponentTimer renamable_horn_recognition_initialization
+    Private StatisticsComponentTimer renamable_horn_recognition_check
+    
+    Private StatisticsComponentCounter renamable_horn_ratio
+    Private StatisticsComponentCounter two_cnf_ratio
     """
 
     def __init__(self):
@@ -57,6 +63,18 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
         self.__variable_set: StatisticsComponentTimer = StatisticsComponentTimer("get variables")
         self._component_list.append(self.__variable_set)
+
+        self.__renamable_horn_recognition_initialization: StatisticsComponentTimer = StatisticsComponentTimer("renamable horn recognition - initialization")
+        self._component_list.append(self.__renamable_horn_recognition_initialization)
+
+        self.__renamable_horn_recognition_check: StatisticsComponentTimer = StatisticsComponentTimer("renamable horn recognition - check")
+        self._component_list.append(self.__renamable_horn_recognition_check)
+
+        self.__renamable_horn_ratio: StatisticsComponentCounter = StatisticsComponentCounter("renamable horn - ratio")
+        self._component_list.append(self.__renamable_horn_ratio)
+
+        self.__two_cnf_ratio: StatisticsComponentCounter = StatisticsComponentCounter("2 CNF - ratio")
+        self._component_list.append(self.__two_cnf_ratio)
 
     # region Property
     @property
@@ -102,4 +120,20 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     @property
     def variable_set(self):
         return self.__variable_set
+
+    @property
+    def renamable_horn_recognition_initialization(self):
+        return self.__renamable_horn_recognition_initialization
+
+    @property
+    def renamable_horn_recognition_check(self):
+        return self.__renamable_horn_recognition_check
+
+    @property
+    def renamable_horn_ratio(self):
+        return self.__renamable_horn_ratio
+
+    @property
+    def two_cnf_ratio(self):
+        return self.__two_cnf_ratio
     # endregion

@@ -23,13 +23,17 @@ class IncidenceGraph(Graph):
     """
     Private Set<int> variable_set
     Private Set<int> clause_id_set
+    Private Set<int> satisfied_clause_set
     Private Dict<int, Set<int>> adjacency_literal_dictionary                # key: a literal, value: a set of clauses (nodes) where the literal appears
     
     Private IncidenceGraphStatistics statistics
     
+    Private Set<int> unit_clause_set
+    Private Dict<int, int> clause_length_dictionary                         # key: a clause, value: the length of the clause
+    
     # Assignment
-    Private Set<int> variable_backup_set
-    Private List<int> literal_backup_list
+    Private Set<int> assigned_literal_set
+    Private List<int> assigned_literal_list
     Private Dict<int, Set<str>> variable_node_backup_dictionary             # key: a variable, value: a set of clauses (nodes) that were incident with the variable node when the variable node was being deleted
     Private Dict<int, Dict<int, Set<int>> clause_node_backup_dictionary     # key: a variable, value: a dictionary, where a key is a clause node that was satisfied because of the variable, and the value is a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
     
@@ -47,7 +51,12 @@ class IncidenceGraph(Graph):
 
         self.__variable_set: Set[int] = set()
         self.__clause_id_set: Set[int] = set()
+        self.__satisfied_clause_set: Set[int] = set()
         self.__adjacency_literal_dictionary: Dict[int, Set[int]] = dict()
+
+        # Clause length
+        self.__unit_clause_set: Set[int] = set()
+        self.__clause_length_dictionary: Dict[int, int] = dict()
 
         # Statistics
         if statistics is None:
@@ -56,8 +65,8 @@ class IncidenceGraph(Graph):
             self.__statistics: IncidenceGraphStatistics = statistics
 
         # Backup - assignment
-        self.__variable_backup_set: Set[int] = set()
-        self.__literal_backup_list: List[int] = []
+        self.__assigned_literal_set: Set[int] = set()
+        self.__assigned_literal_list: List[int] = []
         self.__variable_node_backup_dictionary: Dict[int, Set[str]] = dict()
         self.__clause_node_backup_dictionary: Dict[int, Dict[int, Set[int]]] = dict()
 
@@ -92,9 +101,49 @@ class IncidenceGraph(Graph):
         """
 
         return f"c{clause_id}"
+
+    @staticmethod
+    def __unhash(id_hash: str) -> int:
+        """
+        If the hash is invalid, raise an exception (SomethingWrongException)
+        :param id_hash: the hash
+        :return: the hashed ID
+        """
+
+        try:
+            id = int(id_hash[1:])
+        except ValueError:
+            raise c_exception.SomethingWrongException(f"invalid hash ({id_hash})")
+
+        return id
     # endregion
 
     # region Private method
+    def __update_clause_length(self, clause_id: int, increment_by_one: bool) -> None:
+        """
+        Increment or decrement the clause length by one.
+        If the length of the clause will be negative, raise an exception (SomethingWrongException).
+        :param clause_id: the clause's ID
+        :param increment_by_one: True for incrementing the length by one, False for decrementing the length by one
+        :return: None
+        """
+
+        # Increment
+        if increment_by_one:
+            self.__clause_length_dictionary[clause_id] += 1
+        # Decrement
+        else:
+            self.__clause_length_dictionary[clause_id] -= 1
+
+        value = self.__clause_length_dictionary[clause_id]
+        if value < 0:
+            raise c_exception.SomethingWrongException(f"the length of the clause ({clause_id}) is negative ({value})")
+
+        if value == 1:
+            self.__unit_clause_set.add(clause_id)
+        elif clause_id in self.__unit_clause_set:
+            self.__unit_clause_set.remove(clause_id)
+
     def __node_exist(self, node_hash: str) -> bool:
         """
         :return: True if the node exists in the incidence graph. Otherwise, False is returned.
@@ -130,6 +179,10 @@ class IncidenceGraph(Graph):
         if not self.__node_exist(variable_hash):
             raise ig_exception.VariableDoesNotExistException(variable)
 
+        # Remove edges
+        for neighbour_hash in set(self.neighbors(variable_hash)):
+            self.__temporarily_remove_edge(variable_hash, neighbour_hash)
+
         self.__variable_set.remove(variable)
         self.remove_node(variable_hash)
 
@@ -145,6 +198,10 @@ class IncidenceGraph(Graph):
         # Check if the clause exists in the incidence graph
         if not self.__node_exist(clause_id_hash):
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
+
+        # Remove edges
+        for neighbour_hash in set(self.neighbors(clause_id_hash)):
+            self.__temporarily_remove_edge(neighbour_hash, clause_id_hash)
 
         self.__clause_id_set.remove(clause_id)
         self.remove_node(clause_id_hash)
@@ -182,6 +239,7 @@ class IncidenceGraph(Graph):
         if not self.has_edge(variable_hash, clause_id_hash):
             raise ig_exception.TryingRemoveEdgeDoesNotExistException(variable, clause_id)
 
+        self.__update_clause_length(self.__unhash(clause_id_hash), increment_by_one=False)  # update the length
         super().remove_edge(variable_hash, clause_id_hash)
 
     def __add_edge(self, variable_hash: str, clause_id_hash: str) -> None:
@@ -190,6 +248,7 @@ class IncidenceGraph(Graph):
         :return: None
         """
 
+        self.__update_clause_length(self.__unhash(clause_id_hash), increment_by_one=True)   # update the length
         super().add_edge(variable_hash, clause_id_hash)
     # endregion
 
@@ -228,6 +287,7 @@ class IncidenceGraph(Graph):
         if self.__node_exist(clause_id_hash):
             raise ig_exception.ClauseIdAlreadyExistsException(clause_id)
 
+        self.__clause_length_dictionary[clause_id] = 0  # clause length
         self.__clause_id_set.add(clause_id)
         self.add_node(clause_id_hash, value=clause_id, bipartite=1)
 
@@ -480,22 +540,6 @@ class IncidenceGraph(Graph):
 
         return max_variable
 
-    def is_2_cnf(self) -> bool:
-        """
-        Preconditions: no empty or unit clauses!!!
-        :return: True if the incidence graph represents a 2-CNF. Otherwise, False is returned.
-        """
-
-        ratio = self.number_of_edges() / self.number_of_clauses()
-
-        if ratio < 2:
-            raise c_exception.SomethingWrongException(f"Preconditions for the function is_2_cnf are not satisfied (ratio ({ratio}) < 2)!")
-
-        if ratio == 2:
-            return True
-
-        return False
-
     # region Assignment
     def remove_literal(self, literal: int) -> Set[int]:
         """
@@ -512,7 +556,7 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable has been already removed from the incidence graph
-        if variable in self.__variable_backup_set:
+        if variable in self.__assigned_literal_set:
             raise ig_exception.VariableHasBeenRemovedException(variable)
 
         # The variable does not exist in the incidence graph
@@ -524,8 +568,8 @@ class IncidenceGraph(Graph):
         isolated_variable_set = set()
 
         # Backup
-        self.__variable_backup_set.add(variable)
-        self.__literal_backup_list.append(literal)
+        self.__assigned_literal_set.add(variable)
+        self.__assigned_literal_list.append(literal)
 
         variable_node_neighbour_set = set(self.neighbors(variable_hash))
         self.__variable_node_backup_dictionary[variable] = variable_node_neighbour_set
@@ -545,6 +589,7 @@ class IncidenceGraph(Graph):
             clause_node_dictionary[clause_id] = clause_node_neighbour_set
 
             # Delete the (satisfied) clause
+            self.__satisfied_clause_set.add(clause_id)
             self.__temporarily_remove_clause_id(clause_id)
 
             # Check if a neighbour is not an isolated node
@@ -580,22 +625,23 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable has not been removed from the incidence graph
-        if variable not in self.__variable_backup_set:
+        if variable not in self.__assigned_literal_set:
             raise ig_exception.TryingRestoreLiteralHasNotBeenRemovedException(literal)
 
         # The literal is not the last one that was removed
-        last_literal = self.__literal_backup_list[-1]
+        last_literal = self.__assigned_literal_list[-1]
         if last_literal != literal:
             raise ig_exception.TryingRestoreLiteralIsNotLastOneRemovedException(literal, last_literal)
 
         self.__statistics.restore_backup_literal.start_stopwatch()      # timer (start)
 
-        self.__variable_backup_set.remove(variable)
-        self.__literal_backup_list.pop()
+        self.__assigned_literal_set.remove(variable)
+        self.__assigned_literal_list.pop()
 
-        # Restore clauses
+        # Restore clauses (the clauses are not satisfied anymore)
         clause_node_dictionary = self.__clause_node_backup_dictionary[variable]
         for clause_id in clause_node_dictionary:
+            self.__satisfied_clause_set.remove(clause_id)
             self.add_clause_id(clause_id)
 
             clause_id_hash = self.__clause_id_hash(clause_id)
@@ -623,7 +669,7 @@ class IncidenceGraph(Graph):
 
     def restore_backup_literal_set(self, literal_set: Set[int]) -> None:
         while len(literal_set):
-            last_literal = self.__literal_backup_list[-1]
+            last_literal = self.__assigned_literal_list[-1]
 
             # The last literal in the backup does not exist in the set => choose any element in the set and cause an exception
             if last_literal not in literal_set:
@@ -780,13 +826,14 @@ class IncidenceGraph(Graph):
             incidence_graph_temp = IncidenceGraph(statistics=self.__statistics)
 
             for node_hash in component:
-                # The node is not a variable
-                if not self.__is_node_variable(node_hash):
+                # The node is not a clause
+                if self.__is_node_variable(node_hash):
                     continue
 
-                variable = self.nodes[node_hash]["value"]
+                clause_id = self.nodes[node_hash]["value"]
+                incidence_graph_temp.add_clause_id(clause_id)
                 for neighbour_hash in self.neighbors(node_hash):
-                    clause_id = self.nodes[neighbour_hash]["value"]
+                    variable = self.nodes[neighbour_hash]["value"]
 
                     literal = variable  # Positive literal
                     if clause_id in self.__adjacency_literal_dictionary[-variable]:     # Negative literal
@@ -794,7 +841,7 @@ class IncidenceGraph(Graph):
 
                     incidence_graph_temp.add_edge(literal, clause_id, create_node=True)
 
-                incidence_graph_set.add(incidence_graph_temp)
+            incidence_graph_set.add(incidence_graph_temp)
 
         self.__statistics.create_incidence_graphs_for_components.stop_stopwatch()   # timer (stop)
         return incidence_graph_set
@@ -838,6 +885,42 @@ class IncidenceGraph(Graph):
             cnf.append(self.get_clause(clause_id))
 
         return cnf
+
+    def is_2_cnf(self) -> bool:
+        """
+        :return: True if the incidence graph represents a 2-CNF. Otherwise, False is returned.
+        """
+
+        number_of_unit_clauses = len(self.__unit_clause_set)
+        number_of_not_unit_clauses = self.number_of_clauses() - number_of_unit_clauses
+
+        if number_of_not_unit_clauses == 0:
+            self.__statistics.two_cnf_ratio.add_count(1)  # counter
+            return True
+
+        ratio = (self.number_of_edges() - number_of_unit_clauses) / number_of_not_unit_clauses
+
+        if ratio < 2:
+            raise c_exception.SomethingWrongException(f"preconditions for the function is_2_cnf are not satisfied (ratio ({ratio}) < 2)")
+
+        if ratio == 2:
+            self.__statistics.two_cnf_ratio.add_count(1)    # counter
+            return True
+
+        self.__statistics.two_cnf_ratio.add_count(0)    # counter
+        return False
+
+    def initialize_horn_recognition_algorithm(self) -> None:
+        """
+        Initialize the recognition algorithm for Horn formulae
+        :return: None
+        """
+
+        self.__statistics.renamable_horn_recognition_initialization.start_stopwatch()   # timer (start)
+
+        pass
+
+        self.__statistics.renamable_horn_recognition_initialization.stop_stopwatch()    # timer (stop)
     # endregion
 
     # region Property

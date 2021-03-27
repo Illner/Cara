@@ -95,3 +95,13 @@ class TryingRemoveEdgeDoesNotExistException(IncidenceGraphException):
     def __init__(self, variable: int, clause_id: int):
         self.message = f"Trying to remove the edge ({variable} - {clause_id}) that does not exist in the incidence graph!"
         super().__init__(self.message)
+
+
+class RenamableHornRecognitionHasNotBeenInitializedException(IncidenceGraphException):
+    """
+    Renamable horn recognition has not been initialized
+    """
+
+    def __init__(self):
+        self.message = "Renamable horn recognition has not been initialized!"
+        super().__init__(self.message)

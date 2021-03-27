@@ -1,6 +1,8 @@
 Test automation results
 
-Cnf test: True
+CNF test: True
+
+2-CNF test: True
 
 Incidence graph test: True
 

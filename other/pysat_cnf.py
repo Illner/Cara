@@ -26,7 +26,7 @@ class PySatCnf(CNF):
         self.__formula_length += len(clause)
 
         # Check 2-CNF
-        if len(clause) != 2:
+        if len(clause) > 2:
             self.__is_2_cnf = False
 
         super().append(clause)

@@ -10,8 +10,6 @@ import exception.compiler.compiler_exception as c_exception
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
 
-# TODO statistics
-
 
 class TwoCnf:
     """
@@ -23,7 +21,7 @@ class TwoCnf:
     Private Solver sat_solver
     """
 
-    def __init__(self, cnf: Union[PySatCnf, None] = None,
+    def __init__(self, cnf: Union[PySatCnf, None] = None, check_2_cnf: bool = True,
                  propagate_sat_solver_enum: ss_enum.PropagateSatSolverEnum = ss_enum.PropagateSatSolverEnum.MiniSAT):
         self.__sat_solver = None
 
@@ -32,7 +30,7 @@ class TwoCnf:
             self.__cnf: PySatCnf = PySatCnf()
         else:
             # Check 2-CNF
-            if not cnf.is_2_cnf:
+            if check_2_cnf and not cnf.is_2_cnf:
                 raise f_exception.FormulaIsNot2CnfException()
 
             self.__cnf: PySatCnf = cnf
@@ -49,17 +47,16 @@ class TwoCnf:
             raise c_exception.SatSolverIsNotSupportedException(propagate_sat_solver_enum)
 
     # region Public method
-    def append(self, clause: Union[Set[int], List[int]], check_2_cnf: bool = True) -> None:
+    def append(self, clause: Union[Set[int], List[int]]) -> None:
         """
         Append the clause to the formula.
         If the clause contains more than two literals, raise an exception (FormulaIsNot2CnfException).
         :param clause: the clause
-        :param check_2_cnf: True for checking if the modified formula is still 2-CNF
         :return: None
         """
 
         # Check 2-CNF
-        if check_2_cnf and len(clause) != 2:
+        if len(clause) > 2:
             raise f_exception.FormulaIsNot2CnfException(str(clause))
 
         self.__cnf.append(clause)
@@ -91,20 +88,28 @@ class TwoCnf:
             # Positive literal
             assignment_list_temp.append(var)
             no_conflict, implied_literals = self.__sat_solver.propagate(assumptions=assignment_list_temp)
-            assignment_list_temp.pop()
 
             if no_conflict:
+                for lit in assignment_list_temp:
+                    if lit not in implied_literals:
+                        implied_literals.append(lit)
+
                 assignment_list_temp = implied_literals
                 variable_to_try_set = get_variable_to_try_set(assignment_list_temp)
 
                 continue
 
+            assignment_list_temp.pop()
+
             # Negative literal
             assignment_list_temp.append(-var)
             no_conflict, implied_literals = self.__sat_solver.propagate(assumptions=assignment_list_temp)
-            assignment_list_temp.pop()
 
             if no_conflict:
+                for lit in assignment_list_temp:
+                    if lit not in implied_literals:
+                        implied_literals.append(lit)
+
                 assignment_list_temp = implied_literals
                 variable_to_try_set = get_variable_to_try_set(assignment_list_temp)
 

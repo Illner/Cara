@@ -29,7 +29,16 @@ Assignment: [-2, -3]
 Is satisfiable: True
 
 unit_clause.cnf
-The formula is not 2-CNF!
+Number of variables: 6, number of clauses: 7, formula length: 13
+
+Assignment: []
+Is satisfiable: True
+
+Assignment: [1]
+Is satisfiable: False
+
+Assignment: [-2, -3]
+Is satisfiable: True
 
 unsatisfiable.cnf
 Number of variables: 50, number of clauses: 100, formula length: 200
