@@ -97,11 +97,11 @@ class TryingRemoveEdgeDoesNotExistException(IncidenceGraphException):
         super().__init__(self.message)
 
 
-class RenamableHornRecognitionHasNotBeenInitializedException(IncidenceGraphException):
+class RenamableHornFormulaRecognitionHasNotBeenInitializedException(IncidenceGraphException):
     """
-    Renamable horn recognition has not been initialized
+    Renamable Horn formula recognition has not been initialized
     """
 
     def __init__(self):
-        self.message = "Renamable horn recognition has not been initialized!"
+        self.message = "Renamable Horn formula recognition has not been initialized!"
         super().__init__(self.message)

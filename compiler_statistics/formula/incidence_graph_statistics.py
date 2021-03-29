@@ -21,10 +21,10 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer clause_id_set
     Private StatisticsComponentTimer number_of_components
     Private StatisticsComponentTimer variable_set
-    Private StatisticsComponentTimer renamable_horn_recognition_initialization
-    Private StatisticsComponentTimer renamable_horn_recognition_check
+    Private StatisticsComponentTimer renamable_horn_formula_recognition_initialization
+    Private StatisticsComponentTimer renamable_horn_formula_recognition_check
     
-    Private StatisticsComponentCounter renamable_horn_ratio
+    Private StatisticsComponentCounter renamable_horn_formula_ratio
     Private StatisticsComponentCounter two_cnf_ratio
     """
 
@@ -64,14 +64,14 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
         self.__variable_set: StatisticsComponentTimer = StatisticsComponentTimer("get variables")
         self._component_list.append(self.__variable_set)
 
-        self.__renamable_horn_recognition_initialization: StatisticsComponentTimer = StatisticsComponentTimer("renamable horn recognition - initialization")
-        self._component_list.append(self.__renamable_horn_recognition_initialization)
+        self.__renamable_horn_formula_recognition_initialization: StatisticsComponentTimer = StatisticsComponentTimer("renamable Horn formula recognition - initialization")
+        self._component_list.append(self.__renamable_horn_formula_recognition_initialization)
 
-        self.__renamable_horn_recognition_check: StatisticsComponentTimer = StatisticsComponentTimer("renamable horn recognition - check")
-        self._component_list.append(self.__renamable_horn_recognition_check)
+        self.__renamable_horn_formula_recognition_check: StatisticsComponentTimer = StatisticsComponentTimer("renamable Horn formula recognition - check")
+        self._component_list.append(self.__renamable_horn_formula_recognition_check)
 
-        self.__renamable_horn_ratio: StatisticsComponentCounter = StatisticsComponentCounter("renamable horn - ratio")
-        self._component_list.append(self.__renamable_horn_ratio)
+        self.__renamable_horn_formula_ratio: StatisticsComponentCounter = StatisticsComponentCounter("renamable Horn formula - ratio")
+        self._component_list.append(self.__renamable_horn_formula_ratio)
 
         self.__two_cnf_ratio: StatisticsComponentCounter = StatisticsComponentCounter("2 CNF - ratio")
         self._component_list.append(self.__two_cnf_ratio)
@@ -122,16 +122,16 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
         return self.__variable_set
 
     @property
-    def renamable_horn_recognition_initialization(self):
-        return self.__renamable_horn_recognition_initialization
+    def renamable_horn_formula_recognition_initialization(self):
+        return self.__renamable_horn_formula_recognition_initialization
 
     @property
-    def renamable_horn_recognition_check(self):
-        return self.__renamable_horn_recognition_check
+    def renamable_horn_formula_recognition_check(self):
+        return self.__renamable_horn_formula_recognition_check
 
     @property
-    def renamable_horn_ratio(self):
-        return self.__renamable_horn_ratio
+    def renamable_horn_formula_ratio(self):
+        return self.__renamable_horn_formula_ratio
 
     @property
     def two_cnf_ratio(self):

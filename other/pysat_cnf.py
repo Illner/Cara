@@ -9,21 +9,35 @@ class PySatCnf(CNF):
     """
 
     """
-    Private bool is_2_cnf
     Private int formula_length
-    Protected Set<int> variable_set
+    Private Set<int> variable_set
+    
+    Private bool is_2_cnf
+    Private bool is_horn_formula
     """
 
     def __init__(self):
         super().__init__()
 
-        self.__is_2_cnf: bool = True
         self.__formula_length: int = 0
-        self._variable_set: Set[int] = set()
+        self.__variable_set: Set[int] = set()
+
+        self.__is_2_cnf: bool = True
+        self.__is_horn_formula: bool = True
 
     def append(self, clause: Union[Set[int], List[int]]) -> None:
-        self._variable_set.update(map(lambda l: abs(l), clause))
         self.__formula_length += len(clause)
+
+        number_of_positive_literals = 0
+        for lit in clause:
+            self.__variable_set.add(abs(lit))
+
+            if lit > 0:
+                number_of_positive_literals += 1
+
+        # Check Horn formula
+        if number_of_positive_literals > 1:
+            self.__is_horn_formula = False
 
         # Check 2-CNF
         if len(clause) > 2:
@@ -39,10 +53,23 @@ class PySatCnf(CNF):
 
         return result
 
+    # region Public
+    def get_variable_set(self, copy: bool = False):
+        """
+        :param copy: True if a copy is returned
+        :return: a set of variables
+        """
+
+        if copy:
+            return self.__variable_set.copy()
+
+        return self.__variable_set
+    # endregion
+
     # region Property
     @property
     def number_of_variables(self):
-        return len(self._variable_set)
+        return len(self.__variable_set)
 
     @property
     def number_of_clauses(self):
@@ -55,4 +82,8 @@ class PySatCnf(CNF):
     @property
     def is_2_cnf(self):
         return self.__is_2_cnf
+
+    @property
+    def is_horn_formula(self):
+        return self.__is_horn_formula
     # endregion

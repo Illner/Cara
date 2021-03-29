@@ -62,11 +62,12 @@ class TwoCnf:
         self.__cnf.append(clause)
         self.__sat_solver.add_clause(clause)
 
-    def get_model(self, assignment_list: List[int]) -> Union[List[int], None]:
+    def get_model(self, assignment_list: List[int], variable_restriction_set: Union[Set[int], None] = None) -> Union[List[int], None]:
         """
         Return a satisfying assignment.
         If the formula for the assignment is unsatisfiable, return None.
-        :param assignment_list: the partial assignment
+        :param assignment_list: a partial assignment
+        :param variable_restriction_set: a set of variables on which the model will be restricted
         :return: a complete assignment or None if the formula is unsatisfiable
         """
 
@@ -76,11 +77,12 @@ class TwoCnf:
         if not no_conflict:
             return None
 
-        def get_variable_to_try_set(assignment_list_func: List[int]) -> Set[int]:
-            temp_set = set(map(lambda l: abs(l), assignment_list_func))
-            return self.__cnf._variable_set.difference(temp_set)
+        result_model: List[int] = []
 
-        variable_to_try_set = get_variable_to_try_set(assignment_list_temp)
+        if variable_restriction_set is None:
+            variable_to_try_set = self.__cnf.get_variable_set(copy=True)
+        else:
+            variable_to_try_set = variable_restriction_set.copy()
 
         while variable_to_try_set:
             var = variable_to_try_set.pop()
@@ -90,13 +92,8 @@ class TwoCnf:
             no_conflict, implied_literals = self.__sat_solver.propagate(assumptions=assignment_list_temp)
 
             if no_conflict:
-                for lit in assignment_list_temp:
-                    if lit not in implied_literals:
-                        implied_literals.append(lit)
-
+                result_model.append(var)
                 assignment_list_temp = implied_literals
-                variable_to_try_set = get_variable_to_try_set(assignment_list_temp)
-
                 continue
 
             assignment_list_temp.pop()
@@ -106,19 +103,14 @@ class TwoCnf:
             no_conflict, implied_literals = self.__sat_solver.propagate(assumptions=assignment_list_temp)
 
             if no_conflict:
-                for lit in assignment_list_temp:
-                    if lit not in implied_literals:
-                        implied_literals.append(lit)
-
+                result_model.append(-var)
                 assignment_list_temp = implied_literals
-                variable_to_try_set = get_variable_to_try_set(assignment_list_temp)
-
                 continue
 
             # The formula is not satisfiable
             return None
 
-        return assignment_list_temp
+        return result_model
     # endregion
 
     # region Magic method

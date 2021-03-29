@@ -5,6 +5,7 @@ import networkx as nx
 from other.pysat_cnf import PySatCnf
 from networkx.classes.graph import Graph
 from typing import Set, Dict, List, Union, TypeVar
+from formula.renamable_horn_formula_recognition import RenamableHornFormulaRecognition
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 
 # Import exception
@@ -31,8 +32,13 @@ class IncidenceGraph(Graph):
     Private Set<int> unit_clause_set
     Private Dict<int, int> clause_length_dictionary                         # key: a clause, value: the length of the clause
     
+    # Renamable Horn formula recognition
+    Private Set<int> neg_assigned_literal_set
+    Private Set<int> ignored_literal_set_renamable_horn_formula_recognition
+    Private RenamableHornFormulaRecognition renamable_horn_formula_recognition
+    
     # Assignment
-    Private Set<int> assigned_literal_set
+    Private Set<int> assigned_variable_set
     Private List<int> assigned_literal_list
     Private Dict<int, Set<str>> variable_node_backup_dictionary             # key: a variable, value: a set of clauses (nodes) that were incident with the variable node when the variable node was being deleted
     Private Dict<int, Dict<int, Set<int>> clause_node_backup_dictionary     # key: a variable, value: a dictionary, where a key is a clause node that was satisfied because of the variable, and the value is a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
@@ -46,7 +52,9 @@ class IncidenceGraph(Graph):
     """
 
     def __init__(self, number_of_variables: Union[int, None] = None, number_of_clauses: Union[int, None] = None,
-                 statistics: Union[IncidenceGraphStatistics, None] = None):
+                 statistics: Union[IncidenceGraphStatistics, None] = None,
+                 renamable_horn_formula_recognition: Union[RenamableHornFormulaRecognition, None] = None,
+                 ignored_literal_set_renamable_horn_formula_recognition: Union[Set[int], None] = None):
         super().__init__()
 
         self.__variable_set: Set[int] = set()
@@ -58,6 +66,13 @@ class IncidenceGraph(Graph):
         self.__unit_clause_set: Set[int] = set()
         self.__clause_length_dictionary: Dict[int, int] = dict()
 
+        # Renamable Horn formula recognition
+        self.__neg_assigned_literal_set: Set[int] = set()
+        self.__ignored_literal_set_renamable_horn_formula_recognition: Set[int] = set()
+        if ignored_literal_set_renamable_horn_formula_recognition is not None:
+            self.__ignored_literal_set_renamable_horn_formula_recognition = ignored_literal_set_renamable_horn_formula_recognition
+        self.__renamable_horn_formula_recognition: Union[RenamableHornFormulaRecognition, None] = renamable_horn_formula_recognition
+
         # Statistics
         if statistics is None:
             self.__statistics: IncidenceGraphStatistics = IncidenceGraphStatistics()
@@ -65,7 +80,7 @@ class IncidenceGraph(Graph):
             self.__statistics: IncidenceGraphStatistics = statistics
 
         # Backup - assignment
-        self.__assigned_literal_set: Set[int] = set()
+        self.__assigned_variable_set: Set[int] = set()
         self.__assigned_literal_list: List[int] = []
         self.__variable_node_backup_dictionary: Dict[int, Set[str]] = dict()
         self.__clause_node_backup_dictionary: Dict[int, Dict[int, Set[int]]] = dict()
@@ -556,7 +571,7 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable has been already removed from the incidence graph
-        if variable in self.__assigned_literal_set:
+        if variable in self.__assigned_variable_set:
             raise ig_exception.VariableHasBeenRemovedException(variable)
 
         # The variable does not exist in the incidence graph
@@ -568,7 +583,8 @@ class IncidenceGraph(Graph):
         isolated_variable_set = set()
 
         # Backup
-        self.__assigned_literal_set.add(variable)
+        self.__assigned_variable_set.add(variable)
+        self.__neg_assigned_literal_set.add(-literal)
         self.__assigned_literal_list.append(literal)
 
         variable_node_neighbour_set = set(self.neighbors(variable_hash))
@@ -625,7 +641,7 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable has not been removed from the incidence graph
-        if variable not in self.__assigned_literal_set:
+        if variable not in self.__assigned_variable_set:
             raise ig_exception.TryingRestoreLiteralHasNotBeenRemovedException(literal)
 
         # The literal is not the last one that was removed
@@ -635,7 +651,8 @@ class IncidenceGraph(Graph):
 
         self.__statistics.restore_backup_literal.start_stopwatch()      # timer (start)
 
-        self.__assigned_literal_set.remove(variable)
+        self.__assigned_variable_set.remove(variable)
+        self.__neg_assigned_literal_set.remove(-literal)
         self.__assigned_literal_list.pop()
 
         # Restore clauses (the clauses are not satisfied anymore)
@@ -823,7 +840,14 @@ class IncidenceGraph(Graph):
         incidence_graph_set = set()
 
         for component in nx.connected_components(self):
-            incidence_graph_temp = IncidenceGraph(statistics=self.__statistics)
+            # Renamable Horn formula recognition
+            ignored_literal_set_temp = None
+            if self.__renamable_horn_formula_recognition is not None:
+                ignored_literal_set_temp = self.__ignored_literal_set_renamable_horn_formula_recognition.union(self.__neg_assigned_literal_set)
+
+            incidence_graph_temp = IncidenceGraph(statistics=self.__statistics,
+                                                  renamable_horn_formula_recognition=self.__renamable_horn_formula_recognition,
+                                                  ignored_literal_set_renamable_horn_formula_recognition=ignored_literal_set_temp)
 
             for node_hash in component:
                 # The node is not a clause
@@ -870,19 +894,38 @@ class IncidenceGraph(Graph):
 
                 copy.add_edge(literal, clause_id, create_node=True)
 
+        # Renamable Horn formula recognition
+        if self.__renamable_horn_formula_recognition is not None:
+            copy.initialize_renamable_horn_formula_recognition()
+
         self.__statistics.copy_incidence_graph.stop_stopwatch()     # timer (stop)
         return copy
 
-    def convert_to_cnf(self) -> PySatCnf:
+    def convert_to_cnf(self, renaming_function: Union[Set[int], None] = None) -> PySatCnf:
         """
         Convert the formula represented by the incidence graph to CNF
+        :param renaming_function: a set of variables that will be renamed (for Horn formulae)
         :return: PySAT CNF
         """
 
         cnf: PySatCnf = PySatCnf()
 
         for clause_id in self.clause_id_set():
-            cnf.append(self.get_clause(clause_id))
+            # No renaming function
+            if renaming_function is None:
+                cnf.append(self.get_clause(clause_id))
+
+            # Renaming function exists
+            else:
+                clause_temp = []
+
+                for lit in self.get_clause(clause_id):
+                    if abs(lit) in renaming_function:
+                        clause_temp.append(-lit)
+                    else:
+                        clause_temp.append(lit)
+
+                cnf.append(clause_temp)
 
         return cnf
 
@@ -910,17 +953,46 @@ class IncidenceGraph(Graph):
         self.__statistics.two_cnf_ratio.add_count(0)    # counter
         return False
 
-    def initialize_horn_recognition_algorithm(self) -> None:
+    def initialize_renamable_horn_formula_recognition(self) -> None:
         """
-        Initialize the recognition algorithm for Horn formulae
+        Initialize the recognition algorithm for renamable Horn formulae
         :return: None
         """
 
-        self.__statistics.renamable_horn_recognition_initialization.start_stopwatch()   # timer (start)
+        self.__statistics.renamable_horn_formula_recognition_initialization.start_stopwatch()   # timer (start)
 
-        pass
+        self.__ignored_literal_set_renamable_horn_formula_recognition = set()
+        self.__renamable_horn_formula_recognition = RenamableHornFormulaRecognition(self)
 
-        self.__statistics.renamable_horn_recognition_initialization.stop_stopwatch()    # timer (stop)
+        self.__statistics.renamable_horn_formula_recognition_initialization.stop_stopwatch()    # timer (stop)
+
+    def is_renamable_horn_formula(self) -> Union[Set[int], None]:
+        """
+        If the renamable Horn formula recognition has not been initialized, raise an exception (RenamableHornFormulaRecognitionHasNotBeenInitializedException).
+        :return: If the incidence graph represents (renamable) Horn formula, a renaming function (a set of variables) is returned. Otherwise, None is returned.
+        """
+
+        # The renamable Horn formula recognition has not been initialized
+        if self.__renamable_horn_formula_recognition is None:
+            raise ig_exception.RenamableHornFormulaRecognitionHasNotBeenInitializedException()
+
+        self.__statistics.renamable_horn_formula_recognition_check.start_stopwatch()    # timer (start)
+
+        neg_assigned_literal_set = self.__ignored_literal_set_renamable_horn_formula_recognition.union(self.__neg_assigned_literal_set)
+
+        result = self.__renamable_horn_formula_recognition.is_renamable_horn_formula(satisfied_clause_set=self.__satisfied_clause_set,
+                                                                                     unresolved_clause_set=self.__clause_id_set,
+                                                                                     neg_assigned_literal_set=neg_assigned_literal_set,
+                                                                                     variable_restriction_set=self.__variable_set)
+
+        self.__statistics.renamable_horn_formula_recognition_check.stop_stopwatch()     # timer (stop)
+
+        if result is not None:
+            self.__statistics.renamable_horn_formula_ratio.add_count(1)     # counter
+        else:
+            self.__statistics.renamable_horn_formula_ratio.add_count(0)     # counter
+
+        return result
     # endregion
 
     # region Property
