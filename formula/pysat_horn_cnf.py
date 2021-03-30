@@ -60,16 +60,24 @@ class PySatHornCnf(PySatCnf):
         :return: a complete assignment or None if the formula is unsatisfiable
         """
 
-        no_conflict, implied_literals = self.__sat_solver.propagate(assumptions=assignment_list)
+        no_conflict, assignment_list_temp = self.__sat_solver.propagate(assumptions=assignment_list)
 
         # The formula is not satisfiable
         if not no_conflict:
             return None
 
-        result_model: Set[int] = set(implied_literals)
+        result_model: Set[int] = set(assignment_list_temp)
         for var in self.get_variable_set():
             if (var not in result_model) and (-var not in result_model):
-                result_model.add(-var)
+                # Negative literal
+                assignment_list_temp.append(-var)
+                no_conflict, _ = self.__sat_solver.propagate(assumptions=assignment_list_temp)
+                assignment_list_temp.pop()
+
+                if no_conflict:
+                    result_model.add(-var)
+                else:
+                    result_model.add(var)   # first implied literal
 
         return list(result_model)
     # endregion

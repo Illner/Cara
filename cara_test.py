@@ -9,6 +9,7 @@ from tests.test_abstract import TestAbstract
 # Formula
 import tests.formula.cnf.cnf_test as fc_test
 import tests.formula.two_cnf.two_cnf_test as ftc_test
+import tests.formula.horn_cnf.horn_cnf_test as fhc_test
 import tests.formula.incidence_graph.incidence_graph_test as fig_test
 
 # Circuit
@@ -46,6 +47,14 @@ def main(args):
         two_cnf_test = ftc_test.TwoCnfTest()
         print(two_cnf_test.test_name, end=": ")
         result, log_result = test(two_cnf_test)
+        print(result)
+        log_string = "\n".join((log_string, log_result, ""))
+
+    # Horn CNF test
+    if args.formula_horn_cnf_test:
+        horn_cnf_test = fhc_test.HornCnfTest()
+        print(horn_cnf_test.test_name, end=": ")
+        result, log_result = test(horn_cnf_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
 
@@ -152,6 +161,12 @@ def create_parser() -> argparse.ArgumentParser:
                         default=True,
                         type=cara.str2bool,
                         help="Test automation for 2-CNFs.")
+    parser.add_argument("-fhct",
+                        "--formula_horn_cnf_test",
+                        action="store",
+                        default=True,
+                        type=cara.str2bool,
+                        help="Test automation for Horn CNFs.")
     parser.add_argument("-figt",
                         "--formula_incidence_graph_test",
                         action="store",
