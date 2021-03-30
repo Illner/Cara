@@ -57,3 +57,15 @@ class FormulaIsNot2CnfException(FormulaException):
         if message_extension:
             self.message += f" ({message_extension})"
         super().__init__(self.message)
+
+
+class FormulaIsNotHornException(FormulaException):
+    """
+    The formula is not Horn
+    """
+
+    def __init__(self, message_extension: str = ""):
+        self.message = "The formula is not Horn!"
+        if message_extension:
+            self.message += f" ({message_extension})"
+        super().__init__(self.message)

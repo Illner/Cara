@@ -1,7 +1,7 @@
 # Import
 import os
 from formula.cnf import Cnf
-from formula.two_cnf import TwoCnf
+from formula.pysat_2_cnf import PySat2Cnf
 from tests.test_abstract import TestAbstract
 
 # Import exception
@@ -17,7 +17,7 @@ class TwoCnfTest(TestAbstract):
 
     # region Static method
     @staticmethod
-    def __two_cnf_str(two_cnf: TwoCnf) -> str:
+    def __two_cnf_str(two_cnf: PySat2Cnf) -> str:
         result = f"Number of variables: {two_cnf.number_of_variables}, " \
                  f"number of clauses: {two_cnf.number_of_clauses}, " \
                  f"formula length: {two_cnf.formula_length}"
@@ -55,7 +55,7 @@ class TwoCnfTest(TestAbstract):
                 result = "\n".join((result, file_name))
 
                 cnf = Cnf(file_path)
-                two_cnf = TwoCnf(cnf.get_incidence_graph().convert_to_cnf())
+                two_cnf = cnf.get_incidence_graph().convert_to_2_cnf()
 
                 result = "\n".join((result, self.__two_cnf_str(two_cnf), ""))
 
@@ -79,7 +79,7 @@ class TwoCnfTest(TestAbstract):
         """
 
         result = ""
-        two_cnf = TwoCnf()
+        two_cnf = PySat2Cnf()
 
         clause_list = [[1, 2], [1, 3], [1, 4], [1, -4], [5, 6]]
         for clause in clause_list:

@@ -23,6 +23,9 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer variable_set
     Private StatisticsComponentTimer renamable_horn_formula_recognition_initialization
     Private StatisticsComponentTimer renamable_horn_formula_recognition_check
+    Private StatisticsComponentTimer convert_to_cnf
+    Private StatisticsComponentTimer convert_to_2_cnf
+    Private StatisticsComponentTimer convert_to_horn_cnf
     
     Private StatisticsComponentCounter renamable_horn_formula_ratio
     Private StatisticsComponentCounter two_cnf_ratio
@@ -75,6 +78,15 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
         self.__two_cnf_ratio: StatisticsComponentCounter = StatisticsComponentCounter("2 CNF - ratio")
         self._component_list.append(self.__two_cnf_ratio)
+
+        self.__convert_to_cnf: StatisticsComponentTimer = StatisticsComponentTimer("convert - CNF")
+        self._component_list.append(self.__convert_to_cnf)
+
+        self.__convert_to_2_cnf: StatisticsComponentTimer = StatisticsComponentTimer("convert - 2-CNF")
+        self._component_list.append(self.__convert_to_2_cnf)
+
+        self.__convert_to_horn_cnf: StatisticsComponentTimer = StatisticsComponentTimer("convert - HornCNF")
+        self._component_list.append(self.__convert_to_horn_cnf)
 
     # region Property
     @property
@@ -136,4 +148,16 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     @property
     def two_cnf_ratio(self):
         return self.__two_cnf_ratio
+
+    @property
+    def convert_to_cnf(self):
+        return self.__convert_to_cnf
+
+    @property
+    def convert_to_2_cnf(self):
+        return self.__convert_to_2_cnf
+
+    @property
+    def convert_to_horn_cnf(self):
+        return self.__convert_to_horn_cnf
     # endregion

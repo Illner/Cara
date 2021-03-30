@@ -14,7 +14,7 @@ Assignment: [-2, -3]
 Is satisfiable: True
 
 not_2_cnf.cnf
-The formula is not 2-CNF!
+The formula is not 2-CNF! ([-1, 4, 5])
 
 trivial.cnf
 Number of variables: 7, number of clauses: 7, formula length: 14

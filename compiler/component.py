@@ -1,6 +1,5 @@
 # Import
 from formula.cnf import Cnf
-from formula.two_cnf import TwoCnf
 from compiler.solver import Solver
 from circuit.circuit import Circuit
 from typing import Set, List, Union
@@ -8,6 +7,9 @@ from formula.incidence_graph import IncidenceGraph
 from compiler_statistics.statistics import Statistics
 from compiler.hypergraph_partitioning import HypergraphPartitioning
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
+
+from formula.pysat_2_cnf import PySat2Cnf
+from formula.pysat_horn_cnf import PySatHornCnf
 
 # Import exception
 import exception.cara_exception as ca_exception
@@ -241,8 +243,12 @@ class Component:
             return self.__circuit.create_and_node(implied_literal_id_set)
 
         # TODO Formula type
-        # self.__incidence_graph.is_2_cnf():
-        # self.__incidence_graph.is_renamable_horn_formula()
+        if self.__incidence_graph.is_2_cnf():
+            self.__incidence_graph.convert_to_2_cnf()
+
+        temp = self.__incidence_graph.is_renamable_horn_formula()
+        if temp is not None:
+            self.__incidence_graph.convert_to_horn_cnf(temp)
 
         # Component caching
         key = self.__component_caching.generate_key_cache(self.__incidence_graph)

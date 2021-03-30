@@ -2,15 +2,21 @@
 import mmh3
 import random
 import networkx as nx
-from other.pysat_cnf import PySatCnf
 from networkx.classes.graph import Graph
 from typing import Set, Dict, List, Union, TypeVar
 from formula.renamable_horn_formula_recognition import RenamableHornFormulaRecognition
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 
+from formula.pysat_cnf import PySatCnf
+from formula.pysat_2_cnf import PySat2Cnf
+from formula.pysat_horn_cnf import PySatHornCnf
+
 # Import exception
 import exception.cara_exception as c_exception
 import exception.formula.incidence_graph_exception as ig_exception
+
+# Import enum
+import formula.pysat_cnf_enum as psc_enum
 
 # Type
 TIncidenceGraph = TypeVar("TIncidenceGraph", bound="IncidenceGraph")
@@ -265,6 +271,47 @@ class IncidenceGraph(Graph):
 
         self.__update_clause_length(self.__unhash(clause_id_hash), increment_by_one=True)   # update the length
         super().add_edge(variable_hash, clause_id_hash)
+
+    def __convert_to_cnf(self, pysat_cnf_enum: psc_enum.PySatCnfEnum, renaming_function: Union[Set[int], None] = None) -> Union[PySatCnf, PySat2Cnf, PySatHornCnf]:
+        """
+        Convert the formula represented by the incidence graph to CNF / 2-CNF / HornCNF
+        :param pysat_cnf_enum: a type of CNF (standard, 2-CNF, HornCNF)
+        :param renaming_function: a set of variables that will be renamed (for Horn formulae)
+        :return: PySAT (CNF / 2-CNF / HornCNF)
+        """
+
+        # CNF
+        if pysat_cnf_enum == psc_enum.PySatCnfEnum.CNF:
+            cnf: PySatCnf = PySatCnf()
+        # 2-CNF
+        elif pysat_cnf_enum == psc_enum.PySatCnfEnum.TWO_CNF:
+            cnf: PySat2Cnf = PySat2Cnf()
+        # HornCNF
+        elif pysat_cnf_enum == psc_enum.PySatCnfEnum.HORN_CNF:
+            cnf: PySatHornCnf = PySatHornCnf()
+        # Not supported
+        else:
+            raise c_exception.FunctionNotImplementedException("convert_to_cnf",
+                                                              f"this type of CNF ({pysat_cnf_enum.name}) is not implemented")
+
+        for clause_id in self.clause_id_set():
+            # No renaming function
+            if renaming_function is None:
+                cnf.append(self.get_clause(clause_id))
+
+            # Renaming function exists
+            else:
+                clause_temp = []
+
+                for lit in self.get_clause(clause_id):
+                    if abs(lit) in renaming_function:
+                        clause_temp.append(-lit)
+                    else:
+                        clause_temp.append(lit)
+
+                cnf.append(clause_temp)
+
+        return cnf
     # endregion
 
     # region Public method
@@ -839,12 +886,12 @@ class IncidenceGraph(Graph):
 
         incidence_graph_set = set()
 
-        for component in nx.connected_components(self):
-            # Renamable Horn formula recognition
-            ignored_literal_set_temp = None
-            if self.__renamable_horn_formula_recognition is not None:
-                ignored_literal_set_temp = self.__ignored_literal_set_renamable_horn_formula_recognition.union(self.__neg_assigned_literal_set)
+        # Renamable Horn formula recognition
+        ignored_literal_set_temp = None
+        if self.__renamable_horn_formula_recognition is not None:
+            ignored_literal_set_temp = self.__ignored_literal_set_renamable_horn_formula_recognition.union(self.__neg_assigned_literal_set)
 
+        for component in nx.connected_components(self):
             incidence_graph_temp = IncidenceGraph(statistics=self.__statistics,
                                                   renamable_horn_formula_recognition=self.__renamable_horn_formula_recognition,
                                                   ignored_literal_set_renamable_horn_formula_recognition=ignored_literal_set_temp)
@@ -901,33 +948,50 @@ class IncidenceGraph(Graph):
         self.__statistics.copy_incidence_graph.stop_stopwatch()     # timer (stop)
         return copy
 
-    def convert_to_cnf(self, renaming_function: Union[Set[int], None] = None) -> PySatCnf:
+    def convert_to_cnf(self) -> PySatCnf:
         """
         Convert the formula represented by the incidence graph to CNF
-        :param renaming_function: a set of variables that will be renamed (for Horn formulae)
         :return: PySAT CNF
         """
 
-        cnf: PySatCnf = PySatCnf()
+        self.__statistics.convert_to_cnf.start_stopwatch()  # timer (start)
 
-        for clause_id in self.clause_id_set():
-            # No renaming function
-            if renaming_function is None:
-                cnf.append(self.get_clause(clause_id))
+        result = self.__convert_to_cnf(psc_enum.PySatCnfEnum.CNF)
 
-            # Renaming function exists
-            else:
-                clause_temp = []
+        self.__statistics.convert_to_cnf.stop_stopwatch()   # timer (stop)
 
-                for lit in self.get_clause(clause_id):
-                    if abs(lit) in renaming_function:
-                        clause_temp.append(-lit)
-                    else:
-                        clause_temp.append(lit)
+        return result
 
-                cnf.append(clause_temp)
+    def convert_to_2_cnf(self) -> PySat2Cnf:
+        """
+        Convert the formula represented by the incidence graph to 2-CNF.
+        If the formula is not 2-CNF, raise an exception (FormulaIsNot2CnfException).
+        :return: PySAT 2CNF
+        """
 
-        return cnf
+        self.__statistics.convert_to_2_cnf.start_stopwatch()    # timer (start)
+
+        result = self.__convert_to_cnf(psc_enum.PySatCnfEnum.TWO_CNF)
+
+        self.__statistics.convert_to_2_cnf.stop_stopwatch()     # timer (stop)
+
+        return result
+
+    def convert_to_horn_cnf(self, renaming_function: Union[Set[int], None] = None) -> PySatHornCnf:
+        """
+        Convert the formula represented by the incidence graph to HornCNF.
+        If the formula is not Horn, raise an exception (FormulaIsNotHornException).
+        :param renaming_function: a set of variables that will be renamed
+        :return: PySAT HornCNF
+        """
+
+        self.__statistics.convert_to_horn_cnf.start_stopwatch()     # timer (start)
+
+        result = self.__convert_to_cnf(psc_enum.PySatCnfEnum.HORN_CNF, renaming_function)
+
+        self.__statistics.convert_to_horn_cnf.stop_stopwatch()      # timer (stop)
+
+        return result
 
     def is_2_cnf(self) -> bool:
         """

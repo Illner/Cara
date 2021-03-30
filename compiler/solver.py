@@ -1,7 +1,7 @@
 # Import
 import mmh3
 from formula.cnf import Cnf
-from other.pysat_cnf import PySatCnf
+from formula.pysat_cnf import PySatCnf
 from other.sorted_list import SortedList
 from typing import Set, Dict, List, Tuple, Union
 from pysat.solvers import Minisat22, Glucose4, Lingeling, Cadical

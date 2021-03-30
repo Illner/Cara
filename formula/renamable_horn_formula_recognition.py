@@ -1,7 +1,6 @@
 # Import
-from formula.two_cnf import TwoCnf
-from other.pysat_cnf import PySatCnf
-from typing import Set, Dict, List, Union
+from typing import Set, Dict, Union
+from formula.pysat_2_cnf import PySat2Cnf
 
 
 class RenamableHornFormulaRecognition:
@@ -11,7 +10,7 @@ class RenamableHornFormulaRecognition:
     """
 
     """
-    Private TwoCnf cnf
+    Private PySat2Cnf cnf
     Private int variable_id_counter
 
     Private Dict<int, int> clause_variable_dictionary                   # key: a clause, value: a variable representing the clause
@@ -27,8 +26,7 @@ class RenamableHornFormulaRecognition:
         self.__variable_clause_dictionary: Dict[int, int] = dict()
         self.__clause_auxiliary_variable_dictionary: Dict[int, Set[int]] = dict()
 
-        pysat_cnf = self.__create_cnf_formula(incidence_graph)
-        self.__cnf: TwoCnf = TwoCnf(pysat_cnf, check_2_cnf=False)
+        self.__cnf: PySat2Cnf = self.__create_cnf_formula(incidence_graph)
 
     # region Private method
     def __get_new_variable_id(self) -> int:
@@ -41,8 +39,8 @@ class RenamableHornFormulaRecognition:
         self.__variable_id_counter += 1
         return self.__variable_id_counter
 
-    def __create_cnf_formula(self, incidence_graph) -> PySatCnf:
-        pysat_cnf: PySatCnf = PySatCnf()
+    def __create_cnf_formula(self, incidence_graph) -> PySat2Cnf:
+        cnf: PySat2Cnf = PySat2Cnf()
 
         for clause_id in incidence_graph.clause_id_set():
             clause = incidence_graph.get_clause(clause_id)
@@ -60,12 +58,12 @@ class RenamableHornFormulaRecognition:
 
                 # Unit clause
                 if (previous_y is None) and is_last:
-                    pysat_cnf.append([lit, clause_variable])
+                    cnf.append([lit, clause_variable], check_2_cnf=False)
                     continue
 
                 # Last literal
                 if is_last:
-                    pysat_cnf.append([-previous_y, lit, clause_variable])
+                    cnf.append([-previous_y, lit, clause_variable], check_2_cnf=False)
                     continue
 
                 new_y = self.__get_new_variable_id()
@@ -73,16 +71,16 @@ class RenamableHornFormulaRecognition:
 
                 # First literal
                 if previous_y is None:
-                    pysat_cnf.append([lit, new_y, clause_variable])
+                    cnf.append([lit, new_y, clause_variable], check_2_cnf=False)
                     previous_y = new_y
                     continue
 
-                pysat_cnf.append([-previous_y, lit, clause_variable])
-                pysat_cnf.append([-previous_y, new_y, clause_variable])
-                pysat_cnf.append([lit, new_y, clause_variable])
+                cnf.append([-previous_y, lit, clause_variable], check_2_cnf=False)
+                cnf.append([-previous_y, new_y, clause_variable], check_2_cnf=False)
+                cnf.append([lit, new_y, clause_variable], check_2_cnf=False)
                 previous_y = new_y
 
-        return pysat_cnf
+        return cnf
     # endregion
 
     # region Public method
