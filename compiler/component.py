@@ -243,12 +243,12 @@ class Component:
             return self.__circuit.create_and_node(implied_literal_id_set)
 
         # TODO Formula type
-        if self.__incidence_graph.is_2_cnf():
-            self.__incidence_graph.convert_to_2_cnf()
-
-        temp = self.__incidence_graph.is_renamable_horn_formula()
-        if temp is not None:
-            self.__incidence_graph.convert_to_horn_cnf(temp)
+        # if self.__incidence_graph.is_2_cnf():
+        #     self.__incidence_graph.convert_to_2_cnf()
+        #
+        # temp = self.__incidence_graph.is_renamable_horn_formula()
+        # if temp is not None:
+        #     self.__incidence_graph.convert_to_horn_cnf(temp)
 
         # Component caching
         key = self.__component_caching.generate_key_cache(self.__incidence_graph)

@@ -58,7 +58,7 @@ class ExperimentAbstract(ABC):
                 self.__log_directory_path: Path = log_directory_path
         else:
             self.__log_directory_path: Path = Path(os.path.join(directory_path, self.__experiment_name))
-        print(self.__log_directory_path)
+
         self.__log_directory_path.mkdir(parents=True, exist_ok=True)
 
         # Get all files in the directory

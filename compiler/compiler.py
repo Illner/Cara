@@ -154,7 +154,7 @@ class Compiler:
         node_id_set: Set[int] = set()
         for incidence_graph in incidence_graph_set:
             # TODO Renamable Horn formula recognition
-            incidence_graph.initialize_renamable_horn_formula_recognition()
+            # incidence_graph.initialize_renamable_horn_formula_recognition()
 
             component = Component(cnf=self.__cnf,
                                   assignment_list=[],
