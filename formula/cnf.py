@@ -84,12 +84,23 @@ class Cnf:
         self.__cnf_statistics.create.start_stopwatch()      # timer (start)
 
         with open(dimacs_cnf_file_path, "r") as file:
+            line_id = 0
+
             clause_id = 0
             is_p_line_defined = False
 
-            for line_id, line in enumerate(file.readlines()):
+            while True:
+                line = file.readline()
+                line_id += 1
+
+                # End of the file
+                if not line:
+                    break
+
+                line = line.strip()
+
                 # The line is empty
-                if not line.strip():
+                if not line:
                     continue
 
                 # Comment line
@@ -150,7 +161,7 @@ class Cnf:
                 line_array_temp = line.split()
                 # Invalid line
                 if not line_array_temp or line_array_temp.pop() != "0":
-                    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined on line {line_id + 1} doesn't end with 0")
+                    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined on line {line_id} doesn't end with 0")
 
                 clause_set_temp = set()
                 try:
@@ -173,7 +184,7 @@ class Cnf:
 
                         clause_set_temp.add(lit)
                 except ValueError:
-                    raise f_exception.InvalidDimacsCnfFormatException(f"invalid clause ({line}) defined on line {line_id + 1}")
+                    raise f_exception.InvalidDimacsCnfFormatException(f"invalid clause ({line}) defined on line {line_id}")
 
                 # The clause is empty or contains two opposite literals
                 if not clause_set_temp:

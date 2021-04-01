@@ -206,7 +206,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("-ct",
                         "--compiler_test",
                         action="store",
-                        default=True,
+                        default=False,
                         type=cara.str2bool,
                         help="Test automation for compilers.")
 

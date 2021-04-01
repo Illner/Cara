@@ -1,5 +1,6 @@
 # Import
 from typing import Set
+from other.sorted_list import SortedList
 from formula.pysat_horn_cnf import PySatHornCnf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
@@ -100,7 +101,7 @@ class RenamableHornCnfLeaf(LeafAbstract):
 
     # region Magic method
     def __str__(self):
-        return str(self.__cnf)
+        return "\n".join((str(SortedList(self.__renaming_function)), str(self.__cnf)))
     # endregion
 
     # region Property

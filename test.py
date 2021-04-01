@@ -28,7 +28,7 @@ cnf: Cnf = Cnf(path)
 
 compiler = Compiler(cnf, preprocessing=False, smooth=False, ub_factor=0.2, new_cut_set_threshold=0.1, subsumed_threshold=1000,
                     sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                    base_class_enum_set={bs_enum.BaseClassEnum.RENAMABLE_HORN_CNF, bs_enum.BaseClassEnum.TWO_CNF},
+                    base_class_enum_set={bs_enum.BaseClassEnum.TWO_CNF, bs_enum.BaseClassEnum.RENAMABLE_HORN_CNF},
                     implied_literals_enum=il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP,
                     first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP,
                     component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
@@ -47,7 +47,9 @@ end_time = time.time()
 
 print("Time: ", end_time-start_time)
 print(circuit.size)
-print(str(compiler.statistics.incidence_graph_statistics))
+# print(str(compiler.statistics.incidence_graph_statistics))
+print(circuit)
+
 # print(circuit.model_counting(assumption_set=set(), exist_quantification_set=set()))
 
 
