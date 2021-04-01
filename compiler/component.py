@@ -13,6 +13,7 @@ import exception.cara_exception as ca_exception
 import exception.compiler.compiler_exception as c_exception
 
 # Import enum
+import compiler.enum.base_class_enum as bs_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 
@@ -30,6 +31,8 @@ class Component:
     Private bool cut_set_try_cache
     Private float new_cut_set_threshold
     Private float new_cut_set_threshold_reduction
+    Private Set<BaseClassEnum> base_class_enum_set
+    
     Private IncidenceGraph incidence_graph
     Private ComponentCachingAbstract component_caching
     Private HypergraphPartitioning hypergraph_partitioning
@@ -51,6 +54,7 @@ class Component:
                  component_caching: ComponentCachingAbstract,
                  hypergraph_partitioning: HypergraphPartitioning,
                  sat_solver_enum: ss_enum.SatSolverEnum,
+                 base_class_enum_set: Set[bs_enum.BaseClassEnum],
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                  statistics: Statistics,
@@ -61,6 +65,7 @@ class Component:
         self.__incidence_graph: IncidenceGraph = incidence_graph
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
+        self.__base_class_enum_set: Set[bs_enum.BaseClassEnum] = base_class_enum_set
 
         self.__component_caching: ComponentCachingAbstract = component_caching
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
@@ -253,7 +258,7 @@ class Component:
             self.__statistics.component_statistics.cached.add_count(0)      # counter
 
         # 2-CNF
-        if True and self.__incidence_graph.is_2_cnf():
+        if (bs_enum.BaseClassEnum.TWO_CNF in self.__base_class_enum_set) and self.__incidence_graph.is_2_cnf():
             two_cnf = self.__incidence_graph.convert_to_2_cnf()
 
             node_id_cache = self.__circuit.create_2_cnf_leaf(two_cnf)
@@ -266,18 +271,19 @@ class Component:
             return node_id
 
         # Renamable Horn CNF
-        renaming_function_temp = self.__incidence_graph.is_renamable_horn_formula()
-        if True and renaming_function_temp is not None:
-            horn_cnf = self.__incidence_graph.convert_to_horn_cnf(renaming_function_temp)
+        if bs_enum.BaseClassEnum.RENAMABLE_HORN_CNF in self.__base_class_enum_set:
+            renaming_function_temp = self.__incidence_graph.is_renamable_horn_formula()
+            if renaming_function_temp is not None:
+                horn_cnf = self.__incidence_graph.convert_to_horn_cnf(renaming_function_temp)
 
-            node_id_cache = self.__circuit.create_renamable_horn_cnf_leaf(horn_cnf, renaming_function_temp)
-            node_id = self.__circuit.create_and_node({node_id_cache}.union(implied_literal_id_set))
+                node_id_cache = self.__circuit.create_renamable_horn_cnf_leaf(horn_cnf, renaming_function_temp)
+                node_id = self.__circuit.create_and_node({node_id_cache}.union(implied_literal_id_set))
 
-            # Component caching
-            self.__component_caching.add(key, node_id_cache)
+                # Component caching
+                self.__component_caching.add(key, node_id_cache)
 
-            remove_implied_literals(implied_literal_set)  # Restore the implied literals
-            return node_id
+                remove_implied_literals(implied_literal_set)  # Restore the implied literals
+                return node_id
 
         # Check if more components exist
         if self.__exist_more_components():
@@ -296,6 +302,7 @@ class Component:
                                            component_caching=self.__component_caching,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
                                            sat_solver_enum=self.__sat_solver_enum,
+                                           base_class_enum_set=self.__base_class_enum_set,
                                            implied_literals_enum=self.__implied_literals_enum,
                                            first_implied_literals_enum=self.__first_implied_literals_enum,
                                            statistics=self.__statistics)

@@ -17,6 +17,7 @@ from compiler.component_caching.standard_caching_scheme import StandardCachingSc
 import exception.cara_exception as c_exception
 
 # Import enum
+import compiler.enum.base_class_enum as bs_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.component_caching.component_caching_enum as cc_enum
@@ -39,7 +40,8 @@ class Compiler:
     Private Statistics statistics
     Private bool cut_set_try_cache
     Private float new_cut_set_threshold
-    Private float new_cut_set_threshold_reduction   # when cut set cache can be used
+    Private float new_cut_set_threshold_reduction           # when cut set cache can be used
+    Private Set<BaseClassEnum> base_class_enum_set
     Private ComponentCachingAbstract component_caching
     Private HypergraphPartitioning hypergraph_partitioning
     
@@ -60,6 +62,7 @@ class Compiler:
                  subsumed_threshold: Union[int, None],
                  new_cut_set_threshold: float,
                  sat_solver_enum: ss_enum.SatSolverEnum,
+                 base_class_enum_set: Set[bs_enum.BaseClassEnum],
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                  component_caching_enum: cc_enum.ComponentCachingEnum,
@@ -90,6 +93,7 @@ class Compiler:
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
+        self.__base_class_enum_set: Set[bs_enum.BaseClassEnum] = base_class_enum_set
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
@@ -153,8 +157,9 @@ class Compiler:
 
         node_id_set: Set[int] = set()
         for incidence_graph in incidence_graph_set:
-            # TODO Renamable Horn formula recognition
-            incidence_graph.initialize_renamable_horn_formula_recognition()
+            # Renamable Horn CNF
+            if bs_enum.BaseClassEnum.RENAMABLE_HORN_CNF in self.__base_class_enum_set:
+                incidence_graph.initialize_renamable_horn_formula_recognition()
 
             component = Component(cnf=self.__cnf,
                                   assignment_list=[],
@@ -166,6 +171,7 @@ class Compiler:
                                   component_caching=self.__component_caching,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
                                   sat_solver_enum=self.__sat_solver_enum,
+                                  base_class_enum_set=self.__base_class_enum_set,
                                   implied_literals_enum=self.__implied_literals_enum,
                                   first_implied_literals_enum=self.__first_implied_literals_enum,
                                   statistics=self.__statistics,

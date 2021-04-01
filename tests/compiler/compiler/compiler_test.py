@@ -59,6 +59,7 @@ class CompilerTest(TestAbstract):
                                                             subsumed_threshold=subsumed_threshold,
                                                             new_cut_set_threshold=new_cut_set_threshold,
                                                             sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
+                                                            base_class_enum_set=set(),
                                                             implied_literals_enum=implied_literals_enum,
                                                             first_implied_literals_enum=first_implied_literals_enum,
                                                             component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
