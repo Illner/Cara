@@ -208,3 +208,13 @@ class SetContainsLiteralsButOnlyVariablesAreAllowedException(CircuitException):
     def __init__(self, set_name: str, variable_set: Set[int]):
         self.message = f"The set ({set_name}) contains literals, but only variables are allowed ({variable_set}!)"
         super().__init__(self.message)
+
+
+class OperationIsNotSupportedException(CircuitException):
+    """
+    The operation is not supported
+    """
+
+    def __init__(self, operation_name: str):
+        self.message = f"The operation ({operation_name}) is not supported!"
+        super().__init__(self.message)

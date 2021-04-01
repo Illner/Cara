@@ -4,6 +4,8 @@ CNF test: True
 
 2-CNF test: True
 
+Horn CNF test: True
+
 Incidence graph test: True
 
 Node test: True

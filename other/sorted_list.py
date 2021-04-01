@@ -9,5 +9,10 @@ class SortedList(sortedcontainers.SortedList):
     def __str__(self):
         return self.str_delimiter()
 
-    def str_delimiter(self, delimiter: str = " ") -> str:
-        return f"{delimiter}".join(map(str, self))
+    def str_delimiter(self, delimiter: str = " ", end_delimiter: str = "") -> str:
+        result = f"{delimiter}".join(map(str, self))
+
+        if end_delimiter != "":
+            result = " ".join((result, end_delimiter))
+
+        return result

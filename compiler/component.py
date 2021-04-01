@@ -8,9 +8,6 @@ from compiler_statistics.statistics import Statistics
 from compiler.hypergraph_partitioning import HypergraphPartitioning
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
 
-from formula.pysat_2_cnf import PySat2Cnf
-from formula.pysat_horn_cnf import PySatHornCnf
-
 # Import exception
 import exception.cara_exception as ca_exception
 import exception.compiler.compiler_exception as c_exception
@@ -242,14 +239,6 @@ class Component:
             self.__statistics.component_statistics.empty_incidence_graph.add_count(1)   # counter
             return self.__circuit.create_and_node(implied_literal_id_set)
 
-        # TODO Formula type
-        # if self.__incidence_graph.is_2_cnf():
-        #     self.__incidence_graph.convert_to_2_cnf()
-        #
-        # temp = self.__incidence_graph.is_renamable_horn_formula()
-        # if temp is not None:
-        #     self.__incidence_graph.convert_to_horn_cnf(temp)
-
         # Component caching
         key = self.__component_caching.generate_key_cache(self.__incidence_graph)
         self.__statistics.component_statistics.generate_key_cache.add_count(1)      # counter
@@ -262,6 +251,21 @@ class Component:
             return node_id
         else:
             self.__statistics.component_statistics.cached.add_count(0)      # counter
+
+        # 2-CNF
+        if self.__incidence_graph.is_2_cnf():
+            two_cnf = self.__incidence_graph.convert_to_2_cnf()
+
+            node_id_cache = self.__circuit.create_2_cnf_leaf(two_cnf)
+            node_id = self.__circuit.create_and_node({node_id_cache}.union(implied_literal_id_set))
+
+            # Component caching
+            self.__component_caching.add(key, node_id_cache)
+
+            remove_implied_literals(implied_literal_set)  # Restore the implied literals
+            return node_id
+
+        # TODO HornCNF
 
         # Check if more components exist
         if self.__exist_more_components():

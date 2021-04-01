@@ -5,12 +5,16 @@ from sortedcontainers import SortedDict
 from other.sorted_list import SortedList
 from typing import Set, Dict, List, Union
 from circuit.node.node_abstract import NodeAbstract
+from circuit.node.leaf.two_cnf_leaf import TwoCnfLeaf
 from circuit.node.leaf.literal_leaf import LiteralLeaf
 from circuit.node.leaf.constant_leaf import ConstantLeaf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 from circuit.node.inner_node.or_inner_node import OrInnerNode
 from circuit.node.inner_node.and_inner_node import AndInnerNode
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
+
+from formula.pysat_2_cnf import PySat2Cnf
+from formula.pysat_horn_cnf import PySatHornCnf
 
 # Import exception
 import exception.circuit.circuit_exception as c_exception
@@ -526,6 +530,20 @@ class Circuit:
             node_id_set.add(node_id)
 
         return node_id_set
+
+    def create_2_cnf_leaf(self, two_cnf: PySat2Cnf) -> int:
+        """
+        Create a new 2-CNF leaf in the circuit
+        :param two_cnf: 2-CNF
+        :return: the node's id
+        """
+
+        node = TwoCnfLeaf(two_cnf, self.__get_new_id())
+        self.__add_new_node(node)
+
+        return node.id
+
+    # TODO create_horn_cnf_leaf
 
     def create_and_node(self, child_id_set: Set[int], use_unique_node_cache: bool = True) -> int:
         """
@@ -1070,6 +1088,8 @@ class Circuit:
                     string_temp = " ".join(map(str, child_to_list))
                     string = "\n".join((string, f"O {j} {len(child_to_list)} {string_temp}"))
                     continue
+
+                # TODO 2-CNF, HornCNF
 
                 raise c_exception.SomethingWrongException(
                     f"this type of node ({type(node)}) is not implemented in ToString (circuit)")
