@@ -10,9 +10,9 @@ import exception.circuit.circuit_exception as c_exception
 import circuit.node.node_type_enum as nt_enum
 
 
-class HornCnfLeaf(LeafAbstract):
+class RenamableHornCnfLeaf(LeafAbstract):
     """
-    Circuit Horn CNF leaf representation
+    Circuit renamable Horn CNF leaf representation
     """
 
     """
@@ -27,7 +27,7 @@ class HornCnfLeaf(LeafAbstract):
         size_temp = self.formula_length
         super().__init__(id=id,
                          size=size_temp,
-                         node_type=nt_enum.NodeTypeEnum.HORN_CNF,
+                         node_type=nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF,
                          variable_in_circuit_set=self.__cnf.get_variable_set(),
                          literal_in_circuit_set=self.__cnf.get_literal_set())
 

@@ -265,12 +265,12 @@ class Component:
             remove_implied_literals(implied_literal_set)  # Restore the implied literals
             return node_id
 
-        # Horn CNF
+        # Renamable Horn CNF
         renaming_function_temp = self.__incidence_graph.is_renamable_horn_formula()
         if True and renaming_function_temp is not None:
             horn_cnf = self.__incidence_graph.convert_to_horn_cnf(renaming_function_temp)
 
-            node_id_cache = self.__circuit.create_horn_cnf_leaf(horn_cnf, renaming_function_temp)
+            node_id_cache = self.__circuit.create_renamable_horn_cnf_leaf(horn_cnf, renaming_function_temp)
             node_id = self.__circuit.create_and_node({node_id_cache}.union(implied_literal_id_set))
 
             # Component caching

@@ -7,12 +7,12 @@ from typing import Set, Dict, List, Union
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.leaf.two_cnf_leaf import TwoCnfLeaf
 from circuit.node.leaf.literal_leaf import LiteralLeaf
-from circuit.node.leaf.horn_cnf_leaf import HornCnfLeaf
 from circuit.node.leaf.constant_leaf import ConstantLeaf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 from circuit.node.inner_node.or_inner_node import OrInnerNode
 from circuit.node.inner_node.and_inner_node import AndInnerNode
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
+from circuit.node.leaf.renamable_horn_cnf_leaf import RenamableHornCnfLeaf
 
 from formula.pysat_2_cnf import PySat2Cnf
 from formula.pysat_horn_cnf import PySatHornCnf
@@ -544,15 +544,15 @@ class Circuit:
 
         return node.id
 
-    def create_horn_cnf_leaf(self, horn_cnf: PySatHornCnf, renaming_function: Set[int]) -> int:
+    def create_renamable_horn_cnf_leaf(self, renamable_horn_cnf: PySatHornCnf, renaming_function: Set[int]) -> int:
         """
-        Create a new Horn CNF leaf in the circuit
-        :param horn_cnf: Horn CNF
+        Create a new renamable Horn CNF leaf in the circuit
+        :param renamable_horn_cnf: renamable Horn CNF
         :param renaming_function: a set of variables that were renamed
         :return: the node's id
         """
 
-        node = HornCnfLeaf(horn_cnf, renaming_function, self.__get_new_id())
+        node = RenamableHornCnfLeaf(renamable_horn_cnf, renaming_function, self.__get_new_id())
         self.__add_new_node(node)
 
         return node.id
