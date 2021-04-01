@@ -253,7 +253,7 @@ class Component:
             self.__statistics.component_statistics.cached.add_count(0)      # counter
 
         # 2-CNF
-        if self.__incidence_graph.is_2_cnf():
+        if True and self.__incidence_graph.is_2_cnf():
             two_cnf = self.__incidence_graph.convert_to_2_cnf()
 
             node_id_cache = self.__circuit.create_2_cnf_leaf(two_cnf)
@@ -265,7 +265,19 @@ class Component:
             remove_implied_literals(implied_literal_set)  # Restore the implied literals
             return node_id
 
-        # TODO HornCNF
+        # Horn CNF
+        renaming_function_temp = self.__incidence_graph.is_renamable_horn_formula()
+        if True and renaming_function_temp is not None:
+            horn_cnf = self.__incidence_graph.convert_to_horn_cnf(renaming_function_temp)
+
+            node_id_cache = self.__circuit.create_horn_cnf_leaf(horn_cnf, renaming_function_temp)
+            node_id = self.__circuit.create_and_node({node_id_cache}.union(implied_literal_id_set))
+
+            # Component caching
+            self.__component_caching.add(key, node_id_cache)
+
+            remove_implied_literals(implied_literal_set)  # Restore the implied literals
+            return node_id
 
         # Check if more components exist
         if self.__exist_more_components():

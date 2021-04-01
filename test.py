@@ -17,9 +17,9 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg4-09.cnf"
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
+path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
 
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\compiler\compiler\CNF_formulae\wff.3.75.315.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\compiler\compiler\CNF_formulae\mixdup.cnf"
 
 start_time = time.time()
 
@@ -45,7 +45,7 @@ end_time = time.time()
 
 print("Time: ", end_time-start_time)
 print(circuit.size)
-print(str(compiler.statistics))
+print(str(compiler.statistics.incidence_graph_statistics))
 print(circuit.model_counting(assumption_set=set(), exist_quantification_set=set()))
 
 

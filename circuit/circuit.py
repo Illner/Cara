@@ -7,6 +7,7 @@ from typing import Set, Dict, List, Union
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.leaf.two_cnf_leaf import TwoCnfLeaf
 from circuit.node.leaf.literal_leaf import LiteralLeaf
+from circuit.node.leaf.horn_cnf_leaf import HornCnfLeaf
 from circuit.node.leaf.constant_leaf import ConstantLeaf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 from circuit.node.inner_node.or_inner_node import OrInnerNode
@@ -543,7 +544,18 @@ class Circuit:
 
         return node.id
 
-    # TODO create_horn_cnf_leaf
+    def create_horn_cnf_leaf(self, horn_cnf: PySatHornCnf, renaming_function: Set[int]) -> int:
+        """
+        Create a new Horn CNF leaf in the circuit
+        :param horn_cnf: Horn CNF
+        :param renaming_function: a set of variables that were renamed
+        :return: the node's id
+        """
+
+        node = HornCnfLeaf(horn_cnf, renaming_function, self.__get_new_id())
+        self.__add_new_node(node)
+
+        return node.id
 
     def create_and_node(self, child_id_set: Set[int], use_unique_node_cache: bool = True) -> int:
         """
