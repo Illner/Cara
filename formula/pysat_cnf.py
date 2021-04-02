@@ -55,7 +55,7 @@ class PySatCnf(CNF):
     def get_number_of_models(self, assignment_list: List[int]) -> int:
         """
         Return the number of models.
-        Time complexity can be exponential!!!
+        Time complexity is exponential!!!
         :param assignment_list: a partial assignment
         :return: the number of models
         """
@@ -95,16 +95,20 @@ class PySatCnf(CNF):
         solver.delete()
 
         return number_of_models
+
+    def str_renaming_function(self, renaming_function: Set[int]) -> str:
+        result = " ".join(('p cnf', str(self.number_of_variables), str(self.number_of_clauses)))
+
+        for clause in self.clauses:
+            clause_temp = [-lit if abs(lit) in renaming_function else lit for lit in clause]
+            result = "\n".join((result, " ".join((" ".join(map(str, clause_temp)), "0"))))
+
+        return result
     # endregion
 
     # region Magic method
     def __str__(self):
-        result = " ".join(('p cnf', str(self.number_of_variables), str(self.number_of_clauses)))
-
-        for clause in self.clauses:
-            result = "\n".join((result, " ".join((" ".join(map(str, clause)), "0"))))
-
-        return result
+        return self.str_renaming_function(renaming_function=set())
 
     def __repr__(self):
         clause_sorted_list = SortedList()
@@ -115,7 +119,7 @@ class PySatCnf(CNF):
     # endregion
 
     # region Public method
-    def get_variable_set(self, copy: bool = False):
+    def get_variable_set(self, copy: bool):
         """
         :param copy: True if a copy is returned
         :return: a set of variables
@@ -126,7 +130,7 @@ class PySatCnf(CNF):
 
         return self.__variable_set
 
-    def get_literal_set(self, copy: bool = False):
+    def get_literal_set(self, copy: bool):
         """
         :param copy: True if a copy is returned
         :return: a set of literals
@@ -140,22 +144,22 @@ class PySatCnf(CNF):
 
     # region Property
     @property
-    def number_of_variables(self):
+    def number_of_variables(self) -> int:
         return len(self.__variable_set)
 
     @property
-    def number_of_clauses(self):
+    def number_of_clauses(self) -> int:
         return len(self.clauses)
 
     @property
-    def formula_length(self):
+    def formula_length(self) -> int:
         return self.__formula_length
 
     @property
-    def is_2_cnf(self):
+    def is_2_cnf(self) -> bool:
         return self.__is_2_cnf
 
     @property
-    def is_horn_formula(self):
+    def is_horn_formula(self) -> bool:
         return self.__is_horn_formula
     # endregion

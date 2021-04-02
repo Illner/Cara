@@ -50,7 +50,7 @@ def is_linux() -> bool:
 
 def is_mac() -> bool:
     """
-    :return: True if the system/OS is MacOS, otherwise False is returned
+    :return: True if the system/OS is MacOS. Otherwise False is returned
     """
 
     os = get_os()
@@ -63,7 +63,7 @@ def is_mac() -> bool:
 
 def is_64bit() -> bool:
     """
-    :return: True if the system/OS is 64 bit, otherwise False is returned
+    :return: True if the system/OS is 64 bit. Otherwise, False is returned
     """
 
     return platform.architecture()[0] == "64bit"

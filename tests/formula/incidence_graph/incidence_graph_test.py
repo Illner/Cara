@@ -21,7 +21,7 @@ class IncidenceGraphTest(TestAbstract):
         Create an incidence graph (incidence_graph_1)
         """
 
-        incidence_graph = IncidenceGraph(3, 4)
+        incidence_graph = IncidenceGraph()
 
         # clause 1
         incidence_graph.add_edge(-1, 0)
@@ -46,7 +46,7 @@ class IncidenceGraphTest(TestAbstract):
         Create an incidence graph (incidence_graph_2)
         """
 
-        incidence_graph = IncidenceGraph(5, 6)
+        incidence_graph = IncidenceGraph()
 
         # clause 1
         incidence_graph.add_edge(1, 0)
@@ -87,14 +87,14 @@ class IncidenceGraphTest(TestAbstract):
 
         # Neighbours (variables)
         result = "\n".join((result, "Neighbours (variables)"))
-        for variable in sorted(incidence_graph.variable_set()):
+        for variable in sorted(incidence_graph.variable_set(copy=False)):
             neighbour_sorted_list = SortedList(incidence_graph.variable_neighbour_set(variable))
             number_of_neighbours = incidence_graph.number_of_neighbours_variable(variable)
             result = "\n".join((result, f"{variable} ({number_of_neighbours}): {neighbour_sorted_list}"))
 
         # Neighbours (clauses)
         result = "\n".join((result, "Neighbours (clauses)"))
-        for clause_id in sorted(incidence_graph.clause_id_set()):
+        for clause_id in sorted(incidence_graph.clause_id_set(copy=False)):
             neighbour_sorted_list = SortedList(incidence_graph.clause_id_neighbour_set(clause_id))
             number_of_neighbours = incidence_graph.number_of_neighbours_clause_id(clause_id)
             result = "\n".join((result, f"{clause_id} ({number_of_neighbours}): {neighbour_sorted_list}"))
@@ -165,15 +165,15 @@ class IncidenceGraphTest(TestAbstract):
 
             # Add edges
             result = "\n".join((result, "Add an edge (|3| - 4)"))
-            incidence_graph.add_edge(3, 4, create_node=True)
+            incidence_graph.add_edge(3, 4)
             result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
 
             result = "\n".join((result, "Add an edge (|-4| - 4)"))
-            incidence_graph.add_edge(-4, 4, create_node=True)
+            incidence_graph.add_edge(-4, 4)
             result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
 
             result = "\n".join((result, "Add an edge (5 - 4)"))
-            incidence_graph.add_edge(5, 4, create_node=True)
+            incidence_graph.add_edge(5, 4)
             result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))

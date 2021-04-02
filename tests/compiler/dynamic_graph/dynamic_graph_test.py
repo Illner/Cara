@@ -40,7 +40,7 @@ class DynamicGraphTest(TestAbstract):
         result = "\n".join((result, "Neighbours"))
         node_list_temp = [1, 2, 3, 4, 5, 6]
         for node in node_list_temp:
-            neighbour_sorted_list = SortedList(dynamic_graph_func.get_neighbour_set(node))
+            neighbour_sorted_list = SortedList(dynamic_graph_func.get_neighbour_set(node, copy=False))
             result = "\n".join((result, f"{node}: {neighbour_sorted_list}"))
 
         result = "\n".join((result, ""))

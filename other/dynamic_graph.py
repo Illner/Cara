@@ -167,7 +167,7 @@ class DynamicGraph(Graph):
 
         return component_size_list
 
-    def get_neighbour_set(self, node: int, copy: bool = False) -> Set[int]:
+    def get_neighbour_set(self, node: int, copy: bool) -> Set[int]:
         """
         Return a set of neighbours of the node.
         If the node does not exist, an empty set is returned.
@@ -187,7 +187,7 @@ class DynamicGraph(Graph):
 
     def delete_all_neighbours(self, node: int) -> None:
         """
-        Delete all edges which are incident with the node.
+        Delete all edges that are incident with the node.
         If the node does not exist, nothing happens.
         Isolate the node (the clause is satisfied).
         :param node: the node
@@ -198,7 +198,7 @@ class DynamicGraph(Graph):
         if node not in self.__neighbour_dictionary:
             return
 
-        neighbour_set = self.get_neighbour_set(node)
+        neighbour_set = self.get_neighbour_set(node, copy=False)
         for neighbour in neighbour_set:
             super().delete_edge(node, neighbour)
             self.__neighbour_dictionary[neighbour].remove(node)
@@ -213,7 +213,7 @@ class DynamicGraph(Graph):
         """
         Return the number of edges between the nodes.
         If one of the nodes does not exist, 0 is returned.
-        If none edge exists between the nodes, 0 is returned.
+        If no edge exists between the nodes, 0 is returned.
         :param node_1: the first node
         :param node_2: the second node
         :return: the number of edges
@@ -225,7 +225,7 @@ class DynamicGraph(Graph):
 
         counter_key = self._generate_key(node_1, node_2)
 
-        # None edge exists
+        # No edge exists
         if counter_key not in self.__counter_dictionary:
             return 0
 

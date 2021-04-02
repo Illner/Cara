@@ -1,6 +1,7 @@
 # Import
 import os
 from formula.cnf import Cnf
+from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
 
 # Import exception
@@ -21,8 +22,8 @@ class CnfTest(TestAbstract):
         for (file_name, file_path) in self._files:
             try:
                 c = Cnf(file_path)
-                clause = c.get_clause(1)
-                actual_result = "\n".join((actual_result, file_name, str(c), f"The second clause: {clause}", ""))
+                clause = c.get_clause(1, copy=False)
+                actual_result = "\n".join((actual_result, file_name, str(c), f"The second clause: ({SortedList(clause)})", ""))
             except (c_exception.CaraException, Exception) as err:
                 actual_result = "\n".join((actual_result, file_name, str(err), ""))
 

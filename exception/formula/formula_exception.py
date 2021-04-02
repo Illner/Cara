@@ -27,16 +27,6 @@ class ClauseDoesNotExistException(FormulaException):
         super().__init__(self.message)
 
 
-class VariableDoesNotExistException(FormulaException):
-    """
-    The variable does not exist
-    """
-
-    def __init__(self, variable: int):
-        self.message = f"The variable ({variable}) was not defined on p line but is used in a clause!"
-        super().__init__(self.message)
-
-
 class PLineIsNotMentionedException(FormulaException):
     """
     P line is not mentioned at all or is mentioned after the clauses

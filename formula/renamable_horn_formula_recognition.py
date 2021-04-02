@@ -5,7 +5,7 @@ from formula.pysat_2_cnf import PySat2Cnf
 
 class RenamableHornFormulaRecognition:
     """
-    A linear time recognition algorithm for (renamable) Horn formula
+    A linear-time recognition algorithm for (renamable) Horn formula
     Bengt Aspvall. Recognizing disguised NR(1) instances of the satisfiability problem. J. Algorithms, 1(1):97–103, 1980. (Cited pages 43, 44 and 121.)
     """
 
@@ -19,7 +19,7 @@ class RenamableHornFormulaRecognition:
     """
 
     def __init__(self, incidence_graph):
-        self.__variable_id_counter: int = max(incidence_graph.variable_set(), default=0)
+        self.__variable_id_counter: int = max(incidence_graph.variable_set(copy=False), default=0)
 
         # Mappings
         self.__clause_variable_dictionary: Dict[int, int] = dict()
@@ -42,7 +42,7 @@ class RenamableHornFormulaRecognition:
     def __create_cnf_formula(self, incidence_graph) -> PySat2Cnf:
         cnf: PySat2Cnf = PySat2Cnf()
 
-        for clause_id in incidence_graph.clause_id_set():
+        for clause_id in incidence_graph.clause_id_set(copy=False):
             clause = incidence_graph.get_clause(clause_id)
             clause_len = len(clause)
             previous_y: Union[int, None] = None
