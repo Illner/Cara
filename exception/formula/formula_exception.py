@@ -1,4 +1,4 @@
-# Import
+# Import exception
 from exception.cara_exception import CaraException
 
 

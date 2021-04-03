@@ -250,7 +250,7 @@ class CircuitTest(TestAbstract):
             result = "\n".join((result, "id_exist, node_exist, get_node"))
             node_id_list = [5, 6, 12, 19, 25, -1]
             for node_id in node_id_list:
-                node_id_exist_temp = circuit.id_exist(node_id)
+                node_id_exist_temp = circuit.node_id_exist(node_id)
                 node_temp = circuit.get_node(node_id)
                 node_exist_temp = None if node_temp is None else circuit.node_exist(node_temp)
 

@@ -83,7 +83,7 @@ class Compiler:
                                                        incidence_graph_statistics=self.__cnf.incidence_graph_statistics)   # statistics
         else:
             self.__statistics: Statistics = Statistics()    # statistics
-            self.__cnf: Cnf = Cnf(dimacs_cnf_file_path=cnf,
+            self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
                                   cnf_statistics=self.__statistics.cnf_statistics,
                                   incidence_graph_statistics=self.__statistics.incidence_graph_statistics)
 
@@ -190,8 +190,14 @@ class Compiler:
 
         # Add unused variables
         node_id_set = set()
-        variable_in_circuit_set = self.__circuit.get_node(self.__circuit.root_id)._get_variable_in_circuit_set()
-        unused_variable_set = self.__cnf._get_variable_set().difference(variable_in_circuit_set)
+        variable_in_circuit_set = self.__circuit.get_node(self.__circuit.root_id)._get_variable_in_circuit_set(copy=False)
+        unused_variable_set = self.__cnf.get_variable_set(copy=False).difference(variable_in_circuit_set)
+
+        number_of_unused_variables = self.__cnf.number_of_variables - self.__cnf.real_number_of_variables
+        max_variable_id = max(self.__cnf.get_variable_set(copy=False))
+        unused_variable_list = [max_variable_id + 1 + i for i, _ in enumerate(range(number_of_unused_variables))]
+
+        unused_variable_set.update(set(unused_variable_list))
 
         for var in unused_variable_set:
             child_id_set = self.__circuit.create_literal_leaf_set({var, -var})

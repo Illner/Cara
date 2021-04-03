@@ -5,6 +5,7 @@ char_not_exist.nnf
 DIMACS NNF format is invalid in the file! (the line (11) starts with an invalid char (P 1 2))
 
 circuit.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: D_BDMC
 C Decomposability: True
@@ -36,6 +37,7 @@ A 2 9 12
 O 4 2 7 13
 
 different_real_number_edge_valid.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: D_BDMC
 C Decomposability: True
@@ -67,6 +69,7 @@ A 2 9 12
 O 4 2 7 13
 
 different_real_number_node_valid.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: D_BDMC
 C Decomposability: True
@@ -98,6 +101,7 @@ A 2 9 12
 O 4 2 7 13
 
 different_real_number_variable_valid.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: D_BDMC
 C Decomposability: True
@@ -129,9 +133,10 @@ A 2 9 12
 O 4 2 7 13
 
 empty_invalid.nnf
-DIMACS NNF format is invalid in the file! (file does not contain any node)
+DIMACS NNF format is invalid in the file! (the file does not contain any node)
 
 empty_line_valid.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: D_BDMC
 C Decomposability: True
@@ -166,6 +171,7 @@ missing_n_line_invalid.nnf
 NNF line is not mentioned at all or is mentioned after the nodes!
 
 more_comments_valid.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: D_BDMC
 C Decomposability: True
@@ -178,7 +184,9 @@ C LITERAL: 7
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
 C
-C comment 1, comment 2, comment 3
+C comment 1
+C comment 2
+C comment 3
 nnf 15 17 4
 L -3
 L -2
@@ -197,10 +205,10 @@ A 2 9 12
 O 4 2 7 13
 
 n_line_less_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (nnf line has an invalid format - valid format is 'nnf number_of_nodes number_of_edges number_of_variables')
+DIMACS NNF format is invalid in the file! (nnf line has an invalid format - the valid format is 'nnf number_of_nodes number_of_edges number_of_variables')
 
 n_line_more_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (nnf line has an invalid format - valid format is 'nnf number_of_nodes number_of_edges number_of_variables')
+DIMACS NNF format is invalid in the file! (nnf line has an invalid format - the valid format is 'nnf number_of_nodes number_of_edges number_of_variables')
 
 n_line_not_number_edge_invalid.nnf
 DIMACS NNF format is invalid in the file! (the number of nodes (15), the number of edges (a) or the number of variables (4) is not an integer)
@@ -215,6 +223,7 @@ n_line_position_invalid.nnf
 NNF line is not mentioned at all or is mentioned after the nodes!
 
 no_comments_valid.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: D_BDMC
 C Decomposability: True
@@ -226,8 +235,6 @@ C CONSTANT: 0
 C LITERAL: 7
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
-C
-C 
 nnf 15 17 4
 L -3
 L -2
@@ -303,6 +310,7 @@ node_or_not_number_node_invalid.nnf
 DIMACS NNF format is invalid in the file! (the c value, j value or some id of a node (O 4 2 a 7) mentioned on line 17 in the OR node is not an integer)
 
 optional_end_%_valid.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: D_BDMC
 C Decomposability: True
@@ -324,6 +332,7 @@ L 2
 O 2 2 2 3
 
 sat-grid-pbl-0010.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: D_BDMC
 C Decomposability: True
@@ -335,8 +344,6 @@ C CONSTANT: 0
 C LITERAL: 185
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
-C
-C 
 nnf 1243 2427 110
 L 39
 L 65
@@ -1583,6 +1590,7 @@ A 2 1239 1240
 A 2 1238 1241
 
 sat-grid-pbl-0010_smooth.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: SD_BDMC
 C Decomposability: True
@@ -1594,8 +1602,6 @@ C CONSTANT: 0
 C LITERAL: 212
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
-C
-C 
 nnf 1955 4053 110
 L -34
 L 82
@@ -3554,6 +3560,7 @@ A 2 1951 1952
 A 2 1950 1953
 
 sat-grid-pbl-0010_smooth_all.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: SD_BDMC
 C Decomposability: True
@@ -3565,8 +3572,6 @@ C CONSTANT: 0
 C LITERAL: 212
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
-C
-C 
 nnf 1744 3455 110
 L -47
 L 22
@@ -5314,13 +5319,12 @@ A 2 1740 1741
 A 2 1739 1742
 
 unsat_valid.nnf
+C CaraCompiler
 C Name: Circuit
 C Type: SD_BDMC
 C Decomposability: True
 C Determinism: True
 C Smoothness: True
-C
-C 
 nnf 1 0 0
 O 0 0
 
@@ -5328,6 +5332,7 @@ O 0 0
 Creating circuits
 
 __create_circuit_2
+C CaraCompiler
 C Name: circuit_2
 C Type: NNF
 C Decomposability: False
@@ -5339,8 +5344,6 @@ C CONSTANT: 1
 C LITERAL: 3
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
-C
-C 
 nnf 7 7 3
 L -3
 L 1
@@ -5351,6 +5354,7 @@ O 0 3 1 3 4
 A 2 2 5
 
 __create_circuit_3
+C CaraCompiler
 C Name: circuit_3
 C Type: SD_BDMC
 C Decomposability: True
@@ -5362,8 +5366,6 @@ C CONSTANT: 0
 C LITERAL: 8
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
-C
-C 
 nnf 23 30 4
 L -1
 L 2
@@ -5390,6 +5392,7 @@ A 2 17 20
 O 0 2 14 21
 
 __create_circuit_4
+C CaraCompiler
 C Name: circuit_4
 C Type: D_BDMC
 C Decomposability: True
@@ -5401,8 +5404,6 @@ C CONSTANT: 0
 C LITERAL: 11
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
-C
-C 
 nnf 20 25 7
 L 7
 L -7
@@ -5426,6 +5427,7 @@ A 2 1 17
 O 7 2 0 18
 
 __create_circuit_5
+C CaraCompiler
 C Name: circuit_5
 C Type: D_BDMC
 C Decomposability: True
@@ -5437,8 +5439,6 @@ C CONSTANT: 0
 C LITERAL: 8
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
-C
-C 
 nnf 15 16 5
 L 2
 L -1
@@ -5499,6 +5499,7 @@ node_exist: None
 get_node: None
 Comment
 New comments
+C CaraCompiler
 C Name: circuit_4
 C Type: D_BDMC
 C Decomposability: True
@@ -5511,7 +5512,8 @@ C LITERAL: 11
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
 C
-C New comment 1, New comment 2
+C New comment 1
+C New comment 2
 nnf 20 25 7
 L 7
 L -7
@@ -5535,6 +5537,7 @@ A 2 1 17
 O 7 2 0 18
 
 Clear comments
+C CaraCompiler
 C Name: circuit_4
 C Type: D_BDMC
 C Decomposability: True
@@ -5546,8 +5549,6 @@ C CONSTANT: 0
 C LITERAL: 11
 C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
-C
-C 
 nnf 20 25 7
 L 7
 L -7
@@ -5719,7 +5720,7 @@ Add edge (40 -> 45)
 The node (40) does not exist in the circuit! (add_edge (from_id_node))
 
 Add edge (25 -> 21)
-Something wrong (trying to add an edge from the node (25) which is not an inner node)
+Something wrong (trying to add an edge from the node (25) that is not an inner node)
 
 Add edge (26 -> 21)
 is connected: True
@@ -5917,13 +5918,12 @@ Smooth: True
 
 Leaf as root
 
+C CaraCompiler
 C Name: Circuit
 C Type: SD_BDMC
 C Decomposability: True
 C Determinism: True
 C Smoothness: True
-C
-C 
 nnf 1 0 1
 L 1
 

@@ -1,6 +1,5 @@
 # Import
 from typing import Set
-from other.sorted_list import SortedList
 from formula.pysat_horn_cnf import PySatHornCnf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
@@ -29,60 +28,61 @@ class RenamableHornCnfLeaf(LeafAbstract):
         super().__init__(id=id,
                          size=size_temp,
                          node_type=nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF,
-                         variable_in_circuit_set=self.__cnf.get_variable_set(),
-                         literal_in_circuit_set=self.__cnf.get_literal_set())
+                         variable_in_circuit_set=self.__cnf.get_variable_set(copy=False),
+                         literal_in_circuit_set=self.__cnf.get_literal_set(copy=False))
 
     # region Override method
-    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> bool:
-        assumption_restricted_set_temp = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
-        renamed_assumption_restricted_set_temp = self.__rename_assignment(assumption_restricted_set_temp)
-        exist_quantification_restricted_set_temp = exist_quantification_set.intersection(self._get_variable_in_circuit_set())
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
+        restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set)
+        restricted_renamed_assumption_set_temp = self.__rename_assignment(restricted_assumption_set_temp)
+        restricted_exist_quantification_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set)
 
         # Cache
-        key = ""  # initialization
-        if use_caches:
-            key = self._generate_key_cache(renamed_assumption_restricted_set_temp, exist_quantification_restricted_set_temp)
+        key = ""    # initialization
+        if use_cache:
+            key = self._generate_key_cache(restricted_renamed_assumption_set_temp, restricted_exist_quantification_set_temp)
             value = self._get_satisfiable_cache(key)
             if value is not None:
                 return value
 
-        model = self.__cnf.get_model(assignment_list=list(renamed_assumption_restricted_set_temp))
+        model = self.__cnf.get_model(assignment_list=list(restricted_renamed_assumption_set_temp))
         is_satisfiable = False if model is None else True
 
         # Cache
-        if use_caches:
+        if use_cache:
             self._add_satisfiable_cache(key, is_satisfiable)
 
         return is_satisfiable
 
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> int:
-        assumption_restricted_set_temp = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
-        renamed_assumption_restricted_set_temp = self.__rename_assignment(assumption_restricted_set_temp)
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
+        restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set)
+        restricted_renamed_assumption_set_temp = self.__rename_assignment(restricted_assumption_set_temp)
 
         # Cache
-        key = ""  # initialization
-        if use_caches:
-            key = self._generate_key_cache(renamed_assumption_restricted_set_temp, set())
+        key = ""    # initialization
+        if use_cache:
+            key = self._generate_key_cache(restricted_renamed_assumption_set_temp, set())
             value = self._get_model_counting_cache(key)
             if value is not None:
                 return value
 
-        number_of_models = self.__cnf.get_number_of_models(assignment_list=list(renamed_assumption_restricted_set_temp))
+        number_of_models = self.__cnf.get_number_of_models(assignment_list=list(restricted_renamed_assumption_set_temp))
 
         # Cache
-        if use_caches:
+        if use_cache:
             self._add_model_counting_cache(key, number_of_models)
 
         return number_of_models
 
-    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
         raise c_exception.OperationIsNotSupportedException("minimum default cardinality")
     # endregion
 
     # region Private method
     def __rename_assignment(self, assignment_set: Set[int]) -> Set[int]:
         """
-        :return: renamed assignment based on the renaming function
+        :param assignment_set: an assigment set
+        :return: the renamed assignment based on the renaming function
         """
 
         renamed_assignment_set = set()
@@ -101,19 +101,19 @@ class RenamableHornCnfLeaf(LeafAbstract):
 
     # region Magic method
     def __str__(self):
-        return "\n".join((str(SortedList(self.__renaming_function)), str(self.__cnf)))
+        return self.__cnf.str_renaming_function(self.__renaming_function)
     # endregion
 
     # region Property
     @property
-    def number_of_variables(self):
+    def number_of_variables(self) -> int:
         return self.__cnf.number_of_variables
 
     @property
-    def number_of_clauses(self):
+    def number_of_clauses(self) -> int:
         return self.__cnf.number_of_clauses
 
     @property
-    def formula_length(self):
+    def formula_length(self) -> int:
         return self.__cnf.formula_length
     # endregion

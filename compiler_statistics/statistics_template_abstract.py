@@ -31,6 +31,6 @@ class StatisticsTemplateAbstract(ABC):
 
     # region Property
     @property
-    def name(self):
+    def name(self) -> str:
         return self.__name
     # endregion

@@ -1,5 +1,7 @@
 # Import
 from typing import Set
+
+# Import exception
 from exception.cara_exception import CaraException
 
 # Import enum
@@ -9,16 +11,6 @@ import circuit.node.node_type_enum as nt_enum
 class CircuitException(CaraException):
     def __init__(self, message: str):
         super().__init__(message)
-
-
-class SizeCannotBeLessThanZeroException(CircuitException):
-    """
-    The size of the circuit cannot be less than 0
-    """
-
-    def __init__(self, node: str):
-        self.message = f"The size of the circuit ({node}) cannot be less than 0!"
-        super().__init__(self.message)
 
 
 class ParentDoesNotExistException(CircuitException):
@@ -38,26 +30,6 @@ class ChildDoesNotExistException(CircuitException):
 
     def __init__(self, node: str, child: str):
         self.message = f"The node ({node}) does not have the child ({child}) in its list of children!"
-        super().__init__(self.message)
-
-
-class NumberOfNodeTypeOccurrencesCannotBeLessThanZeroException(CircuitException):
-    """
-    The number of node type occurrences cannot be less than 0
-    """
-
-    def __init__(self, node_type: nt_enum.NodeTypeEnum, node: str):
-        self.message = f"The number of node type ({node_type.value}) occurrences cannot be less than 0! Node: ({node})"
-        super().__init__(self.message)
-
-
-class TryingRemoveNodeTypeDoesNotHaveOccurrenceException(CircuitException):
-    """
-    Trying to remove an occurrence of the node type which does not have any occurrence in the circuit
-    """
-
-    def __init__(self, node_type: nt_enum.NodeTypeEnum, node: str):
-        self.message = f"Trying to remove an occurrence of the node type ({node_type.value}) which does not have any occurrence in the circuit! Node: ({node})"
         super().__init__(self.message)
 
 
@@ -176,7 +148,7 @@ class RootOfCircuitIsNotSetException(CircuitException):
 class AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(CircuitException):
     """
     The assumption set and existential quantification set are not disjoint.
-    Can be used for an observation set and default set as well (assumption_and_exist_set = False).
+    It can be used for an observation set and default set as well (assumption_and_exist_set = False).
     """
 
     def __init__(self, variable_union_set: Set[int], assumption_and_exist_set: bool = True):
@@ -190,7 +162,7 @@ class AssumptionSetAndExistentialQuantificationSetAreNotDisjointException(Circui
 class AssumptionSetContainsComplementLiteralsException(CircuitException):
     """
     The assumption set contains complement literals.
-    Can be used for an observation set as well (assumption_set = False).
+    It can be used for an observation set as well (assumption_set = False).
     """
 
     def __init__(self, complement_literals_set: Set[int], assumption_set: bool = True):

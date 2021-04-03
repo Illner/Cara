@@ -66,27 +66,27 @@ class StatisticsComponentCounter:
 
     # region Property
     @property
-    def name(self):
+    def name(self) -> str:
         return self.__name
 
     @property
-    def number_of_calls(self):
+    def number_of_calls(self) -> int:
         return self.__number_of_calls
 
     @property
-    def sum_count(self):
+    def sum_count(self) -> float:
         return self.__sum_count
 
     @property
-    def min_count(self):
+    def min_count(self) -> Union[float, None]:
         return self.__min_count
 
     @property
-    def max_count(self):
+    def max_count(self) -> Union[float, None]:
         return self.__max_count
 
     @property
-    def average_count(self):
+    def average_count(self) -> Union[float, None]:
         if self.__number_of_calls == 0:
             return None
 

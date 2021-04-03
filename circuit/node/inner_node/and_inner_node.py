@@ -18,18 +18,21 @@ class AndInnerNode(InnerNodeAbstract):
     def __init__(self, child_set: Set[NodeAbstract], id: int = 0):
         decomposable_temp = self.__is_decomposable_set(child_set)
 
-        super().__init__(id, nt_enum.NodeTypeEnum.AND_NODE, child_set, decomposable=decomposable_temp)
+        super().__init__(id=id,
+                         node_type=nt_enum.NodeTypeEnum.AND_NODE,
+                         child_set=child_set,
+                         decomposable=decomposable_temp)
 
     # region Private method
     @staticmethod
     def __is_decomposable_set(child_set: Set[NodeAbstract]) -> bool:
         """
         Check if the node is decomposable
-        :param child_set: the children set
-        :return: True if the node is decomposable. Otherwise False is returned.
+        :param child_set: children set
+        :return: True if the node is decomposable. Otherwise, False is returned.
         """
 
-        # The node has no children or one child
+        # The node has no children or only one child
         if not len(child_set) or len(child_set) == 1:
             return True
 
@@ -37,7 +40,7 @@ class AndInnerNode(InnerNodeAbstract):
 
         for i in range(0, len(child_list) - 1):
             for j in range(i+1, len(child_list)):
-                intersection_temp = child_list[i]._get_variable_in_circuit_set().intersection(child_list[j]._get_variable_in_circuit_set())
+                intersection_temp = child_list[i]._get_variable_in_circuit_set(copy=False).intersection(child_list[j]._get_variable_in_circuit_set(copy=False))
 
                 if len(intersection_temp):
                     return False
@@ -49,7 +52,7 @@ class AndInnerNode(InnerNodeAbstract):
     def _is_decomposable(self) -> bool:
         """
         Check if the node is decomposable
-        :return: True if the node is decomposable. Otherwise False is returned.
+        :return: True if the node is decomposable. Otherwise, False is returned.
         """
 
         return self.__is_decomposable_set(self._child_set)
@@ -59,37 +62,37 @@ class AndInnerNode(InnerNodeAbstract):
     def _update_properties(self) -> None:
         self._set_decomposable(self._is_decomposable())
 
-    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Satisfiability is not supported if the circuit is not decomposable.")
 
-        assumption_restricted_set_temp = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
-        exist_quantification_restricted_set_temp = exist_quantification_set.intersection(self._get_variable_in_circuit_set())
+        restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set)
+        restricted_exist_quantification_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set)
 
         # Cache
         key = ""    # initialization
-        if use_caches:
-            key = self._generate_key_cache(assumption_restricted_set_temp, exist_quantification_restricted_set_temp)
+        if use_cache:
+            key = self._generate_key_cache(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
             value = self._get_satisfiable_cache(key)
             if value is not None:
                 return value
 
         result = True
         for child in self._child_set:
-            result_temp = child.is_satisfiable(assumption_restricted_set_temp, exist_quantification_restricted_set_temp)
+            result_temp = child.is_satisfiable(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
             # The child is not satisfied => this node is not satisfied
             if not result_temp:
                 result = False
                 break
 
         # Cache
-        if use_caches:
+        if use_cache:
             self._add_satisfiable_cache(key, result)
 
         return result
 
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Model counting is not supported if the circuit is not decomposable.")
@@ -102,39 +105,39 @@ class AndInnerNode(InnerNodeAbstract):
         if not self.smoothness_in_circuit:
             raise c_exception.CircuitIsNotSmoothException("Model counting is not supported if the circuit is not smooth.")
 
-        assumption_restricted_set_temp = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
-        exist_quantification_restricted_set_temp = exist_quantification_set.intersection(self._get_variable_in_circuit_set())
+        restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set)
+        restricted_exist_quantification_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set)
 
         # Cache
         key = ""    # initialization
-        if use_caches:
-            key = self._generate_key_cache(assumption_restricted_set_temp, exist_quantification_restricted_set_temp)
+        if use_cache:
+            key = self._generate_key_cache(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
             value = self._get_model_counting_cache(key)
             if value is not None:
                 return value
 
         number_of_models = 1
         for child in self._child_set:
-            number_of_models *= child.model_counting(assumption_restricted_set_temp, exist_quantification_restricted_set_temp)
+            number_of_models *= child.model_counting(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
 
         # Cache
-        if use_caches:
+        if use_cache:
             self._add_model_counting_cache(key, number_of_models)
 
         return number_of_models
 
-    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Minimum default-cardinality is not supported if the circuit is not decomposable.")
 
-        observation_restricted_set_temp = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), observation_set))
-        default_restricted_set_temp = default_set.intersection(self._get_variable_in_circuit_set())
+        restricted_observation_set_temp = self._create_restricted_assumption_set(observation_set)
+        restricted_default_set_temp = self._create_restricted_exist_quantification_set(default_set)
 
         # Cache
-        key = ""  # initialization
-        if use_caches:
-            key = self._generate_key_cache(observation_restricted_set_temp, default_restricted_set_temp)
+        key = ""    # initialization
+        if use_cache:
+            key = self._generate_key_cache(restricted_observation_set_temp, restricted_default_set_temp)
             value = self._get_minimal_default_cardinality_cache(key)
             if value is not None:
                 return value
@@ -144,7 +147,7 @@ class AndInnerNode(InnerNodeAbstract):
             default_cardinality += child.minimum_default_cardinality(observation_set, default_set)
 
         # Cache
-        if use_caches:
+        if use_cache:
             self._add_minimal_default_cardinality_cache(key, default_cardinality)
 
         return default_cardinality

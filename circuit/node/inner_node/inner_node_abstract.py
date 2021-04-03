@@ -23,7 +23,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     Protected Set<NodeAbstract> child_set
     Protected Set<Leaf> leaf_set
     Protected Set<InnerNodeAbstract> parent_set
-    Private Dict<NodeTypeEnum.value, int> node_type_in_circuit_counter_dict     # Could be None
+    Private Dict<NodeTypeEnum.value, int> node_type_in_circuit_counter_dict
 
     Private bool decomposable                   # The node satisfies decomposability
     Private bool decomposable_in_circuit        # All nodes in the circuit satisfy decomposability
@@ -36,15 +36,15 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum, child_set: Set[NodeAbstract],
                  decomposable: bool = True, deterministic: bool = True, smoothness: bool = True):
         self._child_set: Set[NodeAbstract] = child_set
-        self._parent_set: Set[TInnerNodeAbstract] = set()  # initialization
-        self.__node_type_in_circuit_counter_dict: Union[Dict[nt_enum.NodeTypeEnum.value, int], None] = None  # initialization
+        self._parent_set: Set[TInnerNodeAbstract] = set()
+        self.__node_type_in_circuit_counter_dict: Union[Dict[nt_enum.NodeTypeEnum.value, int], None] = None
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
 
-        self._leaf_set: Set[LeafAbstract] = set()  # initialization
-        node_in_circuit_set_temp = {self}  # initialization
+        self._leaf_set: Set[LeafAbstract] = set()
+        node_in_circuit_set_temp = {self}
         for child in child_set:
-            node_in_circuit_set_temp = node_in_circuit_set_temp.union(child._get_node_in_circuit_set())
+            node_in_circuit_set_temp = node_in_circuit_set_temp.union(child._get_node_in_circuit_set(copy=False))
             self._leaf_set.update(self.__get_leaf_set(child))
             child._add_parent(self)  # add me as a parent
 
@@ -52,13 +52,16 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self.__deterministic = deterministic
         self.__smoothness = smoothness
 
-        self.__decomposable_in_circuit = None  # initialization
-        self.__deterministic_in_circuit = None  # initialization
-        self.__smoothness_in_circuit = None  # initialization
+        self.__decomposable_in_circuit = None
+        self.__deterministic_in_circuit = None
+        self.__smoothness_in_circuit = None
         self._check_properties_decomposable_deterministic_smoothness_in_circuit()
 
-        super().__init__(id, node_type, variable_in_circuit_set_temp, literal_in_circuit_set_temp,
-                         node_in_circuit_set_temp)
+        super().__init__(id=id,
+                         node_type=node_type,
+                         variable_in_circuit_set=variable_in_circuit_set_temp,
+                         literal_in_circuit_set=literal_in_circuit_set_temp,
+                         node_in_circuit_set=node_in_circuit_set_temp)
 
         # Set the node_type_in_circuit_counter_dict
         self._set_node_type_in_circuit_counter_dict()
@@ -68,8 +71,8 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def __get_leaf_set(node: NodeAbstract) -> Set[LeafAbstract]:
         """
         Return a set of leaves in the circuit where the node is the root
-        :param node: the node (root of the circuit)
-        :return: the set which contains all leaves
+        :param node: a node (the root of the circuit)
+        :return: the set that contains all leaves
         """
 
         # The node is an inner node
@@ -94,8 +97,8 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         union_variable_set = set()
         union_literal_set = set()
         for child in child_set:
-            union_variable_set = union_variable_set.union(child._get_variable_in_circuit_set())
-            union_literal_set = union_literal_set.union(child._get_literal_in_circuit_set())
+            union_variable_set = union_variable_set.union(child._get_variable_in_circuit_set(copy=False))
+            union_literal_set = union_literal_set.union(child._get_literal_in_circuit_set(copy=False))
 
         return union_variable_set, union_literal_set
     # endregion
@@ -104,7 +107,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     @abstractmethod
     def _update_properties(self) -> None:
         pass
-
     # endregion
 
     # region Protected method
@@ -123,7 +125,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._leaf_set: Set[LeafAbstract] = set()
         node_in_circuit_set_temp = {self}
         for child in self._child_set:
-            node_in_circuit_set_temp = node_in_circuit_set_temp.union(child._get_node_in_circuit_set())
+            node_in_circuit_set_temp = node_in_circuit_set_temp.union(child._get_node_in_circuit_set(copy=False))
             self._leaf_set.update(self.__get_leaf_set(child))
         self._set_node_in_circuit_set(node_in_circuit_set_temp)
 
@@ -138,7 +140,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
                 parent._update()
 
         # Clear caches
-        self._clear_cache()
+        self._clear_caches()
 
     def _check_properties_decomposable_deterministic_smoothness_in_circuit(self) -> None:
         """
@@ -176,8 +178,8 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def _set_decomposable(self, new_decomposable_value: bool) -> None:
         """
         Set the decomposable property.
-        In case the decomposable property is False, change the decomposable_in_circuit property to False.
-        :param new_decomposable_value: the new value of the decomposable property
+        In case the decomposable property is False, change the decomposable_in_circuit property to False as well.
+        :param new_decomposable_value: a new value of the decomposable property
         :return: None
         """
 
@@ -190,8 +192,8 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def _set_deterministic(self, new_deterministic_value: bool) -> None:
         """
         Set the deterministic property.
-        In case the deterministic property is False, change the deterministic_in_circuit property to False.
-        :param new_deterministic_value: the new value of the deterministic property
+        In case the deterministic property is False, change the deterministic_in_circuit property to False as well.
+        :param new_deterministic_value: a new value of the deterministic property
         :return: None
         """
 
@@ -204,8 +206,8 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def _set_smoothness(self, new_smoothness_value: bool) -> None:
         """
         Set the smoothness property.
-        In case the smoothness property is False, change the smoothness_in_circuit property to False.
-        :param new_smoothness_value: the new value of the smoothness property
+        In case the smoothness property is False, change the smoothness_in_circuit property to False as well.
+        :param new_smoothness_value: a new value of the smoothness property
         :return: None
         """
 
@@ -223,7 +225,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         self.__node_type_in_circuit_counter_dict = dict()
 
-        for node in self._get_node_in_circuit_set():
+        for node in self._get_node_in_circuit_set(copy=False):
             key = node.node_type.value
 
             # The node type does not exist in the dictionary
@@ -233,9 +235,10 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             else:
                 self.__node_type_in_circuit_counter_dict[key] += 1
 
-    def _get_node_type_in_circuit_counter_dict(self, copy: bool = False):
+    def _get_node_type_in_circuit_counter_dict(self, copy: bool):
         """
-        :return: node_type_in_circuit_counter_dict (getter)
+        :param copy: True if a copy is returned
+        :return: the node type counter
         """
 
         # The node_type_in_circuit_counter_dict is not initialized
@@ -260,9 +263,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
         Add the parent (new_parent) to the set of parents (parent_set).
         If the parent already exists in the set, nothing happens.
-        If a cycle was detected (the new parent is already in the circuit), raise an exception (CycleWasDetectedException).
-        :param new_parent: the new parent
+        :param new_parent: a new parent
         :return: None
+        :raises CycleWasDetectedException: if a cycle was detected (the new parent is already in the circuit)
         """
 
         # The new parent already exists in the circuit
@@ -274,9 +277,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def _remove_parent(self, parent_to_delete: TInnerNodeAbstract) -> None:
         """
         Remove the parent (parent_to_delete) from the set of parents (parent_set).
-        If the parent does not exist in the set, raise an exception (ParentDoesNotExistException).
-        :param parent_to_delete: the parent
+        :param parent_to_delete: a parent
         :return: None
+        :raises ParentDoesNotExistException: if the parent does not exist in the set
         """
 
         # The parent does not exist in the set
@@ -289,13 +292,13 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
         Add the child (new_child) to the set of children (child_set).
         If the child already exists in the set, nothing happens.
-        :param new_child: the new child
+        :param new_child: a new child
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
         :return: None
         """
 
-        # The child already exists in the list
+        # The child already exists
         if new_child in self._child_set:
             return
 
@@ -306,15 +309,15 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
     def _remove_child(self, child_to_delete: NodeAbstract, call_update: bool = True) -> None:
         """
-        Remove the child (child_to_delete) from the set of children (child_set).
-        If the child does not exist in the set, raise an exception (ChildDoesNotExistException).
-        :param child_to_delete: the child
+        Remove the child (child_to_delete) from the set of children (child_set)
+        :param child_to_delete: a child
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
         :return: None
+        :raises ChildDoesNotExistException: if the child does not exist in the set
         """
 
-        # The child does not exist in the list
+        # The child does not exist
         if child_to_delete not in self._child_set:
             raise c_exception.ChildDoesNotExistException(str(self), str(child_to_delete))
 
@@ -323,9 +326,10 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         if call_update:
             self._update()
 
-    def _get_child_set(self, copy: bool = False) -> Set[NodeAbstract]:
+    def _get_child_set(self, copy: bool) -> Set[NodeAbstract]:
         """
-        :return: child_set (getter)
+        :param copy: True if a copy is returned
+        :return: the set of children
         """
 
         if copy:
@@ -333,9 +337,10 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         return self._child_set
 
-    def _get_parent_set(self, copy: bool = False) -> Set[NodeAbstract]:
+    def _get_parent_set(self, copy: bool) -> Set[NodeAbstract]:
         """
-        :return: parent_set (getter)
+        :param copy: True if a copy is returned
+        :return: the set of parents
         """
 
         if copy:
@@ -343,9 +348,10 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         return self._parent_set
 
-    def _get_leaf_set(self, copy: bool = False) -> Set[NodeAbstract]:
+    def _get_leaf_set(self, copy: bool) -> Set[NodeAbstract]:
         """
-        :return: leaf_set (getter)
+        :param copy: True if a copy is returned
+        :return: the set of leaves
         """
 
         if copy:
@@ -363,7 +369,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         value = node_type.value
-        node_type_in_circuit_counter_dict_temp = self._get_node_type_in_circuit_counter_dict()
+        node_type_in_circuit_counter_dict_temp = self._get_node_type_in_circuit_counter_dict(copy=False)
 
         # The node type value exists as a key in the dictionary
         if value in node_type_in_circuit_counter_dict_temp:
@@ -374,7 +380,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
     def get_child_id_list(self) -> List[int]:
         """
-        Return a list which contains children's ID
+        Return a list that contains children's ID
         :return: a children's ID list
         """
 
@@ -387,7 +393,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     # endregion
 
     # region Override method
-    def node_size(self) -> int:
+    def get_node_size(self) -> int:
         """
         :return: the size of the inner node (= number of children)
         """
@@ -432,26 +438,26 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
     # region Property
     @property
-    def decomposable(self):
+    def decomposable(self) -> bool:
         return self.__decomposable
 
     @property
-    def decomposable_in_circuit(self):
+    def decomposable_in_circuit(self) -> bool:
         return self.__decomposable_in_circuit
 
     @property
-    def deterministic(self):
+    def deterministic(self) -> bool:
         return self.__deterministic
 
     @property
-    def deterministic_in_circuit(self):
+    def deterministic_in_circuit(self) -> bool:
         return self.__deterministic_in_circuit
 
     @property
-    def smoothness(self):
+    def smoothness(self) -> bool:
         return self.__smoothness
 
     @property
-    def smoothness_in_circuit(self):
+    def smoothness_in_circuit(self) -> bool:
         return self.__smoothness_in_circuit
     # endregion

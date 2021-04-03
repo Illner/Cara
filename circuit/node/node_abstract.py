@@ -19,7 +19,7 @@ class NodeAbstract(ABC):
     """
     Private int id
     Private NodeTypeEnum node_type
-    Private Set<NodeAbstract> node_in_circuit_set   # The set which contains all nodes in the circuit
+    Private Set<NodeAbstract> node_in_circuit_set                   # a set that contains all nodes in the circuit
     Private Set<int> variable_in_circuit_set
     Private SortedList<int> variable_in_circuit_sorted_list
     Private Set<int> literal_in_circuit_set
@@ -32,49 +32,46 @@ class NodeAbstract(ABC):
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
                  variable_in_circuit_set: Set[int], literal_in_circuit_set: Set[int],
                  node_in_circuit_set: Set[TNodeAbstract]):
-        self.__node_type: nt_enum.NodeTypeEnum = node_type
         self.__id = id
+        self.__node_type: nt_enum.NodeTypeEnum = node_type
 
         self.__node_in_circuit_set: Set[TNodeAbstract] = node_in_circuit_set
-        self.__variable_in_circuit_set: Set[int] = set()                        # initialization
-        self.__variable_in_circuit_sorted_list: SortedList[int] = SortedList()  # initialization
-        self.__literal_in_circuit_set: Set[int] = set()                         # initialization
+        self.__variable_in_circuit_set: Set[int] = set()
+        self.__variable_in_circuit_sorted_list: SortedList[int] = SortedList()
+        self.__literal_in_circuit_set: Set[int] = set()
 
         self._set_variable_in_circuit_set(variable_in_circuit_set)
         self._set_literal_in_circuit_set(literal_in_circuit_set)
 
         # Cache
-        self.__satisfiable_cache: Dict[int, bool] = dict()                      # initialization
-        self.__model_counting_cache: Dict[int, int] = dict()                    # initialization
-        self.__minimal_default_cardinality_cache: Dict[int, float] = dict()     # initialization
+        self.__satisfiable_cache: Dict[int, bool] = dict()
+        self.__model_counting_cache: Dict[int, int] = dict()
+        self.__minimal_default_cardinality_cache: Dict[int, float] = dict()
 
     # region Abstract method
     @abstractmethod
-    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int],
-                       use_caches: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
         pass
 
     @abstractmethod
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int],
-                       use_caches: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
         pass
 
     @abstractmethod
-    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int],
-                                    use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
         pass
 
     @abstractmethod
-    def node_size(self) -> int:
+    def get_node_size(self) -> int:
         pass
     # endregion
 
     # region Protected method
     def _add_variable_in_circuit_set(self, variable_set: Set[int]) -> None:
         """
-        Add the variables in the variable_set to the variable_in_circuit_set.
+        Add variables to the variable_in_circuit_set.
         If some variable already exists in the variable_in_circuit_set, nothing happens.
-        :param variable_set: a set of variables which will be added to the variable_in_circuit_set
+        :param variable_set: a set of variables that will be added to the variable_in_circuit_set
         :return: None
         """
 
@@ -88,9 +85,9 @@ class NodeAbstract(ABC):
 
     def _remove_variable_in_circuit_set(self, variable_to_delete_set: Set[int]) -> None:
         """
-        Remove the variables in the variable_to_delete_set from the variable_in_circuit_set.
+        Remove variables from the variable_in_circuit_set.
         If some variable does not exist in the variable_in_circuit_set, nothing happens.
-        :param variable_to_delete_set: a set of variables which will be deleted from the variable_in_circuit_set
+        :param variable_to_delete_set: a set of variables that will be deleted from the variable_in_circuit_set
         :return: None
         """
 
@@ -111,9 +108,10 @@ class NodeAbstract(ABC):
         self.__variable_in_circuit_set = new_variable_in_circuit_set
         self.__variable_in_circuit_sorted_list = SortedList(new_variable_in_circuit_set)
 
-    def _get_variable_in_circuit_set(self, copy: bool = False) -> Set[int]:
+    def _get_variable_in_circuit_set(self, copy: bool) -> Set[int]:
         """
-        :return: variable_in_circuit_set (getter)
+        :param copy: True if a copy is returned
+        :return: a set of variables in the circuit
         """
 
         if copy:
@@ -125,16 +123,16 @@ class NodeAbstract(ABC):
         """
         Check if the variable exists in the variable_in_circuit_set
         :param variable: the variable
-        :return: True if the variable exists in the variable_in_circuit_set. Otherwise False is returned.
+        :return: True if the variable exists in the variable_in_circuit_set. Otherwise, False is returned.
         """
 
         return variable in self.__variable_in_circuit_set
 
     def _add_literal_in_circuit_set(self, literal_set: Set[int]) -> None:
         """
-        Add the literals in the literal_set to the literal_in_circuit_set.
+        Add literals to the literal_in_circuit_set.
         If some literal already exists in the literal_in_circuit_set, nothing happens.
-        :param literal_set: a set of literals which will be added to the literal_in_circuit_set
+        :param literal_set: a set of literals that will be added to the literal_in_circuit_set
         :return: None
         """
 
@@ -142,9 +140,9 @@ class NodeAbstract(ABC):
 
     def _remove_literal_in_circuit_set(self, literal_to_delete_set: Set[int]) -> None:
         """
-        Remove the literals in the literal_to_delete_set from the literal_in_circuit_set.
+        Remove literals from the literal_in_circuit_set.
         If some literal does not exist in the literal_in_circuit_set, nothing happens.
-        :param literal_to_delete_set: a set of literals which will be deleted from the literal_in_circuit_set
+        :param literal_to_delete_set: a set of literals that will be deleted from the literal_in_circuit_set
         :return: None
         """
 
@@ -158,9 +156,10 @@ class NodeAbstract(ABC):
 
         self.__literal_in_circuit_set = new_literal_in_circuit_set
 
-    def _get_literal_in_circuit_set(self, copy: bool = False) -> Set[int]:
+    def _get_literal_in_circuit_set(self, copy: bool) -> Set[int]:
         """
-        :return: literal_in_circuit_set (getter)
+        :param copy: True if a copy is returned
+        :return: a set of literals in the circuit
         """
 
         if copy:
@@ -172,16 +171,16 @@ class NodeAbstract(ABC):
         """
         Check if the literal exists in the literal_in_circuit_set
         :param literal: the literal
-        :return: True if the literal exists in the literal_in_circuit_set. Otherwise False is returned.
+        :return: True if the literal exists in the literal_in_circuit_set. Otherwise, False is returned.
         """
 
         return literal in self.__literal_in_circuit_set
 
     def _add_node_in_circuit_set(self, node_set: Set[TNodeAbstract]) -> None:
         """
-        Add the nodes in the node_set to the node_in_circuit_set.
+        Add nodes to the node_in_circuit_set.
         If some node already exists in the node_in_circuit_set, nothing happens.
-        :param node_set: the set of nodes which will be added to the node_in_circuit_set
+        :param node_set: a set of nodes that will be added to the node_in_circuit_set
         :return: None
         """
 
@@ -189,9 +188,9 @@ class NodeAbstract(ABC):
 
     def _remove_node_in_circuit_set(self, node_to_delete_set: Set[TNodeAbstract]) -> None:
         """
-        Remove the nodes in the node_to_delete_set from the node_in_circuit_set.
+        Remove nodes from the node_in_circuit_set.
         If some node does not exist in the node_in_circuit_set, nothing happens.
-        :param node_to_delete_set: the set of nodes which will be deleted from the node_in_circuit_set
+        :param node_to_delete_set: a set of nodes that will be deleted from the node_in_circuit_set
         :return: None
         """
 
@@ -205,9 +204,10 @@ class NodeAbstract(ABC):
 
         self.__node_in_circuit_set = new_node_in_circuit_set
 
-    def _get_node_in_circuit_set(self, copy: bool = False) -> Set[TNodeAbstract]:
+    def _get_node_in_circuit_set(self, copy: bool) -> Set[TNodeAbstract]:
         """
-        :return: node_in_circuit_set (getter)
+        :param copy: True if a copy is returned
+        :return: a set of nodes in the circuit
         """
 
         if copy:
@@ -219,7 +219,7 @@ class NodeAbstract(ABC):
         """
         Check if the node exists in the node_in_circuit_set
         :param node: the node
-        :return: True if the node exists in the node_in_circuit_set. Otherwise False is returned.
+        :return: True if the node exists in the node_in_circuit_set. Otherwise, False is returned.
         """
 
         return node in self.__node_in_circuit_set
@@ -240,7 +240,7 @@ class NodeAbstract(ABC):
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
         :param key: the key
-        :return: The record's value if the record exists. Otherwise, None is returned.
+        :return: the record's value if the record exists. Otherwise, None is returned.
         """
 
         # The record does not exist
@@ -273,7 +273,7 @@ class NodeAbstract(ABC):
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
         :param key: the key
-        :return: The record's value if the record exists. Otherwise, None is returned.
+        :return: the record's value if the record exists. Otherwise, None is returned.
         """
 
         # The record does not exist
@@ -306,7 +306,7 @@ class NodeAbstract(ABC):
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
         :param key: the key
-        :return: The record's value if the record exists. Otherwise, None is returned.
+        :return: the record's value if the record exists. Otherwise, None is returned.
         """
 
         # The record does not exist
@@ -323,7 +323,7 @@ class NodeAbstract(ABC):
 
         self.__minimal_default_cardinality_cache = dict()
 
-    def _clear_cache(self) -> None:
+    def _clear_caches(self) -> None:
         """
         Clear all caches
         Cache: satisfiable_cache, model_counting_cache, minimal_default_cardinality_cache
@@ -336,18 +336,18 @@ class NodeAbstract(ABC):
 
     def _generate_key_cache(self, assumption_set: Set[int], exist_quantification_set: Set[int]) -> int:
         """
-        Generate a key for caching.
+        Generate a key for caching
         Cache: satisfiable_cache, model_counting_cache, minimal_default_cardinality_cache
-        :param assumption_set: the assumption set / observation set (can be empty)
-        :param exist_quantification_set: the exist quantification set / default set (can be empty)
+        :param assumption_set: an assumption set / observation set (can be empty)
+        :param exist_quantification_set: an exist quantification set / default set (can be empty)
         :return: the generated key based on the assumption_set, exist_quantification_set and variable_in_circuit_set
         """
 
         assumption_list_temp = []
         exist_quantification_list_temp = []
 
-        it = self.__variable_in_circuit_sorted_list.irange()
-        for v in it:
+        variable_iterator = self.__variable_in_circuit_sorted_list.irange()
+        for v in variable_iterator:
             # The assumption list
             if v in assumption_set:
                 assumption_list_temp.append("1")
@@ -368,6 +368,22 @@ class NodeAbstract(ABC):
         key = mmh3.hash(key_string)
 
         return key
+
+    def _create_restricted_assumption_set(self, assumption_set: Set[int]) -> Set[int]:
+        """
+        :param assumption_set: an assumption set
+        :return: the restricted assumption set
+        """
+
+        return set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
+
+    def _create_restricted_exist_quantification_set(self, exist_quantification_set: Set[int]) -> Set[int]:
+        """
+        :param exist_quantification_set: an exist quantification set
+        :return: the restricted exist quantification set
+        """
+
+        return exist_quantification_set.intersection(self._get_variable_in_circuit_set(copy=False))
     # endregion
 
     # region Magic method
@@ -382,7 +398,7 @@ class NodeAbstract(ABC):
                                 f"Variables in the circuit: {self.__variable_in_circuit_sorted_list}",
                                 f"Literals in the circuit: {literal_in_circuit_sorted_list_temp}"))
 
-        # Nodes in the circuit
+        # The nodes in the circuit
         string_temp = " ".join((string_temp, "Nodes in the circuit:"))
         node_id_in_circuit_sorted_list_temp = SortedList()
         for node in self.__node_in_circuit_set:
@@ -394,18 +410,18 @@ class NodeAbstract(ABC):
 
     # region Property
     @property
-    def node_type(self):
+    def node_type(self) -> nt_enum.NodeTypeEnum:
         return self.__node_type
 
     @property
-    def id(self):
+    def id(self) -> int:
         return self.__id
 
     @property
-    def number_of_variables(self):
+    def number_of_variables(self) -> int:
         return len(self.__variable_in_circuit_set)
 
     @property
-    def number_of_nodes(self):
+    def number_of_nodes(self) -> int:
         return len(self.__node_in_circuit_set)
     # endregion

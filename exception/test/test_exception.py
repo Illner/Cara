@@ -1,4 +1,4 @@
-# Import
+# Import exception
 from exception.cara_exception import CaraException
 
 
@@ -9,7 +9,7 @@ class TestException(CaraException):
 
 class OriginalResultDoesNotExistException(TestException):
     """
-    File with the original result does not exist
+    The file with the original result does not exist
     """
 
     def __init__(self, test_name: str, file_path: str):

@@ -76,6 +76,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                                                                                       subsumed_threshold=1000,
                                                                                       new_cut_set_threshold=0.1,
                                                                                       sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
+                                                                                      base_class_enum_set=set(),
                                                                                       implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                                                                       first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP,
                                                                                       component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
@@ -162,6 +163,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
     def __file_dictionary_plot(self, file_dictionary: Dict[str, List[Union[timedelta, None]]]) -> None:
         """
         file_dictionary
+        :return: None
         """
 
         print("Plot - file_dictionary: ", end="")
@@ -210,9 +212,10 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
 
     def __boxplot(self, dictionary: Union[Dict[str, List[timedelta]], Dict[str, List[float]]],
                   hp_cache_name_list: List[str], limit_clause_list: List[int], limit_variable_list: List[int],
-                  y_label: str, title: str, directory_name: str, percentage_value: bool = False):
+                  y_label: str, title: str, directory_name: str, percentage_value: bool = False) -> None:
         """
         hypergraph_partitioning_dictionary, generate_key_cache_dictionary and cache_performance_dictionary
+        :return: None
         """
 
         print(f"Plot - {directory_name}: ", end="")

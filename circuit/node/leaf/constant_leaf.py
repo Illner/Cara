@@ -18,22 +18,25 @@ class ConstantLeaf(LeafAbstract):
 
     def __init__(self, constant: bool, id: int = 0):
         self.__constant: bool = constant
-        super().__init__(id, nt_enum.NodeTypeEnum.CONSTANT, set(), set())
+        super().__init__(id=id,
+                         node_type=nt_enum.NodeTypeEnum.CONSTANT,
+                         variable_in_circuit_set=set(),
+                         literal_in_circuit_set=set())
 
     # region Override method
-    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
         if self.constant:
             return True
         else:
             return False
 
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
         if self.constant:
             return 1
         else:
             return 0
 
-    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
         if self.constant:
             return 0
         else:
@@ -51,6 +54,6 @@ class ConstantLeaf(LeafAbstract):
 
     # region Property
     @property
-    def constant(self):
+    def constant(self) -> bool:
         return self.__constant
     # endregion

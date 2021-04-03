@@ -17,7 +17,7 @@ class LeafAbstract(NodeAbstract, ABC):
     """
 
     """
-    Private int size    # The size of the leaf
+    Private int size                            # the size of the leaf
     Private Set<InnerNodeAbstract> parent_set
     """
 
@@ -25,14 +25,18 @@ class LeafAbstract(NodeAbstract, ABC):
                  variable_in_circuit_set: Set[int], literal_in_circuit_set: Set[int], size: int = 0):
         self.__parent_set: Set[NodeAbstract] = set()
         self.__size: int = size
-        super().__init__(id, node_type, variable_in_circuit_set, literal_in_circuit_set, {self})
+        super().__init__(id=id,
+                         node_type=node_type,
+                         variable_in_circuit_set=variable_in_circuit_set,
+                         literal_in_circuit_set=literal_in_circuit_set,
+                         node_in_circuit_set={self})
 
     # region Protected method
     def _add_parent(self, new_parent: NodeAbstract) -> None:
         """
         Add the parent (new_parent) to the set of parents (parent_set).
         If the parent already exists in the set, nothing happens.
-        :param new_parent: the new parent
+        :param new_parent: a new parent
         :return: None
         """
 
@@ -40,10 +44,10 @@ class LeafAbstract(NodeAbstract, ABC):
 
     def _remove_parent(self, parent_to_delete: NodeAbstract) -> None:
         """
-        Remove the parent (parent_to_delete) from the set of parents (parent_set).
-        If the parent does not exist in the set, raise an exception (ParentDoesNotExistException).
+        Remove the parent (parent_to_delete) from the set of parents (parent_set)
         :param parent_to_delete: the parent
         :return: None
+        :raises ParentDoesNotExistException: if the parent does not exist in the set
         """
 
         # The parent does not exist in the set
@@ -54,15 +58,16 @@ class LeafAbstract(NodeAbstract, ABC):
 
     def _set_size(self, new_size: int) -> None:
         """
-        Setter - size
+        Setter - the size
         :return: None
         """
 
         self.__size = new_size
 
-    def _get_parent_set(self, copy: bool = False) -> Set[NodeAbstract]:
+    def _get_parent_set(self, copy: bool) -> Set[NodeAbstract]:
         """
-        :return: parent_set (getter)
+        :param copy: True if a copy is returned
+        :return: the parent set
         """
 
         if copy:
@@ -72,7 +77,7 @@ class LeafAbstract(NodeAbstract, ABC):
     # endregion
 
     # region Override method
-    def node_size(self) -> int:
+    def get_node_size(self) -> int:
         """
         :return: the size of the leaf
         """

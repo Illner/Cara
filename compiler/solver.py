@@ -58,13 +58,13 @@ class Solver:
         # The clause_id_set is implicitly given
         if clause_id_set is not None:
             for clause_id in clause_id_set:
-                self.__cnf.append(cnf._get_clause(clause_id))
+                self.__cnf.append(cnf.get_clause(clause_id, copy=False))
             self.__variable_set: Set[int] = cnf.get_variable_in_clauses(clause_id_set)
         # The whole formula is taken into account
         else:
             for clause_id in range(cnf.real_number_of_clauses):
-                self.__cnf.append(cnf._get_clause(clause_id))
-            self.__variable_set: Set[int] = cnf._get_variable_set(copy=True)
+                self.__cnf.append(cnf.get_clause(clause_id, copy=False))
+            self.__variable_set: Set[int] = cnf.get_variable_set(copy=False)
 
         # Cache
         self.__implicit_bcp_dictionary_cache: \

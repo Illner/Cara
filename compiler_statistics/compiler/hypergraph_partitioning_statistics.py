@@ -45,30 +45,30 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
 
     # region Property
     @property
-    def subsumption(self):
+    def subsumption(self) -> StatisticsComponentTimer:
         return self.__subsumption
 
     @property
-    def variable_simplification(self):
+    def variable_simplification(self) -> StatisticsComponentTimer:
         return self.__variable_simplification
 
     @property
-    def set_static_weights(self):
+    def set_static_weights(self) -> StatisticsComponentTimer:
         return self.__set_static_weights
 
     @property
-    def set_dynamic_weights(self):
+    def set_dynamic_weights(self) -> StatisticsComponentTimer:
         return self.__set_dynamic_weights
 
     @property
-    def generate_key_cache(self):
+    def generate_key_cache(self) -> StatisticsComponentTimer:
         return self.__generate_key_cache
 
     @property
-    def get_cut_set(self):
+    def get_cut_set(self) -> StatisticsComponentTimer:
         return self.__get_cut_set
 
     @property
-    def cached(self):
+    def cached(self) -> StatisticsComponentCounter:
         return self.__cached
     # endregion

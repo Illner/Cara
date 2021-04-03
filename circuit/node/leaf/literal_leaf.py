@@ -22,10 +22,13 @@ class LiteralLeaf(LeafAbstract):
         self.__literal: int = literal
         self.__variable: int = abs(literal)
         self.__is_positive = True if self.__literal > 0 else False
-        super().__init__(id, nt_enum.NodeTypeEnum.LITERAL, {self.__variable}, {self.__literal})
+        super().__init__(id=id,
+                         node_type=nt_enum.NodeTypeEnum.LITERAL,
+                         variable_in_circuit_set={self.__variable},
+                         literal_in_circuit_set={self.__literal})
 
     # region Override method
-    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
         # The assumption set
         if self.literal in assumption_set:
             return True
@@ -38,7 +41,7 @@ class LiteralLeaf(LeafAbstract):
 
         return True
 
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_caches: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
         # The assumption set
         if self.literal in assumption_set:
             return 1
@@ -51,7 +54,7 @@ class LiteralLeaf(LeafAbstract):
 
         return 1
 
-    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_caches: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
         # The default set contains this variable
         if self.variable in default_set:
             if self.is_positive:
@@ -81,14 +84,14 @@ class LiteralLeaf(LeafAbstract):
 
     # region Property
     @property
-    def literal(self):
+    def literal(self) -> int:
         return self.__literal
 
     @property
-    def variable(self):
+    def variable(self) -> int:
         return self.__variable
 
     @property
-    def is_positive(self):
+    def is_positive(self) -> bool:
         return self.__is_positive
     # endregion

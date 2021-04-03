@@ -29,7 +29,8 @@ class TestAbstract(ABC):
     def test(self) -> (bool, (str, str)):
         """
         Generate an actual result and compare it with the original result
-        :return: (True, None) if the actual and general results are identical. Otherwise (False, (general_result, actual_result)) is returned.
+        :return: (True, None) if the actual and original results are identical. Otherwise (False, (general_result, actual_result)) is returned.
+        :raises OriginalResultDoesNotExistException: if the original result does not exist
         """
 
         # Check if the file with the original result exists
@@ -68,7 +69,7 @@ class TestAbstract(ABC):
         """
         Check if the file exists
         :param file_path: the path of the file
-        :return: True if the file exists. Otherwise False is returned.
+        :return: True if the file exists. Otherwise, False is returned.
         """
 
         if os.path.isfile(file_path):
@@ -80,8 +81,8 @@ class TestAbstract(ABC):
     def _compare_results(actual_result: str, original_result: str) -> (bool, (str, str)):
         """
         Check if two strings are identical. If both strings are identical (True, None) is returned. Otherwise (False, (original_result, actual_result)) is returned.
-        :param actual_result: string that represents an actual result
-        :param original_result: string that represents the original result
+        :param actual_result: a string that represents the actual result
+        :param original_result: a string that represents the original result
         :return: (bool, (str, str))
         """
 
@@ -116,10 +117,10 @@ class TestAbstract(ABC):
 
     # region Property
     @property
-    def test_name(self):
+    def test_name(self) -> str:
         return self.__test_name
 
     @property
-    def original_result_path(self):
+    def original_result_path(self) -> str:
         return self.__original_result_path
     # endregion

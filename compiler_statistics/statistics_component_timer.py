@@ -17,11 +17,11 @@ class StatisticsComponentTimer:
     Private bool show_only_sum_time
 
     Private int number_of_calls
-    Private float sum_time          # nanoseconds
-    Private float min_time          # nanoseconds
-    Private float max_time          # nanoseconds
+    Private float sum_time              # nanoseconds
+    Private float min_time              # nanoseconds
+    Private float max_time              # nanoseconds
     
-    Private float stopwatch_time    # nanoseconds
+    Private float stopwatch_time        # nanoseconds
     """
 
     def __init__(self, name: str, show_only_sum_time: bool = False):
@@ -66,9 +66,9 @@ class StatisticsComponentTimer:
 
     def start_stopwatch(self) -> None:
         """
-        Start the stopwatch.
-        If the stopwatch is already running, raise an exception (StopwatchIsAlreadyRunningException).
+        Start the stopwatch
         :return: None
+        :raises StopwatchIsAlreadyRunningException: if the stopwatch is already running
         """
 
         # The stopwatch is already running
@@ -79,9 +79,9 @@ class StatisticsComponentTimer:
 
     def stop_stopwatch(self) -> None:
         """
-        Stop the stopwatch and call add_call.
-        If the stopwatch has not been started, raise an exception (StopwatchHasNotBeenStartedException).
+        Stop the stopwatch and call add_call
         :return: None
+        :raises StopwatchHasNotBeenStartedException: if the stopwatch has not been started
         """
 
         # The stopwatch has not been started
@@ -127,27 +127,27 @@ class StatisticsComponentTimer:
 
     # region Property
     @property
-    def name(self):
+    def name(self) -> str:
         return self.__name
 
     @property
-    def number_of_calls(self):
+    def number_of_calls(self) -> int:
         return self.__number_of_calls
 
     @property
-    def sum_time(self):
+    def sum_time(self) -> float:
         return self.__sum_time
 
     @property
-    def min_time(self):
+    def min_time(self) -> Union[float, None]:
         return self.__min_time
 
     @property
-    def max_time(self):
+    def max_time(self) -> Union[float, None]:
         return self.__max_time
 
     @property
-    def average_time(self):
+    def average_time(self) -> Union[float, None]:
         if self.__number_of_calls == 0:
             return None
 

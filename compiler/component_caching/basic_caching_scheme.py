@@ -15,10 +15,10 @@ class BasicCachingScheme(ComponentCachingAbstract):
 
     # region Override method
     def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[int, None]:
-        variable_sorted_list = sorted(incidence_graph.variable_set())
+        variable_sorted_list = sorted(incidence_graph.variable_set(copy=False))
         clause_list = []
 
-        for clause_id in incidence_graph.clause_id_set(multi_occurrence=False):
+        for clause_id in incidence_graph.clause_id_set(copy=False, multi_occurrence=False):
             literal_set = incidence_graph.get_clause(clause_id)
             clause_list.append(sorted(literal_set))
 

@@ -90,74 +90,74 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
     # region Property
     @property
-    def remove_literal(self):
+    def remove_literal(self) -> StatisticsComponentTimer:
         return self.__remove_literal
 
     @property
-    def restore_backup_literal(self):
+    def restore_backup_literal(self) -> StatisticsComponentTimer:
         return self.__restore_backup_literal
 
     @property
-    def merge_variable_simplification(self):
+    def merge_variable_simplification(self) -> StatisticsComponentTimer:
         return self.__merge_variable_simplification
 
     @property
-    def restore_backup_variable_simplification(self):
+    def restore_backup_variable_simplification(self) -> StatisticsComponentTimer:
         return self.__restore_backup_variable_simplification
 
     @property
-    def remove_subsumed_clause(self):
+    def remove_subsumed_clause(self) -> StatisticsComponentTimer:
         return self.__remove_subsumed_clause
 
     @property
-    def restore_backup_subsumption(self):
+    def restore_backup_subsumption(self) -> StatisticsComponentTimer:
         return self.__restore_backup_subsumption
 
     @property
-    def create_incidence_graphs_for_components(self):
+    def create_incidence_graphs_for_components(self) -> StatisticsComponentTimer:
         return self.__create_incidence_graphs_for_components
 
     @property
-    def copy_incidence_graph(self):
+    def copy_incidence_graph(self) -> StatisticsComponentTimer:
         return self.__copy_incidence_graph
 
     @property
-    def clause_id_set(self):
+    def clause_id_set(self) -> StatisticsComponentTimer:
         return self.__clause_id_set
 
     @property
-    def number_of_components(self):
+    def number_of_components(self) -> StatisticsComponentTimer:
         return self.__number_of_components
 
     @property
-    def variable_set(self):
+    def variable_set(self) -> StatisticsComponentTimer:
         return self.__variable_set
 
     @property
-    def renamable_horn_formula_recognition_initialization(self):
+    def renamable_horn_formula_recognition_initialization(self) -> StatisticsComponentTimer:
         return self.__renamable_horn_formula_recognition_initialization
 
     @property
-    def renamable_horn_formula_recognition_check(self):
+    def renamable_horn_formula_recognition_check(self) -> StatisticsComponentTimer:
         return self.__renamable_horn_formula_recognition_check
 
     @property
-    def renamable_horn_formula_ratio(self):
+    def renamable_horn_formula_ratio(self) -> StatisticsComponentCounter:
         return self.__renamable_horn_formula_ratio
 
     @property
-    def two_cnf_ratio(self):
+    def two_cnf_ratio(self) -> StatisticsComponentCounter:
         return self.__two_cnf_ratio
 
     @property
-    def convert_to_cnf(self):
+    def convert_to_cnf(self) -> StatisticsComponentTimer:
         return self.__convert_to_cnf
 
     @property
-    def convert_to_2_cnf(self):
+    def convert_to_2_cnf(self) -> StatisticsComponentTimer:
         return self.__convert_to_2_cnf
 
     @property
-    def convert_to_horn_cnf(self):
+    def convert_to_horn_cnf(self) -> StatisticsComponentTimer:
         return self.__convert_to_horn_cnf
     # endregion

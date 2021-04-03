@@ -49,34 +49,34 @@ class SolverStatistics(StatisticsTemplateAbstract):
 
     # region Property
     @property
-    def initialize(self):
+    def initialize(self) -> StatisticsComponentTimer:
         return self.__initialize
 
     @property
-    def first_implied_literals(self):
+    def first_implied_literals(self) -> StatisticsComponentTimer:
         return self.__first_implied_literals
 
     @property
-    def is_satisfiable(self):
+    def is_satisfiable(self) -> StatisticsComponentTimer:
         return self.__is_satisfiable
 
     @property
-    def unit_propagation(self):
+    def unit_propagation(self) -> StatisticsComponentTimer:
         return self.__unit_propagation
 
     @property
-    def implicit_unit_propagation(self):
+    def implicit_unit_propagation(self) -> StatisticsComponentTimer:
         return self.__implicit_unit_propagation
 
     @property
-    def iterative_implicit_unit_propagation(self):
+    def iterative_implicit_unit_propagation(self) -> StatisticsComponentTimer:
         return self.__iterative_implicit_unit_propagation
 
     @property
-    def iterative_implicit_unit_propagation_iteration(self):
+    def iterative_implicit_unit_propagation_iteration(self) -> StatisticsComponentCounter:
         return self.__iterative_implicit_unit_propagation_iteration
 
     @property
-    def backbone_literals(self):
+    def backbone_literals(self) -> StatisticsComponentTimer:
         return self.__backbone_literals
     # endregion

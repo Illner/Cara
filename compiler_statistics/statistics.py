@@ -72,26 +72,26 @@ class Statistics:
 
     # region Property
     @property
-    def compiler_statistics(self):
+    def compiler_statistics(self) -> CompilerStatistics:
         return self.__compiler_statistics
 
     @property
-    def cnf_statistics(self):
+    def cnf_statistics(self) -> CnfStatistics:
         return self.__cnf_statistics
 
     @property
-    def incidence_graph_statistics(self):
+    def incidence_graph_statistics(self) -> IncidenceGraphStatistics:
         return self.__incidence_graph_statistics
 
     @property
-    def solver_statistics(self):
+    def solver_statistics(self) -> SolverStatistics:
         return self.__solver_statistics
 
     @property
-    def hypergraph_partitioning_statistics(self):
+    def hypergraph_partitioning_statistics(self) -> HypergraphPartitioningStatistics:
         return self.__hypergraph_partitioning_statistics
 
     @property
-    def component_statistics(self):
+    def component_statistics(self) -> ComponentStatistics:
         return self.__component_statistics
     # endregion

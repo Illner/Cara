@@ -30,6 +30,6 @@ class CnfStatistics(StatisticsTemplateAbstract):
 
     # region Property
     @property
-    def create(self):
+    def create(self) -> StatisticsComponentTimer:
         return self.__create
     # endregion

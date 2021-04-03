@@ -55,7 +55,7 @@ class CompilerTest(TestAbstract):
                                         compiler = Compiler(cnf=cnf,
                                                             smooth=True,
                                                             ub_factor=0.1,
-                                                            preprocessing=True,
+                                                            preprocessing=False,
                                                             subsumed_threshold=subsumed_threshold,
                                                             new_cut_set_threshold=new_cut_set_threshold,
                                                             sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,

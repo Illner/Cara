@@ -1,6 +1,6 @@
 ) comments - exception
-) use_caches - use_cache
-) assumption_restricted_set - node_abstract
 ) iterators
 ) circuit - node type get
 ) readline(s)
+) unused variables - comment
+) \r

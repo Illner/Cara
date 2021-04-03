@@ -101,21 +101,9 @@ class PySatCnf(CNF):
 
         for clause in self.clauses:
             clause_temp = [-lit if abs(lit) in renaming_function else lit for lit in clause]
-            result = "\n".join((result, " ".join((" ".join(map(str, clause_temp)), "0"))))
+            result = "\n".join((result, " ".join((" ".join(map(str, sorted(clause_temp))), "0"))))
 
         return result
-    # endregion
-
-    # region Magic method
-    def __str__(self):
-        return self.str_renaming_function(renaming_function=set())
-
-    def __repr__(self):
-        clause_sorted_list = SortedList()
-        for clause in self.clauses:
-            clause_sorted_list.add(SortedList(clause))
-
-        return " ".join(map(lambda c: c.str_delimiter(end_delimiter="0"), clause_sorted_list))
     # endregion
 
     # region Public method
@@ -140,6 +128,18 @@ class PySatCnf(CNF):
             return self.__literal_set.copy()
 
         return self.__literal_set
+    # endregion
+
+    # region Magic method
+    def __str__(self):
+        return self.str_renaming_function(renaming_function=set())
+
+    def __repr__(self):
+        clause_sorted_list = SortedList()
+        for clause in self.clauses:
+            clause_sorted_list.add(SortedList(clause))
+
+        return " ".join(map(lambda c: c.str_delimiter(end_delimiter="0"), clause_sorted_list))
     # endregion
 
     # region Property

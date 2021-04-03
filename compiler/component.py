@@ -76,7 +76,7 @@ class Component:
 
         self.__statistics: Statistics = statistics
 
-        clause_id_set = self.__incidence_graph.clause_id_set()
+        clause_id_set = self.__incidence_graph.clause_id_set(copy=False)
         self.__solver: Solver = Solver(cnf=cnf,
                                        clause_id_set=clause_id_set,
                                        sat_solver_enum=sat_solver_enum,

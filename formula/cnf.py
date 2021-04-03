@@ -119,7 +119,7 @@ class Cnf:
                         self.__comments = "\n".join((self.__comments, line[1:].strip()))
                     continue
 
-                # End of file (optional)
+                # End of the file (optional)
                 if line.startswith("%"):
                     break
 

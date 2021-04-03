@@ -300,22 +300,22 @@ class NodeTest(TestAbstract):
 
             for cache in range(2):
                 for node in node_list:
-                    result = "\n".join((result, f"Node: {node.id}, cache: {bool(cache)}, sat: {node.is_satisfiable(set(), set(), use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Node: {node.id}, cache: {bool(cache)}, sat: {node.is_satisfiable(set(), set(), use_cache=bool(cache))}"))
 
                 # Assumption
                 assumption_list_temp = [{3}, {-3, -1}, {-1, -2}, {-3}]
                 for assumption in assumption_list_temp:
-                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, cache: {bool(cache)}, sat: {root.is_satisfiable(assumption, set(), use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, cache: {bool(cache)}, sat: {root.is_satisfiable(assumption, set(), use_cache=bool(cache))}"))
 
                 # Exist quantification
                 exist_quantification_list_temp = [{3}, {3, 1}, {1, 2}, {1, 2, 3}]
                 for exist_quantification in exist_quantification_list_temp:
-                    result = "\n".join((result, f"Exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, sat: {root.is_satisfiable(set(), exist_quantification, use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, sat: {root.is_satisfiable(set(), exist_quantification, use_cache=bool(cache))}"))
 
                 # Assumption and exist quantification
                 list_temp = [({3}, {1, 2}), ({3}, {1}), ({-1}, {3})]
                 for assumption, exist_quantification in list_temp:
-                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, sat: {root.is_satisfiable(assumption, exist_quantification, use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, sat: {root.is_satisfiable(assumption, exist_quantification, use_cache=bool(cache))}"))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
@@ -352,22 +352,22 @@ class NodeTest(TestAbstract):
 
             for cache in range(2):
                 for node in node_list:
-                    result = "\n".join((result, f"Node: {node.id}, cache: {bool(cache)}, count of models: {node.model_counting(set(), set(), use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Node: {node.id}, cache: {bool(cache)}, count of models: {node.model_counting(set(), set(), use_cache=bool(cache))}"))
 
                 # Assumption
                 assumption_list_temp = [{-1}, {1}, {-1, -2}, {1, 2}]
                 for assumption in assumption_list_temp:
-                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, cache: {bool(cache)}, count of models: {root.model_counting(assumption, set(), use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, cache: {bool(cache)}, count of models: {root.model_counting(assumption, set(), use_cache=bool(cache))}"))
 
                 # Exist quantification
                 exist_quantification_list_temp = [{1}, {1, 2}, {1, 2, 3}]
                 for exist_quantification in exist_quantification_list_temp:
-                    result = "\n".join((result, f"Exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, count of models: {root.model_counting(set(), exist_quantification, use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, count of models: {root.model_counting(set(), exist_quantification, use_cache=bool(cache))}"))
 
                 # Assumption and exist quantification
                 list_temp = [({-1}, {2, 3}), ({1}, {2, 3}), ({1, 2}, {3, 4})]
                 for assumption, exist_quantification in list_temp:
-                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, count of models: {root.model_counting(assumption, exist_quantification, use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, count of models: {root.model_counting(assumption, exist_quantification, use_cache=bool(cache))}"))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
@@ -406,21 +406,21 @@ class NodeTest(TestAbstract):
         try:
             node_list = NodeTest.__create_circuit_5()
             root = node_list[-1]
-            variable_set = root._get_variable_in_circuit_set(True)
+            variable_set = root._get_variable_in_circuit_set(copy=True)
 
             for cache in range(2):
                 for node in node_list:
-                    result = "\n".join((result, f"Node: {node.id}, cache: {bool(cache)}, minimum cardinality: {node.minimum_default_cardinality(set(), variable_set, use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Node: {node.id}, cache: {bool(cache)}, minimum cardinality: {node.minimum_default_cardinality(set(), variable_set, use_cache=bool(cache))}"))
 
                 # Default
                 default_list_temp = [{4}, {4, 5}]
                 for default in default_list_temp:
-                    result = "\n".join((result, f"Default: {SortedList(default)}, cache: {bool(cache)}, minimum cardinality: {root.minimum_default_cardinality(set(), default, use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Default: {SortedList(default)}, cache: {bool(cache)}, minimum cardinality: {root.minimum_default_cardinality(set(), default, use_cache=bool(cache))}"))
 
                 # Observation and default
                 list_temp = [({-1, 3}, {4, 5}), ({1, -3}, {4, 5}), ({1, 3}, {4, 5})]
                 for observation, default in list_temp:
-                    result = "\n".join((result, f"Observation: {SortedList(observation)}, default: {SortedList(default)}, cache: {bool(cache)}, minimum cardinality: {root.minimum_default_cardinality(observation, default, use_caches=bool(cache))}"))
+                    result = "\n".join((result, f"Observation: {SortedList(observation)}, default: {SortedList(default)}, cache: {bool(cache)}, minimum cardinality: {root.minimum_default_cardinality(observation, default, use_cache=bool(cache))}"))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 

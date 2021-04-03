@@ -9,13 +9,14 @@ from abc import ABC
 from pathlib import Path
 from datetime import timedelta
 from compiler.compiler import Compiler
-from typing import Dict, List, Tuple, Union, TypeVar
 from compiler_statistics.statistics import Statistics
+from typing import Set, Dict, List, Tuple, Union, TypeVar
 
 # Import exception
 import exception.cara_exception as c_exception
 
 # Import enum
+import compiler.enum.base_class_enum as bs_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.component_caching.component_caching_enum as cc_enum
@@ -47,7 +48,7 @@ class ExperimentAbstract(ABC):
                  log_directory_path: Union[str, Path, None] = None, save_circuit: bool = False):
         self.__save_circuit: bool = save_circuit
         self.__experiment_name: str = experiment_name
-        self.__total_time: timedelta = timedelta()  # initialization
+        self.__total_time: timedelta = timedelta()
         self.__timeout_experiment: Union[timedelta, None] = timeout_experiment
 
         # Log
@@ -75,6 +76,7 @@ class ExperimentAbstract(ABC):
                     subsumed_threshold: Union[int, None],
                     new_cut_set_threshold: float,
                     sat_solver_enum: ss_enum.SatSolverEnum,
+                    base_class_enum_set: Set[bs_enum.BaseClassEnum],
                     implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                     first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                     component_caching_enum: cc_enum.ComponentCachingEnum,
@@ -106,6 +108,7 @@ class ExperimentAbstract(ABC):
                             subsumed_threshold=subsumed_threshold,
                             new_cut_set_threshold=new_cut_set_threshold,
                             sat_solver_enum=sat_solver_enum,
+                            base_class_enum_set=base_class_enum_set,
                             implied_literals_enum=implied_literals_enum,
                             first_implied_literals_enum=first_implied_literals_enum,
                             component_caching_enum=component_caching_enum,
@@ -195,7 +198,7 @@ class ExperimentAbstract(ABC):
 
         # Check if the directory exists
         if not directory_path.exists():
-            warnings.warn("Directory doesn't exist!", category=UserWarning)
+            warnings.warn("The directory doesn't exist!", category=UserWarning)
             return []
 
         return [(file, file_path) for file in os.listdir(directory_path)
@@ -214,15 +217,15 @@ class ExperimentAbstract(ABC):
 
     # region Property
     @property
-    def experiment_name(self):
+    def experiment_name(self) -> str:
         return self.__experiment_name
 
     @property
-    def log_directory_path(self):
+    def log_directory_path(self) -> Path:
         return self.__log_directory_path
 
     @property
-    def total_time(self):
+    def total_time(self) -> timedelta:
         return self.__total_time
     # endregion
 

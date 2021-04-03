@@ -34,10 +34,10 @@ class CompilerStatistics(StatisticsTemplateAbstract):
 
     # region Property
     @property
-    def create_circuit(self):
+    def create_circuit(self) -> StatisticsComponentTimer:
         return self.__create_circuit
 
     @property
-    def smooth(self):
+    def smooth(self) -> StatisticsComponentTimer:
         return self.__smooth
     # endregion

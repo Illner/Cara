@@ -74,58 +74,58 @@ class ComponentStatistics(StatisticsTemplateAbstract):
 
     # region Property
     @property
-    def get_implied_literals(self):
+    def get_implied_literals(self) -> StatisticsComponentTimer:
         return self.__get_implied_literals
 
     @property
-    def get_cut_set(self):
+    def get_cut_set(self) -> StatisticsComponentTimer:
         return self.__get_cut_set
 
     @property
-    def get_suggested_variable_from_cut_set(self):
+    def get_suggested_variable_from_cut_set(self) -> StatisticsComponentTimer:
         return self.__get_suggested_variable_from_cut_set
 
     @property
-    def unsatisfiable(self):
+    def unsatisfiable(self) -> StatisticsComponentCounter:
         return self.__unsatisfiable
 
     @property
-    def implied_literal(self):
+    def implied_literal(self) -> StatisticsComponentCounter:
         return self.__implied_literal
 
     @property
-    def isolated_variable(self):
+    def isolated_variable(self) -> StatisticsComponentCounter:
         return self.__isolated_variable
 
     @property
-    def empty_incidence_graph(self):
+    def empty_incidence_graph(self) -> StatisticsComponentCounter:
         return self.__empty_incidence_graph
 
     @property
-    def generate_key_cache(self):
+    def generate_key_cache(self) -> StatisticsComponentCounter:
         return self.__generate_key_cache
 
     @property
-    def cached(self):
+    def cached(self) -> StatisticsComponentCounter:
         return self.__cached
 
     @property
-    def disjoint(self):
+    def disjoint(self) -> StatisticsComponentCounter:
         return self.__disjoint
 
     @property
-    def decision_variable(self):
+    def decision_variable(self) -> StatisticsComponentCounter:
         return self.__decision_variable
 
     @property
-    def recompute_cut_set(self):
+    def recompute_cut_set(self) -> StatisticsComponentCounter:
         return self.__recompute_cut_set
 
     @property
-    def cut_set_try_cache(self):
+    def cut_set_try_cache(self) -> StatisticsComponentTimer:
         return self.__cut_set_try_cache
 
     @property
-    def cut_set_try_cache_cached(self):
+    def cut_set_try_cache_cached(self) -> StatisticsComponentCounter:
         return self.__cut_set_try_cache_cached
     # endregion

@@ -30,8 +30,8 @@ class HypergraphPartitioning:
     Private Cnf cnf
     Private float ub_factor
     Private int subsumed_threshold
+    Private Set<int> hyperedge_set
     Private int total_number_of_nodes
-    Private int total_number_of_hyperedges
     
     Private HypergraphPartitioningStatistics statistics
     
@@ -76,8 +76,8 @@ class HypergraphPartitioning:
 
         self.__cnf: Cnf = cnf
         self.__subsumed_threshold: Union[int, None] = subsumed_threshold
+        self.__hyperedge_set: Set[int] = cnf.get_variable_set(copy=False)
         self.__total_number_of_nodes: int = cnf.real_number_of_clauses
-        self.__total_number_of_hyperedges: int = cnf.number_of_variables
 
         self.__cache_enum: hpc_enum.HypergraphPartitioningCacheEnum = cache_enum
         self.__software_enum: hps_enum.HypergraphPartitioningSoftwareEnum = software_enum
@@ -287,7 +287,7 @@ class HypergraphPartitioning:
 
         # Hyperedge's weight
         if self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.STATIC:
-            for hyperedge_id in range(1, self.__total_number_of_hyperedges + 1):
+            for hyperedge_id in self.__hyperedge_set:
                 self.__hyperedge_weight_dictionary[hyperedge_id] = 1    # TODO STATIC
 
         self.__statistics.set_static_weights.stop_stopwatch()   # timer (stop)
@@ -352,7 +352,7 @@ class HypergraphPartitioning:
         """
 
         # The hyperedge does not exist in the hypergraph
-        if (hyperedge_id < 1) or (hyperedge_id > self.__total_number_of_hyperedges):
+        if hyperedge_id not in self.__hyperedge_set:
             raise hp_exception.HyperedgeDoesNotExistException(hyperedge_id)
 
         # No weights
@@ -429,7 +429,7 @@ class HypergraphPartitioning:
         variance_dictionary: Dict[int, float] = dict()
 
         # Compute occurrences and means
-        for variable in incidence_graph.variable_set():
+        for variable in incidence_graph.variable_set(copy=False):
             clause_id_set = incidence_graph.variable_neighbour_set(variable)
 
             # Occurrence
@@ -444,7 +444,7 @@ class HypergraphPartitioning:
 
         # Compute variances
         if use_variance:
-            for variable in incidence_graph.variable_set():
+            for variable in incidence_graph.variable_set(copy=False):
                 clause_id_set = incidence_graph.variable_neighbour_set(variable)
                 mean_temp = mean_dictionary[variable]
 
@@ -495,7 +495,7 @@ class HypergraphPartitioning:
                 counter_temp += 1
 
         variable_clause_list = []
-        for clause_id in incidence_graph.clause_id_set(multi_occurrence=False):
+        for clause_id in incidence_graph.clause_id_set(copy=False, multi_occurrence=False):
             variable_set = incidence_graph.clause_id_neighbour_set(clause_id)
             variable_sorted_list = sorted(map(lambda v: variable_id_order_id_dictionary[v], variable_set))
             variable_clause_list.append(variable_sorted_list)
@@ -524,7 +524,7 @@ class HypergraphPartitioning:
 
         # Hyperedges
         line_hyperedge = []
-        for variable in incidence_graph.variable_set():
+        for variable in incidence_graph.variable_set(copy=False):
             clause_id_set = incidence_graph.variable_neighbour_set(variable)
 
             line_temp = [self.__get_hyperedge_weight(variable)]
