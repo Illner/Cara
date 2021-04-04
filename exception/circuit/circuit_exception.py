@@ -4,9 +4,6 @@ from typing import Set
 # Import exception
 from exception.cara_exception import CaraException
 
-# Import enum
-import circuit.node.node_type_enum as nt_enum
-
 
 class CircuitException(CaraException):
     def __init__(self, message: str):

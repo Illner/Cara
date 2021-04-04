@@ -11,6 +11,7 @@ import exception.cara_exception as c_exception
 
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
+import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
@@ -33,7 +34,8 @@ class HypergraphPartitioningTest(TestAbstract):
                 cnf = Cnf(file_path)
                 solver = Solver(cnf=cnf,
                                 clause_id_set=None,
-                                sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT)
+                                sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
+                                first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP)
 
                 for cache_enum in hpc_enum.hpc_enum_values:
                     for variable_simplification_enum in hpvs_enum.hpvs_enum_values:

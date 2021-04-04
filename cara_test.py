@@ -37,7 +37,7 @@ def main(args):
     # CNF test
     if args.formula_cnf_test:
         cnf_test = fc_test.CnfTest()
-        print(cnf_test.test_name, end=": ")
+        print(cnf_test.test_name, end=": ", flush=True)
         result, log_result = test(cnf_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
@@ -45,7 +45,7 @@ def main(args):
     # 2-CNF test
     if args.formula_2_cnf_test:
         two_cnf_test = ftc_test.TwoCnfTest()
-        print(two_cnf_test.test_name, end=": ")
+        print(two_cnf_test.test_name, end=": ", flush=True)
         result, log_result = test(two_cnf_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
@@ -53,7 +53,7 @@ def main(args):
     # Horn CNF test
     if args.formula_horn_cnf_test:
         horn_cnf_test = fhc_test.HornCnfTest()
-        print(horn_cnf_test.test_name, end=": ")
+        print(horn_cnf_test.test_name, end=": ", flush=True)
         result, log_result = test(horn_cnf_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
@@ -61,7 +61,7 @@ def main(args):
     # Incidence graph test
     if args.formula_incidence_graph_test:
         incidence_graph_test = fig_test.IncidenceGraphTest()
-        print(incidence_graph_test.test_name, end=": ")
+        print(incidence_graph_test.test_name, end=": ", flush=True)
         result, log_result = test(incidence_graph_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
@@ -69,7 +69,7 @@ def main(args):
     # Node test
     if args.circuit_node_test:
         node_test = cn_test.NodeTest()
-        print(node_test.test_name, end=": ")
+        print(node_test.test_name, end=": ", flush=True)
         result, log_result = test(node_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
@@ -77,7 +77,7 @@ def main(args):
     # Circuit test
     if args.circuit_test:
         circuit_test = cc_test.CircuitTest()
-        print(circuit_test.test_name, end=": ")
+        print(circuit_test.test_name, end=": ", flush=True)
         result, log_result = test(circuit_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
@@ -85,7 +85,7 @@ def main(args):
     # Solver test
     if args.compiler_solver_test:
         solver_test = cs_test.SolverTest()
-        print(solver_test.test_name, end=": ")
+        print(solver_test.test_name, end=": ", flush=True)
         result, log_result = test(solver_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
@@ -93,7 +93,7 @@ def main(args):
     # Hypergraph partitioning test
     if args.compiler_hypergraph_partitioning_test:
         hypergraph_partitioning_test = chp_test.HypergraphPartitioningTest()
-        print(hypergraph_partitioning_test.test_name, end=": ")
+        print(hypergraph_partitioning_test.test_name, end=": ", flush=True)
         result, log_result = test(hypergraph_partitioning_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
@@ -101,7 +101,7 @@ def main(args):
     # Backbones test
     if args.compiler_backbones_test:
         backbones_test = cb_test.BackbonesTest()
-        print(backbones_test.test_name, end=": ")
+        print(backbones_test.test_name, end=": ", flush=True)
         result, log_result = test(backbones_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
@@ -109,7 +109,7 @@ def main(args):
     # Compiler test
     if args.compiler_test:
         compiler_test = c_test.CompilerTest()
-        print(compiler_test.test_name, end=": ")
+        print(compiler_test.test_name, end=": ", flush=True)
         result, log_result = test(compiler_test)
         # print(result)
         log_string = "\n".join((log_string, log_result, ""))

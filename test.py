@@ -20,7 +20,7 @@
 # # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg4-09.cnf"
 # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
 #
-# # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\compiler\compiler\CNF_formulae\wff.3.75.315.cnf"
+# # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\compiler\compiler\CNF_formulae\s400.bench.cnf"
 #
 # start_time = time.time()
 #
@@ -50,31 +50,25 @@
 #
 # print("Time: ", end_time-start_time)
 # print(circuit.size)
+# print(circuit.str_node_type_dictionary())
 # # print(str(compiler.statistics.incidence_graph_statistics))
-# print(circuit)
+# # print(circuit)
+#
+# # print(circuit.model_counting(assumption_set=set(), exist_quantification_set=set()))
 
-# print(circuit.model_counting(assumption_set={1, -3}, exist_quantification_set=set()))
 
+from datetime import timedelta
+from experiment.hypergraph_partitioning_cache_experiment import HypergraphPartitioningCacheExperiment
 
-# from datetime import timedelta
-# from experiment.hypergraph_partitioning_cache_experiment import HypergraphPartitioningCacheExperiment
-#
-# directory_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\temp\Cache"
-# timeout_experiment = timedelta(minutes=15)
-# total_timeout_experiments = timedelta(hours=10)
-#
-# e = HypergraphPartitioningCacheExperiment(directory_path=directory_path, timeout_experiment=timeout_experiment, total_timeout_experiments=total_timeout_experiments,
-#                                           save_plot=True, show_plot=False)
-#
-# limit_clause_list = [900, 1100, 1300, 1500]
-# limit_variable_list = [900, 1100, 1300, 1500]
-#
-# e.experiment(limit_clause_list, limit_variable_list, new_cut_set_threshold_reduction=1, cut_set_try_cache=False)
+directory_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\temp\Cache"
+timeout_experiment = timedelta(minutes=20)
+total_timeout_experiments = timedelta(hours=10)
+new_cut_set_threshold = 0.1
 
-# from circuit.circuit import Circuit
-#
-# path = r"C:\Users\illner\Desktop\nevim.nnf"
-#
-# c = Circuit(path)
-#
-# print(str(c))
+e = HypergraphPartitioningCacheExperiment(directory_path=directory_path, timeout_experiment=timeout_experiment, total_timeout_experiments=total_timeout_experiments,
+                                          save_plot=True, show_plot=False)
+
+limit_clause_list = [1000]
+limit_variable_list = [1000]
+
+e.experiment(limit_clause_list, limit_variable_list, new_cut_set_threshold=new_cut_set_threshold, new_cut_set_threshold_reduction=1, cut_set_try_cache=False)

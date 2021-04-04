@@ -50,7 +50,8 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         self.__plot_directory_path: Path = Path(os.path.join(self.log_directory_path, "plot"))
 
     # region Public method
-    def experiment(self, limit_clause_list: List[int], limit_variable_list: List[int], cut_set_try_cache: bool, new_cut_set_threshold_reduction: float):
+    def experiment(self, limit_clause_list: List[int], limit_variable_list: List[int],
+                   new_cut_set_threshold: float, cut_set_try_cache: bool, new_cut_set_threshold_reduction: float):
         hp_cache_name_list = hpc_enum.hpc_enum_names
         hp_cache_enum_list = list(zip(hpc_enum.hpc_enum_values, hp_cache_name_list))
 
@@ -72,9 +73,9 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                         timeout_exceeded, exception, _, statistics = self._experiment(file_name=file_name, file_path=file_path,
                                                                                       smooth=False,
                                                                                       ub_factor=0.1,
-                                                                                      preprocessing=True,
+                                                                                      preprocessing=False,
                                                                                       subsumed_threshold=1000,
-                                                                                      new_cut_set_threshold=0.1,
+                                                                                      new_cut_set_threshold=new_cut_set_threshold,
                                                                                       sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                                                                                       base_class_enum_set=set(),
                                                                                       implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
@@ -166,7 +167,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         :return: None
         """
 
-        print("Plot - file_dictionary: ", end="")
+        print("Plot - file_dictionary: ", end="", flush=True)
 
         # Valid indices
         valid_index_dictionary: Dict[str, Set[int]] = dict()
@@ -206,7 +207,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
             count_temp += 1
             plot.scatter(data_x=valid_value, data_y=valid_value_none, title=f"{label}\nvs\n{label_none}\n\nTIME [s]",
                          x_label=label, y_label=label_none, save_path=path_temp, show=self.__show_plot)
-            print("|", end="" if count_temp % 10 != 0 else " ")
+            print("|", end="" if count_temp % 10 != 0 else " ", flush=True)
 
         print()
 
@@ -218,7 +219,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         :return: None
         """
 
-        print(f"Plot - {directory_name}: ", end="")
+        print(f"Plot - {directory_name}: ", end="", flush=True)
 
         # Directory
         dictionary_path: Union[Path, None] = None
@@ -291,7 +292,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                         count_temp += 1
                         plot.boxplot(data=data, labels=labels, title=title_temp, x_label=(iteration[1][2]).capitalize(), y_label=y_label,
                                      legend=legend, save_path=path_temp, show=self.__show_plot)
-                        print("|", end="" if count_temp % 10 != 0 else " ")
+                        print("|", end="" if count_temp % 10 != 0 else " ", flush=True)
 
         print()
     # endregion

@@ -13,7 +13,7 @@ import compiler.enum.sat_solver_enum as ss_enum
 import compiler.component_caching.component_caching_enum as cc_enum
 
 # Constant
-VERSION = "0.0.1"
+VERSION = "1.0.1"
 
 
 def main(args):

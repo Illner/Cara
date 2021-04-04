@@ -586,15 +586,22 @@ class IncidenceGraph(Graph):
 
         return len(self.variable_set(copy=False))
 
-    def variable_with_most_occurrences(self) -> Union[int, None]:
+    def variable_with_most_occurrences(self, variable_restriction_set: Union[Set[int], None] = None) -> Union[int, None]:
         """
+        :param variable_restriction_set: a set of variables that will be taken into account (None for all variables)
         :return: a variable with the most occurrences
+        :raises VariableDoesNotExistException: if the variable does not exist in the incidence graph
         """
 
         max_occurrences = 0
         max_variable = None
 
-        for variable in self.variable_set(copy=False):
+        if variable_restriction_set is None:
+            variable_set_temp = self.variable_set(copy=False)
+        else:
+            variable_set_temp = variable_restriction_set
+
+        for variable in variable_set_temp:
             temp = self.number_of_neighbours_variable(variable)
 
             if temp > max_occurrences:
@@ -821,6 +828,66 @@ class IncidenceGraph(Graph):
     # endregion
 
     # region Subsumption
+    def subsumption(self) -> Set[int]:
+        """
+        Return a set of subsumed clauses
+        :return: a set of subsumed clauses
+        """
+
+        self.__statistics.subsumption.start_stopwatch()     # timer (start)
+
+        subsumed_clause_set = set()
+        neighbour_dictionary: [int, Set[int]] = dict()   # Cache
+        clause_id_list = self.clause_id_list()
+
+        for i, clause_a in enumerate(clause_id_list):
+            # Neighbours
+            if clause_a in neighbour_dictionary:
+                variable_set_a = neighbour_dictionary[clause_a]
+            else:
+                variable_set_a = self.clause_id_neighbour_set(clause_a)
+                neighbour_dictionary[clause_a] = variable_set_a
+
+            for j in range(i + 1, len(clause_id_list)):
+                clause_b = clause_id_list[j]
+
+                if clause_b in subsumed_clause_set:
+                    continue
+
+                # Neighbours
+                if clause_b in neighbour_dictionary:
+                    variable_set_b = neighbour_dictionary[clause_b]
+                else:
+                    variable_set_b = self.clause_id_neighbour_set(clause_b)
+                    neighbour_dictionary[clause_b] = variable_set_b
+
+                a_subset_b = variable_set_a.issubset(variable_set_b)
+                b_subset_a = variable_set_b.issubset(variable_set_a)
+
+                # Clauses are the same
+                if a_subset_b and b_subset_a:
+                    if clause_a < clause_b:
+                        subsumed_clause_set.add(clause_a)
+                    else:
+                        subsumed_clause_set.add(clause_b)
+
+                    continue
+
+                # Clause A is subsumed
+                if a_subset_b:
+                    subsumed_clause_set.add(clause_a)
+
+                    continue
+
+                # Clause B is subsumed
+                if b_subset_a:
+                    subsumed_clause_set.add(clause_b)
+
+                    continue
+
+        self.__statistics.subsumption.stop_stopwatch()      # timer (stop)
+        return subsumed_clause_set
+
     def remove_subsumed_clause(self, clause_id: int) -> None:
         """
         Remove the clause from the incidence graph.

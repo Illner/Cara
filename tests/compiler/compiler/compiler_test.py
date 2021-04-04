@@ -81,10 +81,10 @@ class CompilerTest(TestAbstract):
                                             actual_result = "\n".join((actual_result, f"Incorrect: {number_of_models} vs {real_number_of_models}", ""))
                                             result_temp = "X"
 
-                                        print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "))
+                                        print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "), flush=True)
 
                                     except (c_exception.CaraException, Exception) as err:
-                                        print("E", end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "))
+                                        print("E", end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "), flush=True)
                                         actual_result = "\n".join((actual_result, str(err), ""))
 
         print()

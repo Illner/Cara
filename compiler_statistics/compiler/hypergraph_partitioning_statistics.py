@@ -10,7 +10,6 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     """
 
     """
-    Private StatisticsComponentTimer subsumption
     Private StatisticsComponentTimer variable_simplification
     Private StatisticsComponentTimer set_static_weights
     Private StatisticsComponentTimer set_dynamic_weights
@@ -21,9 +20,6 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
 
     def __init__(self):
         super().__init__("Hypergraph partitioning")
-
-        self.__subsumption: StatisticsComponentTimer = StatisticsComponentTimer("subsumption")
-        self._component_list.append(self.__subsumption)
 
         self.__variable_simplification: StatisticsComponentTimer = StatisticsComponentTimer("variable simplification")
         self._component_list.append(self.__variable_simplification)
@@ -44,10 +40,6 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
         self._component_list.append(self.__cached)
 
     # region Property
-    @property
-    def subsumption(self) -> StatisticsComponentTimer:
-        return self.__subsumption
-
     @property
     def variable_simplification(self) -> StatisticsComponentTimer:
         return self.__variable_simplification

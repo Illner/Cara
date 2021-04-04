@@ -9,6 +9,7 @@ import exception.cara_exception as c_exception
 
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
+import compiler.enum.implied_literals_enum as il_enum
 
 
 class BackbonesTest(TestAbstract):
@@ -32,7 +33,8 @@ class BackbonesTest(TestAbstract):
                     cnf = Cnf(file_path)
                     solver = Solver(cnf=cnf,
                                     clause_id_set=None,
-                                    sat_solver_enum=sat_solver_enum)
+                                    sat_solver_enum=sat_solver_enum,
+                                    first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP)
 
                     number_of_backbone_literals = solver.get_backbone_literals([])
                     real_number_of_backbone_literals = int(cnf.comments)

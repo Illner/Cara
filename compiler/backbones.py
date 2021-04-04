@@ -20,7 +20,7 @@ class Backbones:
         """
         Return a set of backbone literals for the assignment.
         If the formula is unsatisfiable, None is returned.
-        :param assignment_list: the assignment
+        :param assignment_list: an assignment
         :return: a set of backbone literals or None if the formula is unsatisfiable
         """
 

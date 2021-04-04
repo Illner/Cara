@@ -24,7 +24,7 @@ class Solver:
     """
     Private PySatCnf cnf
     Private Set<int> variable_set
-    Private Set<int> implied_literal_set        # implied literals (implicit BCP) without any assumption
+    Private Set<int> first_implied_literal_set  # first implied literals (without any assumption)
     Private SatSolverEnum sat_solver_enum
 
     Private Backbones backbones
@@ -32,15 +32,15 @@ class Solver:
     Private SolverStatistics statistics
 
     Private Solver sat_main                     # main SAT solver
-    Private Solver sat_unit_propagation         # for unit propagation
+    Private Solver sat_unit_propagation         # SAT solver for unit propagation
 
-    Private Dict<int, Dict<int, Tuple<Set<int>, Set<int>>>> implicit_bcp_dictionary_cache   # key = hash, value: implicit_bcp_dictionary
+    Private Dict<int, Dict<int, Tuple<Set<int>, Set<int>>>> implicit_bcp_dictionary_cache   # key: hash, value: implicit_bcp_dictionary
     """
 
     def __init__(self, cnf: Cnf,
                  clause_id_set: Union[Set[int], None],
                  sat_solver_enum: ss_enum.SatSolverEnum,
-                 first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum = il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP,
+                 first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                  propagate_sat_solver_enum: Union[ss_enum.PropagateSatSolverEnum, None] = None,
                  statistics: Union[SolverStatistics, None] = None):
         # Statistics
@@ -54,7 +54,7 @@ class Solver:
         self.__cnf: PySatCnf = PySatCnf()
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
 
-        # Create a subformula
+        # Create the subformula
         # The clause_id_set is implicitly given
         if clause_id_set is not None:
             for clause_id in clause_id_set:
@@ -70,35 +70,35 @@ class Solver:
         self.__implicit_bcp_dictionary_cache: \
             Dict[int, Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]] = dict()
 
-        # Create SAT solver - unit propagation
+        # Create a SAT solver - unit propagation
         self.__sat_unit_propagation = None
         if propagate_sat_solver_enum == ss_enum.PropagateSatSolverEnum.MiniSAT:
-            self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
+            self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses)
         elif propagate_sat_solver_enum == ss_enum.PropagateSatSolverEnum.Glucose:
-            self.__sat_unit_propagation = Glucose4(bootstrap_with=self.__cnf.clauses, use_timer=True)
+            self.__sat_unit_propagation = Glucose4(bootstrap_with=self.__cnf.clauses)
 
-        # Create SAT solver - main
+        # Create a SAT solver - main
         self.__sat_main = None
         # MiniSat
         if self.__sat_solver_enum == ss_enum.SatSolverEnum.MiniSAT:
-            self.__sat_main = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
+            self.__sat_main = Minisat22(bootstrap_with=self.__cnf.clauses)
             if self.__sat_unit_propagation is None:
                 self.__sat_unit_propagation = self.__sat_main
         # Glucose
         elif self.__sat_solver_enum == ss_enum.SatSolverEnum.Glucose:
-            self.__sat_main = Glucose4(bootstrap_with=self.__cnf.clauses, use_timer=True)
+            self.__sat_main = Glucose4(bootstrap_with=self.__cnf.clauses)
             if self.__sat_unit_propagation is None:
                 self.__sat_unit_propagation = self.__sat_main
         # Lingeling
         elif self.__sat_solver_enum == ss_enum.SatSolverEnum.Lingeling:
-            self.__sat_main = Lingeling(bootstrap_with=self.__cnf.clauses, use_timer=True)
+            self.__sat_main = Lingeling(bootstrap_with=self.__cnf.clauses)
             if self.__sat_unit_propagation is None:
-                self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
+                self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses)
         # CaDiCal
         elif self.__sat_solver_enum == ss_enum.SatSolverEnum.CaDiCal:
-            self.__sat_main = Cadical(bootstrap_with=self.__cnf.clauses, use_timer=True)
+            self.__sat_main = Cadical(bootstrap_with=self.__cnf.clauses)
             if self.__sat_unit_propagation is None:
-                self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses, use_timer=True)
+                self.__sat_unit_propagation = Minisat22(bootstrap_with=self.__cnf.clauses)
         # Not supported
         else:
             raise c_exception.SatSolverIsNotSupportedException(self.__sat_solver_enum)
@@ -110,7 +110,7 @@ class Solver:
         self.__backbones = Backbones(self)
 
         # First implied literals (without any assumption)
-        self.__implied_literal_set: Set[int] = set()
+        self.__first_implied_literal_set: Set[int] = set()
 
         # IMPLICIT_BCP, IMPLICIT_BCP_ITERATION
         if first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP or \
@@ -122,11 +122,11 @@ class Solver:
             temp = self.get_backbone_literals([])
         # Not supported
         else:
-            raise ca_exception.FunctionNotImplementedException("constructor (solver)",
+            raise ca_exception.FunctionNotImplementedException("__init__ (solver)",
                                                                f"this type of getting first implied literals ({first_implied_literals_enum.name}) is not implemented")
 
         if temp is not None:
-            self.__implied_literal_set = temp
+            self.__first_implied_literal_set = temp
 
         self.__statistics.first_implied_literals.stop_stopwatch()   # timer (stop - first_implied_literals)
 
@@ -136,13 +136,13 @@ class Solver:
     def is_satisfiable(self, assignment_list: List[int]) -> bool:
         """
         Check if the formula is satisfiable for the assignment
-        :param assignment_list: the assignment
-        :return: True if the formula is satisfiable, otherwise False is returned
+        :param assignment_list: an assignment
+        :return: True if the formula is satisfiable. Otherwise, False is returned.
         """
 
         self.__statistics.is_satisfiable.start_stopwatch()  # timer (start)
 
-        is_sat = self.__sat_main.solve(assumptions=self.__create_assumption_list(assignment_list))
+        is_sat = self.__sat_main.solve(assumptions=assignment_list)
 
         self.__statistics.is_satisfiable.stop_stopwatch()   # timer (stop)
         return is_sat
@@ -150,8 +150,8 @@ class Solver:
     def get_model(self, assignment_list: List[int]) -> Union[List[int], None]:
         """
         Return a satisfying assignment.
-        If the formula for the assignment is unsatisfiable, return None.
-        :param assignment_list: the partial assignment
+        If the formula for the assignment is unsatisfiable, None is returned.
+        :param assignment_list: a partial assignment
         :return: a complete assignment or None if the formula is unsatisfiable
         """
 
@@ -165,8 +165,8 @@ class Solver:
     def unit_propagation(self, assignment_list: List[int]) -> Union[Set[int], None]:
         """
         Do unit propagation (boolean constraint propagation).
-        If the formula for the assignment is unsatisfiable, return None.
-        :param assignment_list: the assignment
+        If the formula for the assignment is unsatisfiable, None is returned.
+        :param assignment_list: an assignment
         :return: a set of implied literals or None if the formula is unsatisfiable
         """
 
@@ -180,24 +180,25 @@ class Solver:
         if not no_conflict:
             return None
 
-        implied_literals = (set(implied_literals)).union(self.__implied_literal_set)
+        implied_literals = (set(implied_literals)).union(self.__first_implied_literal_set)
         implied_literals.difference_update(set(assignment_list))
 
         return implied_literals
 
-    def implicit_unit_propagation(self, assignment_list: List[int]) -> Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]:
+    def implicit_unit_propagation(self, assignment_list: List[int], variable_restriction_set: Union[Set[int], None] = None) -> \
+            Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]:
         """
         Do implicit unit propagation (implicit boolean constraint propagation).
-        If the formula for the assignment is unsatisfiable, return None.
-        :param assignment_list: the assignment
-        :return: For each variable is returned a tuple. The first element contains a set of implied literals if the variable is set to True,
-        the second element of the tuple contains a set of implied literals if the variable is set to False.
+        If the formula for the assignment is unsatisfiable, None is returned.
+        :param assignment_list: an assignment
+        :param variable_restriction_set: a set of variables that will be taken into account
+        :return: For each variable, a tuple is returned. The first element contains a set of implied literals if the variable is set to True.
+        The second element of the tuple contains a set of implied literals if the variable is set to False.
         If the formula is unsatisfiable after setting a variable, None will appear in the tuple instead of a set.
         """
-        # TODO subset of variables
 
         # Cache
-        key = self.__generate_key_cache(assignment_list)
+        key = self.__generate_key_cache(assignment_list, variable_restriction_set)
         exist, value = self.__get_implicit_bcp_dictionary_cache(key)
         if exist:
             return value
@@ -205,7 +206,11 @@ class Solver:
         self.__statistics.implicit_unit_propagation.start_stopwatch()   # timer (start)
 
         temp_set = set(map(lambda l: abs(l), assignment_list))
-        variable_to_try_set = self.__variable_set.difference(temp_set)
+        if variable_restriction_set is None:
+            variable_to_try_set = self.__variable_set.difference(temp_set)
+        else:
+            variable_to_try_set = variable_restriction_set.difference(temp_set)
+
         result_dictionary = dict()
 
         for var in variable_to_try_set:
@@ -233,11 +238,13 @@ class Solver:
         self.__statistics.implicit_unit_propagation.stop_stopwatch()  # timer (stop)
         return result_dictionary
 
-    def iterative_implicit_unit_propagation(self, assignment_list: List[int], only_one_iteration: bool) -> Union[Set[int], None]:
+    def iterative_implicit_unit_propagation(self, assignment_list: List[int], only_one_iteration: bool,
+                                            variable_restriction_set: Union[Set[int], None] = None) -> Union[Set[int], None]:
         """
         Repeat implicit unit propagation (implicit boolean constraint propagation) until a new implied literal is found.
-        If the formula for the assignment is unsatisfiable, return None.
-        :param assignment_list: the assignment
+        If the formula for the assignment is unsatisfiable, None is returned.
+        :param assignment_list: an assignment
+        :param variable_restriction_set: a set of variables that will be taken into account
         :param only_one_iteration: True if only one iteration is processed
         :return: a set of implied literals
         """
@@ -247,12 +254,13 @@ class Solver:
         repeat = True
         assignment_list_temp = assignment_list.copy()
 
-        number_of_iterations = 0     # counter
+        number_of_iterations = 0
         while repeat:
             repeat = False
             number_of_iterations += 1
 
-            implicit_bcp_dictionary = self.implicit_unit_propagation(assignment_list_temp)
+            implicit_bcp_dictionary = self.implicit_unit_propagation(assignment_list_temp, variable_restriction_set)
+
             # The formula is unsatisfiable
             if implicit_bcp_dictionary is None:
                 self.__statistics.iterative_implicit_unit_propagation.stop_stopwatch()  # timer (stop)
@@ -294,7 +302,7 @@ class Solver:
         """
         Return a set of backbone literals for the assignment.
         If the formula is unsatisfiable, None is returned.
-        :param assignment_list: the assignment
+        :param assignment_list: an assignment
         :return: a set of backbone literals or None if the formula is unsatisfiable
         """
 
@@ -307,7 +315,7 @@ class Solver:
         if backbone_literal_set is None:
             return None
 
-        backbone_literal_set.update(self.__implied_literal_set)
+        backbone_literal_set.update(self.__first_implied_literal_set)
         backbone_literal_set.difference_update(set(assignment_list))
 
         return backbone_literal_set
@@ -315,16 +323,22 @@ class Solver:
 
     # region Static method
     @staticmethod
-    def __generate_key_cache(assignment_list: List[int]) -> int:
+    def __generate_key_cache(assignment_list: List[int], variable_restriction_set: Union[Set[int], None]) -> int:
         """
-        Generate a key for caching.
+        Generate a key for caching
         Cache: implicit_bcp_dictionary_cache
-        :param assignment_list: the assignment (can be empty)
-        :return: the generated key based on the assignment
+        :param assignment_list: an assignment (can be empty)
+        :param variable_restriction_set: a set of variables
+        :return: the generated key based on the assignment and set of variables
         """
 
         assignment_sorted_list = SortedList(assignment_list)
-        key_string = assignment_sorted_list.str_delimiter("-")
+        if variable_restriction_set is None:
+            variable_restriction_sorted_list = SortedList()
+        else:
+            variable_restriction_sorted_list = SortedList(variable_restriction_set)
+
+        key_string = "0".join((variable_restriction_sorted_list.str_delimiter(","), assignment_sorted_list.str_delimiter(",")))
         key = mmh3.hash(key_string)
 
         return key
@@ -332,15 +346,14 @@ class Solver:
 
     # region Private method
     def __create_assumption_list(self, assignment_list: List[int]) -> List[int]:
-        return list(self.__implied_literal_set.union(set(assignment_list)))
+        return list(self.__first_implied_literal_set.union(set(assignment_list)))
 
-    # region Cache
     def __add_implicit_bcp_dictionary_cache(self, key: int, implicit_bcp_dictionary) -> None:
         """
         Add a new record to the cache.
         If the record already exists in the cache, the value of the record will be updated.
-        :param key: the key
-        :param implicit_bcp_dictionary: the value
+        :param key: a key
+        :param implicit_bcp_dictionary: a value
         :return: None
         """
 
@@ -349,7 +362,7 @@ class Solver:
     def __get_implicit_bcp_dictionary_cache(self, key: int) -> \
             Tuple[bool, Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]]:
         """
-        Return the value of the record with the key from the cache.
+        Return a value of the record with the key from the cache.
         If the record does not exist in the cache, (False, None) is returned.
         :param key: the key
         :return: (True, the record's value) if the record exists. Otherwise, (False, None) is returned.
@@ -361,9 +374,8 @@ class Solver:
 
         return True, self.__implicit_bcp_dictionary_cache[key]
     # endregion
-    # endregion
 
-    # region Magic function
+    # region Magic method
     def __del__(self):
         # Delete the main SAT solver
         if self.__sat_main is not None:

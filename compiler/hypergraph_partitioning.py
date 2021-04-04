@@ -1,6 +1,7 @@
 # Import
 import os
 import mmh3
+import warnings
 import subprocess
 from pathlib import Path
 from formula.cnf import Cnf
@@ -33,6 +34,14 @@ class HypergraphPartitioning:
     Private Set<int> hyperedge_set
     Private int total_number_of_nodes
     
+    Private Tuple<int, int> limit_number_of_clauses_cache       # (lower_bound, upper_bound) - None = no limit
+    Private Tuple<int, int> limit_number_of_variables_cache     # (lower_bound, upper_bound) - None = no limit
+    
+    Private Dict<int, int> node_weight_dictionary               # key: node = clause, value: the weight of the clause
+    Private Dict<int, int> hyperedge_weight_dictionary          # key: edge = variable, value: the weight of the variable
+    
+    Private Dict<int, Set<int>> cut_set_cache                   # key: hash, value: a cut set
+    
     Private HypergraphPartitioningStatistics statistics
     
     Private HypergraphPartitioningCacheEnum cache_enum
@@ -40,14 +49,6 @@ class HypergraphPartitioning:
     Private HypergraphPartitioningNodeWeightEnum node_weight_enum
     Private HypergraphPartitioningHyperedgeWeightEnum hyperedge_weight_enum
     Private HypergraphPartitioningVariableSimplificationEnum variable_simplification_enum
-    
-    Private Tuple<int, int> limit_number_of_clauses_cache    # (lower_bound, upper_bound) - None = no limit
-    Private Tuple<int, int> limit_number_of_variables_cache  # (lower_bound, upper_bound) - None = no limit
-    
-    Private Dict<int, int> node_weight_dictionary       # key: node = clause's id, value: the weight of the clause
-    Private Dict<int, int> hyperedge_weight_dictionary  # key: edge = variable, value: the weight of the variable
-    
-    Private Dict<int, Set<int>> cut_set_cache           # key = hash, value = a cut set
     """
 
     # Static variable - Path
@@ -81,9 +82,9 @@ class HypergraphPartitioning:
 
         self.__cache_enum: hpc_enum.HypergraphPartitioningCacheEnum = cache_enum
         self.__software_enum: hps_enum.HypergraphPartitioningSoftwareEnum = software_enum
-        self.__variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum = variable_simplification_enum
         self.__node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum = node_weight_enum
         self.__hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum = hyperedge_weight_enum
+        self.__variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum = variable_simplification_enum
 
         self.__cut_set_cache: Dict[int, Set[int]] = dict()
 
@@ -112,15 +113,15 @@ class HypergraphPartitioning:
         self.__hyperedge_weight_dictionary: Dict[int, int] = dict()
 
         self.__check_files_and_directories()
-        self.__set_static_weights()
+        self.__set_static_weights(initial_incidence_graph=cnf.get_incidence_graph())
 
     # region Private method
     def __check_files_and_directories(self) -> None:
         """
-        Check if all necessary files and directories exist.
-        If some file is missing, raise an exception (FileIsMissingException).
-        If the chosen software is not supported on the system, raise an exception (SoftwareIsNotSupportedOnSystemException).
+        Check if all necessary files and directories exist
         :return: None
+        :raises FileIsMissingException: if some file is missing
+        :raises SoftwareIsNotSupportedOnSystemException: if the chosen software is not supported on the system
         """
 
         # Windows
@@ -138,20 +139,22 @@ class HypergraphPartitioning:
 
         # Linux
         elif env.is_linux():
-            pass    # TODO Linux
+            warnings.warn("No software for hypergraph partitioning is used!")
+            return  # TODO
 
         # Mac
         elif env.is_mac():
-            pass    # TODO Mac
+            warnings.warn("No software for hypergraph partitioning is used!")
+            return  # TODO
 
         # Undefined
         raise c_exception.FunctionNotImplementedException("check_files_and_directories", f"not implemented for this OS ({env.get_os().name})")
 
-    def __variable_simplification(self, solver: Solver, assignment: List[int]) -> Dict[int, Set[int]]:
+    def __variable_simplification(self, solver: Solver, assignment_list: List[int]) -> Dict[int, Set[int]]:
         """
         Compute variable simplification using implicit unit propagation
         :param solver: the solver
-        :param assignment: the (partial) assignment (for the solver)
+        :param assignment_list: a partial assignment (for the solver)
         :return: a dictionary where a key is a variable (representant),
         and the value is a set of variables that can be merged with the variable to reduce the hypergraph size
         """
@@ -162,7 +165,7 @@ class HypergraphPartitioning:
 
         self.__statistics.variable_simplification.start_stopwatch()     # timer (start)
 
-        implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment)
+        implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list, variable_restriction_set=None)
 
         # The formula is unsatisfiable (it should not happen at all)
         if implicit_bcp_dictionary is None:
@@ -208,73 +211,13 @@ class HypergraphPartitioning:
         raise c_exception.FunctionNotImplementedException("variable_simplification",
                                                           f"this type of variable simplification ({self.__variable_simplification_enum.name}) is not implemented")
 
-    def __subsumption(self, incidence_graph: IncidenceGraph) -> Set[int]:
-        """
-        Return a set of subsumed clauses
-        :param incidence_graph: the incidence graph
-        :return: a set of subsumed clauses
-        """
-
-        self.__statistics.subsumption.start_stopwatch()     # timer (start)
-
-        subsumed_clause_set = set()
-        neighbour_dictionary: [int, Set[int]] = dict()   # Cache
-        clause_id_list = incidence_graph.clause_id_list()
-
-        for i, clause_a in enumerate(clause_id_list):
-            # Neighbours
-            if clause_a in neighbour_dictionary:
-                variable_set_a = neighbour_dictionary[clause_a]
-            else:
-                variable_set_a = incidence_graph.clause_id_neighbour_set(clause_a)
-                neighbour_dictionary[clause_a] = variable_set_a
-
-            for j in range(i + 1, len(clause_id_list)):
-                clause_b = clause_id_list[j]
-
-                if clause_b in subsumed_clause_set:
-                    continue
-
-                # Neighbours
-                if clause_b in neighbour_dictionary:
-                    variable_set_b = neighbour_dictionary[clause_b]
-                else:
-                    variable_set_b = incidence_graph.clause_id_neighbour_set(clause_b)
-                    neighbour_dictionary[clause_b] = variable_set_b
-
-                a_subset_b = variable_set_a.issubset(variable_set_b)
-                b_subset_a = variable_set_b.issubset(variable_set_a)
-
-                # Clauses are the same
-                if a_subset_b and b_subset_a:
-                    if clause_a < clause_b:
-                        subsumed_clause_set.add(clause_a)
-                    else:
-                        subsumed_clause_set.add(clause_b)
-
-                    continue
-
-                # Clause A is subsumed
-                if a_subset_b:
-                    subsumed_clause_set.add(clause_a)
-
-                    continue
-
-                # Clause B is subsumed
-                if b_subset_a:
-                    subsumed_clause_set.add(clause_b)
-
-                    continue
-
-        self.__statistics.subsumption.stop_stopwatch()      # timer (stop)
-        return subsumed_clause_set
-
     # region Weights
-    def __set_static_weights(self) -> None:
+    def __set_static_weights(self, initial_incidence_graph: IncidenceGraph) -> None:
         """
         Initialize the static weights.
         If the type of weights is not STATIC, nothing happens.
         Variable: node_weight_dictionary, hyperedge_weight_dictionary
+        :param initial_incidence_graph: an incidence graph
         :return: None
         """
 
@@ -297,7 +240,7 @@ class HypergraphPartitioning:
         Initialize the dynamic weights based on the incidence graph.
         If the type of weights is not Dynamic, nothing happens.
         Variable: node_weight_dictionary, hyperedge_weight_dictionary
-        :param incidence_graph: the incidence graph
+        :param incidence_graph: an incidence graph
         :return: None
         """
 
@@ -317,21 +260,21 @@ class HypergraphPartitioning:
 
     def __get_node_weight(self, node_id: int) -> int:
         """
-        Return the weight of the node based on the node_weight_enum.
-        If the node does not exist in the hypergraph, raise an exception (NodeDoesNotExistException).
-        :param node_id: the node's ID
+        Return the weight of the node based on the node_weight_enum
+        :param node_id: the identifier of the node
         :return: the weight of the node
+        :raises NodeDoesNotExistException: if the node does not exist in the hypergraph
         """
 
         # The node does not exist in the hypergraph
         if (node_id < 0) or (node_id >= self.__total_number_of_nodes):
             raise hp_exception.NodeDoesNotExistException(node_id)
 
-        # No weights
+        # No weight
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE:
             return 1
 
-        # STATIC/DYNAMIC weights
+        # STATIC/DYNAMIC weight
         if (self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.STATIC) or \
            (self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.DYNAMIC):
             # Something wrong
@@ -341,25 +284,25 @@ class HypergraphPartitioning:
             return self.__node_weight_dictionary[node_id]
 
         raise c_exception.FunctionNotImplementedException("get_node_weight",
-                                                          f"this type of weights ({self.__node_weight_enum.name}) is not implemented")
+                                                          f"this type of weight ({self.__node_weight_enum.name}) is not implemented")
 
     def __get_hyperedge_weight(self, hyperedge_id: int) -> int:
         """
-        Return the weight of the hyperedge based on the hyperedge_weight_enum.
-        If the hyperedge does not exist in the hypergraph, raise an exception (HyperedgeDoesNotExistException).
-        :param hyperedge_id: the hyperedge's ID
+        Return the weight of the hyperedge based on the hyperedge_weight_enum
+        :param hyperedge_id: the identifier of the hyperedge
         :return: the weight of the hyperedge
+        :raises HyperedgeDoesNotExistException: if the hyperedge does not exist in the hypergraph
         """
 
         # The hyperedge does not exist in the hypergraph
         if hyperedge_id not in self.__hyperedge_set:
             raise hp_exception.HyperedgeDoesNotExistException(hyperedge_id)
 
-        # No weights
+        # No weight
         if self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE:
             return 1
 
-        # STATIC/DYNAMIC weights
+        # STATIC/DYNAMIC weight
         if (self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.STATIC) or \
            (self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.DYNAMIC):
             # Something wrong
@@ -369,7 +312,7 @@ class HypergraphPartitioning:
             return self.__hyperedge_weight_dictionary[hyperedge_id]
 
         raise c_exception.FunctionNotImplementedException("get_hyperedge_weight",
-                                                          f"this type of weights ({self.__hyperedge_weight_enum.name}) is not implemented")
+                                                          f"this type of weight ({self.__hyperedge_weight_enum.name}) is not implemented")
     # endregion
 
     # region Cache
@@ -387,11 +330,11 @@ class HypergraphPartitioning:
 
     def __get_cut_set_cache(self, key: int) -> Union[Set[int], None]:
         """
-        Return the value of the record with the key from the cache.
+        Return a value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
         Cache: cut_set_cache
         :param key: the key
-        :return: The record's value if the record exists. Otherwise, None is returned.
+        :return: the record's value if the record exists. Otherwise, None is returned.
         """
 
         # The record does not exist
@@ -413,6 +356,7 @@ class HypergraphPartitioning:
         """
         Generate a key for caching
         Variable property: occurrence, mean, variance (optional)
+        :param incidence_graph: an incidence graph
         :return: the generated key based on the incidence graph and both mappings between variables (variable_id -> order_id, order_id -> variable_id)
         """
 
@@ -454,15 +398,15 @@ class HypergraphPartitioning:
                 # variance_temp = variance_temp / (len(clause_id_set) - 1)
                 variance_dictionary[variable] = variance_temp
 
-        def variable_order(ordering: List[List[int]], mapping_dictionary: Dict[int, float]) -> List[List[int]]:
+        def variable_order(ordering_func: List[List[int]], mapping_dictionary_func: Dict[int, float]) -> List[List[int]]:
             result_ordering = []
 
-            for group_func in ordering:
+            for group_func in ordering_func:
                 last_value = None
                 new_group = []
 
-                for var_func in sorted(group_func, key=lambda v_func: mapping_dictionary[v_func]):
-                    value = mapping_dictionary[var_func]
+                for var_func in sorted(group_func, key=lambda v_func: mapping_dictionary_func[v_func]):
+                    value = mapping_dictionary_func[var_func]
 
                     if (last_value is None) or (value == last_value):
                         new_group.append(var_func)
@@ -511,7 +455,7 @@ class HypergraphPartitioning:
     def __create_hypergraph_hmetis_exe(self, incidence_graph: IncidenceGraph) -> Tuple[str, Dict[int, int]]:
         """
         Create an input file string with the hypergraph for hMETIS.exe based on the incidence graph
-        :param incidence_graph: the incidence graph
+        :param incidence_graph: an incidence graph
         :return: (file string, mapping from node_id (file) to clause_id (CNF))
         """
 
@@ -519,7 +463,7 @@ class HypergraphPartitioning:
         clause_id_node_id_dictionary: Dict[int, int] = dict()   # Mapping clause_id -> node_id
         node_id_clause_id_dictionary: Dict[int, int] = dict()   # Mapping node_id -> clause_id
 
-        number_of_nodes = 0  # incidence_graph.number_of_clauses()
+        number_of_nodes = 0
         number_of_hyperedges = incidence_graph.number_of_variables()
 
         # Hyperedges
@@ -557,7 +501,7 @@ class HypergraphPartitioning:
     def __get_cut_set_hmetis_exe(self, incidence_graph: IncidenceGraph) -> Set[int]:
         """
         Compute a cut set using hMETIS.exe
-        :param incidence_graph: the incidence graph
+        :param incidence_graph: an incidence graph
         :return: a cut set of the hypergraph
         """
 
@@ -576,8 +520,7 @@ class HypergraphPartitioning:
         subprocess.run([HypergraphPartitioning.__WIN_PROGRAM_EXE_HMETIS_PATH,
                         HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH,
                         str(2), str(100 * self.__ub_factor)],
-                       stdout=devnull, stderr=devnull)
-        # TODO error => str
+                       stdout=devnull)
 
         # A cut set does not exist (because of balance etc.)
         if HypergraphPartitioning.__OUTPUT_FILE_1_EXE_HMETIS_PATH.exists():
@@ -593,8 +536,17 @@ class HypergraphPartitioning:
         # Get the cut set
         variable_partition_0_set = set()
         variable_partition_1_set = set()
-        with open(HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH, "r", encoding="utf8") as output_file:
-            for line_id, line in enumerate(output_file.readlines()):
+        with open(HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH, "r", encoding="utf-8") as output_file:
+            line_id = 0
+
+            while True:
+                line = output_file.readline()
+                line_id += 1
+
+                # End of the file
+                if not line:
+                    break
+
                 try:
                     partition_temp = int(line)
                 except ValueError:
@@ -603,7 +555,7 @@ class HypergraphPartitioning:
                 if partition_temp != 0 and partition_temp != 1:
                     raise hp_exception.SomethingWrongException(f"invalid partition ({partition_temp}) in the output file from hMETIS.exe")
 
-                variable_set_temp = incidence_graph.clause_id_neighbour_set(node_id_clause_id_dictionary[line_id + 1])
+                variable_set_temp = incidence_graph.clause_id_neighbour_set(node_id_clause_id_dictionary[line_id])
 
                 if partition_temp == 0:
                     variable_partition_0_set.update(variable_set_temp)
@@ -624,9 +576,9 @@ class HypergraphPartitioning:
     def get_cut_set(self, incidence_graph: IncidenceGraph, solver: Solver, assignment: List[int], incidence_graph_is_reduced: bool = False) -> Set[int]:
         """
         Create a hypergraph based on the incidence graph
-        :param incidence_graph: the incidence graph
-        :param solver: the solver (in case equivSimpl is used)
-        :param assignment: the (partial) assignment (for the solver)
+        :param incidence_graph: an incidence graph
+        :param solver: a solver (in case equivSimpl is used)
+        :param assignment: a partial assignment (for the solver)
         :param incidence_graph_is_reduced: True if the incidence graph is already reduced
         :return: a cut set of the hypergraph
         """
@@ -723,12 +675,12 @@ class HypergraphPartitioning:
 
         # Subsumption
         if (self.__subsumed_threshold is None) or (incidence_graph.number_of_clauses() <= self.__subsumed_threshold):
-            subsumed_clause_set = self.__subsumption(incidence_graph)
+            subsumed_clause_set = incidence_graph.subsumption()
             incidence_graph.remove_subsumed_clause_set(subsumed_clause_set)
 
     def cache_can_be_used(self, incidence_graph: IncidenceGraph) -> bool:
         """
-        :return: True if a cache can be used. Otherwise, False is returned.
+        :return: True if the cache can be used. Otherwise, False is returned.
         """
 
         if self.__cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE:

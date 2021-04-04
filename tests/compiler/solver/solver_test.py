@@ -10,6 +10,7 @@ import exception.cara_exception as c_exception
 
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
+import compiler.enum.implied_literals_enum as il_enum
 
 
 class SolverTest(TestAbstract):
@@ -33,7 +34,8 @@ class SolverTest(TestAbstract):
                         cnf = Cnf(file_path)
                         solver = Solver(cnf=cnf,
                                         clause_id_set=None,
-                                        sat_solver_enum=sat_solver)
+                                        sat_solver_enum=sat_solver,
+                                        first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP)
 
                         # Unit propagation
                         unit_propagation = solver.unit_propagation(assumption)

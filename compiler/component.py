@@ -88,7 +88,7 @@ class Component:
     # region Public
     def create_circuit(self) -> int:
         """
-        :return: the root's id of the created circuit
+        :return: the identifier of the root of the created circuit
         """
 
         return self.__create_circuit(set())
@@ -160,7 +160,7 @@ class Component:
 
         new_cut_set_threshold_temp = self.__new_cut_set_threshold
 
-        # Cut set cache can be used
+        # The cache for cut sets can be used
         if self.__hypergraph_partitioning.cache_can_be_used(self.__incidence_graph):
             new_cut_set_threshold_temp *= self.__new_cut_set_threshold_reduction
 
@@ -172,10 +172,10 @@ class Component:
 
     def __get_suggested_variable_from_cut_set(self, cut_set: Set[int]) -> int:
         """
-        Return a suggested variable from the cut set based on the heuristic.
-        If the cut set is empty, raise an exception (TryingGetVariableFromEmptyCutSetException).
-        :param cut_set: the cut set
+        Return a suggested variable from the cut set based on the heuristic
+        :param cut_set: a cut set
         :return: a suggested variable (based on the heuristic) from the cut set
+        :raises TryingGetVariableFromEmptyCutSetException: if the cut set is empty
         """
         # TODO Cut set heuristic
 
@@ -185,15 +185,7 @@ class Component:
         if not cut_set:
             raise c_exception.TryingGetVariableFromEmptyCutSetException()
 
-        max = 0
-        max_variable = None
-
-        for variable in cut_set:
-            temp = self.__incidence_graph.number_of_neighbours_variable(variable)
-
-            if temp > max:
-                max = temp
-                max_variable = variable
+        max_variable = self.__incidence_graph.variable_with_most_occurrences(cut_set)
 
         self.__statistics.component_statistics.get_suggested_variable_from_cut_set.stop_stopwatch()     # timer (stop)
         return max_variable
@@ -201,14 +193,14 @@ class Component:
     def __exist_more_components(self) -> bool:
         """
         Check if more components exist
-        :return: True if more components exist, otherwise False is returned
+        :return: True if more components exist. Otherwise, False is returned.
         """
 
         return True if self.__incidence_graph.number_of_components() > 1 else False
 
     def __create_circuit(self, cut_set: Set[int]) -> int:
         """
-        :return: the root's id of the created circuit
+        :return: the identifier of the root of the created circuit
         """
 
         def remove_implied_literals(implied_literals_set_func: Set[int]) -> None:
@@ -239,7 +231,7 @@ class Component:
 
         # The formula is empty after the unit propagation
         if self.__incidence_graph.number_of_nodes() == 0:
-            remove_implied_literals(implied_literal_set)    # Restore the implied literals
+            remove_implied_literals(implied_literal_set)    # restore the implied literals
 
             self.__statistics.component_statistics.empty_incidence_graph.add_count(1)   # counter
             return self.__circuit.create_and_node(implied_literal_id_set)
@@ -250,7 +242,7 @@ class Component:
         value = self.__component_caching.get(key)
         if value is not None:
             node_id = self.__circuit.create_and_node({value}.union(implied_literal_id_set))
-            remove_implied_literals(implied_literal_set)    # Restore the implied literals
+            remove_implied_literals(implied_literal_set)    # restore the implied literals
 
             self.__statistics.component_statistics.cached.add_count(1)      # counter
             return node_id
@@ -267,7 +259,7 @@ class Component:
             # Component caching
             self.__component_caching.add(key, node_id_cache)
 
-            remove_implied_literals(implied_literal_set)  # Restore the implied literals
+            remove_implied_literals(implied_literal_set)  # restore the implied literals
             return node_id
 
         # Renamable Horn CNF
@@ -282,7 +274,7 @@ class Component:
                 # Component caching
                 self.__component_caching.add(key, node_id_cache)
 
-                remove_implied_literals(implied_literal_set)  # Restore the implied literals
+                remove_implied_literals(implied_literal_set)  # restore the implied literals
                 return node_id
 
         # Check if more components exist
@@ -315,7 +307,7 @@ class Component:
             # Component caching
             self.__component_caching.add(key, node_id_cache)
 
-            remove_implied_literals(implied_literal_set)    # Restore the implied literals
+            remove_implied_literals(implied_literal_set)    # restore the implied literals
             return node_id
 
         # Only one component exists

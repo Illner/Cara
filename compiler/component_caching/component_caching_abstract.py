@@ -14,7 +14,7 @@ class ComponentCachingAbstract(ABC):
     """
 
     """
-    Private Dict<int, int> cache    key: hash, value: identifier of a node
+    Private Dict<int, int> cache        # key: hash, value: an identifier of a node
     
     Protected str delimiter
     Protected str end_delimiter
@@ -34,7 +34,7 @@ class ComponentCachingAbstract(ABC):
         """
         Generate a key for caching.
         None is returned if the formula represented by the incidence graph is not cacheable.
-        :param incidence_graph: the incidence graph
+        :param incidence_graph: an incidence graph
         :return: the generated key based on the incidence graph
         """
 
@@ -63,7 +63,7 @@ class ComponentCachingAbstract(ABC):
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
         :param key: the key
-        :return: The record's value if the record exists. Otherwise, None is returned.
+        :return: the record's value if the record exists. Otherwise, None is returned.
         """
 
         # The record does not exist

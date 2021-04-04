@@ -261,13 +261,13 @@ class Circuit:
 
                     dimacs_cnf_temp = ""
                     for _ in range(size_of_dimacs_cnf_temp):
-                        dimacs_cnf_temp = "\n".join((dimacs_cnf_temp, file.readline()))
+                        dimacs_cnf_temp = "".join((dimacs_cnf_temp, file.readline()))
 
                     io_temp = StringIO(initial_value=dimacs_cnf_temp)
                     try:
-                        cnf_temp = Cnf(io_temp, starting_line_id=(line_id + 1))
-                    except f_exception.FormulaException:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the formula mentioned on line {line_id} has an invalid DIMACS format")
+                        cnf_temp = Cnf(io_temp, starting_line_id=line_id)
+                    except f_exception.FormulaException as err:
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the formula mentioned on line {line_id} has an invalid DIMACS format ({err})")
 
                     # 2-CNF
                     if node_type_temp == nt_enum.NodeTypeEnum.TWO_CNF:
@@ -1067,6 +1067,53 @@ class Circuit:
         self.check_circuit_type()
         # Recompute the size of the circuit
         self.__compute_size_of_circuit()
+
+    def get_node_type_dictionary(self) -> Dict[nt_enum.NodeTypeEnum, int]:
+        """
+        :return: the node type dictionary
+        """
+
+        node_type_dictionary: Dict[nt_enum.NodeTypeEnum, int] = dict()
+
+        # Initialize
+        for nt in nt_enum.NodeTypeEnum:
+            node_type_dictionary[nt] = 0
+
+        # The root of the circuit is not set
+        if not self.is_root_set():
+            return node_type_dictionary
+
+        # The root of the circuit is a leaf
+        if isinstance(self.__root, LeafAbstract):
+            node_type_dictionary[self.__root.node_type] = 1
+
+            return node_type_dictionary
+
+        # The root of the circuit is an inner node
+        if isinstance(self.__root, InnerNodeAbstract):
+            for nt in nt_enum.NodeTypeEnum:
+                node_type_dictionary[nt] = self.__root.get_number_of_occurrences_node_type_in_circuit_counter_dict(nt)
+
+            return node_type_dictionary
+
+    def str_node_type_dictionary(self, prefix: str = "") -> str:
+        """
+        :param prefix: a string that appears before every line (for comments)
+        :return: a string representation of the node type dictionary
+        """
+
+        result = ""
+        node_type_dictionary = self.get_node_type_dictionary()
+
+        for nt in node_type_dictionary:
+            value = node_type_dictionary[nt]
+
+            if not result:
+                result = f"{prefix}{nt.name}: {str(value)}"
+            else:
+                result = "\n".join((result, f"{prefix}{nt.name}: {str(value)}"))
+
+        return result
     # endregion
 
     # region Magic method
@@ -1083,12 +1130,8 @@ class Circuit:
                                 f"C Type: {str(self.circuit_type.name)}",
                                 f"C Decomposability: {self.is_decomposable()}",
                                 f"C Determinism: {self.is_deterministic()}",
-                                f"C Smoothness: {self.is_smooth()}"))
-
-            if isinstance(self.__root, InnerNodeAbstract):
-                for nt in nt_enum.NodeTypeEnum:
-                    string = "\n".join((string,
-                                        f"C {nt.name}: {self.__root.get_number_of_occurrences_node_type_in_circuit_counter_dict(nt)}"))
+                                f"C Smoothness: {self.is_smooth()}",
+                                self.str_node_type_dictionary(prefix="C ")))
 
             if self.comments and not self.comments.startswith("CaraCompiler"):
                 comments_list_temp = self.comments.split("\n")

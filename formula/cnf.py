@@ -31,7 +31,7 @@ class Cnf:
     Private Dict<int, Set<int>> adjacency_literal_dictionary    # key: literal, value: a set of clauses where the literal appears
     Private Dict<int, Set<int>> adjacency_variable_dictionary   # key: variable, value: a set of clauses where the variable appears
     Private Set<int> unit_clause_set                            # a set which contains all unit clauses
-    Private List<Set<int>> clause_size_list                     # key: 0, 1, .., number_of_variables, value: a set contains all clauses with the size k
+    Private Dict<int, Set<int>> clause_size_dictionary          # key: number, value: a set that contains all clauses with the size k
     
     Private CnfStatistics cnf_statistics
     Private IncidenceGraphStatistics incidence_graph_statistics
@@ -59,7 +59,7 @@ class Cnf:
         self.__adjacency_literal_dictionary: Dict[int, Set[int]] = dict()
         self.__adjacency_variable_dictionary: Dict[int, Set[int]] = dict()
         self.__unit_clause_set: Set[int] = set()
-        self.__clause_size_list: List[Set[int]] = []
+        self.__clause_size_dictionary: Dict[int, Set[int]] = {1: set()}
         # endregion
 
         # Statistics - CNF
@@ -141,9 +141,6 @@ class Cnf:
 
                     self.__number_of_literals = 2 * self.__number_of_variables
 
-                    for _ in range(self.__number_of_variables + 1):
-                        self.__clause_size_list.append(set())   # initialization
-
                     # Incidence graph
                     self.__incidence_graph = IncidenceGraph(statistics=self.__incidence_graph_statistics)
 
@@ -208,7 +205,12 @@ class Cnf:
                     # Incidence graph
                     self.__incidence_graph.add_edge(lit, clause_id)
 
-                self.__clause_size_list[len(clause_set_temp)].add(clause_id)
+                clause_set_temp_len = len(clause_set_temp)
+                if clause_set_temp_len not in self.__clause_size_dictionary:
+                    self.__clause_size_dictionary[clause_set_temp_len] = {clause_id}
+                else:
+                    self.__clause_size_dictionary[clause_set_temp_len].add(clause_id)
+
                 self.__cnf.append(clause_set_temp)
                 self.__cnf_variable.append(clause_variable_set_temp)
 
@@ -221,7 +223,7 @@ class Cnf:
         if not len(self.__cnf):
             raise f_exception.InvalidDimacsCnfFormatException("the file does not contain any clause")
 
-        self.__unit_clause_set = self.__clause_size_list[1].copy()  # get unit clauses
+        self.__unit_clause_set = self.__clause_size_dictionary[1].copy()  # get unit clauses
         self.__real_number_of_variables = len(self.__variable_set)
 
         self.__cnf_statistics.create.stop_stopwatch()   # timer (stop)

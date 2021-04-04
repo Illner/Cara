@@ -21,6 +21,7 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer clause_id_set
     Private StatisticsComponentTimer number_of_components
     Private StatisticsComponentTimer variable_set
+    Private StatisticsComponentTimer subsumption
     Private StatisticsComponentTimer renamable_horn_formula_recognition_initialization
     Private StatisticsComponentTimer renamable_horn_formula_recognition_check
     Private StatisticsComponentTimer convert_to_cnf
@@ -66,6 +67,9 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
         self.__variable_set: StatisticsComponentTimer = StatisticsComponentTimer("get variables")
         self._component_list.append(self.__variable_set)
+
+        self.__subsumption: StatisticsComponentTimer = StatisticsComponentTimer("subsumption")
+        self._component_list.append(self.__subsumption)
 
         self.__renamable_horn_formula_recognition_initialization: StatisticsComponentTimer = StatisticsComponentTimer("renamable Horn formula recognition - initialization")
         self._component_list.append(self.__renamable_horn_formula_recognition_initialization)
@@ -132,6 +136,10 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     @property
     def variable_set(self) -> StatisticsComponentTimer:
         return self.__variable_set
+
+    @property
+    def subsumption(self) -> StatisticsComponentTimer:
+        return self.__subsumption
 
     @property
     def renamable_horn_formula_recognition_initialization(self) -> StatisticsComponentTimer:

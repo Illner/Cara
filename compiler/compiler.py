@@ -40,7 +40,7 @@ class Compiler:
     Private Statistics statistics
     Private bool cut_set_try_cache
     Private float new_cut_set_threshold
-    Private float new_cut_set_threshold_reduction           # when cut set cache can be used
+    Private float new_cut_set_threshold_reduction           # when the cache for cut sets can be used
     Private Set<BaseClassEnum> base_class_enum_set
     Private ComponentCachingAbstract component_caching
     Private HypergraphPartitioning hypergraph_partitioning
@@ -80,9 +80,9 @@ class Compiler:
         if isinstance(cnf, Cnf):
             self.__cnf: Cnf = cnf
             self.__statistics: Statistics = Statistics(cnf_statistics=self.__cnf.cnf_statistics,
-                                                       incidence_graph_statistics=self.__cnf.incidence_graph_statistics)   # statistics
+                                                       incidence_graph_statistics=self.__cnf.incidence_graph_statistics)
         else:
-            self.__statistics: Statistics = Statistics()    # statistics
+            self.__statistics: Statistics = Statistics()
             self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
                                   cnf_statistics=self.__statistics.cnf_statistics,
                                   incidence_graph_statistics=self.__statistics.incidence_graph_statistics)
@@ -146,7 +146,7 @@ class Compiler:
         :return: the created circuit
         """
 
-        self.__statistics.compiler_statistics.create_circuit.start_stopwatch()  # timer (start)
+        self.__statistics.compiler_statistics.create_circuit.start_stopwatch()  # timer (start - create_circuit)
 
         incidence_graph: IncidenceGraph = self.__cnf.get_incidence_graph()
         incidence_graph_set: Set[IncidenceGraph] = {incidence_graph}
@@ -191,13 +191,12 @@ class Compiler:
         # Add unused variables
         node_id_set = set()
         variable_in_circuit_set = self.__circuit.get_node(self.__circuit.root_id)._get_variable_in_circuit_set(copy=False)
-        unused_variable_set = self.__cnf.get_variable_set(copy=False).difference(variable_in_circuit_set)
+        variable_in_formula_set = self.__cnf.get_variable_set(copy=False)
+        unused_variable_set = variable_in_formula_set.difference(variable_in_circuit_set)
 
         number_of_unused_variables = self.__cnf.number_of_variables - self.__cnf.real_number_of_variables
-        max_variable_id = max(self.__cnf.get_variable_set(copy=False))
-        unused_variable_list = [max_variable_id + 1 + i for i, _ in enumerate(range(number_of_unused_variables))]
-
-        unused_variable_set.update(set(unused_variable_list))
+        sorted_list_temp = sorted(set(range(1, self.__cnf.number_of_variables + 1)).difference(variable_in_formula_set))
+        unused_variable_set.update(set(sorted_list_temp[:number_of_unused_variables]))
 
         for var in unused_variable_set:
             child_id_set = self.__circuit.create_literal_leaf_set({var, -var})
@@ -208,24 +207,24 @@ class Compiler:
             node_id = self.__circuit.create_and_node({root_id}.union(node_id_set))
             self.__circuit.set_root(node_id)
 
-        self.__statistics.compiler_statistics.smooth.start_stopwatch()  # timer (start)
+        self.__statistics.compiler_statistics.smooth.start_stopwatch()  # timer (start - smooth)
 
         # Smooth
         if self.__smooth:
             self.__circuit.smooth()
 
-        self.__statistics.compiler_statistics.smooth.stop_stopwatch()   # timer (stop)
+        self.__statistics.compiler_statistics.smooth.stop_stopwatch()   # timer (stop - smooth)
+        self.__statistics.compiler_statistics.create_circuit.stop_stopwatch()   # timer (stop - create_circuit)
 
-        self.__statistics.compiler_statistics.create_circuit.stop_stopwatch()   # timer (stop)
         return self.circuit
     # endregion
 
     # region Property
     @property
-    def circuit(self):
+    def circuit(self) -> Circuit:
         return self.__circuit
 
     @property
-    def statistics(self):
+    def statistics(self) -> Statistics:
         return self.__statistics
     # endregion
