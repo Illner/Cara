@@ -11,11 +11,11 @@ Python 3.6+
 * <a href="https://pypi.org/project/mmh3/" target="_blank">mmh3</a> 3.0.0 (Windows / Linux / Mac)
 * <a href="https://pypi.org/project/matplotlib/" target="_blank">matplotlib</a> 3.3.4 (Windows / Linux / Mac)
 
+You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11 hypernetx==0.3.7 matplotlib==3.3.4**
+
 ## Software
 * <a href="http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview" target="_blank">hMETIS</a> 1.5.3 (Windows / Linux)
 * ~~-<a href="https://www.cc.gatech.edu/~umit/software.html" target="_blank">PaToH</a> 3.3 (Linux / Mac)-~~
-
-You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11 hypernetx==0.3.7 matplotlib==3.3.4**
 
 ## TODO
 - [ ] hMETIS - Linux
@@ -67,9 +67,6 @@ optional arguments:
   + if the limits for hypergraph partitioning caching (number of clauses/variables) are satisfied, then the new_cut_set_threshold will be multiplied by x (default: 1)
 * **-v, --version**
   + show program's version number and exit
-
-## High-level overview
-![alt text](images/high-level_overview.png)
-
+  
 ## Modules
 ![alt text](images/modules.png)
