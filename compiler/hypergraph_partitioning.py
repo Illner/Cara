@@ -30,7 +30,7 @@ class HypergraphPartitioning:
     """
     Private Cnf cnf
     Private float ub_factor
-    Private int subsumed_threshold
+    Private int subsumption_threshold
     Private Set<int> hyperedge_set
     Private int total_number_of_nodes
     
@@ -60,7 +60,7 @@ class HypergraphPartitioning:
 
     def __init__(self, cnf: Cnf,
                  ub_factor: float,
-                 subsumed_threshold: Union[int, None],
+                 subsumption_threshold: Union[int, None],
                  cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                  software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
                  node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
@@ -76,7 +76,7 @@ class HypergraphPartitioning:
             self.__statistics: HypergraphPartitioningStatistics = statistics
 
         self.__cnf: Cnf = cnf
-        self.__subsumed_threshold: Union[int, None] = subsumed_threshold
+        self.__subsumption_threshold: Union[int, None] = subsumption_threshold
         self.__hyperedge_set: Set[int] = cnf.get_variable_set(copy=False)
         self.__total_number_of_nodes: int = cnf.real_number_of_clauses
 
@@ -674,7 +674,7 @@ class HypergraphPartitioning:
         incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
 
         # Subsumption
-        if (self.__subsumed_threshold is None) or (incidence_graph.number_of_clauses() <= self.__subsumed_threshold):
+        if (self.__subsumption_threshold is None) or (incidence_graph.number_of_clauses() <= self.__subsumption_threshold):
             subsumed_clause_set = incidence_graph.subsumption()
             incidence_graph.remove_subsumed_clause_set(subsumed_clause_set)
 

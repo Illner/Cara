@@ -30,12 +30,12 @@ import exception.test.test_exception as t_exception
 LOG_PATH = os.path.join(os.getcwd(), "log")
 
 
-def main(args):
+def main(main_args):
     log_string = "Test automation results\n"
     print(log_string)
 
     # CNF test
-    if args.formula_cnf_test:
+    if main_args.formula_cnf_test:
         cnf_test = fc_test.CnfTest()
         print(cnf_test.test_name, end=": ", flush=True)
         result, log_result = test(cnf_test)
@@ -43,7 +43,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # 2-CNF test
-    if args.formula_2_cnf_test:
+    if main_args.formula_2_cnf_test:
         two_cnf_test = ftc_test.TwoCnfTest()
         print(two_cnf_test.test_name, end=": ", flush=True)
         result, log_result = test(two_cnf_test)
@@ -51,7 +51,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Horn CNF test
-    if args.formula_horn_cnf_test:
+    if main_args.formula_horn_cnf_test:
         horn_cnf_test = fhc_test.HornCnfTest()
         print(horn_cnf_test.test_name, end=": ", flush=True)
         result, log_result = test(horn_cnf_test)
@@ -59,7 +59,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Incidence graph test
-    if args.formula_incidence_graph_test:
+    if main_args.formula_incidence_graph_test:
         incidence_graph_test = fig_test.IncidenceGraphTest()
         print(incidence_graph_test.test_name, end=": ", flush=True)
         result, log_result = test(incidence_graph_test)
@@ -67,7 +67,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Node test
-    if args.circuit_node_test:
+    if main_args.circuit_node_test:
         node_test = cn_test.NodeTest()
         print(node_test.test_name, end=": ", flush=True)
         result, log_result = test(node_test)
@@ -75,7 +75,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Circuit test
-    if args.circuit_test:
+    if main_args.circuit_test:
         circuit_test = cc_test.CircuitTest()
         print(circuit_test.test_name, end=": ", flush=True)
         result, log_result = test(circuit_test)
@@ -83,7 +83,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Solver test
-    if args.compiler_solver_test:
+    if main_args.compiler_solver_test:
         solver_test = cs_test.SolverTest()
         print(solver_test.test_name, end=": ", flush=True)
         result, log_result = test(solver_test)
@@ -91,7 +91,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Hypergraph partitioning test
-    if args.compiler_hypergraph_partitioning_test:
+    if main_args.compiler_hypergraph_partitioning_test:
         hypergraph_partitioning_test = chp_test.HypergraphPartitioningTest()
         print(hypergraph_partitioning_test.test_name, end=": ", flush=True)
         result, log_result = test(hypergraph_partitioning_test)
@@ -99,7 +99,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Backbones test
-    if args.compiler_backbones_test:
+    if main_args.compiler_backbones_test:
         backbones_test = cb_test.BackbonesTest()
         print(backbones_test.test_name, end=": ", flush=True)
         result, log_result = test(backbones_test)
@@ -107,7 +107,7 @@ def main(args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Compiler test
-    if args.compiler_test:
+    if main_args.compiler_test:
         compiler_test = c_test.CompilerTest()
         print(compiler_test.test_name, end=": ", flush=True)
         result, log_result = test(compiler_test)
@@ -142,75 +142,74 @@ def test(test_instantiation: TestAbstract) -> Tuple[bool, str]:
 
 def create_parser() -> argparse.ArgumentParser:
     # Create the parser
-    # noinspection PyTypeChecker
-    parser = argparse.ArgumentParser(prog="Cara - test automation",
-                                     description="Test automation for Cara compiler",
-                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter     # Default values are shown in help
-                                     )
+    parser_temp = argparse.ArgumentParser(prog="Cara - test automation",
+                                          description="Test automation for Cara compiler",
+                                          formatter_class=argparse.ArgumentDefaultsHelpFormatter    # Default values are shown in help
+                                          )
 
     # Add the arguments
-    parser.add_argument("-fct",
-                        "--formula_cnf_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for CNFs.")
-    parser.add_argument("-f2ct",
-                        "--formula_2_cnf_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for 2-CNFs.")
-    parser.add_argument("-fhct",
-                        "--formula_horn_cnf_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for Horn CNFs.")
-    parser.add_argument("-figt",
-                        "--formula_incidence_graph_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for incidence graphs.")
-    parser.add_argument("-cct",
-                        "--circuit_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for circuits.")
-    parser.add_argument("-cnt",
-                        "--circuit_node_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for nodes.")
-    parser.add_argument("-cst",
-                        "--compiler_solver_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for solvers.")
-    parser.add_argument("-chpt",
-                        "--compiler_hypergraph_partitioning_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for hypergraph partitioning.")
-    parser.add_argument("-cbt",
-                        "--compiler_backbones_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for backbones.")
-    parser.add_argument("-ct",
-                        "--compiler_test",
-                        action="store",
-                        default=True,
-                        type=cara.str2bool,
-                        help="Test automation for compilers.")
+    parser_temp.add_argument("-fct",
+                             "--formula_cnf_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for CNFs")
+    parser_temp.add_argument("-f2ct",
+                             "--formula_2_cnf_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for 2-CNFs")
+    parser_temp.add_argument("-fhct",
+                             "--formula_horn_cnf_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for Horn CNFs")
+    parser_temp.add_argument("-figt",
+                             "--formula_incidence_graph_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for incidence graphs")
+    parser_temp.add_argument("-cct",
+                             "--circuit_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for circuits")
+    parser_temp.add_argument("-cnt",
+                             "--circuit_node_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for nodes")
+    parser_temp.add_argument("-cst",
+                             "--compiler_solver_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for solvers")
+    parser_temp.add_argument("-chpt",
+                             "--compiler_hypergraph_partitioning_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for hypergraph partitioning")
+    parser_temp.add_argument("-cbt",
+                             "--compiler_backbones_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for backbones")
+    parser_temp.add_argument("-ct",
+                             "--compiler_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for compilers")
 
-    return parser
+    return parser_temp
 
 
 if __name__ == "__main__":

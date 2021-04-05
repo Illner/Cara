@@ -59,7 +59,7 @@ class Compiler:
                  smooth: bool,
                  ub_factor: float,
                  preprocessing: bool,
-                 subsumed_threshold: Union[int, None],
+                 subsumption_threshold: Union[int, None],
                  new_cut_set_threshold: float,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  base_class_enum_set: Set[bs_enum.BaseClassEnum],
@@ -104,7 +104,7 @@ class Compiler:
 
         self.__hypergraph_partitioning = HypergraphPartitioning(cnf=self.__cnf,
                                                                 ub_factor=ub_factor,
-                                                                subsumed_threshold=subsumed_threshold,
+                                                                subsumption_threshold=subsumption_threshold,
                                                                 cache_enum=hp_cache_enum,
                                                                 software_enum=hp_software_enum,
                                                                 node_weight_enum=hp_node_weight_type_enum,

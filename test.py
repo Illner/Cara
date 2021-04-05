@@ -18,7 +18,7 @@
 # # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\formula\cnf\CNF_formulae\large_cnf_valid.cnf"
 #
 # # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\Handmade\LatinSquare\qg4-09.cnf"
-# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\sum.32.cnf"
+# path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\SAT benchmarks\D4\qif\binsearch.16.cnf"
 #
 # # path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\tests\compiler\compiler\CNF_formulae\s400.bench.cnf"
 #
@@ -53,14 +53,14 @@
 # print(circuit.str_node_type_dictionary())
 # # print(str(compiler.statistics.incidence_graph_statistics))
 # # print(circuit)
-#
-# # print(circuit.model_counting(assumption_set=set(), exist_quantification_set=set()))
+
+# print(circuit.model_counting(assumption_set=set(), exist_quantification_set=set()))
 
 
 from datetime import timedelta
 from experiment.hypergraph_partitioning_cache_experiment import HypergraphPartitioningCacheExperiment
 
-directory_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\temp\Cache"
+directory_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\temp\Cache\qif"
 timeout_experiment = timedelta(minutes=20)
 total_timeout_experiments = timedelta(hours=10)
 new_cut_set_threshold = 0.1

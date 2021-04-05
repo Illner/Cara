@@ -105,7 +105,7 @@ class ExperimentAbstract(ABC):
                             smooth=smooth,
                             ub_factor=ub_factor,
                             preprocessing=preprocessing,
-                            subsumed_threshold=subsumed_threshold,
+                            subsumption_threshold=subsumed_threshold,
                             new_cut_set_threshold=new_cut_set_threshold,
                             sat_solver_enum=sat_solver_enum,
                             base_class_enum_set=base_class_enum_set,

@@ -49,7 +49,7 @@ class HypergraphPartitioningTest(TestAbstract):
                                                                              cache_enum=cache_enum,
                                                                              variable_simplification_enum=variable_simplification_enum,
                                                                              ub_factor=0.10,
-                                                                             subsumed_threshold=None,
+                                                                             subsumption_threshold=None,
                                                                              software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
                                                                              node_weight_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                                                              hyperedge_weight_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
