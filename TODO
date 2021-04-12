@@ -1,1 +1,11 @@
 ) Component caching - subsumption
+) Validity
+) Model count - 2CNF, HornCNF -> exist set -> exception
+) Minimum cardinality - DualHorn
+) Minimizing
+) Exits set - model counting - remove
+) Branching heuristics
+) Candidates for implicit BCP
+) Subsumption
+) Matched formulae
+) Dual Horn - preferring 1
