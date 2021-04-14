@@ -1,5 +1,4 @@
 # Import
-import mmh3
 import warnings
 from io import StringIO
 from formula.cnf import Cnf
@@ -45,8 +44,8 @@ class Circuit:
 
     Private Dict<int, NodeAbstract> literal_unique_node_cache       # key: a literal, value: a node
     Private List<NodeAbstract> constant_unique_node_cache           # [False: node, True: node]
-    Private Dict<int, NodeAbstract> and_unique_node_cache           # key = hash, value: a node
-    Private Dict<int, NodeAbstract> or_unique_node_cache            # key = hash, value: a node
+    Private Dict<str, NodeAbstract> and_unique_node_cache           # key = hash, value: a node
+    Private Dict<str, NodeAbstract> or_unique_node_cache            # key = hash, value: a node
     """
 
     def __init__(self, dimacs_nnf_file_path: str = None, circuit_name: str = "Circuit"):
@@ -61,8 +60,8 @@ class Circuit:
 
         self.__literal_unique_node_cache: Dict[int, NodeAbstract] = dict()
         self.__constant_unique_node_cache: List[Union[NodeAbstract, None]] = [None, None]
-        self.__and_unique_node_cache: Dict[int, NodeAbstract] = dict()
-        self.__or_unique_node_cache: Dict[int, NodeAbstract] = dict()
+        self.__and_unique_node_cache: Dict[str, NodeAbstract] = dict()
+        self.__or_unique_node_cache: Dict[str, NodeAbstract] = dict()
 
         # The file with the circuit was given
         if dimacs_nnf_file_path is not None:
@@ -483,7 +482,7 @@ class Circuit:
         from_node._remove_child(to_node, call_update)
 
     @staticmethod
-    def __generate_key_cache(child_id_set: Set[int]) -> int:
+    def __generate_key_cache(child_id_set: Set[int]) -> str:
         """
         Generate a key for caching based on the children set.
         Cache: and_unique_node_cache, or_unique_node_cache
@@ -493,9 +492,8 @@ class Circuit:
 
         child_id_sorted_list = SortedList(child_id_set)
         key_string = child_id_sorted_list.str_delimiter("-")
-        key = mmh3.hash(key_string)
 
-        return key
+        return key_string
     # endregion
 
     # region Public method
@@ -614,6 +612,10 @@ class Circuit:
         if not len(child_id_set):
             return self.create_constant_leaf(True, use_unique_node_cache)
 
+        # Only one child was given -> AND node is not needed
+        if len(child_id_set) == 1:
+            return list(child_id_set)[0]
+
         # Cache
         key_cache = self.__generate_key_cache(child_id_set)
         if use_unique_node_cache and (key_cache in self.__and_unique_node_cache):
@@ -650,6 +652,10 @@ class Circuit:
         # No child was given -> constant leaf (FALSE)
         if not len(child_id_set):
             return self.create_constant_leaf(False, use_unique_node_cache)
+
+        # Only one child was given -> OR node is not needed
+        if len(child_id_set) == 1:
+            return list(child_id_set)[0]
 
         # Cache
         key_cache = self.__generate_key_cache(child_id_set)
@@ -840,27 +846,42 @@ class Circuit:
 
         return not self.is_satisfiable(assumption_set, exist_quantification_set, use_cache)
 
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], use_cache: bool = True) -> int:
         """
-        Count the number of models with the assumption set and existential quantification set
-        Requirement: decomposability, determinism, smooth
+        Count the number of models with the assumption set
+        Requirement: decomposability, determinism, smoothness
         :param assumption_set: the assumption set
-        :param exist_quantification_set: the existential quantification set
         :param use_cache: True if the cache can be used
         :return: the number of models
-        :raises AssumptionSetAndExistentialQuantificationSetAreNotDisjointException, AssumptionSetContainsComplementLiteralsException: if the assumption set or existential quantification set is not valid
+        :raises AssumptionSetContainsComplementLiteralsException: if the assumption set is not valid
         :raises RootOfCircuitIsNotSetUpException: if the root of the circuit is not set
-        :raises SetContainsLiteralsButOnlyVariablesAreAllowedException: if the existential quantification set contains a literal instead of variables
         """
 
         # The root of the circuit is not set
         if not self.is_root_set():
             raise c_exception.RootOfCircuitIsNotSetException()
 
-        self.__check_assumption_set_and_exist_quantification_set(assumption_set, exist_quantification_set)
+        self.__check_assumption_set_and_exist_quantification_set(assumption_set, set())
 
         self.smooth()
-        return self.__root.model_counting(assumption_set, exist_quantification_set, use_cache)
+        return self.__root.model_counting(assumption_set, use_cache)
+
+    def is_valid(self, assumption_set: Set[int], use_cache: bool = True) -> bool:
+        """
+        Check if the formula is valid with the assumption set
+        Requirement: decomposability, determinism, smoothness
+        :param assumption_set: the assumption set
+        :param use_cache: True if the cache can be used
+        :return: True if the formula is valid. Otherwise, False is returned.
+        :raises AssumptionSetContainsComplementLiteralsException: if the assumption set is not valid
+        :raises RootOfCircuitIsNotSetUpException: if the root of the circuit is not set
+        """
+
+        number_of_models = self.model_counting(assumption_set, use_cache)
+
+        restricted_assumption_set_temp = self.__root._create_restricted_assumption_set(assumption_set)
+
+        return number_of_models == 2**(self.number_of_variables - len(restricted_assumption_set_temp))
 
     def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
         """

@@ -1,5 +1,4 @@
 # Import
-import mmh3
 import random
 import networkx as nx
 from networkx.classes.graph import Graph
@@ -520,18 +519,17 @@ class IncidenceGraph(Graph):
             return clause_id_set
 
         # Multi-occurrent clauses are not kept
-        cache: Dict[int, int] = dict()
+        cache: Dict[str, int] = dict()
         clause_id_set_without_multi_occurrence = set()
 
         for clause_id in clause_id_set:
             clause_key_string = ",".join(map(str, sorted(self.get_clause(clause_id))))
-            clause_key = mmh3.hash(clause_key_string)
 
-            if clause_key not in cache:
-                cache[clause_key] = clause_id
+            if clause_key_string not in cache:
+                cache[clause_key_string] = clause_id
                 clause_id_set_without_multi_occurrence.add(clause_id)
             else:
-                value = cache[clause_key]
+                value = cache[clause_key_string]
 
                 # determinism
                 if value < clause_id:
@@ -539,7 +537,7 @@ class IncidenceGraph(Graph):
 
                 clause_id_set_without_multi_occurrence.remove(value)
                 clause_id_set_without_multi_occurrence.add(clause_id)
-                cache[clause_key] = clause_id
+                cache[clause_key_string] = clause_id
 
         self.__statistics.clause_id_set.stop_stopwatch()    # timer (stop)
         return clause_id_set_without_multi_occurrence
@@ -828,9 +826,9 @@ class IncidenceGraph(Graph):
     # endregion
 
     # region Subsumption
-    def subsumption(self) -> Set[int]:
+    def subsumption_variable(self) -> Set[int]:
         """
-        Return a set of subsumed clauses
+        Return a set of subsumed clauses concerning only variables
         :return: a set of subsumed clauses
         """
 

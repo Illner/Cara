@@ -8,10 +8,9 @@ Python 3.6+
 * <a href="https://pypi.org/project/sortedcontainers/" target="_blank">sortedcontainers</a> 2.3.0 (Windows / Linux / Mac)
 * <a href="https://pypi.org/project/python-sat/" target="_blank">python-sat</a> 0.1.6.dev11 (Windows / Linux / Mac)
 * <a href="https://pypi.org/project/hypernetx/" target="_blank">hypernetx</a> 0.3.7 (Windows / Linux / Mac)
-* <a href="https://pypi.org/project/mmh3/" target="_blank">mmh3</a> 3.0.0 (Windows / Linux / Mac)
 * <a href="https://pypi.org/project/matplotlib/" target="_blank">matplotlib</a> 3.3.4 (Windows / Linux / Mac)
 
-You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11 hypernetx==0.3.7 matplotlib==3.3.4 mmh3==3.0.0**
+You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11 hypernetx==0.3.7 matplotlib==3.3.4**
 
 ## Software
 * <a href="http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview" target="_blank">hMETIS</a> 1.5.3 (Windows / Linux)
@@ -22,7 +21,7 @@ You can install all required packages to central user packages repository using 
 - [ ] PaToH - Mac, Linux
 
 ## Arguments
-Example: *cara -s -bc TWO_CNF - bc RENAMABLE_HORN_CNF input_file output_file*
+Example: *cara -s -bc TWO_CNF -bc RENAMABLE_HORN_CNF input_file output_file*
 
 positional arguments:
 * **input_file**

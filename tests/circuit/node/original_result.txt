@@ -209,12 +209,6 @@ Assumption: -1, cache: False, count of models: 4
 Assumption: 1, cache: False, count of models: 4
 Assumption: -2 -1, cache: False, count of models: 2
 Assumption: 1 2, cache: False, count of models: 2
-Exist quantification: 1, cache: False, count of models: 8
-Exist quantification: 1 2, cache: False, count of models: 8
-Exist quantification: 1 2 3, cache: False, count of models: 8
-Assumption: -1, exist quantification: 2 3, cache: False, count of models: 4
-Assumption: 1, exist quantification: 2 3, cache: False, count of models: 4
-Assumption: 1 2, exist quantification: 3 4, cache: False, count of models: 2
 Node: 0, cache: True, count of models: 1
 Node: 1, cache: True, count of models: 1
 Node: 2, cache: True, count of models: 1
@@ -244,12 +238,6 @@ Assumption: -1, cache: True, count of models: 4
 Assumption: 1, cache: True, count of models: 4
 Assumption: -2 -1, cache: True, count of models: 2
 Assumption: 1 2, cache: True, count of models: 2
-Exist quantification: 1, cache: True, count of models: 8
-Exist quantification: 1 2, cache: True, count of models: 8
-Exist quantification: 1 2 3, cache: True, count of models: 8
-Assumption: -1, exist quantification: 2 3, cache: True, count of models: 4
-Assumption: 1, exist quantification: 2 3, cache: True, count of models: 4
-Assumption: 1 2, exist quantification: 3 4, cache: True, count of models: 2
 
 Model counting (negative)
 

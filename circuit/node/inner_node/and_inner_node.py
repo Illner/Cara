@@ -92,7 +92,7 @@ class AndInnerNode(InnerNodeAbstract):
 
         return result
 
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], use_cache: bool = True) -> int:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Model counting is not supported if the circuit is not decomposable.")
@@ -106,19 +106,18 @@ class AndInnerNode(InnerNodeAbstract):
             raise c_exception.CircuitIsNotSmoothException("Model counting is not supported if the circuit is not smooth.")
 
         restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set)
-        restricted_exist_quantification_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set)
 
         # Cache
         key = ""    # initialization
         if use_cache:
-            key = self._generate_key_cache(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
+            key = self._generate_key_cache(restricted_assumption_set_temp, set())
             value = self._get_model_counting_cache(key)
             if value is not None:
                 return value
 
         number_of_models = 1
         for child in self._child_set:
-            number_of_models *= child.model_counting(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
+            number_of_models *= child.model_counting(restricted_assumption_set_temp)
 
         # Cache
         if use_cache:

@@ -253,6 +253,8 @@ class Component:
         if (bs_enum.BaseClassEnum.TWO_CNF in self.__base_class_enum_set) and self.__incidence_graph.is_2_cnf():
             two_cnf = self.__incidence_graph.convert_to_2_cnf()
 
+            self.__statistics.component_statistics.two_cnf_formula_length.add_count(two_cnf.formula_length)     # counter
+
             node_id_cache = self.__circuit.create_2_cnf_leaf(two_cnf)
             node_id = self.__circuit.create_and_node({node_id_cache}.union(implied_literal_id_set))
 
@@ -267,6 +269,8 @@ class Component:
             renaming_function_temp = self.__incidence_graph.is_renamable_horn_formula()
             if renaming_function_temp is not None:
                 horn_cnf = self.__incidence_graph.convert_to_horn_cnf(renaming_function_temp)
+
+                self.__statistics.component_statistics.renamable_horn_cnf_formula_length.add_count(horn_cnf.formula_length)     # counter
 
                 node_id_cache = self.__circuit.create_renamable_horn_cnf_leaf(horn_cnf, renaming_function_temp)
                 node_id = self.__circuit.create_and_node({node_id_cache}.union(implied_literal_id_set))

@@ -352,22 +352,13 @@ class NodeTest(TestAbstract):
 
             for cache in range(2):
                 for node in node_list:
-                    result = "\n".join((result, f"Node: {node.id}, cache: {bool(cache)}, count of models: {node.model_counting(set(), set(), use_cache=bool(cache))}"))
+                    result = "\n".join((result, f"Node: {node.id}, cache: {bool(cache)}, count of models: {node.model_counting(set(), use_cache=bool(cache))}"))
 
                 # Assumption
                 assumption_list_temp = [{-1}, {1}, {-1, -2}, {1, 2}]
                 for assumption in assumption_list_temp:
-                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, cache: {bool(cache)}, count of models: {root.model_counting(assumption, set(), use_cache=bool(cache))}"))
+                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, cache: {bool(cache)}, count of models: {root.model_counting(assumption, use_cache=bool(cache))}"))
 
-                # Exist quantification
-                exist_quantification_list_temp = [{1}, {1, 2}, {1, 2, 3}]
-                for exist_quantification in exist_quantification_list_temp:
-                    result = "\n".join((result, f"Exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, count of models: {root.model_counting(set(), exist_quantification, use_cache=bool(cache))}"))
-
-                # Assumption and exist quantification
-                list_temp = [({-1}, {2, 3}), ({1}, {2, 3}), ({1, 2}, {3, 4})]
-                for assumption, exist_quantification in list_temp:
-                    result = "\n".join((result, f"Assumption: {SortedList(assumption)}, exist quantification: {SortedList(exist_quantification)}, cache: {bool(cache)}, count of models: {root.model_counting(assumption, exist_quantification, use_cache=bool(cache))}"))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
@@ -389,7 +380,7 @@ class NodeTest(TestAbstract):
 
                 node_list = circuit()
                 root = node_list[-1]
-                root.model_counting(set(), set())
+                root.model_counting(set())
             except c_exception.CaraException as err:
                 result = "\n".join((result, str(err)))
 

@@ -41,16 +41,12 @@ class LiteralLeaf(LeafAbstract):
 
         return True
 
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], use_cache: bool = True) -> int:
         # The assumption set
         if self.literal in assumption_set:
             return 1
         if -self.literal in assumption_set:
             return 0
-
-        # The exist quantification set
-        if self.variable in exist_quantification_set:
-            return 1
 
         return 1
 

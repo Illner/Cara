@@ -71,7 +71,7 @@ class CompilerTest(TestAbstract):
                                                             hp_limit_number_of_clauses_cache=(None, 200),
                                                             hp_limit_number_of_variables_cache=(None, 200))
                                         circuit = compiler.create_circuit()
-                                        number_of_models = circuit.model_counting(set(), set())
+                                        number_of_models = circuit.model_counting(set())
                                         real_number_of_models = int(cnf.comments)
 
                                         if number_of_models == real_number_of_models:

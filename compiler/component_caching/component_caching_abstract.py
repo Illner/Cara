@@ -14,7 +14,7 @@ class ComponentCachingAbstract(ABC):
     """
 
     """
-    Private Dict<int, int> cache        # key: hash, value: an identifier of a node
+    Private Dict<str, int> cache        # key: hash, value: an identifier of a node
     
     Protected str delimiter
     Protected str end_delimiter
@@ -22,7 +22,7 @@ class ComponentCachingAbstract(ABC):
     """
 
     def __init__(self):
-        self.__cache: Dict[int, int] = dict()
+        self.__cache: Dict[str, int] = dict()
 
         self._delimiter = ","
         self._end_delimiter = f"{self._delimiter}0{self._delimiter}"
@@ -30,7 +30,7 @@ class ComponentCachingAbstract(ABC):
 
     # region Abstract method
     @abstractmethod
-    def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[int, None]:
+    def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[str, None]:
         """
         Generate a key for caching.
         None is returned if the formula represented by the incidence graph is not cacheable.
@@ -42,7 +42,7 @@ class ComponentCachingAbstract(ABC):
     # endregion
 
     # region Public method
-    def add(self, key: Union[int, None], node_id: int) -> None:
+    def add(self, key: Union[str, None], node_id: int) -> None:
         """
         Add a new record to the cache.
         If the key is None, nothing happens.
@@ -58,7 +58,7 @@ class ComponentCachingAbstract(ABC):
 
         self.__cache[key] = node_id
 
-    def get(self, key: Union[int, None]) -> Union[int, None]:
+    def get(self, key: Union[str, None]) -> Union[int, None]:
         """
         Return the value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
@@ -72,7 +72,7 @@ class ComponentCachingAbstract(ABC):
 
         return self.__cache[key]
 
-    def exist(self, key: Union[int, None]) -> bool:
+    def exist(self, key: Union[str, None]) -> bool:
         """
         Check if a record with the key exists in the cache
         :param key: the key

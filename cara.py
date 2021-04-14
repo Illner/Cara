@@ -46,7 +46,7 @@ def main(main_args):
                             hp_limit_number_of_variables_cache=(None, main_args.hp_limit_number_of_variables),
                             cut_set_try_cache=main_args.cut_set_try_cache,
                             new_cut_set_threshold_reduction=main_args.new_cut_set_threshold_reduction)
-        print("The formula has been processed!")
+        print("The formula has been processed!\n")
 
         print("Compiling...")
         compiler.create_circuit()
@@ -54,8 +54,9 @@ def main(main_args):
 
         circuit = compiler.circuit
         statistics = compiler.statistics
-        print(f"Time: {statistics.compiler_statistics.get_time()}")
+        print(f"Time: {statistics.compiler_statistics.get_time()}\n")
 
+        print("Generating files...")
         # Circuit
         with open(main_args.output_file, "w", encoding="utf-8") as file:
             file.write(str(circuit))

@@ -54,7 +54,7 @@ class RenamableHornCnfLeaf(LeafAbstract):
 
         return is_satisfiable
 
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], use_cache: bool = True) -> int:
         restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set)
         restricted_renamed_assumption_set_temp = self.__rename_assignment(restricted_assumption_set_temp)
 

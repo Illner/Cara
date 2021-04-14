@@ -25,6 +25,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter decision_variable
     Private StatisticsComponentCounter recompute_cut_set
     Private StatisticsComponentCounter cut_set_try_cache_cached
+    Private StatisticsComponentCounter two_cnf_formula_length
+    Private StatisticsComponentCounter renamable_horn_cnf_formula_length
     """
 
     def __init__(self):
@@ -71,6 +73,12 @@ class ComponentStatistics(StatisticsTemplateAbstract):
 
         self.__cut_set_try_cache_cached: StatisticsComponentCounter = StatisticsComponentCounter("cut set try cache - cached")
         self._component_list.append(self.__cut_set_try_cache_cached)
+
+        self.__two_cnf_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("2-CNF - formula length")
+        self._component_list.append(self.__two_cnf_formula_length)
+
+        self.__renamable_horn_cnf_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("renamable Horn formula - formula length")
+        self._component_list.append(self.__renamable_horn_cnf_formula_length)
 
     # region Property
     @property
@@ -128,4 +136,12 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def cut_set_try_cache_cached(self) -> StatisticsComponentCounter:
         return self.__cut_set_try_cache_cached
+
+    @property
+    def two_cnf_formula_length(self) -> StatisticsComponentCounter:
+        return self.__two_cnf_formula_length
+
+    @property
+    def renamable_horn_cnf_formula_length(self) -> StatisticsComponentCounter:
+        return self.__renamable_horn_cnf_formula_length
     # endregion

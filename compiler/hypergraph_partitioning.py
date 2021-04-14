@@ -1,6 +1,5 @@
 # Import
 import os
-import mmh3
 import warnings
 import subprocess
 from pathlib import Path
@@ -40,7 +39,7 @@ class HypergraphPartitioning:
     Private Dict<int, int> node_weight_dictionary               # key: node = clause, value: the weight of the clause
     Private Dict<int, int> hyperedge_weight_dictionary          # key: edge = variable, value: the weight of the variable
     
-    Private Dict<int, Set<int>> cut_set_cache                   # key: hash, value: a cut set
+    Private Dict<str, Set<int>> cut_set_cache                   # key: hash, value: a cut set
     
     Private HypergraphPartitioningStatistics statistics
     
@@ -86,7 +85,7 @@ class HypergraphPartitioning:
         self.__hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum = hyperedge_weight_enum
         self.__variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum = variable_simplification_enum
 
-        self.__cut_set_cache: Dict[int, Set[int]] = dict()
+        self.__cut_set_cache: Dict[str, Set[int]] = dict()
 
         # limit_number_of_clauses_cache
         lnocc_l_temp = limit_number_of_clauses_cache[0]
@@ -316,7 +315,7 @@ class HypergraphPartitioning:
     # endregion
 
     # region Cache
-    def __add_cut_set_cache(self, key: int, cut_set: Set[int]) -> None:
+    def __add_cut_set_cache(self, key: str, cut_set: Set[int]) -> None:
         """
         Add a new record to the cache.
         If the record already exists in the cache, the value of the record will be updated.
@@ -328,7 +327,7 @@ class HypergraphPartitioning:
 
         self.__cut_set_cache[key] = cut_set
 
-    def __get_cut_set_cache(self, key: int) -> Union[Set[int], None]:
+    def __get_cut_set_cache(self, key: str) -> Union[Set[int], None]:
         """
         Return a value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
@@ -352,7 +351,7 @@ class HypergraphPartitioning:
 
         self.__cut_set_cache = dict()
 
-    def __generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[int, Tuple[Dict[int, int], Dict[int, int]]]:
+    def __generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[str, Tuple[Dict[int, int], Dict[int, int]]]:
         """
         Generate a key for caching
         Variable property: occurrence, mean, variance (optional)
@@ -445,10 +444,9 @@ class HypergraphPartitioning:
             variable_clause_list.append(variable_sorted_list)
 
         key_string = ",0,".join([",".join(map(str, variable_clause)) for variable_clause in sorted(variable_clause_list)])
-        key = mmh3.hash(key_string)
 
         self.__statistics.generate_key_cache.stop_stopwatch()       # timer (stop)
-        return key, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
+        return key_string, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
     # endregion
 
     # region hMETIS.exe
@@ -639,7 +637,7 @@ class HypergraphPartitioning:
         self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
         return cut_set
 
-    def check_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[Set[int], None], Union[Tuple[int, Tuple[Dict[int, int], Dict[int, int]]], None]]:
+    def check_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[Set[int], None], Union[Tuple[str, Tuple[Dict[int, int], Dict[int, int]]], None]]:
         """
         Generate a key for caching based on the incidence graph and check if a cut set exists in the cache
         :return: (cut set, key, (mapping, mapping))
@@ -675,7 +673,7 @@ class HypergraphPartitioning:
 
         # Subsumption
         if (self.__subsumption_threshold is None) or (incidence_graph.number_of_clauses() <= self.__subsumption_threshold):
-            subsumed_clause_set = incidence_graph.subsumption()
+            subsumed_clause_set = incidence_graph.subsumption_variable()
             incidence_graph.remove_subsumed_clause_set(subsumed_clause_set)
 
     def cache_can_be_used(self, incidence_graph: IncidenceGraph) -> bool:

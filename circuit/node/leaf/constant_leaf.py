@@ -30,7 +30,7 @@ class ConstantLeaf(LeafAbstract):
         else:
             return False
 
-    def model_counting(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], use_cache: bool = True) -> int:
         if self.constant:
             return 1
         else:

@@ -1,5 +1,4 @@
 # Import
-import mmh3
 from formula.cnf import Cnf
 from formula.pysat_cnf import PySatCnf
 from other.sorted_list import SortedList
@@ -34,7 +33,7 @@ class Solver:
     Private Solver sat_main                     # main SAT solver
     Private Solver sat_unit_propagation         # SAT solver for unit propagation
 
-    Private Dict<int, Dict<int, Tuple<Set<int>, Set<int>>>> implicit_bcp_dictionary_cache   # key: hash, value: implicit_bcp_dictionary
+    Private Dict<str, Dict<int, Tuple<Set<int>, Set<int>>>> implicit_bcp_dictionary_cache   # key: hash, value: implicit_bcp_dictionary
     """
 
     def __init__(self, cnf: Cnf,
@@ -68,7 +67,7 @@ class Solver:
 
         # Cache
         self.__implicit_bcp_dictionary_cache: \
-            Dict[int, Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]] = dict()
+            Dict[str, Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]] = dict()
 
         # Create a SAT solver - unit propagation
         self.__sat_unit_propagation = None
@@ -323,7 +322,7 @@ class Solver:
 
     # region Static method
     @staticmethod
-    def __generate_key_cache(assignment_list: List[int], variable_restriction_set: Union[Set[int], None]) -> int:
+    def __generate_key_cache(assignment_list: List[int], variable_restriction_set: Union[Set[int], None]) -> str:
         """
         Generate a key for caching
         Cache: implicit_bcp_dictionary_cache
@@ -339,16 +338,15 @@ class Solver:
             variable_restriction_sorted_list = SortedList(variable_restriction_set)
 
         key_string = "0".join((variable_restriction_sorted_list.str_delimiter(","), assignment_sorted_list.str_delimiter(",")))
-        key = mmh3.hash(key_string)
 
-        return key
+        return key_string
     # endregion
 
     # region Private method
     def __create_assumption_list(self, assignment_list: List[int]) -> List[int]:
         return list(self.__first_implied_literal_set.union(set(assignment_list)))
 
-    def __add_implicit_bcp_dictionary_cache(self, key: int, implicit_bcp_dictionary) -> None:
+    def __add_implicit_bcp_dictionary_cache(self, key: str, implicit_bcp_dictionary) -> None:
         """
         Add a new record to the cache.
         If the record already exists in the cache, the value of the record will be updated.
@@ -359,7 +357,7 @@ class Solver:
 
         self.__implicit_bcp_dictionary_cache[key] = implicit_bcp_dictionary
 
-    def __get_implicit_bcp_dictionary_cache(self, key: int) -> \
+    def __get_implicit_bcp_dictionary_cache(self, key: str) -> \
             Tuple[bool, Union[Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]], None]]:
         """
         Return a value of the record with the key from the cache.

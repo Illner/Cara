@@ -80,7 +80,7 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
         self.__renamable_horn_formula_ratio: StatisticsComponentCounter = StatisticsComponentCounter("renamable Horn formula - ratio")
         self._component_list.append(self.__renamable_horn_formula_ratio)
 
-        self.__two_cnf_ratio: StatisticsComponentCounter = StatisticsComponentCounter("2 CNF - ratio")
+        self.__two_cnf_ratio: StatisticsComponentCounter = StatisticsComponentCounter("2-CNF - ratio")
         self._component_list.append(self.__two_cnf_ratio)
 
         self.__convert_to_cnf: StatisticsComponentTimer = StatisticsComponentTimer("convert - CNF")

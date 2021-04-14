@@ -335,14 +335,17 @@ class CircuitTest(TestAbstract):
                 c, _ = circuit()
                 operation_set = [c.is_satisfiable, c.clause_entailment, c.model_counting, c.minimum_default_cardinality]
 
-                for operation in operation_set:
+                for i, operation in enumerate(operation_set):
                     result = "\n".join((result, operation.__name__))
 
                     for assumption_set, exist_quantification_set in sets:
                         try:
                             result = "\n".join((result, f"assumption set: {SortedList(assumption_set)}, exist quantification set: {SortedList(exist_quantification_set)}"))
 
-                            temp = operation(assumption_set, exist_quantification_set)
+                            if i == 2:  # model counting
+                                temp = operation(assumption_set)
+                            else:
+                                temp = operation(assumption_set, exist_quantification_set)
 
                             result = "\n".join((result, str(temp)))
                         except c_exception.CaraException as err:
@@ -451,7 +454,7 @@ class CircuitTest(TestAbstract):
             # Operations
             result = "\n".join((result, f"Satisfiable: {circuit.is_satisfiable(set(), set())}"))
             result = "\n".join((result, f"Clause entailment: {circuit.clause_entailment(set(), set())}"))
-            result = "\n".join((result, f"Model counting: {circuit.model_counting(set(), set())}"))
+            result = "\n".join((result, f"Model counting: {circuit.model_counting(set())}"))
             result = "\n".join((result, f"Minimum default-cardinality: {circuit.minimum_default_cardinality({1}, set())}", ""))
 
             # Smooth
