@@ -67,7 +67,7 @@ def main(main_args):
             file.write(str(statistics))
 
         print("The files have been generated!")
-    except (c_exception) as err:
+    except (c_exception.SomethingWrongException) as err:
         print(f"An error has occurred!\n{str(err)}")
 
 
