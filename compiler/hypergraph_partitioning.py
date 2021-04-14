@@ -4,6 +4,7 @@ import warnings
 import subprocess
 from pathlib import Path
 from formula.cnf import Cnf
+from datetime import datetime
 import other.environment as env
 from compiler.solver import Solver
 from typing import Set, Dict, List, Tuple, Union
@@ -48,14 +49,16 @@ class HypergraphPartitioning:
     Private HypergraphPartitioningNodeWeightEnum node_weight_enum
     Private HypergraphPartitioningHyperedgeWeightEnum hyperedge_weight_enum
     Private HypergraphPartitioningVariableSimplificationEnum variable_simplification_enum
+    
+    Private Path input_file_hmetis_path
+    Private Path output_file_1_hmetis_path
+    Private Path output_file_2_hmetis_path
     """
 
     # Static variable - Path
     __TEMP_DIRECTORY_PATH = Path(os.path.join(os.getcwd(), "temp"))
-    __INPUT_FILE_EXE_HMETIS_PATH = Path(os.path.join(__TEMP_DIRECTORY_PATH, "input_file_hypergraph.graph"))
-    __OUTPUT_FILE_1_EXE_HMETIS_PATH = Path(str(__INPUT_FILE_EXE_HMETIS_PATH) + ".part.1")
-    __OUTPUT_FILE_2_EXE_HMETIS_PATH = Path(str(__INPUT_FILE_EXE_HMETIS_PATH) + ".part.2")
-    __WIN_PROGRAM_EXE_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe"))
+    __WIN_PROGRAM_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "win", "shmetis.exe"))
+    __LINUX_PROGRAM_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "linux", "shmetis"))
 
     def __init__(self, cnf: Cnf,
                  ub_factor: float,
@@ -114,7 +117,25 @@ class HypergraphPartitioning:
         self.__check_files_and_directories()
         self.__set_static_weights(initial_incidence_graph=cnf.get_incidence_graph())
 
+        # hMETIS
+        if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:
+            self.__create_hmetis_paths()
+
     # region Private method
+    def __create_hmetis_paths(self) -> None:
+        """
+        Create paths
+        Paths: input_file, output_file_1, output_file_2
+        :return: None
+        """
+
+        now = str(datetime.now().time())
+        now_postfix = now.replace(":", "_").replace(".", "_").replace(" ", "_")
+
+        self.__input_file_hmetis_path = Path(os.path.join(self.__TEMP_DIRECTORY_PATH, f"hmetis_hypergraph_{now_postfix}.graph"))
+        self.__output_file_1_hmetis_path = Path(str(self.__input_file_hmetis_path) + ".part.1")
+        self.__output_file_2_hmetis_path = Path(str(self.__input_file_hmetis_path) + ".part.2")
+
     def __check_files_and_directories(self) -> None:
         """
         Check if all necessary files and directories exist
@@ -123,31 +144,30 @@ class HypergraphPartitioning:
         :raises SoftwareIsNotSupportedOnSystemException: if the chosen software is not supported on the system
         """
 
-        # Windows
-        if env.is_windows():
-            # hMETIS
-            if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:
-                HypergraphPartitioning.__TEMP_DIRECTORY_PATH.mkdir(exist_ok=True)
+        # hMETIS
+        if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:
+            HypergraphPartitioning.__TEMP_DIRECTORY_PATH.mkdir(exist_ok=True)
 
-                # The exe has not been found
-                if not HypergraphPartitioning.__WIN_PROGRAM_EXE_HMETIS_PATH.exists():
-                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__WIN_PROGRAM_EXE_HMETIS_PATH)
+            # Windows
+            if env.is_windows():
+                # The exe file has not been found
+                if not HypergraphPartitioning.__WIN_PROGRAM_HMETIS_PATH.exists():
+                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__WIN_PROGRAM_HMETIS_PATH)
+
                 return
 
+            # Linux
+            if env.is_linux():
+                # The file has not been found
+                if not HypergraphPartitioning.__LINUX_PROGRAM_HMETIS_PATH.exists():
+                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__LINUX_PROGRAM_HMETIS_PATH)
+
+                return
+
+            # Mac or undefined
             raise hp_exception.SoftwareIsNotSupportedOnSystemException(self.__software_enum.name)
 
-        # Linux
-        elif env.is_linux():
-            warnings.warn("No software for hypergraph partitioning is used!")
-            return  # TODO
-
-        # Mac
-        elif env.is_mac():
-            warnings.warn("No software for hypergraph partitioning is used!")
-            return  # TODO
-
-        # Undefined
-        raise c_exception.FunctionNotImplementedException("check_files_and_directories", f"not implemented for this OS ({env.get_os().name})")
+        warnings.warn("No software for hypergraph partitioning is used!")
 
     def __variable_simplification(self, solver: Solver, assignment_list: List[int]) -> Dict[int, Set[int]]:
         """
@@ -449,10 +469,10 @@ class HypergraphPartitioning:
         return key_string, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
     # endregion
 
-    # region hMETIS.exe
-    def __create_hypergraph_hmetis_exe(self, incidence_graph: IncidenceGraph) -> Tuple[str, Dict[int, int]]:
+    # region hMETIS
+    def __create_hypergraph_hmetis(self, incidence_graph: IncidenceGraph) -> Tuple[str, Dict[int, int]]:
         """
-        Create an input file string with the hypergraph for hMETIS.exe based on the incidence graph
+        Create an input file string with the hypergraph for hMETIS based on the incidence graph
         :param incidence_graph: an incidence graph
         :return: (file string, mapping from node_id (file) to clause_id (CNF))
         """
@@ -496,45 +516,48 @@ class HypergraphPartitioning:
 
         return string_result, node_id_clause_id_dictionary
 
-    def __get_cut_set_hmetis_exe(self, incidence_graph: IncidenceGraph) -> Set[int]:
+    def __get_cut_set_hmetis(self, incidence_graph: IncidenceGraph, win: bool) -> Set[int]:
         """
-        Compute a cut set using hMETIS.exe
+        Compute a cut set using hMETIS
         :param incidence_graph: an incidence graph
+        :param win: True for Windows, False for Linux
         :return: a cut set of the hypergraph
         """
 
-        file_string, node_id_clause_id_dictionary = self.__create_hypergraph_hmetis_exe(incidence_graph)
+        file_string, node_id_clause_id_dictionary = self.__create_hypergraph_hmetis(incidence_graph)
 
         # Delete temp files
-        HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
-        HypergraphPartitioning.__OUTPUT_FILE_1_EXE_HMETIS_PATH.unlink(missing_ok=True)
-        HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        self.__input_file_hmetis_path.unlink(missing_ok=True)
+        self.__output_file_1_hmetis_path.unlink(missing_ok=True)
+        self.__output_file_2_hmetis_path.unlink(missing_ok=True)
 
         # Save the input file
-        with open(HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH, "w", encoding="utf8") as input_file:
+        with open(self.__input_file_hmetis_path, "w", encoding="utf8") as input_file:
             input_file.write(file_string)
 
+        program_hmetis_path_temp = HypergraphPartitioning.__WIN_PROGRAM_HMETIS_PATH if win else HypergraphPartitioning.__LINUX_PROGRAM_HMETIS_PATH
+
         devnull = open(os.devnull, 'w')
-        subprocess.run([HypergraphPartitioning.__WIN_PROGRAM_EXE_HMETIS_PATH,
-                        HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH,
+        subprocess.run([program_hmetis_path_temp,
+                        self.__input_file_hmetis_path,
                         str(2), str(100 * self.__ub_factor)],
                        stdout=devnull)
 
         # A cut set does not exist (because of balance etc.)
-        if HypergraphPartitioning.__OUTPUT_FILE_1_EXE_HMETIS_PATH.exists():
-            HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
-            HypergraphPartitioning.__OUTPUT_FILE_1_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        if self.__output_file_1_hmetis_path.exists():
+            self.__input_file_hmetis_path.unlink(missing_ok=True)
+            self.__output_file_1_hmetis_path.unlink(missing_ok=True)
 
             return set()
 
         # The output file has not been generated => an error occurred
-        if not HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH.exists():
+        if not self.__output_file_2_hmetis_path.exists():
             raise hp_exception.SomethingWrongException("the output file from hMETIS.exe has not been generated => an error occurred")
 
         # Get the cut set
         variable_partition_0_set = set()
         variable_partition_1_set = set()
-        with open(HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH, "r", encoding="utf-8") as output_file:
+        with open(self.__output_file_2_hmetis_path, "r", encoding="utf-8") as output_file:
             line_id = 0
 
             while True:
@@ -563,8 +586,8 @@ class HypergraphPartitioning:
         cut_set = variable_partition_0_set.intersection(variable_partition_1_set)
 
         # Delete temp files
-        HypergraphPartitioning.__INPUT_FILE_EXE_HMETIS_PATH.unlink(missing_ok=True)
-        HypergraphPartitioning.__OUTPUT_FILE_2_EXE_HMETIS_PATH.unlink(missing_ok=True)
+        self.__input_file_hmetis_path.unlink(missing_ok=True)
+        self.__output_file_2_hmetis_path.unlink(missing_ok=True)
 
         return cut_set
     # endregion
@@ -616,9 +639,10 @@ class HypergraphPartitioning:
 
         cut_set = set()
 
-        # Windows -> hMETIS.exe
-        if env.is_windows():
-            cut_set = self.__get_cut_set_hmetis_exe(incidence_graph)
+        # hMETIS
+        if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:
+            win_temp = True if env.is_windows() else False
+            cut_set = self.__get_cut_set_hmetis(incidence_graph, win=win_temp)
 
         # A cut set does not exist (because of balance etc.) => a variable with the most occurrences is selected
         if not cut_set:
@@ -634,6 +658,7 @@ class HypergraphPartitioning:
 
         self.remove_reduction_incidence_graph(incidence_graph)
 
+        self.__statistics.cut_set_size.add_count(len(cut_set))  # counter
         self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
         return cut_set
 

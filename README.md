@@ -17,7 +17,6 @@ You can install all required packages to central user packages repository using 
 * ~~-<a href="https://www.cc.gatech.edu/~umit/software.html" target="_blank">PaToH</a> 3.3 (Linux / Mac)-~~
 
 ## TODO
-- [ ] hMETIS - Linux
 - [ ] PaToH - Mac, Linux
 
 ## Arguments

@@ -15,7 +15,9 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer set_dynamic_weights
     Private StatisticsComponentTimer generate_key_cache
     Private StatisticsComponentTimer get_cut_set
+    
     Private StatisticsComponentCounter cached
+    Private StatisticsComponentCounter cut_set_size
     """
 
     def __init__(self):
@@ -38,6 +40,9 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
 
         self.__cached: StatisticsComponentCounter = StatisticsComponentCounter("cached")
         self._component_list.append(self.__cached)
+
+        self.__cut_set_size: StatisticsComponentCounter = StatisticsComponentCounter("cut set - size")
+        self._component_list.append(self.__cut_set_size)
 
     # region Property
     @property
@@ -63,4 +68,8 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     @property
     def cached(self) -> StatisticsComponentCounter:
         return self.__cached
+
+    @property
+    def cut_set_size(self) -> StatisticsComponentCounter:
+        return self.__cut_set_size
     # endregion
