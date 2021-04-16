@@ -77,3 +77,13 @@ class InvalidLimitCacheException(HypergraphPartitioningException):
     def __init__(self, lower_bound: int, upper_bound: int, type_of_limit: str):
         self.message = f"Invalid lower bound ({lower_bound}) and upper bound ({upper_bound}) for {type_of_limit}!"
         super().__init__(self.message)
+
+
+class SomethingWrongWithPatohLibraryException(HypergraphPartitioningException):
+    """
+    Something wrong with the PaToH library
+    """
+
+    def __init__(self, function_name: str, message_extension: str):
+        self.message = f"Something wrong with the PaToH library - {function_name}! ({message_extension})"
+        super().__init__(self.message)
