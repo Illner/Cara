@@ -1,5 +1,6 @@
 # Import
 import os
+import ctypes
 import warnings
 import subprocess
 from pathlib import Path
@@ -9,6 +10,8 @@ import other.environment as env
 from compiler.solver import Solver
 from typing import Set, Dict, List, Tuple, Union
 from formula.incidence_graph import IncidenceGraph
+from compiler.hypergraph_partitioning.patoh_data import PatohData
+from compiler.hypergraph_partitioning.patoh_initialize_parameters import PatohInitializeParameters
 from compiler_statistics.compiler.hypergraph_partitioning_statistics import HypergraphPartitioningStatistics
 
 # Import exception
@@ -19,6 +22,7 @@ import exception.compiler.hypergraph_partitioning_exception as hp_exception
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
+import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_patoh_sugparam_enum as hpps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
 
@@ -53,12 +57,21 @@ class HypergraphPartitioning:
     Private Path input_file_hmetis_path
     Private Path output_file_1_hmetis_path
     Private Path output_file_2_hmetis_path
+    
+    Private PATOH_InitializeParameters
+    Private PATOH_Alloc
+    Private PATOH_Part
+    Private PATOH_Free
     """
 
     # Static variable - Path
     __TEMP_DIRECTORY_PATH = Path(os.path.join(os.getcwd(), "temp"))
+    # hMETIS
     __WIN_PROGRAM_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "windows", "shmetis.exe"))
     __LINUX_PROGRAM_HMETIS_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "hMETIS", "linux", "shmetis"))
+    # PaToH
+    __LINUX_LIBRARY_PATOH_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "PaToH", "linux", "libpatoh.so"))
+    __MAC_OS_LIBRARY_PATOH_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "PaToH", "macOS", "libpatoh.dylib"))
 
     def __init__(self, cnf: Cnf,
                  ub_factor: float,
@@ -121,6 +134,10 @@ class HypergraphPartitioning:
         if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:
             self.__create_hmetis_paths()
 
+        # PaToH
+        if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.PATOH:
+            self.__load_patoh_library_and_functions()
+
     # region Private method
     def __create_hmetis_paths(self) -> None:
         """
@@ -132,9 +149,38 @@ class HypergraphPartitioning:
         now = str(datetime.now().time())
         now_postfix = now.replace(":", "_").replace(".", "_").replace(" ", "_")
 
-        self.__input_file_hmetis_path = Path(os.path.join(self.__TEMP_DIRECTORY_PATH, f"hmetis_hypergraph_{now_postfix}.graph"))
+        self.__input_file_hmetis_path = Path(os.path.join(HypergraphPartitioning.__TEMP_DIRECTORY_PATH, f"hmetis_hypergraph_{now_postfix}.graph"))
         self.__output_file_1_hmetis_path = Path(str(self.__input_file_hmetis_path) + ".part.1")
         self.__output_file_2_hmetis_path = Path(str(self.__input_file_hmetis_path) + ".part.2")
+
+    def __load_patoh_library_and_functions(self) -> None:
+        """
+        Load the PaToH library and functions
+        :return: None
+        :raises SomethingWrongException: if something is wrong
+        """
+
+        library_patoh_path_temp = str(HypergraphPartitioning.__LINUX_LIBRARY_PATOH_PATH) if env.is_linux() else str(HypergraphPartitioning.__MAC_OS_LIBRARY_PATOH_PATH)
+
+        try:
+            clib = ctypes.cdll.LoadLibrary(library_patoh_path_temp)
+
+            # PATOH_InitializeParameters
+            self.__PATOH_InitializeParameters = clib.Patoh_Initialize_Parameters
+            self.__PATOH_InitializeParameters.argtypes = (ctypes.POINTER(PatohInitializeParameters), ctypes.c_int, ctypes.c_int)
+
+            # PATOH_Alloc
+            self.__PATOH_Alloc = clib.Patoh_Alloc
+            self.__PATOH_Alloc.argtypes = (ctypes.POINTER(PatohInitializeParameters), ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)
+
+            # PATOH_Part
+            self.__PATOH_Part = clib.Patoh_Part
+            self.__PATOH_Part.argtypes = (ctypes.POINTER(PatohInitializeParameters), ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)
+
+            # PATOH_Free
+            self.__PATOH_Free = clib.Patoh_Free
+        except Exception as err:
+            raise c_exception.SomethingWrongException(f"while importing the PaToH library - {err}")
 
     def __check_files_and_directories(self) -> None:
         """
@@ -150,7 +196,7 @@ class HypergraphPartitioning:
 
             # Windows
             if env.is_windows():
-                # The exe file has not been found
+                # The exe file does not exist
                 if not HypergraphPartitioning.__WIN_PROGRAM_HMETIS_PATH.exists():
                     raise hp_exception.FileIsMissingException(HypergraphPartitioning.__WIN_PROGRAM_HMETIS_PATH)
 
@@ -158,13 +204,34 @@ class HypergraphPartitioning:
 
             # Linux
             if env.is_linux():
-                # The file has not been found
+                # The file does not exist
                 if not HypergraphPartitioning.__LINUX_PROGRAM_HMETIS_PATH.exists():
                     raise hp_exception.FileIsMissingException(HypergraphPartitioning.__LINUX_PROGRAM_HMETIS_PATH)
 
                 return
 
-            # Mac or undefined
+            # MacOS or undefined
+            raise hp_exception.SoftwareIsNotSupportedOnSystemException(self.__software_enum.name)
+
+        # PaToH
+        if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.PATOH:
+            # Linux
+            if env.is_linux():
+                # The library does not exist
+                if not HypergraphPartitioning.__LINUX_LIBRARY_PATOH_PATH.exists():
+                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__LINUX_LIBRARY_PATOH_PATH)
+
+                return
+
+            # MacOS
+            if env.is_mac_os():
+                # The library does not exist
+                if not HypergraphPartitioning.__MAC_OS_LIBRARY_PATOH_PATH.exists():
+                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__MAC_OS_LIBRARY_PATOH_PATH)
+
+                return
+
+            # Windows or undefined
             raise hp_exception.SoftwareIsNotSupportedOnSystemException(self.__software_enum.name)
 
         warnings.warn("No software for hypergraph partitioning is used!")

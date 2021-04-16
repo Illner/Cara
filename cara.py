@@ -38,7 +38,7 @@ def main(main_args):
                             first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum[main_args.first_implied_literals],
                             component_caching_enum=cc_enum.ComponentCachingEnum[main_args.component_caching],
                             hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum[main_args.hp_caching],
-                            hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
+                            hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum[main_args.hp_software],
                             hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                             hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                             hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum[main_args.hp_variable_simplification],
@@ -245,6 +245,13 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str,
                              choices=cc_enum.component_caching_enum_names,
                              help="type of component caching that will be used for compiling the circuit")
+    parser_temp.add_argument("-hps",
+                             "--hp_software",
+                             action="store",
+                             default=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS.name,
+                             type=str,
+                             choices=hps_enum.hps_enum_names,
+                             help="software used for hypergraph partitioning")
     parser_temp.add_argument("-hpc",
                              "--hp_caching",
                              action="store",

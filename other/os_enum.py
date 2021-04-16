@@ -6,7 +6,7 @@ from enum import IntEnum, unique
 class OsEnum(IntEnum):
     WINDOWS = 1
     LINUX = 2
-    MAC = 3
+    MAC_OS = 3
     UNDEFINED = 4
 
 
