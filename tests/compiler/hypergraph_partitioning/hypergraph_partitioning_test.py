@@ -4,7 +4,7 @@ from formula.cnf import Cnf
 from compiler.solver import Solver
 from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
-from compiler.hypergraph_partitioning import HypergraphPartitioning
+from compiler.hypergraph_partitioning.hypergraph_partitioning import HypergraphPartitioning
 
 # Import exception
 import exception.cara_exception as c_exception

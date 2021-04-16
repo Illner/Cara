@@ -5,7 +5,7 @@ from typing import Set, Tuple, Union
 from compiler.component import Component
 from formula.incidence_graph import IncidenceGraph
 from compiler_statistics.statistics import Statistics
-from compiler.hypergraph_partitioning import HypergraphPartitioning
+from compiler.hypergraph_partitioning.hypergraph_partitioning import HypergraphPartitioning
 
 # Import component caching
 from compiler.component_caching.none_caching import NoneCaching

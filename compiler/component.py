@@ -5,8 +5,8 @@ from circuit.circuit import Circuit
 from typing import Set, List, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler_statistics.statistics import Statistics
-from compiler.hypergraph_partitioning import HypergraphPartitioning
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
+from compiler.hypergraph_partitioning.hypergraph_partitioning import HypergraphPartitioning
 
 # Import exception
 import exception.cara_exception as ca_exception
