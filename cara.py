@@ -202,7 +202,7 @@ def create_parser() -> argparse.ArgumentParser:
                              default=0.1,
                              type=float,
                              metavar="[0.01-0.49]",
-                             help="balance factor that is used for hypergraph partitioning (hMETIS)")
+                             help="balance factor that is used for hypergraph partitioning (hMETIS - UB factor, KaHyPar - epsilon)")
     parser_temp.add_argument("-st",
                              "--subsumption_threshold",
                              action="store",

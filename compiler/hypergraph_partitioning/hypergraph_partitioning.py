@@ -4,6 +4,7 @@ import ctypes
 import warnings
 import subprocess
 from pathlib import Path
+# import kahypar as kahypar
 from formula.cnf import Cnf
 from datetime import datetime
 import other.environment as env
@@ -62,6 +63,8 @@ class HypergraphPartitioning:
     Private PATOH_Alloc
     Private PATOH_Part
     Private PATOH_Free
+    
+    Private Context kahypar_context
     """
 
     # Static variable - Path
@@ -72,6 +75,8 @@ class HypergraphPartitioning:
     # PaToH
     __LINUX_LIBRARY_PATOH_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "PaToH", "linux", "libpatoh.so"))
     __MAC_OS_LIBRARY_PATOH_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "PaToH", "macOS", "libpatoh.dylib"))
+    # KaHyPar
+    __CONFIG_KAHYPAR_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "KaHyPar", "config.ini"))
 
     def __init__(self, cnf: Cnf,
                  ub_factor: float,
@@ -138,6 +143,10 @@ class HypergraphPartitioning:
         if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.PATOH:
             self.__load_patoh_library_and_functions()
 
+        # KaHyPar
+        if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.KAHYPAR:
+            self.__load_kahypar_context()
+
     # region Private method
     def __create_hmetis_paths(self) -> None:
         """
@@ -182,6 +191,18 @@ class HypergraphPartitioning:
         except Exception as err:
             raise hp_exception.SomethingWrongWithPatohLibraryException("library", str(err))
 
+    def __load_kahypar_context(self) -> None:
+        """
+        Initialize the KaHyPar context
+        :return: None
+        """
+
+        self.__kahypar_context = kahypar.Context()
+        self.__kahypar_context.loadINIconfiguration(HypergraphPartitioning.__CONFIG_KAHYPAR_PATH)
+
+        self.__kahypar_context.setK(2)
+        self.__kahypar_context.setEpsilon(self.__ub_factor)
+
     def __check_files_and_directories(self) -> None:
         """
         Check if all necessary files and directories exist
@@ -198,7 +219,7 @@ class HypergraphPartitioning:
             if env.is_windows():
                 # The exe file does not exist
                 if not HypergraphPartitioning.__WIN_PROGRAM_HMETIS_PATH.exists():
-                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__WIN_PROGRAM_HMETIS_PATH)
+                    raise hp_exception.FileIsMissingException(str(HypergraphPartitioning.__WIN_PROGRAM_HMETIS_PATH))
 
                 return
 
@@ -206,7 +227,7 @@ class HypergraphPartitioning:
             if env.is_linux():
                 # The file does not exist
                 if not HypergraphPartitioning.__LINUX_PROGRAM_HMETIS_PATH.exists():
-                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__LINUX_PROGRAM_HMETIS_PATH)
+                    raise hp_exception.FileIsMissingException(str(HypergraphPartitioning.__LINUX_PROGRAM_HMETIS_PATH))
 
                 return
 
@@ -219,7 +240,7 @@ class HypergraphPartitioning:
             if env.is_linux():
                 # The library does not exist
                 if not HypergraphPartitioning.__LINUX_LIBRARY_PATOH_PATH.exists():
-                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__LINUX_LIBRARY_PATOH_PATH)
+                    raise hp_exception.FileIsMissingException(str(HypergraphPartitioning.__LINUX_LIBRARY_PATOH_PATH))
 
                 return
 
@@ -227,7 +248,20 @@ class HypergraphPartitioning:
             if env.is_mac_os():
                 # The library does not exist
                 if not HypergraphPartitioning.__MAC_OS_LIBRARY_PATOH_PATH.exists():
-                    raise hp_exception.FileIsMissingException(HypergraphPartitioning.__MAC_OS_LIBRARY_PATOH_PATH)
+                    raise hp_exception.FileIsMissingException(str(HypergraphPartitioning.__MAC_OS_LIBRARY_PATOH_PATH))
+
+                return
+
+            # Windows or undefined
+            raise hp_exception.SoftwareIsNotSupportedOnSystemException(self.__software_enum.name)
+
+        # KaHyPar
+        if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.KAHYPAR:
+            # Linux or MacOS
+            if env.is_linux() or env.is_mac_os():
+                # The config file does not exist
+                if not HypergraphPartitioning.__CONFIG_KAHYPAR_PATH.exists():
+                    raise hp_exception.FileIsMissingException(str(HypergraphPartitioning.__CONFIG_KAHYPAR_PATH))
 
                 return
 
@@ -536,11 +570,11 @@ class HypergraphPartitioning:
         return key_string, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
     # endregion
 
-    # region PaToH
+    # region PaToH, KaHyPar
     def __create_hypergraph(self, incidence_graph: IncidenceGraph) -> Tuple[int, int, List[int], List[int], List[int], List[int], Dict[int, int]]:
         """
         Create the hypergraph based on the incidence graph
-        Software: PaToH
+        Software: PaToH, KaHyPar
         :param incidence_graph: an incidence graph
         :return: (number of nodes, number of hyperedges, xpins, pins, node weights, hyperedge weights, mapping from node_id (hypergraph) to clause_id (CNF))
         """
@@ -580,6 +614,34 @@ class HypergraphPartitioning:
 
         return number_of_nodes, number_of_hyperedges, xpins_list, pins_list, node_weight_list, hyperedge_weight_list, node_id_clause_id_dictionary
 
+    def __get_cut_set_from_partition(self, incidence_graph: IncidenceGraph, partition_list: List[int], node_id_clause_id_dictionary: Dict[int, int]) -> Set[int]:
+        """
+        Create a cut set from the partition
+        Software: PaToh, KaHyPar
+        :param incidence_graph: an incidence graph
+        :param partition_list: a partition list {0|1}*
+        :param node_id_clause_id_dictionary: mapping from node_id (hypergraph) to clause_id (CNF)
+        :return: a cut set
+        :raises SomethingWrongException: if the partition is invalid
+        """
+
+        variable_partition_0_set = set()
+        variable_partition_1_set = set()
+
+        for i, partition in enumerate(partition_list):
+            if (partition != 0) and (partition != 1):
+                raise hp_exception.SomethingWrongException(f"invalid partition ({partition})")
+
+            variable_set_temp = incidence_graph.clause_id_neighbour_set(node_id_clause_id_dictionary[i])
+
+            if partition == 0:
+                variable_partition_0_set.update(variable_set_temp)
+            else:
+                variable_partition_1_set.update(variable_set_temp)
+
+        cut_set = variable_partition_0_set.intersection(variable_partition_1_set)
+        return cut_set
+
     def __get_cut_set_patoh(self, incidence_graph: IncidenceGraph) -> Set[int]:
         """
         Compute a cut set using PaToH
@@ -596,7 +658,7 @@ class HypergraphPartitioning:
         # PaToH library
         try:
             # PATOH_InitializeParameters
-            result_code = self.__PATOH_InitializeParameters(patoh_data.parameters_ref(), 2, hpps_enum.PatohSugparamEnum.PATOH_SUGPARAM_QUALITY.value)
+            result_code = self.__PATOH_InitializeParameters(patoh_data.parameters_ref(), 1, hpps_enum.PatohSugparamEnum.PATOH_SUGPARAM_QUALITY.value)
             if result_code:
                 raise hp_exception.SomethingWrongWithPatohLibraryException("PATOH_InitializeParameters", str(result_code))
 
@@ -616,21 +678,7 @@ class HypergraphPartitioning:
             raise hp_exception.SomethingWrongWithPatohLibraryException("library", str(err))
 
         # Get the cut set
-        variable_partition_0_set = set()
-        variable_partition_1_set = set()
-
-        for i, partition in enumerate(patoh_data.partvec()):
-            if (partition != 0) and (partition != 1):
-                raise hp_exception.SomethingWrongException(f"invalid partition ({partition}) in the output vector from the PaToH library")
-
-            variable_set_temp = incidence_graph.clause_id_neighbour_set(node_id_clause_id_dictionary[i])
-
-            if partition == 0:
-                variable_partition_0_set.update(variable_set_temp)
-            else:
-                variable_partition_1_set.update(variable_set_temp)
-
-        cut_set = variable_partition_0_set.intersection(variable_partition_1_set)
+        cut_set = self.__get_cut_set_from_partition(incidence_graph, patoh_data.partvec(), node_id_clause_id_dictionary)
 
         # PATOH_Free
         result_code = self.__PATOH_Free()
@@ -638,6 +686,24 @@ class HypergraphPartitioning:
             raise hp_exception.SomethingWrongWithPatohLibraryException("PATOH_Free", str(result_code))
 
         del patoh_data
+        return cut_set
+
+    def __get_cut_set_kahypar(self, incidence_graph: IncidenceGraph) -> Set[int]:
+        """
+        Compute a cut set using KaHyPar
+        :param incidence_graph: an incidence graph
+        :return: a cut set of the hypergraph
+        """
+
+        number_of_nodes, number_of_hyperedges, xpins_list, pins_list, node_weight_list, hyperedge_weight_list, node_id_clause_id_dictionary = self.__create_hypergraph(incidence_graph)
+        hypergraph = kahypar.Hypergraph(number_of_nodes, number_of_hyperedges, xpins_list, pins_list, 2, hyperedge_weight_list, node_weight_list)
+
+        kahypar.partition(hypergraph, self.__kahypar_context)
+        partition_list = [hypergraph.blockID(i) for i in hypergraph.nodes()]
+
+        # Get the cut set
+        cut_set = self.__get_cut_set_from_partition(incidence_graph, partition_list, node_id_clause_id_dictionary)
+
         return cut_set
     # endregion
 
@@ -818,6 +884,10 @@ class HypergraphPartitioning:
         # PaToH
         if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.PATOH:
             cut_set = self.__get_cut_set_patoh(incidence_graph)
+
+        # KaHyPar
+        if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.KAHYPAR:
+            cut_set = self.__get_cut_set_kahypar(incidence_graph)
 
         # A cut set does not exist (because of balance etc.) => a variable with the most occurrences is selected
         if not cut_set:
