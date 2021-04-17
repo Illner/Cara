@@ -4,7 +4,7 @@ import ctypes
 import warnings
 import subprocess
 from pathlib import Path
-# import kahypar as kahypar
+import kahypar as kahypar
 from formula.cnf import Cnf
 from datetime import datetime
 import other.environment as env
