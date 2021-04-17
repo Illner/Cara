@@ -199,7 +199,7 @@ class HypergraphPartitioning:
         import kahypar as kahypar
 
         self.__kahypar_context = kahypar.Context()
-        self.__kahypar_context.loadINIconfiguration(HypergraphPartitioning.__CONFIG_KAHYPAR_PATH)
+        self.__kahypar_context.loadINIconfiguration(str(HypergraphPartitioning.__CONFIG_KAHYPAR_PATH))
 
         self.__kahypar_context.setK(2)
         self.__kahypar_context.setEpsilon(self.__ub_factor)
