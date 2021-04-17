@@ -1,6 +1,7 @@
 # Import
 import os
 from formula.cnf import Cnf
+import other.environment as env
 from compiler.compiler import Compiler
 from tests.test_abstract import TestAbstract
 
@@ -27,6 +28,10 @@ class CompilerTest(TestAbstract):
     # region Override method
     def _get_actual_result(self) -> str:
         actual_result = ""
+
+        hp_software_enum = hps_enum.HypergraphPartitioningSoftwareEnum.PATOH
+        if env.is_windows():
+            hp_software_enum = hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS
 
         for (file_name, file_path) in self._files:
             count = 0
@@ -64,7 +69,7 @@ class CompilerTest(TestAbstract):
                                                             first_implied_literals_enum=first_implied_literals_enum,
                                                             component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
                                                             hp_cache_enum=hp_cache_enum,
-                                                            hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
+                                                            hp_software_enum=hp_software_enum,
                                                             hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                                             hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                                                             hp_variable_simplification_enum=hp_variable_simplification_enum,

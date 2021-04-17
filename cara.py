@@ -3,6 +3,7 @@ import argparse
 import warnings
 from pathlib import Path
 from typing import Union
+import other.environment as env
 from compiler.compiler import Compiler
 
 # Import exception
@@ -171,6 +172,10 @@ def create_parser() -> argparse.ArgumentParser:
                                           formatter_class=argparse.ArgumentDefaultsHelpFormatter     # default values are shown in the help
                                           )
 
+    hp_software_default = hps_enum.HypergraphPartitioningSoftwareEnum.PATOH
+    if env.is_windows():
+        hp_software_default = hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS
+
     # Add arguments
     parser_temp.add_argument("input_file",
                              action="store",
@@ -248,7 +253,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-hps",
                              "--hp_software",
                              action="store",
-                             default=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS.name,
+                             default=hp_software_default.name,
                              type=str,
                              choices=hps_enum.hps_enum_names,
                              help="software used for hypergraph partitioning")

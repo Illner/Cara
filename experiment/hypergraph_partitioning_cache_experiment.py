@@ -3,6 +3,7 @@ import os
 import numpy as np
 from pathlib import Path
 from datetime import timedelta
+import other.environment as env
 import visualization.plot as plot
 from typing import Set, Dict, List, Union, Tuple
 from experiment.experiment_abstract import ExperimentAbstract
@@ -60,6 +61,11 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         generate_key_cache_dictionary: Dict[str, List[timedelta]] = dict()
         cache_performance_dictionary: Dict[str, List[float]] = dict()
 
+        # Hypergraph partitioning - software
+        hp_software_enum = hps_enum.HypergraphPartitioningSoftwareEnum.PATOH
+        if env.is_windows():
+            hp_software_enum = hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS
+
         for file_name, file_path in self._files:
             for i_c, (hp_cache_enum, cache_name) in enumerate(hp_cache_enum_list):
                 for i_lc, limit_clause in enumerate(limit_clause_list):
@@ -82,7 +88,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                                                                                       first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP,
                                                                                       component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
                                                                                       hp_cache_enum=hp_cache_enum,
-                                                                                      hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
+                                                                                      hp_software_enum=hp_software_enum,
                                                                                       hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                                                                       hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                                                                                       hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,

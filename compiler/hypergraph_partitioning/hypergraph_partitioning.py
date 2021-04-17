@@ -238,7 +238,7 @@ class HypergraphPartitioning:
 
         # KaHyPar
         if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.KAHYPAR:
-            # Linux or MacOS
+            # Linux or macOS
             if env.is_linux() or env.is_mac_os():
                 # The config file does not exist
                 if not HypergraphPartitioning.__CONFIG_KAHYPAR_PATH.exists():
