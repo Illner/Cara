@@ -4,7 +4,6 @@ import ctypes
 import warnings
 import subprocess
 from pathlib import Path
-import kahypar as kahypar
 from formula.cnf import Cnf
 from datetime import datetime
 import other.environment as env
@@ -196,6 +195,8 @@ class HypergraphPartitioning:
         Initialize the KaHyPar context
         :return: None
         """
+
+        import kahypar as kahypar
 
         self.__kahypar_context = kahypar.Context()
         self.__kahypar_context.loadINIconfiguration(HypergraphPartitioning.__CONFIG_KAHYPAR_PATH)
@@ -694,6 +695,8 @@ class HypergraphPartitioning:
         :param incidence_graph: an incidence graph
         :return: a cut set of the hypergraph
         """
+
+        import kahypar as kahypar
 
         number_of_nodes, number_of_hyperedges, xpins_list, pins_list, node_weight_list, hyperedge_weight_list, node_id_clause_id_dictionary = self.__create_hypergraph(incidence_graph)
         hypergraph = kahypar.Hypergraph(number_of_nodes, number_of_hyperedges, xpins_list, pins_list, 2, hyperedge_weight_list, node_weight_list)
