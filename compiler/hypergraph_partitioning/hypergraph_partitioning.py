@@ -574,8 +574,6 @@ class HypergraphPartitioning:
             xpins_list.append(xpins_list[-1] + len(pin_temp))
             pins_list.extend(pin_temp)
 
-        xpins_list.append(len(pins_list))
-
         # Node weights
         for node_id in range(1, number_of_nodes + 1):
             node_weight_list.append(self.__get_node_weight(node_id_clause_id_dictionary[node_id]))
@@ -594,15 +592,6 @@ class HypergraphPartitioning:
         patoh_data: PatohData = PatohData(number_of_nodes=number_of_nodes, number_of_hyperedges=number_of_hyperedges,
                                           node_weight_list=node_weight_list, hyperedge_weight_list=hyperedge_weight_list,
                                           xpins=xpins_list, pins=pins_list)
-
-        xpins_2 = [0, 2, 6, 9, 12]
-        pins_2 = [0, 2, 0, 1, 3, 4, 3, 4, 6, 2, 5, 6]
-        cwghts_2 = [1, 2, 3, 4, 5, 6, 7]
-        nwghts_2 = [11, 22, 33, 44]
-
-        patoh_data: PatohData = PatohData(number_of_nodes=7, number_of_hyperedges=4,
-                                          node_weight_list=cwghts_2, hyperedge_weight_list=nwghts_2,
-                                          xpins=xpins_2, pins=pins_2)
 
         # PaToH library
         try:

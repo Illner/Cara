@@ -88,6 +88,18 @@ class PatohData:
         return ctypes.byref(self.__parameters)
     # endregion
 
+    # region Magic method
+    def __str__(self):
+        string_temp = "\n".join((f"Number of nodes: {self.c}",
+                                 f"Number of hyperedges: {self.n}",
+                                 f"Node weight list: {self.__cwghts}",
+                                 f"Hyperedge weight list: {self.__nwghts}",
+                                 f"Xpins: {self.__xpins}",
+                                 f"Pins: {self.__pins}"))
+
+        return string_temp
+    # endregion
+
     # region Property
     @property
     def c(self) -> int:
