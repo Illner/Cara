@@ -565,9 +565,9 @@ class HypergraphPartitioning:
             for clause_id in clause_id_set:
                 # Add to the mapping
                 if clause_id not in clause_id_node_id_dictionary:
-                    number_of_nodes += 1
                     clause_id_node_id_dictionary[clause_id] = number_of_nodes
                     node_id_clause_id_dictionary[number_of_nodes] = clause_id
+                    number_of_nodes += 1
 
                 pin_temp.append(clause_id_node_id_dictionary[clause_id])
 
@@ -575,7 +575,7 @@ class HypergraphPartitioning:
             pins_list.extend(pin_temp)
 
         # Node weights
-        for node_id in range(1, number_of_nodes + 1):
+        for node_id in range(number_of_nodes):
             node_weight_list.append(self.__get_node_weight(node_id_clause_id_dictionary[node_id]))
 
         return number_of_nodes, number_of_hyperedges, xpins_list, pins_list, node_weight_list, hyperedge_weight_list, node_id_clause_id_dictionary
@@ -623,7 +623,7 @@ class HypergraphPartitioning:
             if (partition != 0) and (partition != 1):
                 raise hp_exception.SomethingWrongException(f"invalid partition ({partition}) in the output vector from the PaToH library")
 
-            variable_set_temp = incidence_graph.clause_id_neighbour_set(node_id_clause_id_dictionary[i + 1])
+            variable_set_temp = incidence_graph.clause_id_neighbour_set(node_id_clause_id_dictionary[i])
 
             if partition == 0:
                 variable_partition_0_set.update(variable_set_temp)
