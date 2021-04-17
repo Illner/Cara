@@ -62,8 +62,6 @@ class HypergraphPartitioning:
     Private PATOH_Alloc
     Private PATOH_Part
     Private PATOH_Free
-    
-    Private Context kahypar_context
     """
 
     # Static variable - Path
@@ -142,10 +140,6 @@ class HypergraphPartitioning:
         if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.PATOH:
             self.__load_patoh_library_and_functions()
 
-        # KaHyPar
-        if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.KAHYPAR:
-            self.__load_kahypar_context()
-
     # region Private method
     def __create_hmetis_paths(self) -> None:
         """
@@ -189,21 +183,6 @@ class HypergraphPartitioning:
             self.__PATOH_Free = clib.Patoh_Free
         except Exception as err:
             raise hp_exception.SomethingWrongWithPatohLibraryException("library", str(err))
-
-    def __load_kahypar_context(self) -> None:
-        """
-        Initialize the KaHyPar context
-        :return: None
-        """
-
-        import kahypar as kahypar
-
-        self.__kahypar_context = kahypar.Context()
-        self.__kahypar_context.loadINIconfiguration(str(HypergraphPartitioning.__CONFIG_KAHYPAR_PATH))
-
-        self.__kahypar_context.setK(2)
-        self.__kahypar_context.setEpsilon(self.__ub_factor)
-        self.__kahypar_context.suppressOutput(True)
 
     def __check_files_and_directories(self) -> None:
         """
@@ -699,10 +678,17 @@ class HypergraphPartitioning:
 
         import kahypar as kahypar
 
+        kahypar_context = kahypar.Context()
+        kahypar_context.loadINIconfiguration(str(HypergraphPartitioning.__CONFIG_KAHYPAR_PATH))
+
+        kahypar_context.setK(2)
+        kahypar_context.setEpsilon(self.__ub_factor)
+        kahypar_context.suppressOutput(True)
+
         number_of_nodes, number_of_hyperedges, xpins_list, pins_list, node_weight_list, hyperedge_weight_list, node_id_clause_id_dictionary = self.__create_hypergraph(incidence_graph)
         hypergraph = kahypar.Hypergraph(number_of_nodes, number_of_hyperedges, xpins_list, pins_list, 2, hyperedge_weight_list, node_weight_list)
 
-        kahypar.partition(hypergraph, self.__kahypar_context)
+        kahypar.partition(hypergraph, kahypar_context)
         partition_list = [hypergraph.blockID(i) for i in hypergraph.nodes()]
 
         # Get the cut set
