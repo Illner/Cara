@@ -203,6 +203,7 @@ class HypergraphPartitioning:
 
         self.__kahypar_context.setK(2)
         self.__kahypar_context.setEpsilon(self.__ub_factor)
+        self.__kahypar_context.suppressOutput(True)
 
     def __check_files_and_directories(self) -> None:
         """
