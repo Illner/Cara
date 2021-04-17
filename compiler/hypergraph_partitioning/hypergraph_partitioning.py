@@ -614,11 +614,6 @@ class HypergraphPartitioning:
                                             patoh_data.targetweights_ctypes(), patoh_data.partvec_ctypes(), patoh_data.partweights_ctypes(), patoh_data.cut_addr())
             if result_code:
                 raise hp_exception.SomethingWrongWithPatohLibraryException("PATOH_Part", str(result_code))
-
-            # PATOH_Free
-            result_code = self.__PATOH_Free()
-            if result_code:
-                raise hp_exception.SomethingWrongWithPatohLibraryException("PATOH_Free", str(result_code))
         except Exception as err:
             raise hp_exception.SomethingWrongWithPatohLibraryException("library", str(err))
 
@@ -638,6 +633,11 @@ class HypergraphPartitioning:
                 variable_partition_1_set.update(variable_set_temp)
 
         cut_set = variable_partition_0_set.intersection(variable_partition_1_set)
+
+        # PATOH_Free
+        result_code = self.__PATOH_Free()
+        if result_code:
+            raise hp_exception.SomethingWrongWithPatohLibraryException("PATOH_Free", str(result_code))
 
         del patoh_data
         return cut_set
@@ -747,7 +747,7 @@ class HypergraphPartitioning:
                 except ValueError:
                     raise hp_exception.SomethingWrongException(f"partition ({line}) in the output file from hMETIS.exe is not a number")
 
-                if partition_temp != 0 and partition_temp != 1:
+                if (partition_temp != 0) and (partition_temp != 1):
                     raise hp_exception.SomethingWrongException(f"invalid partition ({partition_temp}) in the output file from hMETIS.exe")
 
                 variable_set_temp = incidence_graph.clause_id_neighbour_set(node_id_clause_id_dictionary[line_id])
