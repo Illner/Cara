@@ -21,9 +21,12 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 class HypergraphPartitioningTest(TestAbstract):
     __DIRECTORY: str = os.path.join("compiler", "hypergraph_partitioning")
 
-    def __init__(self):
-        super().__init__(HypergraphPartitioningTest.__DIRECTORY, test_name="Hypergraph partitioning test")
+    def __init__(self, software_enum: hps_enum.HypergraphPartitioningSoftwareEnum):
+        super().__init__(HypergraphPartitioningTest.__DIRECTORY,
+                         test_name=f"Hypergraph partitioning test ({hps_enum.HypergraphPartitioningSoftwareEnum._value2member_map_[software_enum].name})")
         self._set_files(HypergraphPartitioningTest.__DIRECTORY, "CNF_formulae")
+
+        self.__software_enum: hps_enum.HypergraphPartitioningSoftwareEnum = software_enum
 
     # region Override method
     def _get_actual_result(self) -> str:
@@ -50,7 +53,7 @@ class HypergraphPartitioningTest(TestAbstract):
                                                                              variable_simplification_enum=variable_simplification_enum,
                                                                              ub_factor=0.10,
                                                                              subsumption_threshold=None,
-                                                                             software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
+                                                                             software_enum=self.__software_enum,
                                                                              node_weight_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                                                              hyperedge_weight_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                                                                              limit_number_of_clauses_cache=(None, None),

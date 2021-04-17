@@ -4,6 +4,7 @@ import cara
 import argparse
 import warnings
 from typing import Tuple
+import other.environment as env
 from tests.test_abstract import TestAbstract
 
 # Formula
@@ -25,6 +26,9 @@ import tests.compiler.hypergraph_partitioning.hypergraph_partitioning_test as ch
 
 # Import exception
 import exception.test.test_exception as t_exception
+
+# Import enum
+import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 
 # Static variable - Path
 LOG_PATH = os.path.join(os.getcwd(), "log")
@@ -92,11 +96,25 @@ def main(main_args):
 
     # Hypergraph partitioning test
     if main_args.compiler_hypergraph_partitioning_test:
-        hypergraph_partitioning_test = chp_test.HypergraphPartitioningTest()
-        print(hypergraph_partitioning_test.test_name, end=": ", flush=True)
-        result, log_result = test(hypergraph_partitioning_test)
-        print(result)
-        log_string = "\n".join((log_string, log_result, ""))
+        for software_enum in hps_enum.hps_enum_values:
+            # None
+            if software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.NONE:
+                continue
+
+            # Windows
+            if env.is_windows() and \
+               (software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.PATOH or software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.KAHYPAR):
+                continue
+
+            # MacOS
+            if env.is_mac_os() and software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:
+                continue
+
+            hypergraph_partitioning_test = chp_test.HypergraphPartitioningTest(software_enum)
+            print(hypergraph_partitioning_test.test_name, end=": ", flush=True)
+            result, log_result = test(hypergraph_partitioning_test)
+            print(result)
+            log_string = "\n".join((log_string, log_result, ""))
 
     # Backbones test
     if main_args.compiler_backbones_test:
