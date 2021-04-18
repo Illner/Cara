@@ -18,8 +18,6 @@ You can install all required packages to central user packages repository using 
 * <a href="http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview" target="_blank">hMETIS</a> 1.5.3 (Windows / Linux)
 * <a href="https://www.cc.gatech.edu/~umit/software.html" target="_blank">PaToH</a> 3.3 (Linux / macOS)
 
-** **
-
 ## Cara
 ### Example
 *cara.py -s -bc TWO_CNF -bc RENAMABLE_HORN_CNF input_file output_file*
@@ -70,8 +68,6 @@ optional arguments:
   + if the limits for hypergraph partitioning caching (number of clauses/variables) are satisfied, then the new_cut_set_threshold will be multiplied by x (default: 1)
 * **-v, --version**
   + show program's version number and exit
-  
-** **
 
 ## Cara - query
 ### Example
@@ -113,8 +109,6 @@ optional arguments:
   + observation set (MC) (default: [])
 + **-d, --default [var_1, var_2, ...]**
   + default set (MC) (default: [])
-  
-** ** 
 
 ## Modules
 ![alt text](images/modules.png)
