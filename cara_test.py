@@ -160,8 +160,8 @@ def test(test_instantiation: TestAbstract) -> Tuple[bool, str]:
 
 def create_parser() -> argparse.ArgumentParser:
     # Create the parser
-    parser_temp = argparse.ArgumentParser(prog="Cara - test automation",
-                                          description="Test automation for Cara compiler",
+    parser_temp = argparse.ArgumentParser(prog="cara_test.py",
+                                          description="CaraCompiler - test automation",
                                           formatter_class=argparse.ArgumentDefaultsHelpFormatter    # Default values are shown in help
                                           )
 
@@ -223,7 +223,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-ct",
                              "--compiler_test",
                              action="store",
-                             default=True,
+                             default=False,
                              type=cara.str_to_bool_parser,
                              help="test automation for compilers")
 

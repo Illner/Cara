@@ -20,7 +20,7 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
 # Constant
-VERSION = "1.0.0"
+VERSION = "12.8"
 
 
 def main(main_args):
@@ -167,7 +167,7 @@ def non_negative_int_or_none_parser(value: Union[int, str]) -> Union[int, None]:
 
 def create_parser() -> argparse.ArgumentParser:
     # Create the parser
-    parser_temp = argparse.ArgumentParser(prog="CaraCompiler",
+    parser_temp = argparse.ArgumentParser(prog="cara.py",
                                           description="Backdoor Decomposable Monotone Circuits (BDMC) compiler",
                                           formatter_class=argparse.ArgumentDefaultsHelpFormatter     # default values are shown in the help
                                           )

@@ -185,5 +185,5 @@ class OperationIsNotSupportedException(CircuitException):
     """
 
     def __init__(self, operation_name: str):
-        self.message = f"The operation ({operation_name}) is not supported!"
+        self.message = f"The operation ({operation_name}) is not supported for this type of circuit!"
         super().__init__(self.message)

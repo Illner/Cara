@@ -861,6 +861,10 @@ class Circuit:
         if not self.is_root_set():
             raise c_exception.RootOfCircuitIsNotSetException()
 
+        node_type_dictionary = self.get_node_type_dictionary()
+        if (node_type_dictionary[nt_enum.NodeTypeEnum.TWO_CNF] > 0) or (node_type_dictionary[nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF] > 0):
+            warnings.warn("The circuit contains 2-CNF or renamable Horn formulae -> time complexity can be exponential!")
+
         self.__check_assumption_set_and_exist_quantification_set(assumption_set, set())
 
         self.smooth()

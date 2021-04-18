@@ -2,7 +2,7 @@
 **Backdoor Decomposable Monotone Circuits (BDMC) compiler**
 
 ## Language
-Python 3.6+
+Python 3.6+ (64 bit)
 
 ## Packages
 * <a href="https://pypi.org/project/sortedcontainers/" target="_blank">sortedcontainers</a> 2.3.0 (Windows / Linux / macOS)
@@ -18,9 +18,13 @@ You can install all required packages to central user packages repository using 
 * <a href="http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview" target="_blank">hMETIS</a> 1.5.3 (Windows / Linux)
 * <a href="https://www.cc.gatech.edu/~umit/software.html" target="_blank">PaToH</a> 3.3 (Linux / macOS)
 
-## Arguments
-Example: *cara -s -bc TWO_CNF -bc RENAMABLE_HORN_CNF input_file output_file*
+** **
 
+## Cara
+### Example
+*cara.py -s -bc TWO_CNF -bc RENAMABLE_HORN_CNF input_file output_file*
+
+### Arguments
 positional arguments:
 * **input_file**
   + path of the input file, which is in the DIMACS CNF format
@@ -67,5 +71,50 @@ optional arguments:
 * **-v, --version**
   + show program's version number and exit
   
+** **
+
+## Cara - query
+### Example
+**Consistency** - *cara_query.py -co -a 1 -2 3 circuit_file*
+
+**Validity** - *cara_query.py -va -a 1 -2 3 circuit_file*
+
+**Clausal entailment** - *cara_query.py -ce -cl 1 -2 3 circuit_file*
+
+**Model counting** - *cara_query.py -ct -a 1 -2 3 circuit_file*
+
+**Minimum cardinality** - *cara_query.py -mc -o 1 -2 3 -d 4 5 circuit_file*
+
+### Arguments
+positional arguments:
+* **circuit_file**
+  + path of the circuit file, which is in the DIMACS NNF format
+ 
+optional arguments:
++ **-h, --help**
+  + show this help message and exit
++ **-co, --consistency**
+  + consistency check (CO) (default: False)
++ **-va, --validity**
+  + validity check (VA) (default: False)
++ **-ce, --clausal_entailment**
+  + clausal entailment check (CE) (default: False)
++ **-ct, --model_counting**
+  + model counting (CT) (default: False)
++ **-mc, --minimum_cardinality**
+  + minimum cardinality (MC) (default: False)
+  
+
++ **-a, --assumption [lit_1, lit_2, ...]**
+  + assumption set (CO, VA, CT) (default: [])
++ **-cl, --clause [lit_1, lit_2, ...]**
+  + clause (CE) (default: [])
++ **-o, --observation [lit_1, lit_2, ...]**
+  + observation set (MC) (default: [])
++ **-d, --default [var_1, var_2, ...]**
+  + default set (MC) (default: [])
+  
+** ** 
+
 ## Modules
 ![alt text](images/modules.png)
