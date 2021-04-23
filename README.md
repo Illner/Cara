@@ -99,8 +99,6 @@ optional arguments:
   + model counting (CT) (default: False)
 + **-mc, --minimum_cardinality**
   + minimum cardinality (MC) (default: False)
-  
-
 + **-a, --assumption [lit_1, lit_2, ...]**
   + assumption set (CO, VA, CT) (default: [])
 + **-cl, --clause [lit_1, lit_2, ...]**
