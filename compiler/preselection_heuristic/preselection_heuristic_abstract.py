@@ -14,10 +14,11 @@ class PreselectionHeuristicAbstract(ABC):
 
     # region Abstract method
     @abstractmethod
-    def preselect_variables(self, incidence_graph: IncidenceGraph) -> Set[int]:
+    def preselect_variables(self, incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
         """
         Compute a set of preselected variables
         :param incidence_graph: an incidence graph
+        :param depth: depth of the node where this preselection is used
         :return: a set of preselected variables
         """
 

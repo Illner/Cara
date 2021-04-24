@@ -2,10 +2,8 @@
 from typing import List
 from compiler.solver import Solver
 from formula.incidence_graph import IncidenceGraph
-from compiler.decision_heuristic.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
-
-# Import enum
-import compiler.enum.decision_heuristic_preselection_enum as dhp_enum
+from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
+from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
 
 
 class ClauseReductionHeuristic(DecisionHeuristicAbstract):
@@ -13,8 +11,8 @@ class ClauseReductionHeuristic(DecisionHeuristicAbstract):
     Clause reduction - decision heuristic
     """
 
-    def __init__(self, preselection_heuristic_enum: dhp_enum.DecisionHeuristicPreselectionEnum):
-        super().__init__(preselection_heuristic_enum)
+    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract):
+        super().__init__(preselection_heuristic)
 
     # region Override method
     def get_decision_variable(self, incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int]) -> int:

@@ -1,7 +1,7 @@
 # Import
 from typing import Set
 from formula.incidence_graph import IncidenceGraph
-from compiler.decision_heuristic.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
+from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
 
 
 class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
@@ -13,7 +13,7 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
         super().__init__()
 
     # region Override method
-    def preselect_variables(self, incidence_graph: IncidenceGraph) -> Set[int]:
+    def preselect_variables(self, incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
         # TODO
         pass
     # endregion
