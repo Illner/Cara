@@ -540,7 +540,7 @@ class HypergraphPartitioning:
                 counter_temp += 1
 
         variable_clause_list = []
-        for clause_id in incidence_graph.clause_id_set(copy=False, multi_occurrence=False):
+        for clause_id in incidence_graph.clause_id_set(copy=False, multi_occurrence=False, multi_occurrence_literal=False):
             variable_set = incidence_graph.clause_id_neighbour_set(clause_id)
             variable_sorted_list = sorted(map(lambda v: variable_id_order_id_dictionary[v], variable_set))
             variable_clause_list.append(variable_sorted_list)
@@ -966,6 +966,6 @@ class HypergraphPartitioning:
     # region Static method
     @staticmethod
     def remove_reduction_incidence_graph(incidence_graph: IncidenceGraph) -> None:
-        incidence_graph.restore_backup_subsumption()                # Subsumption
-        incidence_graph.restore_backup_variable_simplification()    # Variable simplification
+        incidence_graph.restore_backup_subsumption()                # subsumption
+        incidence_graph.restore_backup_variable_simplification()    # variable simplification
     # endregion

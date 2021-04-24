@@ -176,7 +176,7 @@ class Compiler:
                                   first_implied_literals_enum=self.__first_implied_literals_enum,
                                   statistics=self.__statistics,
                                   preprocessing=self.__preprocessing)
-            node_id = component.create_circuit()
+            node_id = component.create_circuit(depth=1)
             node_id_set.add(node_id)
 
         # More components have to be connected

@@ -67,6 +67,16 @@ class VariableHasBeenRemovedException(IncidenceGraphException):
         super().__init__(self.message)
 
 
+class VariableDoesNotExistInClauseException(IncidenceGraphException):
+    """
+    The variable does not exist in the clause
+    """
+
+    def __init__(self, variable: int, clause_id: int):
+        self.message = f"The variable ({variable}) does not exist in the clause ({clause_id})!"
+        super().__init__(self.message)
+
+
 class TryingRestoreLiteralHasNotBeenRemovedException(IncidenceGraphException):
     """
     Trying to restore the variable node that has not been removed

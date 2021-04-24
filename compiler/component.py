@@ -86,12 +86,13 @@ class Component:
         self.__assignment_list: List[int] = assignment_list
 
     # region Public
-    def create_circuit(self) -> int:
+    def create_circuit(self, depth: int) -> int:
         """
+        :param depth: depth of the node
         :return: the identifier of the root of the created circuit
         """
 
-        return self.__create_circuit(set())
+        return self.__create_circuit(cut_set=set(), depth=depth)
     # endregion
 
     # region Private
@@ -198,8 +199,10 @@ class Component:
 
         return True if self.__incidence_graph.number_of_components() > 1 else False
 
-    def __create_circuit(self, cut_set: Set[int]) -> int:
+    def __create_circuit(self, cut_set: Set[int], depth: int) -> int:
         """
+        :param cut_set: a cut set (can be empty)
+        :param depth: depth of the node
         :return: the identifier of the root of the created circuit
         """
 
@@ -302,7 +305,7 @@ class Component:
                                            implied_literals_enum=self.__implied_literals_enum,
                                            first_implied_literals_enum=self.__first_implied_literals_enum,
                                            statistics=self.__statistics)
-                node_id = component_temp.create_circuit()
+                node_id = component_temp.create_circuit(depth=(depth + 1))
                 node_id_set.add(node_id)
 
             node_id_cache = self.__circuit.create_and_node(node_id_set)
@@ -367,7 +370,7 @@ class Component:
             isolated_variable_in_cut_set_restriction_set = isolated_variable_set.intersection(cut_set_restriction)
             cut_set_restriction.difference_update(isolated_variable_in_cut_set_restriction_set)
 
-            node_id = self.__create_circuit(cut_set_restriction)
+            node_id = self.__create_circuit(cut_set_restriction, depth=(depth + 1))
             node_id_list.append(node_id)
 
             self.__assignment_list.pop()

@@ -30,12 +30,15 @@ class IncidenceGraph(Graph):
     Private Set<int> variable_set
     Private Set<int> clause_id_set
     Private Set<int> satisfied_clause_set
-    Private Dict<int, Set<int>> adjacency_literal_dictionary                # key: a literal, value: a set of clauses (nodes) where the literal appears
+    Private Dict<int, Set<int>> adjacency_literal_static_dictionary         # key: a literal, value: a set of clauses (nodes) where the literal appears
+    Private Dict<int, Set<int>> adjacency_literal_dynamic_dictionary        # key: a literal, value: a set of clauses (nodes) where the literal appears
+    Private bool update_adjacency_literal_dynamic_dictionary
     
     Private IncidenceGraphStatistics statistics
     
-    Private Set<int> unit_clause_set
+    # Clause length
     Private Dict<int, int> clause_length_dictionary                         # key: a clause, value: the length of the clause
+    Private Dict<int, Set<int>> length_set_clauses_dictionary               # key: a length, value: a set of clauses with that length
     
     # Renamable Horn formula recognition
     Private Set<int> neg_assigned_literal_set
@@ -64,11 +67,14 @@ class IncidenceGraph(Graph):
         self.__variable_set: Set[int] = set()
         self.__clause_id_set: Set[int] = set()
         self.__satisfied_clause_set: Set[int] = set()
-        self.__adjacency_literal_dictionary: Dict[int, Set[int]] = dict()
+        self.__adjacency_literal_static_dictionary: Dict[int, Set[int]] = dict()
+        self.__adjacency_literal_dynamic_dictionary: Dict[int, Set[int]] = dict()
+        self.__update_adjacency_literal_dynamic_dictionary: bool = True             # because of variable simplification
 
         # Clause length
-        self.__unit_clause_set: Set[int] = set()
+        # self.__unit_clause_set: Set[int] = set()
         self.__clause_length_dictionary: Dict[int, int] = dict()
+        self.__length_set_clauses_dictionary: Dict[int, Set[int]] = {0: set(), 1: set(), 2: set()}
 
         # Renamable Horn formula recognition
         self.__neg_assigned_literal_set: Set[int] = set()
@@ -142,6 +148,8 @@ class IncidenceGraph(Graph):
         :raises SomethingWrongException: if the length of the clause will be negative
         """
 
+        value_before = self.__clause_length_dictionary[clause_id]
+
         # Increment
         if increment_by_one:
             self.__clause_length_dictionary[clause_id] += 1
@@ -149,14 +157,19 @@ class IncidenceGraph(Graph):
         else:
             self.__clause_length_dictionary[clause_id] -= 1
 
-        value = self.__clause_length_dictionary[clause_id]
-        if value < 0:
-            raise c_exception.SomethingWrongException(f"the length of the clause ({clause_id}) is negative ({value})")
+        value_after = self.__clause_length_dictionary[clause_id]
+        if value_after < 0:
+            raise c_exception.SomethingWrongException(f"the length of the clause ({clause_id}) is negative ({value_after})")
 
-        if value == 1:
-            self.__unit_clause_set.add(clause_id)
-        elif clause_id in self.__unit_clause_set:
-            self.__unit_clause_set.remove(clause_id)
+        self.__length_set_clauses_dictionary[value_before].remove(clause_id)
+        if value_after not in self.__length_set_clauses_dictionary:
+            self.__length_set_clauses_dictionary[value_after] = set()
+        self.__length_set_clauses_dictionary[value_after].add(clause_id)
+
+        # if value_after == 1:
+        #     self.__unit_clause_set.add(clause_id)
+        # elif clause_id in self.__unit_clause_set:
+        #     self.__unit_clause_set.remove(clause_id)
 
     def __node_exist(self, node_hash: str) -> bool:
         """
@@ -221,13 +234,17 @@ class IncidenceGraph(Graph):
         for neighbour_hash in set(self.neighbors(clause_id_hash)):
             self.__temporarily_remove_edge(neighbour_hash, clause_id_hash)
 
+        # Clause length
+        del self.__clause_length_dictionary[clause_id]
+        self.__length_set_clauses_dictionary[0].remove(clause_id)
+
         self.__clause_id_set.remove(clause_id)
         self.remove_node(clause_id_hash)
 
-    def __temporarily_remove_edge(self, variable_id: Union[int, str], clause_id: Union[int, str]) -> None:
+    def __temporarily_remove_edge(self, variable: Union[int, str], clause_id: Union[int, str]) -> None:
         """
-        Temporarily remove the edge (variable_id - clause_id)
-        :param variable_id: the identifier/hash of the variable
+        Temporarily remove the edge (variable - clause_id)
+        :param variable: the identifier/hash of the variable
         :param clause_id: the identifier/hash of the clause
         :return: None
         :raises VariableDoesNotExistException: if the variable does not exist in the incidence graph
@@ -235,14 +252,16 @@ class IncidenceGraph(Graph):
         :raises TryingRemoveEdgeDoesNotExistException: if the edge does not exist in the incidence graph
         """
 
+        # Variable
         # Hash
-        if isinstance(variable_id, str):
-            variable_hash = variable_id
-            variable_id = self.__unhash(variable_hash)
+        if isinstance(variable, str):
+            variable_hash = variable
+            variable = self.__unhash(variable_hash)
         # ID
         else:
-            variable_hash = self.__variable_hash(variable_id)
+            variable_hash = self.__variable_hash(variable)
 
+        # Clause
         # Hash
         if isinstance(clause_id, str):
             clause_id_hash = clause_id
@@ -253,7 +272,7 @@ class IncidenceGraph(Graph):
 
         # The variable does not exist in the incidence graph
         if not self.__node_exist(variable_hash):
-            raise ig_exception.VariableDoesNotExistException(variable_id)
+            raise ig_exception.VariableDoesNotExistException(variable)
 
         # The clause does not exist in the incidence graph
         if not self.__node_exist(clause_id_hash):
@@ -261,7 +280,12 @@ class IncidenceGraph(Graph):
 
         # The edge does not exist in the incidence graph
         if not self.has_edge(variable_hash, clause_id_hash):
-            raise ig_exception.TryingRemoveEdgeDoesNotExistException(variable_id, clause_id)
+            raise ig_exception.TryingRemoveEdgeDoesNotExistException(variable, clause_id)
+
+        # adjacency_literal_dynamic_dictionary
+        if self.__update_adjacency_literal_dynamic_dictionary:
+            literal = self.__get_literal_from_clause(variable, clause_id)
+            self.__adjacency_literal_dynamic_dictionary[literal].remove(clause_id)
 
         self.__update_clause_length(clause_id, increment_by_one=False)  # update the length
         super().remove_edge(variable_hash, clause_id_hash)
@@ -275,6 +299,12 @@ class IncidenceGraph(Graph):
         """
 
         clause_id = self.__unhash(clause_id_hash)
+
+        # adjacency_literal_dynamic_dictionary
+        if self.__update_adjacency_literal_dynamic_dictionary:
+            variable = self.__unhash(variable_hash)
+            literal = self.__get_literal_from_clause(variable, clause_id)
+            self.__adjacency_literal_dynamic_dictionary[literal].add(clause_id)
 
         self.__update_clause_length(clause_id, increment_by_one=True)   # update the length
         super().add_edge(variable_hash, clause_id_hash)
@@ -319,6 +349,26 @@ class IncidenceGraph(Graph):
                 cnf.append(clause_temp)
 
         return cnf
+
+    def __get_literal_from_clause(self, variable: int, clause_id: int) -> int:
+        """
+        Return a sign of variable which occurs in the clause
+        :param variable: the variable
+        :param clause_id: the identifier of the clause
+        :return: a literal which appears in the clause
+        :raises VariableDoesNotExistInClauseException: if the variable does not exist in the clause
+        """
+
+        # Positive literal
+        if clause_id in self.__adjacency_literal_static_dictionary[variable]:
+            return variable
+
+        # Negative literal
+        if clause_id in self.__adjacency_literal_static_dictionary[(-variable)]:
+            return -variable
+
+        # The variable does not exist in the clause
+        raise ig_exception.VariableDoesNotExistInClauseException(variable, clause_id)
     # endregion
 
     # region Public method
@@ -337,9 +387,11 @@ class IncidenceGraph(Graph):
             raise ig_exception.VariableAlreadyExistsException(variable)
 
         # adjacency_literal_dictionary
-        if variable not in self.__adjacency_literal_dictionary:
-            self.__adjacency_literal_dictionary[variable] = set()
-            self.__adjacency_literal_dictionary[-variable] = set()
+        if variable not in self.__adjacency_literal_static_dictionary:
+            self.__adjacency_literal_static_dictionary[variable] = set()
+            self.__adjacency_literal_static_dictionary[-variable] = set()
+            self.__adjacency_literal_dynamic_dictionary[variable] = set()
+            self.__adjacency_literal_dynamic_dictionary[-variable] = set()
 
         self.__variable_set.add(variable)
         self.add_node(variable_hash, value=variable, bipartite=0)
@@ -358,7 +410,10 @@ class IncidenceGraph(Graph):
         if self.__node_exist(clause_id_hash):
             raise ig_exception.ClauseIdAlreadyExistsException(clause_id)
 
-        self.__clause_length_dictionary[clause_id] = 0  # clause length
+        # Clause length
+        self.__clause_length_dictionary[clause_id] = 0
+        self.__length_set_clauses_dictionary[0].add(clause_id)
+
         self.__clause_id_set.add(clause_id)
         self.add_node(clause_id_hash, value=clause_id, bipartite=1)
 
@@ -389,8 +444,8 @@ class IncidenceGraph(Graph):
         if self.has_edge(variable_hash, clause_id_hash):
             return
 
-        # adjacency_literal_dictionary
-        self.__adjacency_literal_dictionary[literal].add(clause_id)
+        # adjacency_literal_static_dictionary
+        self.__adjacency_literal_static_dictionary[literal].add(clause_id)
 
         self.__add_edge(variable_hash, clause_id_hash)
 
@@ -489,10 +544,8 @@ class IncidenceGraph(Graph):
         literal_set = set()
 
         for variable in variable_set:
-            if clause_id in self.__adjacency_literal_dictionary[variable]:
-                literal_set.add(variable)
-            else:
-                literal_set.add(-variable)
+            literal = self.__get_literal_from_clause(variable, clause_id)
+            literal_set.add(literal)
 
         return literal_set
 
@@ -503,10 +556,11 @@ class IncidenceGraph(Graph):
 
         return super().number_of_nodes()
 
-    def clause_id_set(self, copy: bool, multi_occurrence: bool = True) -> Set[int]:
+    def clause_id_set(self, copy: bool, multi_occurrence: bool = True, multi_occurrence_literal: bool = True) -> Set[int]:
         """
         :param copy: True if a copy is returned
         :param multi_occurrence: should be multi-occurrent clauses kept (a copy is returned)
+        :param multi_occurrence_literal: True if multi-occurrence is based on literals, False for variables
         :return: a set of clauses that are in the incidence graph
         """
 
@@ -523,7 +577,8 @@ class IncidenceGraph(Graph):
         clause_id_set_without_multi_occurrence = set()
 
         for clause_id in clause_id_set:
-            clause_key_string = ",".join(map(str, sorted(self.get_clause(clause_id))))
+            clause_temp = self.get_clause(clause_id) if multi_occurrence_literal else self.clause_id_neighbour_set(clause_id)
+            clause_key_string = ",".join(map(str, sorted(clause_temp)))
 
             if clause_key_string not in cache:
                 cache[clause_key_string] = clause_id
@@ -647,7 +702,7 @@ class IncidenceGraph(Graph):
         self.__temporarily_remove_variable(variable)
 
         clause_node_dictionary = dict()
-        for clause_id in self.__adjacency_literal_dictionary[literal]:
+        for clause_id in self.__adjacency_literal_static_dictionary[literal]:
             clause_id_hash = self.__clause_id_hash(clause_id)
 
             # The clause node has been already deleted
@@ -759,6 +814,7 @@ class IncidenceGraph(Graph):
         """
 
         self.__statistics.merge_variable_simplification.start_stopwatch()   # timer (start)
+        self.__update_adjacency_literal_dynamic_dictionary = False
 
         variable_to_delete_set = set()
 
@@ -777,10 +833,10 @@ class IncidenceGraph(Graph):
 
                 variable_to_delete_set.add(variable)
 
-            # Add edges
             if representant_hash not in self.__added_edge_backup_dictionary:
                 self.__added_edge_backup_dictionary[representant_hash] = set()
 
+            # Add edges
             for neighbour_hash in neighbour_hash_set:
                 # The edge does not exist
                 if not self.has_edge(representant_hash, neighbour_hash):
@@ -822,6 +878,7 @@ class IncidenceGraph(Graph):
 
         self.__added_edge_backup_dictionary = dict()
 
+        self.__update_adjacency_literal_dynamic_dictionary = True
         self.__statistics.restore_backup_variable_simplification.stop_stopwatch()   # timer (stop)
     # endregion
 
@@ -971,11 +1028,7 @@ class IncidenceGraph(Graph):
                 incidence_graph_temp.add_clause_id(clause_id)
                 for neighbour_hash in self.neighbors(node_hash):
                     variable = self.nodes[neighbour_hash]["value"]
-
-                    literal = variable  # Positive literal
-                    if clause_id in self.__adjacency_literal_dictionary[-variable]:     # Negative literal
-                        literal = -variable
-
+                    literal = self.__get_literal_from_clause(variable, clause_id)
                     incidence_graph_temp.add_edge(literal, clause_id)
 
             incidence_graph_set.add(incidence_graph_temp)
@@ -1001,11 +1054,7 @@ class IncidenceGraph(Graph):
             copy.add_clause_id(clause_id)
             for neighbour_hash in self.neighbors(node_hash):
                 variable = self.nodes[neighbour_hash]["value"]
-
-                literal = variable  # Positive literal
-                if clause_id in self.__adjacency_literal_dictionary[-variable]:  # Negative literal
-                    literal = -variable
-
+                literal = self.__get_literal_from_clause(variable, clause_id)
                 copy.add_edge(literal, clause_id)
 
         # Renamable Horn formula recognition
@@ -1065,7 +1114,7 @@ class IncidenceGraph(Graph):
         :return: True if the incidence graph represents a 2-CNF. Otherwise, False is returned.
         """
 
-        number_of_unit_clauses = len(self.__unit_clause_set)
+        number_of_unit_clauses = len(self.__length_set_clauses_dictionary[1])
         number_of_not_unit_clauses = self.number_of_clauses() - number_of_unit_clauses
 
         if number_of_not_unit_clauses == 0:
