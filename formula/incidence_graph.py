@@ -639,30 +639,6 @@ class IncidenceGraph(Graph):
 
         return len(self.variable_set(copy=False))
 
-    def variable_with_most_occurrences(self, variable_restriction_set: Union[Set[int], None] = None) -> Union[int, None]:
-        """
-        :param variable_restriction_set: a set of variables that will be taken into account (None for all variables)
-        :return: a variable with the most occurrences
-        :raises VariableDoesNotExistException: if the variable does not exist in the incidence graph
-        """
-
-        max_occurrences = 0
-        max_variable = None
-
-        if variable_restriction_set is None:
-            variable_set_temp = self.variable_set(copy=False)
-        else:
-            variable_set_temp = variable_restriction_set
-
-        for variable in variable_set_temp:
-            temp = self.number_of_neighbours_variable(variable)
-
-            if temp > max_occurrences:
-                max_occurrences = temp
-                max_variable = variable
-
-        return max_variable
-
     # region Assignment
     def remove_literal(self, literal: int) -> Set[int]:
         """
@@ -1172,6 +1148,129 @@ class IncidenceGraph(Graph):
             self.__statistics.renamable_horn_formula_ratio.add_count(0)     # counter
 
         return result
+
+    def get_literals_in_binary_clauses(self) -> Set[int]:
+        """
+        :return: a set of literals that occur in binary clauses
+        """
+
+        binary_clause_set = self.__length_set_clauses_dictionary[2]
+        literal_set = set()
+
+        for binary_clause_id in binary_clause_set:
+            for variable in self.clause_id_neighbour_set(binary_clause_id):
+                literal = self.__get_literal_from_clause(variable, binary_clause_id)
+                literal_set.add(literal)
+
+        return literal_set
+
+    def literal_number_of_occurrences(self, literal: int) -> int:
+        """
+        Return the number of occurrences of the literal
+        :param literal: a literal
+        :return: the number of occurrences
+        :raises VariableDoesNotExistException: if the variable (|literal|) does not exist in the incidence graph
+        """
+
+        variable = abs(literal)
+        variable_hash = self.__variable_hash(variable)
+
+        # The variable does not exist in the incidence graph
+        if not self.__node_exist(variable_hash):
+            raise ig_exception.VariableDoesNotExistException(variable)
+
+        return len(self.__adjacency_literal_dynamic_dictionary[literal])
+
+    def literal_set_number_of_occurrences(self, literal_set: Set[int]) -> int:
+        sum_temp = 0
+        for literal in literal_set:
+            sum_temp += self.literal_number_of_occurrences(literal)
+
+        return sum_temp
+
+    def variable_number_of_occurrences(self, variable: int) -> int:
+        """
+        Return the number of occurrences of the variable
+        :param variable: a variable
+        :return: the number of occurrences
+        :raises VariableDoesNotExistException: if the variable does not exist in the incidence graph
+        """
+
+        return self.literal_number_of_occurrences(variable) + self.literal_number_of_occurrences(-variable)
+
+    def variable_with_most_occurrences(self, variable_restriction_set: Union[Set[int], None] = None) -> Union[int, None]:
+        """
+        :param variable_restriction_set: a set of variables that will be taken into account (None for all variables)
+        :return: a variable with the most occurrences
+        :raises VariableDoesNotExistException: if any variable does not exist in the incidence graph
+        """
+
+        max_occurrences = 0
+        max_variable = None
+
+        if variable_restriction_set is None:
+            variable_set_temp = self.variable_set(copy=False)
+        else:
+            variable_set_temp = variable_restriction_set
+
+        for variable in variable_set_temp:
+            temp = self.variable_number_of_occurrences(variable)
+
+            if temp > max_occurrences:
+                max_occurrences = temp
+                max_variable = variable
+
+        return max_variable
+
+    def literal_sum_lengths_clauses(self, literal: int) -> int:
+        """
+        Return the sum of lengths of clauses where the literal occurs
+        :param literal: a literal
+        :return: the sum of lengths of clauses
+        :raises VariableDoesNotExistException: if the variable (|literal|) does not exist in the incidence graph
+        """
+
+        variable = abs(literal)
+        variable_hash = self.__variable_hash(variable)
+
+        # The variable does not exist in the incidence graph
+        if not self.__node_exist(variable_hash):
+            raise ig_exception.VariableDoesNotExistException(variable)
+
+        sum_temp = 0
+        for clause_id in self.__adjacency_literal_dynamic_dictionary[literal]:
+            sum_temp += self.number_of_neighbours_clause_id(clause_id)
+
+        return sum_temp
+
+    def literal_set_sum_lengths_clauses(self, literal_set: Set[int]) -> int:
+        sum_temp = 0
+        for literal in literal_set:
+            sum_temp += self.literal_sum_lengths_clauses(literal)
+
+        return sum_temp
+
+    def variable_sum_lengths_clauses(self, variable: int) -> int:
+        """
+        Return the sum of lengths of clauses where the variable occurs
+        :param variable: a variable
+        :return: the sum of length of clauses
+        :raises VariableDoesNotExistException: if the variable does not exist in the incidence graph
+        """
+
+        return self.literal_sum_lengths_clauses(variable) + self.literal_sum_lengths_clauses(-variable)
+
+    def get_binary_clause_set(self, copy: bool):
+        """
+        Return a set of binary clauses in the incidence graph
+        :param copy: True if a copy is returned
+        :return: a set of binary clauses
+        """
+
+        if copy:
+            return self.__length_set_clauses_dictionary[2].copy()
+
+        return self.__length_set_clauses_dictionary[2]
     # endregion
 
     # region Property

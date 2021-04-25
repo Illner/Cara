@@ -17,6 +17,9 @@ import compiler.enum.base_class_enum as bs_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 
+from compiler.preselection_heuristic.prop_z_heuristic import PropZHeuristic
+from compiler.preselection_heuristic.clause_reduction_approximation_heuristic import ClauseReductionApproximationHeuristic
+
 
 class Component:
     """
@@ -84,6 +87,9 @@ class Component:
                                        statistics=self.__statistics.solver_statistics)
 
         self.__assignment_list: List[int] = assignment_list
+
+        self.__p = PropZHeuristic(depth_threshold=5, number_of_variables_lower_bound=10)
+        self.__p_1 = ClauseReductionApproximationHeuristic(rank=0.1, total_number_of_variables=cnf.number_of_variables)
 
     # region Public
     def create_circuit(self, depth: int) -> int:
@@ -238,6 +244,9 @@ class Component:
 
             self.__statistics.component_statistics.empty_incidence_graph.add_count(1)   # counter
             return self.__circuit.create_and_node(implied_literal_id_set)
+
+        temp = self.__p.preselect_variables(incidence_graph=self.__incidence_graph, depth=depth)
+        temp = self.__p_1.preselect_variables(incidence_graph=self.__incidence_graph, depth=depth)
 
         # Component caching
         key = self.__component_caching.generate_key_cache(self.__incidence_graph)
