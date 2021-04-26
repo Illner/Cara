@@ -23,10 +23,11 @@ class JeroslowWangHeuristic(DecisionHeuristicAbstract):
     # region Override method
     def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
-        score_dictionary: Dict[int, int] = dict()       # key: variable, value: score of the variable
 
         if len(preselected_variable_set) == 1:
             return list(preselected_variable_set)[0]
+
+        score_dictionary: Dict[int, int] = dict()       # key: variable, value: score of the variable
 
         # Compute score
         for variable in preselected_variable_set:

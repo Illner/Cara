@@ -5,3 +5,4 @@
 ) Subsumption
 ) DIMACS NNF - DIMACS CNF
 ) Hypergraph weights
+) Hypergraph partitioning - cache - sorting
