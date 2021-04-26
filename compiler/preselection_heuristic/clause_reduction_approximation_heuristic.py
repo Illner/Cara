@@ -1,11 +1,11 @@
 # Import
 import math
-from typing import Set, Dict
+from typing import Set, Dict, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
 
 # Import exception
-import exception.compiler.compiler_exception as c_exception
+import exception.compiler.heuristic_exception as h_exception
 
 
 class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
@@ -19,44 +19,58 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
     Private int number_of_returned_variables
     """
 
-    def __init__(self, rank: float, total_number_of_variables: int):
+    def __init__(self, rank: float, total_number_of_variables: int, number_of_returned_variables: Union[int, None] = None):
         super().__init__()
 
         self.__rank: float = rank
         self.__total_number_of_variables: int = total_number_of_variables
-        self.__number_of_returned_variables: int = math.ceil(self.__rank * self.__total_number_of_variables)
+
+        # The number of returned variables is explicitly mentioned
+        if number_of_returned_variables is not None:
+            self.__number_of_returned_variables: int = number_of_returned_variables
+        else:
+            self.__number_of_returned_variables: int = math.ceil(self.__rank * self.__total_number_of_variables)
 
     # region Override method
-    def preselect_variables(self, incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
+    def preselect_variables(self, variable_restriction_set: Set[int], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
         approximated_set_dictionary: Dict[int, Set[int]] = dict()           # key: literal, value: set of literals
         occurrences_in_binary_clauses_dictionary: Dict[int, int] = dict()   # key: literal, value: number of binary clauses where the literal occurs
 
-        if incidence_graph.number_of_variables() <= self.__number_of_returned_variables:
-            return incidence_graph.variable_set(copy=False)
+        if len(variable_restriction_set) <= self.__number_of_returned_variables:
+            return variable_restriction_set
 
-        # Get the approximated set
+        # Compute the approximated set
         for binary_clause_id in incidence_graph.get_binary_clause_set(copy=False):
             clause = list(incidence_graph.get_clause(binary_clause_id))
 
             # The clause is not binary
             if len(clause) != 2:
-                raise c_exception.ClauseIsNotBinaryException(clause)
+                raise h_exception.ClauseIsNotBinaryException(clause)
 
-            temp_list = [[clause[0], clause[1]], [clause[1], clause[0]]]
-            for lit_1, lit_2 in temp_list:
-                if lit_1 not in approximated_set_dictionary:
-                    approximated_set_dictionary[lit_1] = set()
-                    occurrences_in_binary_clauses_dictionary[lit_1] = 0
+            # occurrences_in_binary_clauses_dictionary
+            for lit in clause:
+                if lit not in occurrences_in_binary_clauses_dictionary:
+                    occurrences_in_binary_clauses_dictionary[lit] = 1
+                else:
+                    occurrences_in_binary_clauses_dictionary[lit] += 1
 
-                approximated_set_dictionary[lit_1].add(-lit_2)
-                occurrences_in_binary_clauses_dictionary[lit_1] += 1
+            lit_1, lit_2 = clause[0], clause[1]
+            if (abs(lit_1) not in variable_restriction_set) and (abs(lit_2) not in variable_restriction_set):
+                continue
+
+            temp_list = [[lit_1, lit_2], [lit_2, lit_1]]
+            for l_1, l_2 in temp_list:
+                if l_1 not in approximated_set_dictionary:
+                    approximated_set_dictionary[l_1] = set()
+
+                approximated_set_dictionary[l_1].add(-l_2)
 
         def compute_score_for_literal(literal_func: int) -> int:
             approximated_set_dictionary_func = set()
             if literal_func in approximated_set_dictionary:
                 approximated_set_dictionary_func = approximated_set_dictionary[literal_func]
 
-            score_func = incidence_graph.literal_set_number_of_occurrences(approximated_set_dictionary_func)
+            score_func = incidence_graph.literal_set_number_of_occurrences(approximated_set_dictionary_func, binary_clauses_included=True)
             for literal in approximated_set_dictionary_func:
                 if literal in occurrences_in_binary_clauses_dictionary:
                     score_func -= occurrences_in_binary_clauses_dictionary[literal]
@@ -66,14 +80,13 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
         score_dictionary: Dict[int, int] = dict()   # key: variable, value: score of the variable
 
         # Compute score
-        for variable in incidence_graph.variable_set(copy=False):
+        for variable in variable_restriction_set:
             score = compute_score_for_literal(variable) * compute_score_for_literal(-variable)
             score_dictionary[variable] = score
 
         # Pick the best ones
-        temp = sorted(score_dictionary.items(), key=lambda item: item[1], reverse=True)
-        temp = [item[0] for item in temp]
-        temp = set(temp[:self.__number_of_returned_variables])
+        variable_set = sorted(score_dictionary, key=score_dictionary.get, reverse=True)
+        variable_set = set(variable_set[:self.__number_of_returned_variables])
 
-        return temp
+        return variable_set
     # endregion

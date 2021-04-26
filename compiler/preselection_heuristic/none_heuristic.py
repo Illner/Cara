@@ -13,6 +13,6 @@ class NoneHeuristic(PreselectionHeuristicAbstract):
         super().__init__()
 
     # region Override method
-    def preselect_variables(self, incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
-        return incidence_graph.variable_set(copy=False)
+    def preselect_variables(self, variable_restriction_set: Set[int], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
+        return variable_restriction_set
     # endregion

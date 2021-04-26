@@ -1164,10 +1164,11 @@ class IncidenceGraph(Graph):
 
         return literal_set
 
-    def literal_number_of_occurrences(self, literal: int) -> int:
+    def literal_number_of_occurrences(self, literal: int, binary_clauses_included: bool = True) -> int:
         """
         Return the number of occurrences of the literal
         :param literal: a literal
+        :param binary_clauses_included: True if binary clauses are included
         :return: the number of occurrences
         :raises VariableDoesNotExistException: if the variable (|literal|) does not exist in the incidence graph
         """
@@ -1179,12 +1180,17 @@ class IncidenceGraph(Graph):
         if not self.__node_exist(variable_hash):
             raise ig_exception.VariableDoesNotExistException(variable)
 
-        return len(self.__adjacency_literal_dynamic_dictionary[literal])
+        clause_set = self.__adjacency_literal_dynamic_dictionary[literal]
 
-    def literal_set_number_of_occurrences(self, literal_set: Set[int]) -> int:
+        if binary_clauses_included:
+            return len(clause_set)
+
+        return len(clause_set.difference(self.__length_set_clauses_dictionary[2]))
+
+    def literal_set_number_of_occurrences(self, literal_set: Set[int], binary_clauses_included: bool = True) -> int:
         sum_temp = 0
         for literal in literal_set:
-            sum_temp += self.literal_number_of_occurrences(literal)
+            sum_temp += self.literal_number_of_occurrences(literal, binary_clauses_included)
 
         return sum_temp
 
@@ -1222,10 +1228,11 @@ class IncidenceGraph(Graph):
 
         return max_variable
 
-    def literal_sum_lengths_clauses(self, literal: int) -> int:
+    def literal_sum_lengths_clauses(self, literal: int, jeroslow_wang: bool = False) -> int:
         """
         Return the sum of lengths of clauses where the literal occurs
         :param literal: a literal
+        :param jeroslow_wang: False for sum(|w|). True for sum(2^-|w|).
         :return: the sum of lengths of clauses
         :raises VariableDoesNotExistException: if the variable (|literal|) does not exist in the incidence graph
         """
@@ -1239,7 +1246,14 @@ class IncidenceGraph(Graph):
 
         sum_temp = 0
         for clause_id in self.__adjacency_literal_dynamic_dictionary[literal]:
-            sum_temp += self.number_of_neighbours_clause_id(clause_id)
+            temp = self.number_of_neighbours_clause_id(clause_id)
+
+            # sum(2^-|w|)
+            if jeroslow_wang:
+                sum_temp += 2**(-temp)
+            # sum(|w|)
+            else:
+                sum_temp += temp
 
         return sum_temp
 

@@ -1,5 +1,5 @@
 # Import
-from typing import Union, List
+from typing import Union
 
 # Import exception
 from exception.cara_exception import CaraException
@@ -30,14 +30,4 @@ class TryingGetVariableFromEmptyCutSetException(CompilerException):
 
     def __init__(self):
         self.message = "Trying to get a variable from the empty cut set!"
-        super().__init__(self.message)
-
-
-class ClauseIsNotBinaryException(CompilerException):
-    """
-    The clause is not binary
-    """
-
-    def __init__(self, clause: List[int]):
-        self.message = f"The clause ({clause}) is not binary!"
         super().__init__(self.message)
