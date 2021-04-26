@@ -25,6 +25,9 @@ class JeroslowWangHeuristic(DecisionHeuristicAbstract):
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
         score_dictionary: Dict[int, int] = dict()       # key: variable, value: score of the variable
 
+        if len(preselected_variable_set) == 1:
+            return list(preselected_variable_set)[0]
+
         # Compute score
         for variable in preselected_variable_set:
             positive_score = incidence_graph.literal_sum_lengths_clauses(variable, jeroslow_wang=True)

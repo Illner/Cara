@@ -17,6 +17,10 @@ class MostOccurrencesHeuristic(DecisionHeuristicAbstract):
     # region Override method
     def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
+
+        if len(preselected_variable_set) == 1:
+            return list(preselected_variable_set)[0]
+
         decision_variable = incidence_graph.variable_with_most_occurrences(variable_restriction_set=preselected_variable_set)
 
         return decision_variable
