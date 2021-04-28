@@ -5,6 +5,12 @@ from formula.incidence_graph import IncidenceGraph
 from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
 
+# Import exception
+import exception.cara_exception as c_exception
+
+# Import enum
+import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdf_enum
+
 
 class ExactUnitPropagationCountHeuristic(DecisionHeuristicAbstract):
     """
@@ -12,13 +18,14 @@ class ExactUnitPropagationCountHeuristic(DecisionHeuristicAbstract):
     """
 
     """
-    Private int factor
+    Private MixedDifferenceHeuristicEnum mixed_difference_heuristic_enum
     """
 
-    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract, factor: int):
+    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract,
+                 mixed_difference_heuristic_enum: mdf_enum.MixedDifferenceHeuristicEnum):
         super().__init__(preselection_heuristic)
 
-        self.__factor: int = factor
+        self.__mixed_difference_heuristic_enum: mdf_enum.MixedDifferenceHeuristicEnum = mixed_difference_heuristic_enum
 
     # region Override method
     def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
@@ -35,11 +42,24 @@ class ExactUnitPropagationCountHeuristic(DecisionHeuristicAbstract):
         for variable in implicit_bcp_dictionary:
             temp_positive, temp_negative = implicit_bcp_dictionary[variable]
 
+            # Implied literal
             if (temp_positive is None) or (temp_negative is None):
                 return variable
 
             v_p, v_n = len(temp_positive), len(temp_negative)
-            score_dictionary[variable] = self.__factor * v_p * v_n + v_p + v_n
+
+            # OK_SOLVER
+            if self.__mixed_difference_heuristic_enum == mdf_enum.MixedDifferenceHeuristicEnum.OK_SOLVER:
+                score = v_p * v_n
+            # POSIT_SATZ
+            elif self.__mixed_difference_heuristic_enum == mdf_enum.MixedDifferenceHeuristicEnum.POSIT_SATZ:
+                score = 1024 * v_p * v_n + v_p + v_n
+            # Not supported
+            else:
+                raise c_exception.FunctionNotImplementedException("get_decision_variable",
+                                                                  f"this type of mixed difference heuristic ({self.__mixed_difference_heuristic_enum.name}) is not implemented")
+
+            score_dictionary[variable] = score
 
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)

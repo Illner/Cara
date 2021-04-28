@@ -28,3 +28,13 @@ class PreselectedVariableSetIsEmptyException(HeuristicException):
     def __init__(self):
         self.message = "The preselected variable set is empty!"
         super().__init__(self.message)
+
+
+class WeightDoesNotExistForSizeOfClauseException(HeuristicException):
+    """
+    Weight does not exist for this size of a clause
+    """
+
+    def __init__(self, clause_size: int):
+        self.message = f"Weight does not exist for this size of a clause ({str(clause_size)})!"
+        super().__init__(self.message)
