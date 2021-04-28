@@ -12,7 +12,7 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     """
     Private StatisticsComponentTimer get_implied_literals
     Private StatisticsComponentTimer get_cut_set
-    Private StatisticsComponentTimer get_suggested_variable_from_cut_set
+    Private StatisticsComponentTimer get_decision_variable_from_cut_set
     Private StatisticsComponentTimer cut_set_try_cache
     
     Private StatisticsComponentCounter unsatisfiable
@@ -38,8 +38,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get cut set")
         self._component_list.append(self.__get_cut_set)
 
-        self.__get_suggested_variable_from_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("suggest variable from cut set")
-        self._component_list.append(self.__get_suggested_variable_from_cut_set)
+        self.__get_decision_variable_from_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("decision variable from cut set")
+        self._component_list.append(self.__get_decision_variable_from_cut_set)
 
         self.__unsatisfiable: StatisticsComponentCounter = StatisticsComponentCounter("unsatisfiable subformulae", True)
         self._component_list.append(self.__unsatisfiable)
@@ -90,8 +90,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         return self.__get_cut_set
 
     @property
-    def get_suggested_variable_from_cut_set(self) -> StatisticsComponentTimer:
-        return self.__get_suggested_variable_from_cut_set
+    def get_decision_variable_from_cut_set(self) -> StatisticsComponentTimer:
+        return self.__get_decision_variable_from_cut_set
 
     @property
     def unsatisfiable(self) -> StatisticsComponentCounter:

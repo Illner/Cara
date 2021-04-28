@@ -19,6 +19,7 @@ import exception.cara_exception as c_exception
 import compiler.enum.base_class_enum as bs_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
+import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import compiler.component_caching.component_caching_enum as cc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
@@ -107,6 +108,7 @@ class ExperimentAbstract(ABC):
                             preprocessing=preprocessing,
                             subsumption_threshold=subsumed_threshold,
                             new_cut_set_threshold=new_cut_set_threshold,
+                            decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
                             sat_solver_enum=sat_solver_enum,
                             base_class_enum_set=base_class_enum_set,
                             implied_literals_enum=implied_literals_enum,

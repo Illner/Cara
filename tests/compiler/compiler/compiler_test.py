@@ -11,6 +11,7 @@ import exception.cara_exception as c_exception
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
+import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import compiler.component_caching.component_caching_enum as cc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
@@ -63,6 +64,7 @@ class CompilerTest(TestAbstract):
                                                             preprocessing=False,
                                                             subsumption_threshold=subsumed_threshold,
                                                             new_cut_set_threshold=new_cut_set_threshold,
+                                                            decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
                                                             sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                                                             base_class_enum_set=set(),
                                                             implied_literals_enum=implied_literals_enum,

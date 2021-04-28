@@ -15,7 +15,6 @@ import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import compiler.component_caching.component_caching_enum as cc_enum
-import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
 import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
@@ -36,6 +35,7 @@ def main(main_args):
                             preprocessing=main_args.preprocessing,
                             subsumption_threshold=main_args.subsumption_threshold,
                             new_cut_set_threshold=main_args.new_cut_set_threshold,
+                            decision_heuristic_enum=dh_enum.DecisionHeuristicEnum[main_args.decision_heuristic],
                             sat_solver_enum=ss_enum.SatSolverEnum[main_args.sat_solver],
                             base_class_enum_set=set([bc_enum.BaseClassEnum[base_class] for base_class in base_class_list]),
                             implied_literals_enum=il_enum.ImpliedLiteralsEnum[main_args.implied_literals],
@@ -49,7 +49,8 @@ def main(main_args):
                             hp_limit_number_of_clauses_cache=(None, main_args.hp_limit_number_of_clauses),
                             hp_limit_number_of_variables_cache=(None, main_args.hp_limit_number_of_variables),
                             cut_set_try_cache=main_args.cut_set_try_cache,
-                            new_cut_set_threshold_reduction=main_args.new_cut_set_threshold_reduction)
+                            new_cut_set_threshold_reduction=main_args.new_cut_set_threshold_reduction,
+                            decision_heuristic_mixed_difference_enum=mdh_enum.MixedDifferenceHeuristicEnum[main_args.dh_mixed_difference_heuristic])
         print("The formula has been processed!\n")
 
         print("Compiling...")

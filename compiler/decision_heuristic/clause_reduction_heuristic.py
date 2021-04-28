@@ -37,6 +37,9 @@ class ClauseReductionHeuristic(DecisionHeuristicAbstract):
         :raises WeightDoesNotExistForSizeOfClauseException: if the weight does not exist for this size
         """
 
+        if k < 0:
+            raise h_exception.WeightDoesNotExistForSizeOfClauseException(k)
+
         # Satisfied clause (= empty clause)
         if k == 0:
             if self.__weight_for_satisfied_clauses:
@@ -44,8 +47,9 @@ class ClauseReductionHeuristic(DecisionHeuristicAbstract):
             else:
                 return 0
 
-        if k <= 1:
-            raise h_exception.WeightDoesNotExistForSizeOfClauseException(k)
+        # Unsatisfied clause (because of no unit propagation)
+        if k == 1:
+            return -10000
 
         if k == 2:
             return 1

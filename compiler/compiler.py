@@ -13,6 +13,17 @@ from compiler.component_caching.basic_caching_scheme import BasicCachingScheme
 from compiler.component_caching.hybrid_caching_scheme import HybridCachingScheme
 from compiler.component_caching.standard_caching_scheme import StandardCachingScheme
 
+# Import decision heuristic
+from compiler.decision_heuristic.random_heuristic import RandomHeuristic
+from compiler.decision_heuristic.jeroslow_wang_heuristic import JeroslowWangHeuristic
+from compiler.decision_heuristic.literal_count_heuristic import LiteralCountHeuristic
+from compiler.decision_heuristic.eupc_heuristic import ExactUnitPropagationCountHeuristic
+from compiler.decision_heuristic.clause_reduction_heuristic import ClauseReductionHeuristic
+from compiler.decision_heuristic.weighted_binaries_heuristic import WeightedBinariesHeuristic
+
+# Import preselection heuristic
+from compiler.preselection_heuristic.none_heuristic import NoneHeuristic
+
 # Import exception
 import exception.cara_exception as c_exception
 
@@ -20,7 +31,10 @@ import exception.cara_exception as c_exception
 import compiler.enum.base_class_enum as bs_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
+import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import compiler.component_caching.component_caching_enum as cc_enum
+import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
+import compiler.enum.heuristic.literal_count_heuristic_function_enum as lchf_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
@@ -43,6 +57,7 @@ class Compiler:
     Private float new_cut_set_threshold_reduction           # when the cache for cut sets can be used
     Private Set<BaseClassEnum> base_class_enum_set
     Private ComponentCachingAbstract component_caching
+    Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
     
     Private SatSolverEnum sat_solver_enum
@@ -61,6 +76,7 @@ class Compiler:
                  preprocessing: bool,
                  subsumption_threshold: Union[int, None],
                  new_cut_set_threshold: float,
+                 decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  base_class_enum_set: Set[bs_enum.BaseClassEnum],
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
@@ -74,7 +90,8 @@ class Compiler:
                  hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  cut_set_try_cache: bool = False,
-                 new_cut_set_threshold_reduction: float = 1):
+                 new_cut_set_threshold_reduction: float = 1,
+                 decision_heuristic_mixed_difference_enum: mdh_enum.MixedDifferenceHeuristicEnum = mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER):
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -101,6 +118,9 @@ class Compiler:
 
         # Component caching
         self.__set_component_caching(component_caching_enum)
+
+        # Decision heuristic
+        self.__set_decision_heuristic(decision_heuristic_enum, decision_heuristic_mixed_difference_enum)
 
         self.__hypergraph_partitioning = HypergraphPartitioning(cnf=self.__cnf,
                                                                 ub_factor=ub_factor,
@@ -138,6 +158,65 @@ class Compiler:
 
         raise c_exception.FunctionNotImplementedException("set_component_caching",
                                                           f"this type of component caching ({component_caching_enum.name}) is not implemented")
+
+    def __set_decision_heuristic(self, decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,
+                                 mixed_difference_heuristic_enum: mdh_enum.MixedDifferenceHeuristicEnum):
+        preselection_heuristic = NoneHeuristic()
+
+        # RANDOM
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RANDOM:
+            self.__decision_heuristic = RandomHeuristic(preselection_heuristic=preselection_heuristic)
+            return
+
+        # JEROSLOW_WANG_ONE_SIDED, JEROSLOW_WANG_TWO_SIDED
+        if (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.JEROSLOW_WANG_ONE_SIDED) or \
+           (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.JEROSLOW_WANG_TWO_SIDED):
+            one_sided = True if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.JEROSLOW_WANG_ONE_SIDED else False
+            self.__decision_heuristic = JeroslowWangHeuristic(preselection_heuristic=preselection_heuristic,
+                                                              one_sided=one_sided)
+            return
+
+        # CLAUSE_REDUCTION
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION:
+            self.__decision_heuristic = ClauseReductionHeuristic(preselection_heuristic=preselection_heuristic,
+                                                                 weight_for_satisfied_clauses=True,
+                                                                 mixed_difference_heuristic_enum=mixed_difference_heuristic_enum)
+            return
+
+        # WEIGHTED_BINARIES
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.WEIGHTED_BINARIES:
+            self.__decision_heuristic = WeightedBinariesHeuristic(preselection_heuristic=preselection_heuristic)
+            return
+
+        # DLCS
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.DLCS:
+            self.__decision_heuristic = LiteralCountHeuristic(preselection_heuristic=preselection_heuristic,
+                                                              function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM,
+                                                              tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM)
+            return
+
+        # DLIS
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.DLIS:
+            self.__decision_heuristic = LiteralCountHeuristic(preselection_heuristic=preselection_heuristic,
+                                                              function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX,
+                                                              tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX)
+            return
+
+        # DLCS_DLIS
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.DLCS_DLIS:
+            self.__decision_heuristic = LiteralCountHeuristic(preselection_heuristic=preselection_heuristic,
+                                                              function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM,
+                                                              tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX)
+            return
+
+        # EUPC
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.EUPC:
+            self.__decision_heuristic = ExactUnitPropagationCountHeuristic(preselection_heuristic=preselection_heuristic,
+                                                                           mixed_difference_heuristic_enum=mixed_difference_heuristic_enum)
+            return
+
+        raise c_exception.FunctionNotImplementedException("set_decision_heuristic",
+                                                          f"this type of decision heuristic ({decision_heuristic_enum.name}) is not implemented")
     # endregion
 
     # region Public method
@@ -168,6 +247,7 @@ class Compiler:
                                   new_cut_set_threshold_reduction=self.__new_cut_set_threshold_reduction,
                                   cut_set_try_cache=self.__cut_set_try_cache,
                                   incidence_graph=incidence_graph,
+                                  decision_heuristic=self.__decision_heuristic,
                                   component_caching=self.__component_caching,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
                                   sat_solver_enum=self.__sat_solver_enum,

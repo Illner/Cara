@@ -7,6 +7,7 @@ from formula.incidence_graph import IncidenceGraph
 from compiler_statistics.statistics import Statistics
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
 from compiler.hypergraph_partitioning.hypergraph_partitioning import HypergraphPartitioning
+from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
 
 # Import exception
 import exception.cara_exception as ca_exception
@@ -35,6 +36,7 @@ class Component:
     
     Private IncidenceGraph incidence_graph
     Private ComponentCachingAbstract component_caching
+    Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
     
     Private SatSolverEnum sat_solver_enum
@@ -51,6 +53,7 @@ class Component:
                  new_cut_set_threshold_reduction: float,
                  cut_set_try_cache: bool,
                  incidence_graph: IncidenceGraph,
+                 decision_heuristic: DecisionHeuristicAbstract,
                  component_caching: ComponentCachingAbstract,
                  hypergraph_partitioning: HypergraphPartitioning,
                  sat_solver_enum: ss_enum.SatSolverEnum,
@@ -68,6 +71,7 @@ class Component:
         self.__base_class_enum_set: Set[bs_enum.BaseClassEnum] = base_class_enum_set
 
         self.__component_caching: ComponentCachingAbstract = component_caching
+        self.__decision_heuristic: DecisionHeuristicAbstract = decision_heuristic
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
@@ -171,25 +175,29 @@ class Component:
 
         return False
 
-    def __get_suggested_variable_from_cut_set(self, cut_set: Set[int]) -> int:
+    def __get_decision_variable_from_cut_set(self, cut_set: Set[int], depth: int) -> int:
         """
-        Return a suggested variable from the cut set based on the heuristic
+        Return a decision variable from the cut set based on the decision heuristic
         :param cut_set: a cut set
-        :return: a suggested variable (based on the heuristic) from the cut set
+        :param depth: depth of the node
+        :return: a decision variable (based on the heuristic) from the cut set
         :raises TryingGetVariableFromEmptyCutSetException: if the cut set is empty
         """
-        # TODO Cut set heuristic
 
-        self.__statistics.component_statistics.get_suggested_variable_from_cut_set.start_stopwatch()    # timer (start)
+        self.__statistics.component_statistics.get_decision_variable_from_cut_set.start_stopwatch()    # timer (start)
 
         # The cut set is empty
         if not cut_set:
             raise c_exception.TryingGetVariableFromEmptyCutSetException()
 
-        max_variable = self.__incidence_graph.variable_with_most_occurrences(cut_set)
+        decision_variable = self.__decision_heuristic.get_decision_variable(cut_set=cut_set,
+                                                                            incidence_graph=self.__incidence_graph,
+                                                                            solver=self.__solver,
+                                                                            assignment_list=self.__assignment_list,
+                                                                            depth=depth)
 
-        self.__statistics.component_statistics.get_suggested_variable_from_cut_set.stop_stopwatch()     # timer (stop)
-        return max_variable
+        self.__statistics.component_statistics.get_decision_variable_from_cut_set.stop_stopwatch()     # timer (stop)
+        return decision_variable
 
     def __exist_more_components(self) -> bool:
         """
@@ -298,6 +306,7 @@ class Component:
                                            new_cut_set_threshold_reduction=self.__new_cut_set_threshold_reduction,
                                            cut_set_try_cache=self.__cut_set_try_cache,
                                            incidence_graph=incidence_graph,
+                                           decision_heuristic=self.__decision_heuristic,
                                            component_caching=self.__component_caching,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
                                            sat_solver_enum=self.__sat_solver_enum,
@@ -354,7 +363,8 @@ class Component:
                 self.__hypergraph_partitioning.remove_reduction_incidence_graph(self.__incidence_graph)     # because of cut set - try cache
                 self.__statistics.component_statistics.recompute_cut_set.add_count(0)   # counter
 
-        decision_variable = self.__get_suggested_variable_from_cut_set(cut_set_restriction)
+        decision_variable = self.__get_decision_variable_from_cut_set(cut_set=cut_set_restriction,
+                                                                      depth=depth)
         cut_set_restriction.remove(decision_variable)
         self.__statistics.component_statistics.decision_variable.add_count(1)   # counter
 
