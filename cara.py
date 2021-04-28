@@ -13,7 +13,10 @@ import exception.cara_exception as c_exception
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.implied_literals_enum as il_enum
+import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import compiler.component_caching.component_caching_enum as cc_enum
+import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
+import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
@@ -165,6 +168,14 @@ def non_negative_int_or_none_parser(value: Union[int, str]) -> Union[int, None]:
     return value
 
 
+def non_negative_int_parser(value: Union[int, str]) -> int:
+    # None
+    if isinstance(value, str) and value.lower() == "none":
+        raise argparse.ArgumentTypeError(f"{value} has an invalid type ({type(value)}), expected int!")
+
+    return non_negative_int_or_none_parser(value)
+
+
 def create_parser() -> argparse.ArgumentParser:
     # Create the parser
     parser_temp = argparse.ArgumentParser(prog="cara.py",
@@ -201,6 +212,48 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str,
                              choices=bc_enum.base_class_enum_names,
                              help="types of base classes in the circuit's leaves (literal leaves are mandatory)")
+    parser_temp.add_argument("-dh",
+                             "--decision_heuristic",
+                             action="store",
+                             default=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION.name,
+                             type=str,
+                             choices=dh_enum.decision_heuristic_enum_names,
+                             help="type of decision heuristic")
+    parser_temp.add_argument("-dh_mdh",
+                             "--dh_mixed_difference_heuristic",
+                             action="store",
+                             default=mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER.name,
+                             type=str,
+                             choices=mdh_enum.mixed_difference_heuristic_enum_names,
+                             help="type of mixed difference heuristic for the decision heuristic (clause reduction heuristic, exact unit propagation count heuristic)")
+    # parser_temp.add_argument("-dh_ph",
+    #                          "--dh_preselection_heuristic",
+    #                          action="store",
+    #                          default=ph_enum.PreselectionHeuristicEnum.NONE.name,
+    #                          type=str,
+    #                          choices=ph_enum.preselection_heuristic_enum_names,
+    #                          help="type of preselection heuristic for the decision heuristic")
+    # parser_temp.add_argument("-dh_ph_cra_r",
+    #                          "--dh_ph_cra_rank",
+    #                          action="store",
+    #                          default=0.1,
+    #                          type=float,
+    #                          metavar="[0.01-1.00]",
+    #                          help="how many variables should be pre-selected for the decision heuristic (clause reduction approximation - rank)")
+    # parser_temp.add_argument("-dh_ph_prop_z_lb",
+    #                          "--dh_ph_prop_z_lower_bound",
+    #                          action="store",
+    #                          default=10,
+    #                          type=non_negative_int_parser,
+    #                          metavar="[non-negative number]",
+    #                          help="how many variables should be pre-selected for the decision heuristic (prop_z - lower bound)")
+    # parser_temp.add_argument("-dh_ph_prop_z_dt",
+    #                          "--dh_ph_prop_z_depth_threshold",
+    #                          action="store",
+    #                          default=6,
+    #                          type=non_negative_int_parser,
+    #                          metavar="[non-negative number]",
+    #                          help="depth threshold (prop_z)")
     parser_temp.add_argument("-hpuf",
                              "--hp_ub_factor",
                              action="store",

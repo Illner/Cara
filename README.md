@@ -38,6 +38,10 @@ optional arguments:
   + find all backbone literals before the compilation (default: False)
 * **-bc {TWO_CNF,RENAMABLE_HORN_CNF}, --base_class {TWO_CNF,RENAMABLE_HORN_CNF}**
   + types of base classes in the circuit's leaves (literal leaves are mandatory) (default: None)
+* **-dh {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,DLCS,DLIS,DLCS_DLIS,EUPC}, --decision_heuristic {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,DLCS,DLIS,DLCS_DLIS,EUPC}**
+  + type of decision heuristic (default: CLAUSE_REDUCTION)
+* **-dh_mdh {OK_SOLVER,POSIT_SATZ}, --dh_mixed_difference_heuristic {OK_SOLVER,POSIT_SATZ}**
+  + type of mixed difference heuristic for the decision heuristic (clause reduction heuristic, exact unit propagation count heuristic) (default: OK_SOLVER)
 * **-hpuf [0.01-0.49], --hp_ub_factor [0.01-0.49]**
   + balance factor that is used for hypergraph partitioning (hMETIS - UB factor, KaHyPar - epsilon) (default: 0.1)
 * **-st [non-negative number or None], --subsumption_threshold [non-negative number or None]**
