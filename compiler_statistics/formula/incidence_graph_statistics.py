@@ -14,14 +14,14 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer restore_backup_literal
     Private StatisticsComponentTimer merge_variable_simplification
     Private StatisticsComponentTimer restore_backup_variable_simplification
-    Private StatisticsComponentTimer remove_subsumed_clause
-    Private StatisticsComponentTimer restore_backup_subsumption
+    Private StatisticsComponentTimer remove_subsumed_clause_variable
+    Private StatisticsComponentTimer restore_backup_subsumption_variable
     Private StatisticsComponentTimer create_incidence_graphs_for_components
     Private StatisticsComponentTimer copy_incidence_graph
     Private StatisticsComponentTimer clause_id_set
     Private StatisticsComponentTimer number_of_components
     Private StatisticsComponentTimer variable_set
-    Private StatisticsComponentTimer subsumption
+    Private StatisticsComponentTimer subsumption_variable
     Private StatisticsComponentTimer renamable_horn_formula_recognition_initialization
     Private StatisticsComponentTimer renamable_horn_formula_recognition_check
     Private StatisticsComponentTimer convert_to_cnf
@@ -47,11 +47,11 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
         self.__restore_backup_variable_simplification: StatisticsComponentTimer = StatisticsComponentTimer("restore backup - variable simplification")
         self._component_list.append(self.__restore_backup_variable_simplification)
 
-        self.__remove_subsumed_clause: StatisticsComponentTimer = StatisticsComponentTimer("remove subsumed clause")
-        self._component_list.append(self.__remove_subsumed_clause)
+        self.__remove_subsumed_clause_variable: StatisticsComponentTimer = StatisticsComponentTimer("remove subsumed clause - variable")
+        self._component_list.append(self.__remove_subsumed_clause_variable)
 
-        self.__restore_backup_subsumption: StatisticsComponentTimer = StatisticsComponentTimer("restore backup - subsumption")
-        self._component_list.append(self.__restore_backup_subsumption)
+        self.__restore_backup_subsumption_variable: StatisticsComponentTimer = StatisticsComponentTimer("restore backup - subsumption - variable")
+        self._component_list.append(self.__restore_backup_subsumption_variable)
 
         self.__create_incidence_graphs_for_components: StatisticsComponentTimer = StatisticsComponentTimer("create components")
         self._component_list.append(self.__create_incidence_graphs_for_components)
@@ -68,8 +68,8 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
         self.__variable_set: StatisticsComponentTimer = StatisticsComponentTimer("get variables")
         self._component_list.append(self.__variable_set)
 
-        self.__subsumption: StatisticsComponentTimer = StatisticsComponentTimer("subsumption")
-        self._component_list.append(self.__subsumption)
+        self.__subsumption_variable: StatisticsComponentTimer = StatisticsComponentTimer("subsumption - variable")
+        self._component_list.append(self.__subsumption_variable)
 
         self.__renamable_horn_formula_recognition_initialization: StatisticsComponentTimer = StatisticsComponentTimer("renamable Horn formula recognition - initialization")
         self._component_list.append(self.__renamable_horn_formula_recognition_initialization)
@@ -110,12 +110,12 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
         return self.__restore_backup_variable_simplification
 
     @property
-    def remove_subsumed_clause(self) -> StatisticsComponentTimer:
-        return self.__remove_subsumed_clause
+    def remove_subsumed_clause_variable(self) -> StatisticsComponentTimer:
+        return self.__remove_subsumed_clause_variable
 
     @property
-    def restore_backup_subsumption(self) -> StatisticsComponentTimer:
-        return self.__restore_backup_subsumption
+    def restore_backup_subsumption_variable(self) -> StatisticsComponentTimer:
+        return self.__restore_backup_subsumption_variable
 
     @property
     def create_incidence_graphs_for_components(self) -> StatisticsComponentTimer:
@@ -138,8 +138,8 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
         return self.__variable_set
 
     @property
-    def subsumption(self) -> StatisticsComponentTimer:
-        return self.__subsumption
+    def subsumption_variable(self) -> StatisticsComponentTimer:
+        return self.__subsumption_variable
 
     @property
     def renamable_horn_formula_recognition_initialization(self) -> StatisticsComponentTimer:

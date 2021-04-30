@@ -934,7 +934,7 @@ class HypergraphPartitioning:
         # Subsumption
         if (self.__subsumption_threshold is None) or (incidence_graph.number_of_clauses() <= self.__subsumption_threshold):
             subsumed_clause_set = incidence_graph.subsumption_variable()
-            incidence_graph.remove_subsumed_clause_set(subsumed_clause_set)
+            incidence_graph.remove_subsumed_clause_variable_set(subsumed_clause_set)
 
     def cache_can_be_used(self, incidence_graph: IncidenceGraph) -> bool:
         """
@@ -966,6 +966,6 @@ class HypergraphPartitioning:
     # region Static method
     @staticmethod
     def remove_reduction_incidence_graph(incidence_graph: IncidenceGraph) -> None:
-        incidence_graph.restore_backup_subsumption()                # subsumption
+        incidence_graph.restore_backup_subsumption_variable()                # subsumption
         incidence_graph.restore_backup_variable_simplification()    # variable simplification
     # endregion

@@ -55,8 +55,8 @@ class IncidenceGraph(Graph):
     Private Dict<int, Set<str>> removed_edge_backup_dictionary              # key: a variable, value: a set of neighbours of the variable that were deleted because of variable simplification
     Private Dict<str, Set<str>> added_edge_backup_dictionary                # key: a variable, value: a set of neighbours of the variable that were added because of variable simplification
     
-    # Subsumption
-    Private Dict<int, Set<str>> subsumption_backup_dictionary               # key: a clause, value: a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
+    # Subsumption - variable
+    Private Dict<int, Set<str>> subsumption_variable_backup_dictionary      # key: a clause, value: a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
     """
 
     def __init__(self, statistics: Union[IncidenceGraphStatistics, None] = None,
@@ -99,8 +99,8 @@ class IncidenceGraph(Graph):
         self.__removed_edge_backup_dictionary: Dict[int, Set[str]] = dict()
         self.__added_edge_backup_dictionary: Dict[str, Set[str]] = dict()
 
-        # Backup - subsumption
-        self.__subsumption_backup_dictionary: Dict[int, Set[str]] = dict()
+        # Backup - subsumption - variable
+        self.__subsumption_variable_backup_dictionary: Dict[int, Set[str]] = dict()
 
     # region Static method
     @staticmethod
@@ -858,17 +858,17 @@ class IncidenceGraph(Graph):
         self.__statistics.restore_backup_variable_simplification.stop_stopwatch()   # timer (stop)
     # endregion
 
-    # region Subsumption
+    # region Subsumption - variable
     def subsumption_variable(self) -> Set[int]:
         """
         Return a set of subsumed clauses concerning only variables
         :return: a set of subsumed clauses
         """
 
-        self.__statistics.subsumption.start_stopwatch()     # timer (start)
+        self.__statistics.subsumption_variable.start_stopwatch()     # timer (start)
 
         subsumed_clause_set = set()
-        neighbour_dictionary: [int, Set[int]] = dict()   # Cache
+        neighbour_dictionary: [int, Set[int]] = dict()   # key: clause, value: a set of variables
         clause_id_list = self.clause_id_list()
 
         for i, clause_a in enumerate(clause_id_list):
@@ -916,10 +916,10 @@ class IncidenceGraph(Graph):
 
                     continue
 
-        self.__statistics.subsumption.stop_stopwatch()      # timer (stop)
+        self.__statistics.subsumption_variable.stop_stopwatch()      # timer (stop)
         return subsumed_clause_set
 
-    def remove_subsumed_clause(self, clause_id: int) -> None:
+    def remove_subsumed_clause_variable(self, clause_id: int) -> None:
         """
         Remove the clause from the incidence graph.
         Everything removed from the incidence graph is saved and can be restored from the backup in future.
@@ -932,47 +932,47 @@ class IncidenceGraph(Graph):
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The clause has been already removed from the incidence graph
-        if clause_id in self.__subsumption_backup_dictionary:
+        if clause_id in self.__subsumption_variable_backup_dictionary:
             raise ig_exception.ClauseHasBeenRemovedException(clause_id)
 
         # The clause does not exist in the incidence graph
         if not self.__node_exist(clause_id_hash):
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
-        self.__statistics.remove_subsumed_clause.start_stopwatch()  # timer (start)
+        self.__statistics.remove_subsumed_clause_variable.start_stopwatch()  # timer (start)
 
         clause_neighbour_set = set(self.neighbors(clause_id_hash))
-        self.__subsumption_backup_dictionary[clause_id] = clause_neighbour_set
+        self.__subsumption_variable_backup_dictionary[clause_id] = clause_neighbour_set
 
         # Delete the clause node
         self.__temporarily_remove_clause_id(clause_id)
 
-        self.__statistics.remove_subsumed_clause.stop_stopwatch()   # timer (stop)
+        self.__statistics.remove_subsumed_clause_variable.stop_stopwatch()   # timer (stop)
 
-    def remove_subsumed_clause_set(self, clause_id_set: Set[int]) -> None:
+    def remove_subsumed_clause_variable_set(self, clause_id_set: Set[int]) -> None:
         for clause_id in clause_id_set:
-            self.remove_subsumed_clause(clause_id)
+            self.remove_subsumed_clause_variable(clause_id)
 
-    def restore_backup_subsumption(self) -> None:
+    def restore_backup_subsumption_variable(self) -> None:
         """
         Restore all nodes and edges that are mention in the backup.
         The backup will be cleared.
         :return: None
         """
 
-        self.__statistics.restore_backup_subsumption.start_stopwatch()  # timer (start)
+        self.__statistics.restore_backup_subsumption_variable.start_stopwatch()  # timer (start)
 
-        for clause_id in self.__subsumption_backup_dictionary:
+        for clause_id in self.__subsumption_variable_backup_dictionary:
             clause_id_hash = self.__clause_id_hash(clause_id)
-            neighbour_hash_set = self.__subsumption_backup_dictionary[clause_id]
+            neighbour_hash_set = self.__subsumption_variable_backup_dictionary[clause_id]
 
             self.add_clause_id(clause_id)
             for neighbour_hash in neighbour_hash_set:
                 self.__add_edge(neighbour_hash, clause_id_hash)
 
-        self.__subsumption_backup_dictionary = dict()
+        self.__subsumption_variable_backup_dictionary = dict()
 
-        self.__statistics.restore_backup_subsumption.stop_stopwatch()   # timer (stop)
+        self.__statistics.restore_backup_subsumption_variable.stop_stopwatch()   # timer (stop)
     # endregion
 
     def create_incidence_graphs_for_components(self) -> Set[TIncidenceGraph]:

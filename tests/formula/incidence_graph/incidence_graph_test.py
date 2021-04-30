@@ -266,11 +266,11 @@ class IncidenceGraphTest(TestAbstract):
 
             subsumed_clause_set = {0, 1, 3}
             result = "\n".join((result, f"Subsumption: ({SortedList(subsumed_clause_set).str_delimiter(', ')})"))
-            incidence_graph.remove_subsumed_clause_set(subsumed_clause_set)
+            incidence_graph.remove_subsumed_clause_variable_set(subsumed_clause_set)
             result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
 
             result = "\n".join((result, "Restore:"))
-            incidence_graph.restore_backup_subsumption()
+            incidence_graph.restore_backup_subsumption_variable()
             result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
