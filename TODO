@@ -6,3 +6,7 @@
 ) DIMACS NNF - DIMACS CNF
 ) Hypergraph weights
 ) Hypergraph partitioning - cache - sorting
+) Pure literal
+) One solver
+) Preselection heuristic - statistics
+) Compiler Test

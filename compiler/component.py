@@ -8,6 +8,7 @@ from compiler_statistics.statistics import Statistics
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
 from compiler.hypergraph_partitioning.hypergraph_partitioning import HypergraphPartitioning
 from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
+from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
 
 # Import exception
 import exception.cara_exception as ca_exception
@@ -38,6 +39,7 @@ class Component:
     Private ComponentCachingAbstract component_caching
     Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
+    Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
     
     Private SatSolverEnum sat_solver_enum
     Private ImpliedLiteralsEnum implied_literals_enum
@@ -59,6 +61,7 @@ class Component:
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  base_class_enum_set: Set[bs_enum.BaseClassEnum],
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
+                 implied_literals_preselection_heuristic: PreselectionHeuristicAbstract,
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                  statistics: Statistics,
                  preprocessing: bool = False):
@@ -73,6 +76,7 @@ class Component:
         self.__component_caching: ComponentCachingAbstract = component_caching
         self.__decision_heuristic: DecisionHeuristicAbstract = decision_heuristic
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
+        self.__implied_literals_preselection_heuristic: PreselectionHeuristicAbstract = implied_literals_preselection_heuristic
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
@@ -100,10 +104,11 @@ class Component:
     # endregion
 
     # region Private
-    def __get_implied_literals(self) -> Union[Set[int], None]:
+    def __get_implied_literals(self, depth: int) -> Union[Set[int], None]:
         """
         Return a set of implied literals based on the assignment and implied_literals_enum.
         None is returned if the formula is unsatisfiable.
+        :param depth: depth of the node
         :return: a set of implied literals
         """
 
@@ -111,32 +116,41 @@ class Component:
         if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.NONE:
             return set()
 
-        self.__statistics.component_statistics.get_implied_literals.start_stopwatch()  # timer (start)
+        self.__statistics.component_statistics.get_implied_literals.start_stopwatch()  # timer (start - implied literals)
 
         # BCP
         if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.BCP:
             result = self.__solver.unit_propagation(self.__assignment_list)
 
-            self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()    # timer (stop)
+            self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()    # timer (stop - implied literals)
             return result
 
         # IMPLICIT_BCP, IMPLICIT_BCP_ITERATION
         if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP or \
            self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP_ITERATION:
             only_one_iteration = True if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP else False
-            result = self.__solver.iterative_implicit_unit_propagation(self.__assignment_list, only_one_iteration=only_one_iteration)
 
-            self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop)
+            self.__statistics.component_statistics.implied_literals_preselection_heuristic.start_stopwatch()    # timer (start - preselection heuristic)
+            preselection_set = self.__implied_literals_preselection_heuristic.preselect_variables(variable_restriction_set=None,
+                                                                                                  incidence_graph=self.__incidence_graph,
+                                                                                                  depth=depth)
+            self.__statistics.component_statistics.implied_literals_preselection_heuristic.stop_stopwatch()     # timer (stop - preselection heuristic)
+
+            result = self.__solver.iterative_implicit_unit_propagation(assignment_list=self.__assignment_list,
+                                                                       only_one_iteration=only_one_iteration,
+                                                                       variable_restriction_set=preselection_set)
+
+            self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop - implied literals)
             return result
 
         # BACKBONE
         if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.BACKBONE:
             result = self.__solver.get_backbone_literals(self.__assignment_list)
 
-            self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop)
+            self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop - implied literals)
             return result
 
-        self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop)
+        self.__statistics.component_statistics.get_implied_literals.stop_stopwatch()  # timer (stop - implied literals)
         raise ca_exception.FunctionNotImplementedException("get_implied_literals",
                                                            f"this type of getting implied literals ({self.__implied_literals_enum.name}) is not implemented")
 
@@ -231,7 +245,7 @@ class Component:
         number_of_variables_before_unit_propagation = self.__incidence_graph.number_of_variables()
 
         # Implied literals
-        implied_literal_set = self.__get_implied_literals()
+        implied_literal_set = self.__get_implied_literals(depth)
         self.__statistics.component_statistics.implied_literal.add_count(len(implied_literal_set))  # counter
         self.__assignment_list.extend(implied_literal_set)
         isolated_variable_set = self.__incidence_graph.remove_literal_set(implied_literal_set)
@@ -312,6 +326,7 @@ class Component:
                                            sat_solver_enum=self.__sat_solver_enum,
                                            base_class_enum_set=self.__base_class_enum_set,
                                            implied_literals_enum=self.__implied_literals_enum,
+                                           implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                            first_implied_literals_enum=self.__first_implied_literals_enum,
                                            statistics=self.__statistics)
                 node_id = component_temp.create_circuit(depth=(depth + 1))

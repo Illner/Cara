@@ -15,6 +15,7 @@ import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import compiler.component_caching.component_caching_enum as cc_enum
+import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
 import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
@@ -39,6 +40,7 @@ def main(main_args):
                             sat_solver_enum=ss_enum.SatSolverEnum[main_args.sat_solver],
                             base_class_enum_set=set([bc_enum.BaseClassEnum[base_class] for base_class in base_class_list]),
                             implied_literals_enum=il_enum.ImpliedLiteralsEnum[main_args.implied_literals],
+                            implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum[main_args.il_preselection_heuristic],
                             first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum[main_args.first_implied_literals],
                             component_caching_enum=cc_enum.ComponentCachingEnum[main_args.component_caching],
                             hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum[main_args.hp_caching],
@@ -50,7 +52,10 @@ def main(main_args):
                             hp_limit_number_of_variables_cache=(None, main_args.hp_limit_number_of_variables),
                             cut_set_try_cache=main_args.cut_set_try_cache,
                             new_cut_set_threshold_reduction=main_args.new_cut_set_threshold_reduction,
-                            decision_heuristic_mixed_difference_enum=mdh_enum.MixedDifferenceHeuristicEnum[main_args.dh_mixed_difference_heuristic])
+                            decision_heuristic_mixed_difference_enum=mdh_enum.MixedDifferenceHeuristicEnum[main_args.dh_mixed_difference_heuristic],
+                            implied_literals_preselection_heuristic_prop_z_depth_threshold=main_args.il_ph_prop_z_depth_threshold,
+                            implied_literals_preselection_heuristic_prop_z_number_of_variables_lower_bound=main_args.il_ph_prop_z_number_of_variables_lower_bound,
+                            implied_literals_preselection_heuristic_cra_rank=main_args.il_ph_cra_rank)
         print("The formula has been processed!\n")
 
         print("Compiling...")
@@ -227,34 +232,6 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str,
                              choices=mdh_enum.mixed_difference_heuristic_enum_names,
                              help="type of mixed difference heuristic for the decision heuristic (clause reduction heuristic, exact unit propagation count heuristic)")
-    # parser_temp.add_argument("-dh_ph",
-    #                          "--dh_preselection_heuristic",
-    #                          action="store",
-    #                          default=ph_enum.PreselectionHeuristicEnum.NONE.name,
-    #                          type=str,
-    #                          choices=ph_enum.preselection_heuristic_enum_names,
-    #                          help="type of preselection heuristic for the decision heuristic")
-    # parser_temp.add_argument("-dh_ph_cra_r",
-    #                          "--dh_ph_cra_rank",
-    #                          action="store",
-    #                          default=0.1,
-    #                          type=float,
-    #                          metavar="[0.01-1.00]",
-    #                          help="how many variables should be pre-selected for the decision heuristic (clause reduction approximation - rank)")
-    # parser_temp.add_argument("-dh_ph_prop_z_lb",
-    #                          "--dh_ph_prop_z_lower_bound",
-    #                          action="store",
-    #                          default=10,
-    #                          type=non_negative_int_parser,
-    #                          metavar="[non-negative number]",
-    #                          help="how many variables should be pre-selected for the decision heuristic (prop_z - lower bound)")
-    # parser_temp.add_argument("-dh_ph_prop_z_dt",
-    #                          "--dh_ph_prop_z_depth_threshold",
-    #                          action="store",
-    #                          default=6,
-    #                          type=non_negative_int_parser,
-    #                          metavar="[non-negative number]",
-    #                          help="depth threshold (prop_z)")
     parser_temp.add_argument("-hpuf",
                              "--hp_ub_factor",
                              action="store",
@@ -290,6 +267,34 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str,
                              choices=il_enum.implied_literals_enum_names,
                              help="type of method that will be used for deriving implied literals at every decision node")
+    parser_temp.add_argument("-il_ph",
+                             "--il_preselection_heuristic",
+                             action="store",
+                             default=ph_enum.PreselectionHeuristicEnum.CRA.name,
+                             type=str,
+                             choices=ph_enum.preselection_heuristic_enum_names,
+                             help="type of preselection heuristic for implied literals (relevant only for IMPLICIT_BCP and IMPLICIT_BCP_ITERATION)")
+    parser_temp.add_argument("-il_ph_cra_r",
+                             "--il_ph_cra_rank",
+                             action="store",
+                             default=0.1,
+                             type=float,
+                             metavar="[0.01-1.00]",
+                             help="how many variables should be preselected (clause reduction approximation - rank)")
+    parser_temp.add_argument("-il_ph_prop_z_novlb",
+                             "--il_ph_prop_z_number_of_variables_lower_bound",
+                             action="store",
+                             default=10,
+                             type=non_negative_int_or_none_parser,
+                             metavar="[non-negative number or None]",
+                             help="how many variables should be preselected (prop_z - lower bound) (None for no limit)")
+    parser_temp.add_argument("-il_ph_prop_z_dt",
+                             "--il_ph_prop_z_depth_threshold",
+                             action="store",
+                             default=5,
+                             type=non_negative_int_parser,
+                             metavar="[non-negative number]",
+                             help="depth threshold (prop_z)")
     parser_temp.add_argument("-fil",
                              "--first_implied_literals",
                              action="store",

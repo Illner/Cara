@@ -52,6 +52,14 @@ optional arguments:
   + type of SAT solver that will be used for compiling the circuit (default: MiniSAT)
 * **-il {BCP,IMPLICIT_BCP,IMPLICIT_BCP_ITERATION,BACKBONE,NONE}, --implied_literals {BCP,IMPLICIT_BCP,IMPLICIT_BCP_ITERATION,BACKBONE,NONE}**
   + type of method that will be used for deriving implied literals at every decision node (default: BCP)
+* **-il_ph {NONE,PROP_Z,CRA}, --il_preselection_heuristic {NONE,PROP_Z,CRA}**
+  + type of preselection heuristic for implied literals (relevant only for IMPLICIT_BCP and IMPLICIT_BCP_ITERATION) (default: CRA)
+* **-il_ph_cra_r [0.01-1.00], --il_ph_cra_rank [0.01-1.00]**
+  + how many variables should be preselected (clause reduction approximation - rank) (default: 0.1)
+* **-il_ph_prop_z_novlb [non-negative number or None], --il_ph_prop_z_number_of_variables_lower_bound [non-negative number or None]**
+  + how many variables should be preselected (prop_z - lower bound) (None for no limit) (default: 10)
+* **-il_ph_prop_z_dt [non-negative number], --il_ph_prop_z_depth_threshold [non-negative number]**
+  + depth threshold (prop_z) (default: 5)
 * **-fil {IMPLICIT_BCP,IMPLICIT_BCP_ITERATION,BACKBONE}, --first_implied_literals {IMPLICIT_BCP,IMPLICIT_BCP_ITERATION,BACKBONE}**
   + type of method that will be used for deriving implied literals after component decomposition (default: IMPLICIT_BCP)
 * **-cc {NONE,STANDARD_CACHING_SCHEME,HYBRID_CACHING_SCHEME,BASIC_CACHING_SCHEME}, --component_caching {NONE,STANDARD_CACHING_SCHEME,HYBRID_CACHING_SCHEME,BASIC_CACHING_SCHEME}**

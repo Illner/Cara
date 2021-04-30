@@ -1,6 +1,6 @@
 # Import
 import random
-from typing import Set
+from typing import Set, Union
 from abc import ABC, abstractmethod
 from formula.incidence_graph import IncidenceGraph
 
@@ -15,10 +15,10 @@ class PreselectionHeuristicAbstract(ABC):
 
     # region Abstract method
     @abstractmethod
-    def preselect_variables(self, variable_restriction_set: Set[int], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
+    def preselect_variables(self, variable_restriction_set: Union[Set[int], None], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
         """
         Compute a set of preselected variables
-        :param variable_restriction_set: a set of variables that will be taken into account
+        :param variable_restriction_set: a set of variables that will be taken into account (None for all variables in the incidence graph)
         :param incidence_graph: an incidence graph
         :param depth: depth of the node where this preselection is used
         :return: a set of preselected variables

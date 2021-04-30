@@ -32,7 +32,9 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
             self.__number_of_returned_variables: int = math.ceil(self.__rank * self.__total_number_of_variables)
 
     # region Override method
-    def preselect_variables(self, variable_restriction_set: Set[int], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
+    def preselect_variables(self, variable_restriction_set: Union[Set[int], None], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
+        variable_restriction_set = incidence_graph.variable_set(copy=False) if variable_restriction_set is None else variable_restriction_set
+
         approximated_set_dictionary: Dict[int, Set[int]] = dict()           # key: literal, value: set of literals
         occurrences_in_binary_clauses_dictionary: Dict[int, int] = dict()   # key: literal, value: number of binary clauses where the literal occurs
 

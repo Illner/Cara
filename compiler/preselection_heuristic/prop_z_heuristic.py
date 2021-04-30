@@ -21,7 +21,9 @@ class PropZHeuristic(PreselectionHeuristicAbstract):
         self.__number_of_variables_lower_bound: Union[int, None] = number_of_variables_lower_bound
 
     # region Override method
-    def preselect_variables(self, variable_restriction_set: Set[int], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
+    def preselect_variables(self, variable_restriction_set: Union[Set[int], None], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
+        variable_restriction_set = incidence_graph.variable_set(copy=False) if variable_restriction_set is None else variable_restriction_set
+
         # Near the root of the search tree => return all (restricted) variables
         if depth <= self.__depth_threshold:
             return variable_restriction_set

@@ -23,6 +23,8 @@ from compiler.decision_heuristic.weighted_binaries_heuristic import WeightedBina
 
 # Import preselection heuristic
 from compiler.preselection_heuristic.none_heuristic import NoneHeuristic
+from compiler.preselection_heuristic.prop_z_heuristic import PropZHeuristic
+from compiler.preselection_heuristic.clause_reduction_approximation_heuristic import ClauseReductionApproximationHeuristic
 
 # Import exception
 import exception.cara_exception as c_exception
@@ -33,6 +35,7 @@ import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import compiler.component_caching.component_caching_enum as cc_enum
+import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
 import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
 import compiler.enum.heuristic.literal_count_heuristic_function_enum as lchf_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
@@ -59,6 +62,7 @@ class Compiler:
     Private ComponentCachingAbstract component_caching
     Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
+    Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
     
     Private SatSolverEnum sat_solver_enum
     Private ImpliedLiteralsEnum implied_literals_enum
@@ -80,6 +84,7 @@ class Compiler:
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  base_class_enum_set: Set[bs_enum.BaseClassEnum],
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
+                 implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                  component_caching_enum: cc_enum.ComponentCachingEnum,
                  hp_cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
@@ -91,7 +96,10 @@ class Compiler:
                  hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  cut_set_try_cache: bool = False,
                  new_cut_set_threshold_reduction: float = 1,
-                 decision_heuristic_mixed_difference_enum: mdh_enum.MixedDifferenceHeuristicEnum = mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER):
+                 decision_heuristic_mixed_difference_enum: mdh_enum.MixedDifferenceHeuristicEnum = mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER,
+                 implied_literals_preselection_heuristic_prop_z_depth_threshold: int = 5,
+                 implied_literals_preselection_heuristic_prop_z_number_of_variables_lower_bound: Union[int, None] = 10,
+                 implied_literals_preselection_heuristic_cra_rank: float = 0.1):
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -121,6 +129,12 @@ class Compiler:
 
         # Decision heuristic
         self.__set_decision_heuristic(decision_heuristic_enum, decision_heuristic_mixed_difference_enum)
+
+        # Implied literals - preselection heuristic
+        self.__set_implied_literals_preselection_heuristic(implied_literals_preselection_heuristic_enum=implied_literals_preselection_heuristic_enum,
+                                                           prop_z_depth_threshold=implied_literals_preselection_heuristic_prop_z_depth_threshold,
+                                                           prop_z_number_of_variables_lower_bound=implied_literals_preselection_heuristic_prop_z_number_of_variables_lower_bound,
+                                                           cra_rank=implied_literals_preselection_heuristic_cra_rank)
 
         self.__hypergraph_partitioning = HypergraphPartitioning(cnf=self.__cnf,
                                                                 ub_factor=ub_factor,
@@ -217,6 +231,29 @@ class Compiler:
 
         raise c_exception.FunctionNotImplementedException("set_decision_heuristic",
                                                           f"this type of decision heuristic ({decision_heuristic_enum.name}) is not implemented")
+
+    def __set_implied_literals_preselection_heuristic(self, implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
+                                                      prop_z_depth_threshold: int, prop_z_number_of_variables_lower_bound: Union[int, None],
+                                                      cra_rank: float):
+        # None
+        if implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.NONE:
+            self.__implied_literals_preselection_heuristic = NoneHeuristic()
+            return
+
+        # PROP_Z
+        if implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.PROP_Z:
+            self.__implied_literals_preselection_heuristic = PropZHeuristic(depth_threshold=prop_z_depth_threshold,
+                                                                            number_of_variables_lower_bound=prop_z_number_of_variables_lower_bound)
+            return
+
+        # CRA
+        if implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.CRA:
+            self.__implied_literals_preselection_heuristic = ClauseReductionApproximationHeuristic(rank=cra_rank,
+                                                                                                   total_number_of_variables=self.__cnf.real_number_of_variables)
+            return
+
+        raise c_exception.FunctionNotImplementedException("set_implied_literals_preselection_heuristic",
+                                                          f"this type of preselection heuristic ({implied_literals_preselection_heuristic_enum.name}) is not implemented")
     # endregion
 
     # region Public method
@@ -253,6 +290,7 @@ class Compiler:
                                   sat_solver_enum=self.__sat_solver_enum,
                                   base_class_enum_set=self.__base_class_enum_set,
                                   implied_literals_enum=self.__implied_literals_enum,
+                                  implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                   first_implied_literals_enum=self.__first_implied_literals_enum,
                                   statistics=self.__statistics,
                                   preprocessing=self.__preprocessing)

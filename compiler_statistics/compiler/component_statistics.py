@@ -14,6 +14,7 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer get_cut_set
     Private StatisticsComponentTimer get_decision_variable_from_cut_set
     Private StatisticsComponentTimer cut_set_try_cache
+    Private StatisticsComponentTimer implied_literals_preselection_heuristic
     
     Private StatisticsComponentCounter unsatisfiable
     Private StatisticsComponentCounter implied_literal
@@ -80,6 +81,9 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__renamable_horn_cnf_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("renamable Horn formula - formula length")
         self._component_list.append(self.__renamable_horn_cnf_formula_length)
 
+        self.__implied_literals_preselection_heuristic: StatisticsComponentTimer = StatisticsComponentTimer("implied literals - preselection heuristic")
+        self._component_list.append(self.__implied_literals_preselection_heuristic)
+
     # region Property
     @property
     def get_implied_literals(self) -> StatisticsComponentTimer:
@@ -144,4 +148,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def renamable_horn_cnf_formula_length(self) -> StatisticsComponentCounter:
         return self.__renamable_horn_cnf_formula_length
+
+    @property
+    def implied_literals_preselection_heuristic(self) -> StatisticsComponentTimer:
+        return self.__implied_literals_preselection_heuristic
     # endregion
