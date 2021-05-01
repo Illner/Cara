@@ -35,6 +35,7 @@ class Component:
     Private float new_cut_set_threshold
     Private float new_cut_set_threshold_reduction
     Private Set<BaseClassEnum> base_class_enum_set
+    Private int eliminating_redundant_clauses_threshold
     
     Private IncidenceGraph incidence_graph
     Private ComponentCachingAbstract component_caching
@@ -60,6 +61,7 @@ class Component:
                  decision_heuristic: DecisionHeuristicAbstract,
                  component_caching: ComponentCachingAbstract,
                  eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum,
+                 eliminating_redundant_clauses_threshold: Union[int, None],
                  hypergraph_partitioning: HypergraphPartitioning,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  base_class_enum_set: Set[bs_enum.BaseClassEnum],
@@ -75,6 +77,7 @@ class Component:
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__base_class_enum_set: Set[bs_enum.BaseClassEnum] = base_class_enum_set
+        self.__eliminating_redundant_clauses_threshold: Union[int, None] = eliminating_redundant_clauses_threshold
 
         self.__component_caching: ComponentCachingAbstract = component_caching
         self.__decision_heuristic: DecisionHeuristicAbstract = decision_heuristic
@@ -225,6 +228,16 @@ class Component:
 
         return True if self.__incidence_graph.number_of_components() > 1 else False
 
+    def __get_eliminating_redundant_clauses_enum(self) -> Union[erc_enum.EliminatingRedundantClausesEnum, None]:
+        # No threshold
+        if self.__eliminating_redundant_clauses_threshold is None:
+            return self.__eliminating_redundant_clauses_enum
+
+        if self.__incidence_graph.number_of_clauses() <= self.__eliminating_redundant_clauses_threshold:
+            return self.__eliminating_redundant_clauses_enum
+
+        return None
+
     def __create_circuit(self, cut_set: Set[int], depth: int) -> int:
         """
         :param cut_set: a cut set (can be empty)
@@ -253,7 +266,7 @@ class Component:
         implied_literal_list = list(implied_literal_set)
         self.__statistics.component_statistics.implied_literal.add_count(len(implied_literal_set))  # counter
         self.__assignment_list.extend(implied_literal_list)
-        isolated_variable_set = self.__incidence_graph.remove_literal_list(implied_literal_list, self.__eliminating_redundant_clauses_enum)
+        isolated_variable_set = self.__incidence_graph.remove_literal_list(implied_literal_list, self.__get_eliminating_redundant_clauses_enum())
         self.__statistics.component_statistics.isolated_variable.add_count(len(isolated_variable_set))  # counter
         implied_literal_id_set = self.__circuit.create_literal_leaf_set(implied_literal_set)
 
@@ -328,6 +341,7 @@ class Component:
                                            decision_heuristic=self.__decision_heuristic,
                                            component_caching=self.__component_caching,
                                            eliminating_redundant_clauses_enum=self.__eliminating_redundant_clauses_enum,
+                                           eliminating_redundant_clauses_threshold=self.__eliminating_redundant_clauses_threshold,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
                                            sat_solver_enum=self.__sat_solver_enum,
                                            base_class_enum_set=self.__base_class_enum_set,
@@ -394,7 +408,7 @@ class Component:
             literal = sign * decision_variable
 
             self.__assignment_list.append(literal)
-            isolated_variable_set = self.__incidence_graph.remove_literal(literal, self.__eliminating_redundant_clauses_enum)
+            isolated_variable_set = self.__incidence_graph.remove_literal(literal, self.__get_eliminating_redundant_clauses_enum())
             self.__statistics.component_statistics.isolated_variable.add_count(len(isolated_variable_set))  # counter
 
             # Isolated variables

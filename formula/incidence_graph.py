@@ -825,7 +825,7 @@ class IncidenceGraph(Graph):
         self.__statistics.remove_literal.stop_stopwatch()       # timer (stop)
         return isolated_variable_set
 
-    def remove_literal_list(self, literal_list: List[int], eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum) -> Set[int]:
+    def remove_literal_list(self, literal_list: List[int], eliminating_redundant_clauses_enum: Union[erc_enum.EliminatingRedundantClausesEnum, None]) -> Set[int]:
         isolated_variable_set = set()
 
         for i, literal in enumerate(literal_list):

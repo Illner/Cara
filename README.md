@@ -45,7 +45,7 @@ optional arguments:
 * **-hpuf [0.01-0.49], --hp_ub_factor [0.01-0.49]**
   + balance factor that is used for hypergraph partitioning (hMETIS - UB factor, KaHyPar - epsilon) (default: 0.1)
 * **-st [non-negative number or None], --subsumption_threshold [non-negative number or None]**
-  + threshold (number of clauses) for applying subsumption (None for no limit) (default: 1000)
+  + threshold (number of clauses) for applying subsumption (None for no limit) (default: 500)
 * **-ncst [0.00-1.00], --new_cut_set_threshold [0.00-1.00]**
   + threshold for computing a new cut set (if the number of implied literals is at least x% of the component's number of variables) (default: 0.1)
 * **-ss {MiniSAT,Glucose,Lingeling,CaDiCal}, --sat_solver {MiniSAT,Glucose,Lingeling,CaDiCal}**
@@ -66,6 +66,8 @@ optional arguments:
   + type of component caching that will be used for compiling the circuit (default: BASIC_CACHING_SCHEME)
 * **-erc {NONE,SUBSUMPTION,UP_REDUNDANCY}, --eliminating_redundant_clauses {NONE,SUBSUMPTION,UP_REDUNDANCY}**
   + procedure that will be applied for determining redundant clauses (default: UP_REDUNDANCY)
+* **-erc_t [non-negative number or None], --erc_threshold [non-negative number or None]**
+  + threshold (number of clauses) for applying a procedure that eliminates redundant clauses (None for no limit) (default: 500)
 * **-hps {HMETIS,PATOH,KAHYPAR,NONE}, --hp_software {HMETIS,PATOH,KAHYPAR,NONE}**
   + software used for hypergraph partitioning (default: PATOH (Linux / macOS), HMETIS (Windows))
 * **-hpc {NONE,ISOMORFISM,ISOMORFISM_VARIANCE}, --hp_caching {NONE,ISOMORFISM,ISOMORFISM_VARIANCE}**

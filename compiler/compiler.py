@@ -61,6 +61,7 @@ class Compiler:
     Private float new_cut_set_threshold_reduction           # when the cache for cut sets can be used
     Private Set<BaseClassEnum> base_class_enum_set
     Private ComponentCachingAbstract component_caching
+    Private int eliminating_redundant_clauses_threshold
     Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
     Private EliminatingRedundantClausesEnum eliminating_redundant_clauses_enum
@@ -90,6 +91,7 @@ class Compiler:
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                  component_caching_enum: cc_enum.ComponentCachingEnum,
                  eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum,
+                 eliminating_redundant_clauses_threshold: Union[int, None],
                  hp_cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                  hp_software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
                  hp_node_weight_type_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
@@ -122,6 +124,7 @@ class Compiler:
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__base_class_enum_set: Set[bs_enum.BaseClassEnum] = base_class_enum_set
+        self.__eliminating_redundant_clauses_threshold: Union[int, None] = eliminating_redundant_clauses_threshold
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
@@ -291,6 +294,7 @@ class Compiler:
                                   decision_heuristic=self.__decision_heuristic,
                                   component_caching=self.__component_caching,
                                   eliminating_redundant_clauses_enum=self.__eliminating_redundant_clauses_enum,
+                                  eliminating_redundant_clauses_threshold=self.__eliminating_redundant_clauses_threshold,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
                                   sat_solver_enum=self.__sat_solver_enum,
                                   base_class_enum_set=self.__base_class_enum_set,

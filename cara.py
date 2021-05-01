@@ -45,6 +45,7 @@ def main(main_args):
                             first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum[main_args.first_implied_literals],
                             component_caching_enum=cc_enum.ComponentCachingEnum[main_args.component_caching],
                             eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum[main_args.eliminating_redundant_clauses],
+                            eliminating_redundant_clauses_threshold=main_args.erc_threshold,
                             hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum[main_args.hp_caching],
                             hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum[main_args.hp_software],
                             hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
@@ -244,7 +245,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-st",
                              "--subsumption_threshold",
                              action="store",
-                             default=1000,
+                             default=500,
                              type=non_negative_int_or_none_parser,
                              metavar="[non-negative number or None]",
                              help="threshold (number of clauses) for applying subsumption (None for no limit)")
@@ -318,6 +319,13 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str,
                              choices=erc_enum.eliminating_redundant_clauses_enum_names,
                              help="procedure that will be applied for determining redundant clauses")
+    parser_temp.add_argument("-erc_t",
+                             "--erc_threshold",
+                             action="store",
+                             default=500,
+                             type=non_negative_int_or_none_parser,
+                             metavar="[non-negative number or None]",
+                             help="threshold (number of clauses) for applying a procedure that eliminates redundant clauses (None for no limit)")
     parser_temp.add_argument("-hps",
                              "--hp_software",
                              action="store",
