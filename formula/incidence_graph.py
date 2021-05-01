@@ -975,71 +975,7 @@ class IncidenceGraph(Graph):
         self.__statistics.restore_backup_subsumption_variable.stop_stopwatch()   # timer (stop)
     # endregion
 
-    def create_incidence_graphs_for_components(self) -> Set[TIncidenceGraph]:
-        """
-        For each connected component will be created a new incidence graph
-        :return: a set of incidence graphs (one for each component)
-        """
-
-        self.__statistics.create_incidence_graphs_for_components.start_stopwatch()  # timer (start)
-
-        incidence_graph_set = set()
-
-        # Renamable Horn formula recognition
-        ignored_literal_set_temp = None
-        if self.__renamable_horn_formula_recognition is not None:
-            ignored_literal_set_temp = self.__ignored_literal_set_renamable_horn_formula_recognition.union(self.__neg_assigned_literal_set)
-
-        for component in nx.connected_components(self):
-            incidence_graph_temp = IncidenceGraph(statistics=self.__statistics,
-                                                  renamable_horn_formula_recognition=self.__renamable_horn_formula_recognition,
-                                                  ignored_literal_set_renamable_horn_formula_recognition=ignored_literal_set_temp)
-
-            for node_hash in component:
-                # The node is not a clause
-                if self.__is_node_variable(node_hash):
-                    continue
-
-                clause_id = self.nodes[node_hash]["value"]
-                incidence_graph_temp.add_clause_id(clause_id)
-                for neighbour_hash in self.neighbors(node_hash):
-                    variable = self.nodes[neighbour_hash]["value"]
-                    literal = self.__get_literal_from_clause(variable, clause_id)
-                    incidence_graph_temp.add_edge(literal, clause_id)
-
-            incidence_graph_set.add(incidence_graph_temp)
-
-        self.__statistics.create_incidence_graphs_for_components.stop_stopwatch()   # timer (stop)
-        return incidence_graph_set
-
-    def copy_incidence_graph(self) -> TIncidenceGraph:
-        """
-        :return: a copy of the incidence graph
-        """
-
-        self.__statistics.copy_incidence_graph.start_stopwatch()    # timer (start)
-
-        copy = IncidenceGraph(statistics=self.__statistics)
-
-        for node_hash in self.nodes:
-            # The node is not a clause
-            if self.__is_node_variable(node_hash):
-                continue
-
-            clause_id = self.nodes[node_hash]["value"]
-            copy.add_clause_id(clause_id)
-            for neighbour_hash in self.neighbors(node_hash):
-                variable = self.nodes[neighbour_hash]["value"]
-                literal = self.__get_literal_from_clause(variable, clause_id)
-                copy.add_edge(literal, clause_id)
-
-        # Renamable Horn formula recognition
-        if self.__renamable_horn_formula_recognition is not None:
-            copy.initialize_renamable_horn_formula_recognition()
-
-        self.__statistics.copy_incidence_graph.stop_stopwatch()     # timer (stop)
-        return copy
-
+    # region TwoCnf, HornCnf
     def convert_to_cnf(self) -> PySatCnf:
         """
         Convert the formula represented by the incidence graph to CNF
@@ -1148,7 +1084,9 @@ class IncidenceGraph(Graph):
             self.__statistics.renamable_horn_formula_ratio.add_count(0)     # counter
 
         return result
+    # endregion
 
+    # region Decision heuristics
     def get_literals_in_binary_clauses(self) -> Set[int]:
         """
         :return: a set of literals that occur in binary clauses
@@ -1285,6 +1223,72 @@ class IncidenceGraph(Graph):
             return self.__length_set_clauses_dictionary[2].copy()
 
         return self.__length_set_clauses_dictionary[2]
+    # endregion
+
+    def create_incidence_graphs_for_components(self) -> Set[TIncidenceGraph]:
+        """
+        For each connected component will be created a new incidence graph
+        :return: a set of incidence graphs (one for each component)
+        """
+
+        self.__statistics.create_incidence_graphs_for_components.start_stopwatch()  # timer (start)
+
+        incidence_graph_set = set()
+
+        # Renamable Horn formula recognition
+        ignored_literal_set_temp = None
+        if self.__renamable_horn_formula_recognition is not None:
+            ignored_literal_set_temp = self.__ignored_literal_set_renamable_horn_formula_recognition.union(self.__neg_assigned_literal_set)
+
+        for component in nx.connected_components(self):
+            incidence_graph_temp = IncidenceGraph(statistics=self.__statistics,
+                                                  renamable_horn_formula_recognition=self.__renamable_horn_formula_recognition,
+                                                  ignored_literal_set_renamable_horn_formula_recognition=ignored_literal_set_temp)
+
+            for node_hash in component:
+                # The node is not a clause
+                if self.__is_node_variable(node_hash):
+                    continue
+
+                clause_id = self.nodes[node_hash]["value"]
+                incidence_graph_temp.add_clause_id(clause_id)
+                for neighbour_hash in self.neighbors(node_hash):
+                    variable = self.nodes[neighbour_hash]["value"]
+                    literal = self.__get_literal_from_clause(variable, clause_id)
+                    incidence_graph_temp.add_edge(literal, clause_id)
+
+            incidence_graph_set.add(incidence_graph_temp)
+
+        self.__statistics.create_incidence_graphs_for_components.stop_stopwatch()   # timer (stop)
+        return incidence_graph_set
+
+    def copy_incidence_graph(self) -> TIncidenceGraph:
+        """
+        :return: a copy of the incidence graph
+        """
+
+        self.__statistics.copy_incidence_graph.start_stopwatch()    # timer (start)
+
+        copy = IncidenceGraph(statistics=self.__statistics)
+
+        for node_hash in self.nodes:
+            # The node is not a clause
+            if self.__is_node_variable(node_hash):
+                continue
+
+            clause_id = self.nodes[node_hash]["value"]
+            copy.add_clause_id(clause_id)
+            for neighbour_hash in self.neighbors(node_hash):
+                variable = self.nodes[neighbour_hash]["value"]
+                literal = self.__get_literal_from_clause(variable, clause_id)
+                copy.add_edge(literal, clause_id)
+
+        # Renamable Horn formula recognition
+        if self.__renamable_horn_formula_recognition is not None:
+            copy.initialize_renamable_horn_formula_recognition()
+
+        self.__statistics.copy_incidence_graph.stop_stopwatch()     # timer (stop)
+        return copy
     # endregion
 
     # region Property
