@@ -101,7 +101,7 @@ class CompilerTest(TestAbstract):
                                                         print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "), flush=True)
 
                                                     except (c_exception.CaraException, Exception) as err:
-                                                        print(f"E ({str(err)})", end="\n", flush=True)
+                                                        print(f"\nError - {str(err)}", end="\n", flush=True)
                                                         actual_result = "\n".join((actual_result, str(err), ""))
 
         print()

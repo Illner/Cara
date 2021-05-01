@@ -15,7 +15,8 @@ import exception.cara_exception as c_exception
 import exception.formula.incidence_graph_exception as ig_exception
 
 # Import enum
-import formula.pysat_cnf_enum as psc_enum
+import formula.enum.pysat_cnf_enum as psc_enum
+import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 
 # Type
 TIncidenceGraph = TypeVar("TIncidenceGraph", bound="IncidenceGraph")
@@ -700,6 +701,8 @@ class IncidenceGraph(Graph):
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
 
+        # TODO Subsumption
+
         self.__statistics.remove_literal.stop_stopwatch()       # timer (stop)
         return isolated_variable_set
 
@@ -734,6 +737,8 @@ class IncidenceGraph(Graph):
             raise ig_exception.TryingRestoreLiteralIsNotLastOneRemovedException(literal, last_literal)
 
         self.__statistics.restore_backup_literal.start_stopwatch()      # timer (start)
+
+        # TODO Subsumption
 
         self.__assigned_variable_set.remove(variable)
         self.__neg_assigned_literal_set.remove(-literal)
@@ -868,7 +873,7 @@ class IncidenceGraph(Graph):
         self.__statistics.subsumption_variable.start_stopwatch()     # timer (start)
 
         subsumed_clause_set = set()
-        neighbour_dictionary: [int, Set[int]] = dict()   # key: clause, value: a set of variables
+        neighbour_dictionary: [int, Set[int]] = dict()   # key: clause, value: a set of variables that occur in the clause
         clause_id_list = self.clause_id_list()
 
         for i, clause_a in enumerate(clause_id_list):
