@@ -375,7 +375,56 @@ class IncidenceGraph(Graph):
 
     # region Redundant clauses
     def __get_redundant_clauses_subsumption(self) -> Set[int]:
-        return set()
+        subsumed_clause_set = set()
+        clause_dictionary: [int, Set[int]] = dict()     # key: clause, value: a set of literals that occur in the clause
+        clause_id_list = self.clause_id_list()
+
+        for i, clause_a_id in enumerate(clause_id_list):
+            # Get clause
+            if clause_a_id in clause_dictionary:
+                clause_a = clause_dictionary[clause_a_id]
+            else:
+                clause_a = self.get_clause(clause_a_id)
+                clause_dictionary[clause_a_id] = clause_a
+
+            for j in range(i + 1, len(clause_id_list)):
+                clause_b_id = clause_id_list[j]
+
+                if clause_b_id in subsumed_clause_set:
+                    continue
+
+                # Get clause
+                if clause_b_id in clause_dictionary:
+                    clause_b = clause_dictionary[clause_b_id]
+                else:
+                    clause_b = self.get_clause(clause_b_id)
+                    clause_dictionary[clause_b_id] = clause_b
+
+                a_subset_b = clause_a.issubset(clause_b)
+                b_subset_a = clause_b.issubset(clause_a)
+
+                # Clauses are the same
+                if a_subset_b and b_subset_a:
+                    if clause_a_id < clause_b_id:
+                        subsumed_clause_set.add(clause_a_id)
+                    else:
+                        subsumed_clause_set.add(clause_b_id)
+
+                    continue
+
+                # Clause A is subsumed
+                if a_subset_b:
+                    subsumed_clause_set.add(clause_b_id)
+
+                    continue
+
+                # Clause B is subsumed
+                if b_subset_a:
+                    subsumed_clause_set.add(clause_a_id)
+
+                    continue
+
+        return subsumed_clause_set
 
     def __get_redundant_clauses_up_redundancy(self) -> Set[int]:
         return set()
@@ -652,7 +701,7 @@ class IncidenceGraph(Graph):
 
     def get_redundant_clauses(self, eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum) -> Set[int]:
         """
-        Determine redundant clauses
+        Get redundant clauses
         :param eliminating_redundant_clauses_enum: a procedure that will be applied for determining redundant clauses
         :return: a set of redundant clauses
         """
@@ -683,7 +732,7 @@ class IncidenceGraph(Graph):
                                                           f"this procedure for determining redundant clauses ({eliminating_redundant_clauses_enum.name}) is not implemented")
 
     # region Assignment
-    def remove_literal(self, literal: int, eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum) -> Set[int]:
+    def remove_literal(self, literal: int, eliminating_redundant_clauses_enum: Union[erc_enum.EliminatingRedundantClausesEnum, None]) -> Set[int]:
         """
         Remove the variable node (|literal|).
         Remove all (satisfied) clauses (nodes) that contain the literal.
@@ -745,7 +794,10 @@ class IncidenceGraph(Graph):
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
 
         # Eliminated redundant clauses
-        eliminated_redundant_clause_set = self.get_redundant_clauses(eliminating_redundant_clauses_enum)
+        if eliminating_redundant_clauses_enum is not None:
+            eliminated_redundant_clause_set = self.get_redundant_clauses(eliminating_redundant_clauses_enum)
+        else:
+            eliminated_redundant_clause_set = set()
         eliminated_clause_node_dictionary = dict()
 
         for clause_id in eliminated_redundant_clause_set:
@@ -773,13 +825,12 @@ class IncidenceGraph(Graph):
         self.__statistics.remove_literal.stop_stopwatch()       # timer (stop)
         return isolated_variable_set
 
-    def remove_literal_set(self, literal_set: Set[int], eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum) -> Set[int]:
+    def remove_literal_list(self, literal_list: List[int], eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum) -> Set[int]:
         isolated_variable_set = set()
 
-        # TODO set -> list
-
-        for literal in literal_set:
-            isolated_variable_set.update(self.remove_literal(literal, eliminating_redundant_clauses_enum))
+        for i, literal in enumerate(literal_list):
+            erc_enum_temp = None if i < len(literal_list) - 1 else eliminating_redundant_clauses_enum
+            isolated_variable_set.update(self.remove_literal(literal, erc_enum_temp))
 
         return isolated_variable_set
 
@@ -1380,6 +1431,18 @@ class IncidenceGraph(Graph):
 
         self.__statistics.copy_incidence_graph.stop_stopwatch()     # timer (stop)
         return copy
+    # endregion
+
+    # region Magic method
+    def __str__(self):
+        string_temp = ""
+        clause_id_list = sorted(self.clause_id_set(copy=False))
+
+        for clause_id in clause_id_list:
+            clause = sorted(self.get_clause(clause_id))
+            string_temp = "\n".join((string_temp, f"Clause {clause_id}: {clause}"))
+
+        return string_temp
     # endregion
 
     # region Property

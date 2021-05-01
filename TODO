@@ -1,7 +1,6 @@
 ) Minimum cardinality - DualHorn
 ) Minimizing
 ) Branching heuristics
-) Candidates for implicit BCP
 ) Subsumption
 ) DIMACS NNF - DIMACS CNF
 ) Hypergraph weights
@@ -9,3 +8,4 @@
 ) Pure literal
 ) One solver
 ) Preselection heuristic - statistics
+) multi_occurrence

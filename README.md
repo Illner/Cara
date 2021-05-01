@@ -64,6 +64,8 @@ optional arguments:
   + type of method that will be used for deriving implied literals after component decomposition (default: IMPLICIT_BCP)
 * **-cc {NONE,STANDARD_CACHING_SCHEME,HYBRID_CACHING_SCHEME,BASIC_CACHING_SCHEME}, --component_caching {NONE,STANDARD_CACHING_SCHEME,HYBRID_CACHING_SCHEME,BASIC_CACHING_SCHEME}**
   + type of component caching that will be used for compiling the circuit (default: BASIC_CACHING_SCHEME)
+* **-erc {NONE,SUBSUMPTION,UP_REDUNDANCY}, --eliminating_redundant_clauses {NONE,SUBSUMPTION,UP_REDUNDANCY}**
+  + procedure that will be applied for determining redundant clauses (default: UP_REDUNDANCY)
 * **-hps {HMETIS,PATOH,KAHYPAR,NONE}, --hp_software {HMETIS,PATOH,KAHYPAR,NONE}**
   + software used for hypergraph partitioning (default: PATOH (Linux / macOS), HMETIS (Windows))
 * **-hpc {NONE,ISOMORFISM,ISOMORFISM_VARIANCE}, --hp_caching {NONE,ISOMORFISM,ISOMORFISM_VARIANCE}**

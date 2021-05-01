@@ -34,6 +34,7 @@ import compiler.enum.base_class_enum as bs_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
+import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 import compiler.component_caching.component_caching_enum as cc_enum
 import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
 import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
@@ -62,6 +63,7 @@ class Compiler:
     Private ComponentCachingAbstract component_caching
     Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
+    Private EliminatingRedundantClausesEnum eliminating_redundant_clauses_enum
     Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
     
     Private SatSolverEnum sat_solver_enum
@@ -87,6 +89,7 @@ class Compiler:
                  implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                  component_caching_enum: cc_enum.ComponentCachingEnum,
+                 eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum,
                  hp_cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                  hp_software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
                  hp_node_weight_type_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
@@ -123,6 +126,7 @@ class Compiler:
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
         self.__first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum = first_implied_literals_enum
+        self.__eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum = eliminating_redundant_clauses_enum
 
         # Component caching
         self.__set_component_caching(component_caching_enum)
@@ -286,6 +290,7 @@ class Compiler:
                                   incidence_graph=incidence_graph,
                                   decision_heuristic=self.__decision_heuristic,
                                   component_caching=self.__component_caching,
+                                  eliminating_redundant_clauses_enum=self.__eliminating_redundant_clauses_enum,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
                                   sat_solver_enum=self.__sat_solver_enum,
                                   base_class_enum_set=self.__base_class_enum_set,

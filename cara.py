@@ -14,6 +14,7 @@ import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
+import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 import compiler.component_caching.component_caching_enum as cc_enum
 import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
 import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
@@ -43,6 +44,7 @@ def main(main_args):
                             implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum[main_args.il_preselection_heuristic],
                             first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum[main_args.first_implied_literals],
                             component_caching_enum=cc_enum.ComponentCachingEnum[main_args.component_caching],
+                            eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum[main_args.eliminating_redundant_clauses],
                             hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum[main_args.hp_caching],
                             hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum[main_args.hp_software],
                             hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
@@ -309,6 +311,13 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str,
                              choices=cc_enum.component_caching_enum_names,
                              help="type of component caching that will be used for compiling the circuit")
+    parser_temp.add_argument("-erc",
+                             "--eliminating_redundant_clauses",
+                             action="store",
+                             default=erc_enum.EliminatingRedundantClausesEnum.SUBSUMPTION.name,
+                             type=str,
+                             choices=erc_enum.eliminating_redundant_clauses_enum_names,
+                             help="procedure that will be applied for determining redundant clauses")
     parser_temp.add_argument("-hps",
                              "--hp_software",
                              action="store",

@@ -12,7 +12,10 @@ from compiler_statistics.statistics_component_timer import StatisticsComponentTi
 # Import enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
+import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
+import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 import compiler.component_caching.component_caching_enum as cc_enum
+import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
@@ -82,11 +85,14 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                                                                                       preprocessing=False,
                                                                                       subsumed_threshold=1000,
                                                                                       new_cut_set_threshold=new_cut_set_threshold,
+                                                                                      decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
                                                                                       sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                                                                                       base_class_enum_set=set(),
                                                                                       implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
+                                                                                      implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.CRA,
                                                                                       first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP,
                                                                                       component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                                                                                      eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.SUBSUMPTION,
                                                                                       hp_cache_enum=hp_cache_enum,
                                                                                       hp_software_enum=hp_software_enum,
                                                                                       hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,

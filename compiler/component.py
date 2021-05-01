@@ -40,6 +40,7 @@ class Component:
     Private ComponentCachingAbstract component_caching
     Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
+    Private EliminatingRedundantClausesEnum eliminating_redundant_clauses_enum
     Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
     
     Private SatSolverEnum sat_solver_enum
@@ -58,6 +59,7 @@ class Component:
                  incidence_graph: IncidenceGraph,
                  decision_heuristic: DecisionHeuristicAbstract,
                  component_caching: ComponentCachingAbstract,
+                 eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum,
                  hypergraph_partitioning: HypergraphPartitioning,
                  sat_solver_enum: ss_enum.SatSolverEnum,
                  base_class_enum_set: Set[bs_enum.BaseClassEnum],
@@ -82,6 +84,7 @@ class Component:
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
         self.__first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum = first_implied_literals_enum
+        self.__eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum = eliminating_redundant_clauses_enum
 
         self.__statistics: Statistics = statistics
 
@@ -247,9 +250,10 @@ class Component:
 
         # Implied literals
         implied_literal_set = self.__get_implied_literals(depth)
+        implied_literal_list = list(implied_literal_set)
         self.__statistics.component_statistics.implied_literal.add_count(len(implied_literal_set))  # counter
-        self.__assignment_list.extend(implied_literal_set)
-        isolated_variable_set = self.__incidence_graph.remove_literal_set(implied_literal_set, erc_enum.EliminatingRedundantClausesEnum.NONE)
+        self.__assignment_list.extend(implied_literal_list)
+        isolated_variable_set = self.__incidence_graph.remove_literal_list(implied_literal_list, self.__eliminating_redundant_clauses_enum)
         self.__statistics.component_statistics.isolated_variable.add_count(len(isolated_variable_set))  # counter
         implied_literal_id_set = self.__circuit.create_literal_leaf_set(implied_literal_set)
 
@@ -323,6 +327,7 @@ class Component:
                                            incidence_graph=incidence_graph,
                                            decision_heuristic=self.__decision_heuristic,
                                            component_caching=self.__component_caching,
+                                           eliminating_redundant_clauses_enum=self.__eliminating_redundant_clauses_enum,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,
                                            sat_solver_enum=self.__sat_solver_enum,
                                            base_class_enum_set=self.__base_class_enum_set,
@@ -389,7 +394,7 @@ class Component:
             literal = sign * decision_variable
 
             self.__assignment_list.append(literal)
-            isolated_variable_set = self.__incidence_graph.remove_literal(literal, erc_enum.EliminatingRedundantClausesEnum.NONE)
+            isolated_variable_set = self.__incidence_graph.remove_literal(literal, self.__eliminating_redundant_clauses_enum)
             self.__statistics.component_statistics.isolated_variable.add_count(len(isolated_variable_set))  # counter
 
             # Isolated variables

@@ -20,7 +20,9 @@ import compiler.enum.base_class_enum as bs_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
+import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 import compiler.component_caching.component_caching_enum as cc_enum
+import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
@@ -76,11 +78,14 @@ class ExperimentAbstract(ABC):
                     preprocessing: bool,
                     subsumed_threshold: Union[int, None],
                     new_cut_set_threshold: float,
+                    decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,
                     sat_solver_enum: ss_enum.SatSolverEnum,
                     base_class_enum_set: Set[bs_enum.BaseClassEnum],
                     implied_literals_enum: il_enum.ImpliedLiteralsEnum,
+                    implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                     first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                     component_caching_enum: cc_enum.ComponentCachingEnum,
+                    eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum,
                     hp_cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                     hp_software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
                     hp_node_weight_type_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
@@ -108,12 +113,14 @@ class ExperimentAbstract(ABC):
                             preprocessing=preprocessing,
                             subsumption_threshold=subsumed_threshold,
                             new_cut_set_threshold=new_cut_set_threshold,
-                            decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
+                            decision_heuristic_enum=decision_heuristic_enum,
                             sat_solver_enum=sat_solver_enum,
                             base_class_enum_set=base_class_enum_set,
                             implied_literals_enum=implied_literals_enum,
+                            implied_literals_preselection_heuristic_enum=implied_literals_preselection_heuristic_enum,
                             first_implied_literals_enum=first_implied_literals_enum,
                             component_caching_enum=component_caching_enum,
+                            eliminating_redundant_clauses_enum=eliminating_redundant_clauses_enum,
                             hp_cache_enum=hp_cache_enum,
                             hp_software_enum=hp_software_enum,
                             hp_node_weight_type_enum=hp_node_weight_type_enum,
