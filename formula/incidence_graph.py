@@ -49,8 +49,9 @@ class IncidenceGraph(Graph):
     # Assignment
     Private Set<int> assigned_variable_set
     Private List<int> assigned_literal_list
-    Private Dict<int, Set<str>> variable_node_backup_dictionary             # key: a variable, value: a set of clauses (nodes) that were incident with the variable node when the variable node was being deleted
-    Private Dict<int, Dict<int, Set<int>> clause_node_backup_dictionary     # key: a variable, value: a dictionary, where a key is a clause node that was satisfied because of the variable, and the value is a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
+    Private Dict<int, Set<str>> variable_node_backup_dictionary                             # key: a variable, value: a set of clauses (nodes) that were incident with the variable node when the variable node was being deleted
+    Private Dict<int, Dict<int, Set<int>> clause_node_backup_dictionary                     # key: a variable, value: a dictionary, where a key is a clause node that was satisfied because of the variable, and the value is a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
+    Private Dict<int, Dict<int, Set<int>> eliminated_redundant_clauses_backup_dictionary    # key: a variable, value: a dictionary, where a key is a clause node that was eliminated, and the value is a set of variables (nodes) that were incident with the clause node when the clause node was being deleted
     
     # Variable simplification
     Private Dict<int, Set<str>> removed_edge_backup_dictionary              # key: a variable, value: a set of neighbours of the variable that were deleted because of variable simplification
@@ -95,6 +96,7 @@ class IncidenceGraph(Graph):
         self.__assigned_literal_list: List[int] = []
         self.__variable_node_backup_dictionary: Dict[int, Set[str]] = dict()
         self.__clause_node_backup_dictionary: Dict[int, Dict[int, Set[int]]] = dict()
+        self.__eliminated_redundant_clauses_backup_dictionary: Dict[int, Dict[int, Set[int]]] = dict()
 
         # Backup - variable simplification
         self.__removed_edge_backup_dictionary: Dict[int, Set[str]] = dict()
@@ -370,6 +372,14 @@ class IncidenceGraph(Graph):
 
         # The variable does not exist in the clause
         raise ig_exception.VariableDoesNotExistInClauseException(variable, clause_id)
+
+    # region Redundant clauses
+    def __get_redundant_clauses_subsumption(self) -> Set[int]:
+        return set()
+
+    def __get_redundant_clauses_up_redundancy(self) -> Set[int]:
+        return set()
+    # endregion
     # endregion
 
     # region Public method
@@ -640,13 +650,46 @@ class IncidenceGraph(Graph):
 
         return len(self.variable_set(copy=False))
 
+    def get_redundant_clauses(self, eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum) -> Set[int]:
+        """
+        Determine redundant clauses
+        :param eliminating_redundant_clauses_enum: a procedure that will be applied for determining redundant clauses
+        :return: a set of redundant clauses
+        """
+
+        self.__statistics.get_redundant_clauses.start_stopwatch()   # timer (start)
+
+        redundant_clause_set: Union[Set[int], None] = None
+
+        # NONE
+        if eliminating_redundant_clauses_enum == erc_enum.EliminatingRedundantClausesEnum.NONE:
+            redundant_clause_set = set()
+
+        # SUBSUMPTION
+        elif eliminating_redundant_clauses_enum == erc_enum.EliminatingRedundantClausesEnum.SUBSUMPTION:
+            redundant_clause_set = self.__get_redundant_clauses_subsumption()
+
+        # UP_REDUNDANCY
+        elif eliminating_redundant_clauses_enum == erc_enum.EliminatingRedundantClausesEnum.UP_REDUNDANCY:
+            redundant_clause_set = self.__get_redundant_clauses_up_redundancy()
+
+        if redundant_clause_set is not None:
+            self.__statistics.get_redundant_clauses_size.add_count(len(redundant_clause_set))   # counter
+            self.__statistics.get_redundant_clauses.stop_stopwatch()    # timer (stop)
+
+            return redundant_clause_set
+
+        raise c_exception.FunctionNotImplementedException("get_redundant_clauses",
+                                                          f"this procedure for determining redundant clauses ({eliminating_redundant_clauses_enum.name}) is not implemented")
+
     # region Assignment
-    def remove_literal(self, literal: int) -> Set[int]:
+    def remove_literal(self, literal: int, eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum) -> Set[int]:
         """
         Remove the variable node (|literal|).
         Remove all (satisfied) clauses (nodes) that contain the literal.
         Everything removed from the incidence graph is saved and can be restored from the backup in future.
         :param literal: the literal
+        :param eliminating_redundant_clauses_enum: a procedure that will be applied for determining redundant clauses
         :return: a set of isolated variables that have been deleted
         :raises VariableDoesNotExistException: if the variable does not exist in the incidence graph
         :raises VariableHasBeenRemovedException: if the variable has been already removed
@@ -701,16 +744,42 @@ class IncidenceGraph(Graph):
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
 
-        # TODO Subsumption
+        # Eliminated redundant clauses
+        eliminated_redundant_clause_set = self.get_redundant_clauses(eliminating_redundant_clauses_enum)
+        eliminated_clause_node_dictionary = dict()
+
+        for clause_id in eliminated_redundant_clause_set:
+            clause_id_hash = self.__clause_id_hash(clause_id)
+
+            # The clause does not exist in the incidence graph
+            if not self.__node_exist(clause_id_hash):
+                raise ig_exception.ClauseHasBeenRemovedException(clause_id)
+
+            clause_node_neighbour_set = self.clause_id_neighbour_set(clause_id)
+            eliminated_clause_node_dictionary[clause_id] = clause_node_neighbour_set
+
+            # Delete the redundant clause
+            self.__satisfied_clause_set.add(clause_id)
+            self.__temporarily_remove_clause_id(clause_id)
+
+            # Check if any neighbour is not an isolated node
+            for clause_node_neighbour in clause_node_neighbour_set:
+                if not self.number_of_neighbours_variable(clause_node_neighbour):
+                    self.__temporarily_remove_variable(clause_node_neighbour)
+                    isolated_variable_set.add(clause_node_neighbour)
+
+        self.__eliminated_redundant_clauses_backup_dictionary[variable] = eliminated_clause_node_dictionary
 
         self.__statistics.remove_literal.stop_stopwatch()       # timer (stop)
         return isolated_variable_set
 
-    def remove_literal_set(self, literal_set: Set[int]) -> Set[int]:
+    def remove_literal_set(self, literal_set: Set[int], eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum) -> Set[int]:
         isolated_variable_set = set()
 
+        # TODO set -> list
+
         for literal in literal_set:
-            isolated_variable_set.update(self.remove_literal(literal))
+            isolated_variable_set.update(self.remove_literal(literal, eliminating_redundant_clauses_enum))
 
         return isolated_variable_set
 
@@ -738,7 +807,24 @@ class IncidenceGraph(Graph):
 
         self.__statistics.restore_backup_literal.start_stopwatch()      # timer (start)
 
-        # TODO Subsumption
+        # Eliminated redundant clauses
+        eliminated_clause_node_dictionary = self.__eliminated_redundant_clauses_backup_dictionary[variable]
+        for clause_id in eliminated_clause_node_dictionary:
+            self.__satisfied_clause_set.remove(clause_id)
+            self.add_clause_id(clause_id)
+
+            clause_id_hash = self.__clause_id_hash(clause_id)
+            eliminated_clause_node_neighbour_set = eliminated_clause_node_dictionary[clause_id]
+            for neighbour_id in eliminated_clause_node_neighbour_set:
+                neighbour_hash = self.__variable_hash(neighbour_id)
+
+                # The neighbour does not exist (isolated node)
+                if not self.__node_exist(neighbour_hash):
+                    self.add_variable(neighbour_id)
+
+                self.__add_edge(neighbour_hash, clause_id_hash)
+
+        del self.__eliminated_redundant_clauses_backup_dictionary[variable]
 
         self.__assigned_variable_set.remove(variable)
         self.__neg_assigned_literal_set.remove(-literal)
@@ -755,7 +841,7 @@ class IncidenceGraph(Graph):
             for neighbour_id in clause_node_neighbour_set:
                 neighbour_hash = self.__variable_hash(neighbour_id)
 
-                # The neighbour does not exist
+                # The neighbour does not exist (isolated node)
                 if not self.__node_exist(neighbour_hash):
                     self.add_variable(neighbour_id)
 

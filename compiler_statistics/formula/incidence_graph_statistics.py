@@ -27,9 +27,11 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer convert_to_cnf
     Private StatisticsComponentTimer convert_to_2_cnf
     Private StatisticsComponentTimer convert_to_horn_cnf
+    Private StatisticsComponentTimer get_redundant_clauses
     
     Private StatisticsComponentCounter renamable_horn_formula_ratio
     Private StatisticsComponentCounter two_cnf_ratio
+    Private StatisticsComponentCounter get_redundant_clauses_size
     """
 
     def __init__(self):
@@ -91,6 +93,12 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
         self.__convert_to_horn_cnf: StatisticsComponentTimer = StatisticsComponentTimer("convert - HornCNF")
         self._component_list.append(self.__convert_to_horn_cnf)
+
+        self.__get_redundant_clauses: StatisticsComponentTimer = StatisticsComponentTimer("get redundant clauses")
+        self._component_list.append(self.__get_redundant_clauses)
+
+        self.__get_redundant_clauses_size: StatisticsComponentCounter = StatisticsComponentCounter("get redundant clauses - size")
+        self._component_list.append(self.__get_redundant_clauses_size)
 
     # region Property
     @property
@@ -168,4 +176,12 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     @property
     def convert_to_horn_cnf(self) -> StatisticsComponentTimer:
         return self.__convert_to_horn_cnf
+
+    @property
+    def get_redundant_clauses(self) -> StatisticsComponentTimer:
+        return self.__get_redundant_clauses
+
+    @property
+    def get_redundant_clauses_size(self) -> StatisticsComponentCounter:
+        return self.__get_redundant_clauses_size
     # endregion

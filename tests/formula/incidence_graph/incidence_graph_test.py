@@ -7,6 +7,9 @@ from formula.incidence_graph import IncidenceGraph
 # Import exception
 import exception.cara_exception as c_exception
 
+# Import enum
+import formula.enum.eliminating_redundant_clauses_enum as erc_enum
+
 
 class IncidenceGraphTest(TestAbstract):
     __DIRECTORY: str = os.path.join("formula", "incidence_graph")
@@ -208,7 +211,7 @@ class IncidenceGraphTest(TestAbstract):
                 result = "\n".join((result, f"Remove literals ({remove_literal_list})"))
                 for remove_literal in remove_literal_list:
                     result = "\n".join((result, f"Remove literal ({remove_literal})"))
-                    incidence_graph.remove_literal(remove_literal)
+                    incidence_graph.remove_literal(remove_literal, erc_enum.EliminatingRedundantClausesEnum.NONE)
                     result = "\n".join((result, self.__incidence_graph_str(incidence_graph), connected_components_str(incidence_graph)))
 
                 # Restore

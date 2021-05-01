@@ -18,6 +18,7 @@ import exception.compiler.compiler_exception as c_exception
 import compiler.enum.base_class_enum as bs_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
+import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 
 
 class Component:
@@ -248,7 +249,7 @@ class Component:
         implied_literal_set = self.__get_implied_literals(depth)
         self.__statistics.component_statistics.implied_literal.add_count(len(implied_literal_set))  # counter
         self.__assignment_list.extend(implied_literal_set)
-        isolated_variable_set = self.__incidence_graph.remove_literal_set(implied_literal_set)
+        isolated_variable_set = self.__incidence_graph.remove_literal_set(implied_literal_set, erc_enum.EliminatingRedundantClausesEnum.NONE)
         self.__statistics.component_statistics.isolated_variable.add_count(len(isolated_variable_set))  # counter
         implied_literal_id_set = self.__circuit.create_literal_leaf_set(implied_literal_set)
 
@@ -388,7 +389,7 @@ class Component:
             literal = sign * decision_variable
 
             self.__assignment_list.append(literal)
-            isolated_variable_set = self.__incidence_graph.remove_literal(literal)
+            isolated_variable_set = self.__incidence_graph.remove_literal(literal, erc_enum.EliminatingRedundantClausesEnum.NONE)
             self.__statistics.component_statistics.isolated_variable.add_count(len(isolated_variable_set))  # counter
 
             # Isolated variables

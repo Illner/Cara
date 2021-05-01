@@ -1,4 +1,5 @@
 # Import
+import random
 from typing import Set, List
 from compiler.solver import Solver
 from formula.incidence_graph import IncidenceGraph
@@ -17,5 +18,9 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
     # region Override method
     def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
         # TODO
-        pass
+
+        preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
+        decision_variable = random.sample(preselected_variable_set, 1)[0]
+
+        return decision_variable
     # endregion
