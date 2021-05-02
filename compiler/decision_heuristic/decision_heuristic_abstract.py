@@ -1,12 +1,16 @@
 # Import
-from typing import Set, List
 from compiler.solver import Solver
 from abc import ABC, abstractmethod
+from typing import Set, Dict, List, Tuple, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
 
 # Import exception
+import exception.cara_exception as c_exception
 import exception.compiler.heuristic_exception as h_exception
+
+# Import enum
+import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdf_enum
 
 
 class DecisionHeuristicAbstract(ABC):
@@ -57,4 +61,50 @@ class DecisionHeuristicAbstract(ABC):
             raise h_exception.PreselectedVariableSetIsEmptyException()
 
         return preselected_variable_set
+
+    def _process_implicit_bcp_dictionary(self, implicit_bcp_dictionary: Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]]) -> \
+            Tuple[Union[int, None], Dict[int, Tuple[Set[int], Set[int]]]]:
+
+        implied_literal_dictionary: Dict[int, Tuple[Set[int], Set[int]]] = dict()   # key: a literal, value: (implied literals, complementary implied literals)
+
+        for variable in implicit_bcp_dictionary:
+            positive, negative = implicit_bcp_dictionary[variable]
+
+            # Implied literal
+            if (positive is None) or (negative is None):
+                return variable, dict()
+
+            positive_temp = positive.union({variable})
+            complementary_positive_temp = set(map(lambda l: -1 * l, positive_temp))
+
+            negative_temp = negative.union({-variable})
+            complementary_negative_temp = set(map(lambda l: -1 * l, negative_temp))
+
+            implied_literal_dictionary[variable] = positive_temp, complementary_positive_temp
+            implied_literal_dictionary[-variable] = negative_temp, complementary_negative_temp
+
+        return None, implied_literal_dictionary
+
+    def _compute_score_mixed_difference_heuristic(self, literal_score_dictionary: Dict[int, int], preselected_variable_set: Set[int],
+                                                  mixed_difference_heuristic_enum: mdf_enum.MixedDifferenceHeuristicEnum) -> Dict[int, int]:
+        score_dictionary: Dict[int, int] = dict()   # key: a variable, value: score of the variable
+
+        for variable in preselected_variable_set:
+            positive_score = literal_score_dictionary[variable]
+            negative_score = literal_score_dictionary[-variable]
+
+            # OK_SOLVER
+            if mixed_difference_heuristic_enum == mdf_enum.MixedDifferenceHeuristicEnum.OK_SOLVER:
+                score = positive_score * negative_score
+            # POSIT_SATZ
+            elif mixed_difference_heuristic_enum == mdf_enum.MixedDifferenceHeuristicEnum.POSIT_SATZ:
+                score = 1024 * positive_score * negative_score + positive_score + negative_score
+            # Not supported
+            else:
+                raise c_exception.FunctionNotImplementedException("compute_score_mixed_difference_heuristic",
+                                                                  f"this type of mixed difference heuristic ({mixed_difference_heuristic_enum.name}) is not implemented")
+
+            score_dictionary[variable] = score
+
+        return score_dictionary
     # endregion

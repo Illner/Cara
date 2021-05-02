@@ -1274,6 +1274,34 @@ class IncidenceGraph(Graph):
 
         return sum_temp
 
+    def literal_number_of_occurrences_dictionary(self, literal: int) -> Dict[int, int]:
+        """
+        Return the number of occurrences of the literal for each clause size
+        :param literal: a literal
+        :return: the number of occurrences for each clause size
+        :raises VariableDoesNotExistException: if the variable (|literal|) does not exist in the incidence graph
+        """
+
+        variable = abs(literal)
+        variable_hash = self.__variable_hash(variable)
+
+        # The variable does not exist in the incidence graph
+        if not self.__node_exist(variable_hash):
+            raise ig_exception.VariableDoesNotExistException(variable)
+
+        number_of_occurrences_dictionary: Dict[int, int] = dict()
+        clause_set = self.__adjacency_literal_dynamic_dictionary[literal]
+
+        for clause_id in clause_set:
+            clause_length = self.__clause_length_dictionary[clause_id]
+
+            if clause_length not in number_of_occurrences_dictionary:
+                number_of_occurrences_dictionary[clause_length] = 1
+            else:
+                number_of_occurrences_dictionary[clause_length] += 1
+
+        return number_of_occurrences_dictionary
+
     def variable_number_of_occurrences(self, variable: int) -> int:
         """
         Return the number of occurrences of the variable

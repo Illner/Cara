@@ -38,7 +38,7 @@ optional arguments:
   + find all backbone literals before the compilation (default: False)
 * **-bc {TWO_CNF,RENAMABLE_HORN_CNF}, --base_class {TWO_CNF,RENAMABLE_HORN_CNF}**
   + types of base classes in the circuit's leaves (literal leaves are mandatory) (default: None)
-* **-dh {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,DLCS,DLIS,DLCS_DLIS,EUPC}, --decision_heuristic {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,DLCS,DLIS,DLCS_DLIS,EUPC}**
+* **-dh {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,BACKBONE_SEARCH,DLCS,DLIS,DLCS_DLIS,EUPC}, --decision_heuristic {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,BACKBONE_SEARCH,DLCS,DLIS,DLCS_DLIS,EUPC}**
   + type of decision heuristic (default: CLAUSE_REDUCTION)
 * **-dh_mdh {OK_SOLVER,POSIT_SATZ}, --dh_mixed_difference_heuristic {OK_SOLVER,POSIT_SATZ}**
   + type of mixed difference heuristic for the decision heuristic (clause reduction heuristic, exact unit propagation count heuristic) (default: OK_SOLVER)

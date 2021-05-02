@@ -1,12 +1,11 @@
 # Import
+from typing import List, Set, Dict
 from compiler.solver import Solver
-from typing import List, Set, Dict, Tuple
 from formula.incidence_graph import IncidenceGraph
 from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
 
 # Import exception
-import exception.cara_exception as c_exception
 import exception.compiler.heuristic_exception as h_exception
 
 # Import enum
@@ -78,23 +77,9 @@ class ClauseReductionHeuristic(DecisionHeuristicAbstract):
 
         implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list=assignment_list,
                                                                    variable_restriction_set=preselected_variable_set)
-        implied_literal_dictionary: Dict[int, Tuple[Set[int], Set[int]]] = dict()   # key: a literal, value: (implied literals, complementary implied literals)
-
-        for variable in implicit_bcp_dictionary:
-            positive, negative = implicit_bcp_dictionary[variable]
-
-            # Implied literal
-            if (positive is None) or (negative is None):
-                return variable
-
-            positive_temp = positive.union({variable})
-            complementary_positive_temp = set(map(lambda l: -1 * l, positive_temp))
-
-            negative_temp = negative.union({-variable})
-            complementary_negative_temp = set(map(lambda l: -1 * l, negative_temp))
-
-            implied_literal_dictionary[variable] = positive_temp, complementary_positive_temp
-            implied_literal_dictionary[-variable] = negative_temp, complementary_negative_temp
+        implied_variable, implied_literal_dictionary = self._process_implicit_bcp_dictionary(implicit_bcp_dictionary)
+        if implied_variable is not None:
+            return implied_variable
 
         literal_clause_size_dictionary: Dict[int, Dict[int, int]] = dict()  # key: a literal, value: (size k, number of clauses with the size k)
         for literal in implied_literal_dictionary:
@@ -138,25 +123,9 @@ class ClauseReductionHeuristic(DecisionHeuristicAbstract):
 
             literal_score_dictionary[literal] = score
 
-        score_dictionary: Dict[int, int] = dict()   # key: variable, value: score of the variable
-
-        # Compute score
-        for variable in preselected_variable_set:
-            positive_score = literal_score_dictionary[variable]
-            negative_score = literal_score_dictionary[-variable]
-
-            # OK_SOLVER
-            if self.__mixed_difference_heuristic_enum == mdf_enum.MixedDifferenceHeuristicEnum.OK_SOLVER:
-                score = positive_score * negative_score
-            # POSIT_SATZ
-            elif self.__mixed_difference_heuristic_enum == mdf_enum.MixedDifferenceHeuristicEnum.POSIT_SATZ:
-                score = 1024 * positive_score * negative_score + positive_score + negative_score
-            # Not supported
-            else:
-                raise c_exception.FunctionNotImplementedException("get_decision_variable",
-                                                                  f"this type of mixed difference heuristic ({self.__mixed_difference_heuristic_enum.name}) is not implemented")
-
-            score_dictionary[variable] = score
+        score_dictionary = self._compute_score_mixed_difference_heuristic(literal_score_dictionary=literal_score_dictionary,
+                                                                          preselected_variable_set=preselected_variable_set,
+                                                                          mixed_difference_heuristic_enum=self.__mixed_difference_heuristic_enum)
 
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)
