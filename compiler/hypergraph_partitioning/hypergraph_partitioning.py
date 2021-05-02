@@ -499,48 +499,62 @@ class HypergraphPartitioning:
                 # variance_temp = variance_temp / (len(clause_id_set) - 1)
                 variance_dictionary[variable] = variance_temp
 
-        def variable_order(ordering_func: List[List[int]], mapping_dictionary_func: Dict[int, float]) -> List[List[int]]:
-            result_ordering = []
+        variable_property_dictionary: Dict[int, Tuple[int, float, float, int]] = dict()
+        for variable in incidence_graph.variable_set(copy=False):
+            occurrence = occurrence_dictionary[variable]
+            mean = mean_dictionary[variable]
+            variance = variance_dictionary.get(variable, 0)
 
-            for group_func in ordering_func:
-                last_value = None
-                new_group = []
+            variable_property_dictionary[variable] = occurrence, mean, variance, variable
 
-                for var_func in sorted(group_func, key=lambda v_func: mapping_dictionary_func[v_func]):
-                    value = mapping_dictionary_func[var_func]
-
-                    if (last_value is None) or (value == last_value):
-                        new_group.append(var_func)
-                    else:
-                        result_ordering.append(new_group)
-                        new_group = [var_func]
-
-                    last_value = value
-
-                result_ordering.append(new_group)
-
-            return result_ordering
-
-        variable_ordering = [incidence_graph.variable_list()]
-        variable_ordering = variable_order(variable_ordering, occurrence_dictionary)
-        variable_ordering = variable_order(variable_ordering, mean_dictionary)
-        if use_variance:
-            variable_ordering = variable_order(variable_ordering, variance_dictionary)
+        variable_sorted_list = sorted(variable_property_dictionary, key=variable_property_dictionary.get)
 
         # Mapping
         variable_id_order_id_dictionary: Dict[int, int] = dict()  # Mapping variable_id -> order_id
         order_id_variable_id_dictionary: Dict[int, int] = dict()  # Mapping order_id -> variable_id
 
-        # Create an ordering
-        counter_temp = 0
-        for group in variable_ordering:
-            for var in sorted(group):
-                variable_id_order_id_dictionary[var] = counter_temp
-                order_id_variable_id_dictionary[counter_temp] = var
-                counter_temp += 1
+        for i, variable in enumerate(variable_sorted_list):
+            variable_id_order_id_dictionary[variable] = i
+            order_id_variable_id_dictionary[i] = variable
+
+        # def variable_order(ordering_func: List[List[int]], mapping_dictionary_func: Dict[int, float]) -> List[List[int]]:
+        #     result_ordering = []
+        #
+        #     for group_func in ordering_func:
+        #         last_value = None
+        #         new_group = []
+        #
+        #         for var_func in sorted(group_func, key=lambda v_func: mapping_dictionary_func[v_func]):
+        #             value = mapping_dictionary_func[var_func]
+        #
+        #             if (last_value is None) or (value == last_value):
+        #                 new_group.append(var_func)
+        #             else:
+        #                 result_ordering.append(new_group)
+        #                 new_group = [var_func]
+        #
+        #             last_value = value
+        #
+        #         result_ordering.append(new_group)
+        #
+        #     return result_ordering
+        #
+        # variable_ordering = [incidence_graph.variable_list()]
+        # variable_ordering = variable_order(variable_ordering, occurrence_dictionary)
+        # variable_ordering = variable_order(variable_ordering, mean_dictionary)
+        # if use_variance:
+        #     variable_ordering = variable_order(variable_ordering, variance_dictionary)
+        #
+        # # Create an ordering
+        # counter_temp = 0
+        # for group in variable_ordering:
+        #     for var in sorted(group):
+        #         variable_id_order_id_dictionary[var] = counter_temp
+        #         order_id_variable_id_dictionary[counter_temp] = var
+        #         counter_temp += 1
 
         variable_clause_list = []
-        for clause_id in incidence_graph.clause_id_set(copy=False, multi_occurrence=False, multi_occurrence_literal=False):
+        for clause_id in incidence_graph.clause_id_set(copy=False, multi_occurrence=True):
             variable_set = incidence_graph.clause_id_neighbour_set(clause_id)
             variable_sorted_list = sorted(map(lambda v: variable_id_order_id_dictionary[v], variable_set))
             variable_clause_list.append(variable_sorted_list)
