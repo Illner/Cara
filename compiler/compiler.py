@@ -208,6 +208,7 @@ class Compiler:
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.WEIGHTED_BINARIES:
             self.__decision_heuristic = WeightedBinariesHeuristic(preselection_heuristic=preselection_heuristic,
                                                                   mixed_difference_heuristic_enum=mixed_difference_heuristic_enum,
+                                                                  weight_for_satisfied_clauses=True,
                                                                   backbone_search_heuristic=False)
             return
 
@@ -215,6 +216,7 @@ class Compiler:
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.BACKBONE_SEARCH:
             self.__decision_heuristic = WeightedBinariesHeuristic(preselection_heuristic=preselection_heuristic,
                                                                   mixed_difference_heuristic_enum=mixed_difference_heuristic_enum,
+                                                                  weight_for_satisfied_clauses=True,
                                                                   backbone_search_heuristic=True)
             return
 

@@ -17,14 +17,17 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
 
     """
     Private bool backbone_search_heuristic
+    Private bool weight_for_satisfied_clauses
     Private MixedDifferenceHeuristicEnum mixed_difference_heuristic_enum
     """
 
-    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract, mixed_difference_heuristic_enum: mdf_enum.MixedDifferenceHeuristicEnum,
-                 backbone_search_heuristic: bool = False):
+    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract,
+                 mixed_difference_heuristic_enum: mdf_enum.MixedDifferenceHeuristicEnum,
+                 weight_for_satisfied_clauses: bool, backbone_search_heuristic: bool = False):
         super().__init__(preselection_heuristic)
 
         self.__backbone_search_heuristic: bool = backbone_search_heuristic
+        self.__weight_for_satisfied_clauses: bool = weight_for_satisfied_clauses
         self.__mixed_difference_heuristic_enum: mdf_enum.MixedDifferenceHeuristicEnum = mixed_difference_heuristic_enum
 
     # region Private method
@@ -32,6 +35,9 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
         """
         :return: the weight (importance) of a clause with the size k
         """
+
+        if (k == 0) and (not self.__weight_for_satisfied_clauses):
+            return 0
 
         return 5 ** (3-k)
     # endregion
@@ -65,9 +71,8 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
             return implied_variable
 
         literal_score_dictionary: Dict[int, int] = dict()   # key: a literal, value: score of the literal
-        for variable in preselected_variable_set:
-            literal_score_dictionary[variable] = 0
-            literal_score_dictionary[-variable] = 0
+        for literal in implied_literal_dictionary:
+            literal_score_dictionary[literal] = 0
 
         # Compute score for literals
         for clause_id in incidence_graph.clause_id_set(copy=False):
@@ -78,6 +83,8 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
 
                 # The clause is satisfied
                 if len(clause.intersection(implied_literal_set)):
+                    literal_score_dictionary[literal] += self.__get_weight(0)
+
                     continue
 
                 clause_size_before = len(clause)
@@ -105,12 +112,12 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
 
                 literal_score_dictionary[literal] += score
 
-            score_dictionary = self._compute_score_mixed_difference_heuristic(literal_score_dictionary=literal_score_dictionary,
-                                                                              preselected_variable_set=preselected_variable_set,
-                                                                              mixed_difference_heuristic_enum=self.__mixed_difference_heuristic_enum)
+        score_dictionary = self._compute_score_mixed_difference_heuristic(literal_score_dictionary=literal_score_dictionary,
+                                                                          preselected_variable_set=preselected_variable_set,
+                                                                          mixed_difference_heuristic_enum=self.__mixed_difference_heuristic_enum)
 
-            # Pick the best one
-            decision_variable = max(score_dictionary, key=score_dictionary.get)
+        # Pick the best one
+        decision_variable = max(score_dictionary, key=score_dictionary.get)
 
-            return decision_variable
+        return decision_variable
     # endregion
