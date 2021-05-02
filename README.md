@@ -36,6 +36,8 @@ optional arguments:
   + smooth the circuit (default: False)
 + **-p, --preprocessing**
   + find all backbone literals before the compilation (default: False)
++ **-uos, --use_one_solver**
+  + use only one SAT solver for all components (default: False)
 * **-bc {TWO_CNF,RENAMABLE_HORN_CNF}, --base_class {TWO_CNF,RENAMABLE_HORN_CNF}**
   + types of base classes in the circuit's leaves (literal leaves are mandatory) (default: None)
 * **-dh {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,BACKBONE_SEARCH,DLCS,DLIS,DLCS_DLIS,EUPC}, --decision_heuristic {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,BACKBONE_SEARCH,DLCS,DLIS,DLCS_DLIS,EUPC}**

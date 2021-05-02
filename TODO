@@ -1,10 +1,7 @@
 ) Minimum cardinality - DualHorn
 ) Minimizing
-) Branching heuristics
 ) Subsumption
 ) DIMACS NNF - DIMACS CNF
 ) Hypergraph weights
 ) Hypergraph partitioning - cache - sorting
-) One solver
 ) Preselection heuristic - statistics
-) multi_occurrence

@@ -55,6 +55,7 @@ class Compiler:
     Private bool smooth
     Private Circuit circuit
     Private bool preprocessing
+    Private bool use_more_solvers
     Private Statistics statistics
     Private bool cut_set_try_cache
     Private float new_cut_set_threshold
@@ -81,6 +82,7 @@ class Compiler:
                  smooth: bool,
                  ub_factor: float,
                  preprocessing: bool,
+                 use_more_solvers: bool,
                  subsumption_threshold: Union[int, None],
                  new_cut_set_threshold: float,
                  decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,
@@ -120,6 +122,7 @@ class Compiler:
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
         self.__preprocessing: bool = preprocessing
+        self.__use_more_solvers: bool = use_more_solvers
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
@@ -296,6 +299,8 @@ class Compiler:
                 incidence_graph.initialize_renamable_horn_formula_recognition()
 
             component = Component(cnf=self.__cnf,
+                                  use_more_solvers=self.__use_more_solvers,
+                                  solver=None,
                                   assignment_list=[],
                                   circuit=self.__circuit,
                                   new_cut_set_threshold=self.__new_cut_set_threshold,

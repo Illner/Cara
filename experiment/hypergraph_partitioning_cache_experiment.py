@@ -83,6 +83,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                                                                                       smooth=False,
                                                                                       ub_factor=0.1,
                                                                                       preprocessing=False,
+                                                                                      use_more_solvers=False,
                                                                                       subsumed_threshold=500,
                                                                                       new_cut_set_threshold=new_cut_set_threshold,
                                                                                       decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,

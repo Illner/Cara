@@ -34,6 +34,7 @@ def main(main_args):
         compiler = Compiler(cnf=main_args.input_file,
                             smooth=main_args.smooth,
                             ub_factor=main_args.hp_ub_factor,
+                            use_more_solvers=not main_args.use_one_solver,
                             preprocessing=main_args.preprocessing,
                             subsumption_threshold=main_args.subsumption_threshold,
                             new_cut_set_threshold=main_args.new_cut_set_threshold,
@@ -215,6 +216,11 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="find all backbone literals before the compilation")
+    parser_temp.add_argument("-uos",
+                             "--use_one_solver",
+                             action="store_true",
+                             default=False,
+                             help="use only one SAT solver for all components")
     parser_temp.add_argument("-bc",
                              "--base_class",
                              action="append",

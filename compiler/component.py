@@ -30,6 +30,7 @@ class Component:
     Private Cnf cnf
     Private Solver solver
     Private Circuit circuit
+    Private bool use_more_solvers
     Private Statistics statistics
     Private bool cut_set_try_cache
     Private float new_cut_set_threshold
@@ -52,6 +53,8 @@ class Component:
     """
 
     def __init__(self, cnf: Cnf,
+                 use_more_solvers: bool,
+                 solver: Union[Solver, None],
                  assignment_list: List[int],
                  circuit: Circuit,
                  new_cut_set_threshold: float,
@@ -72,6 +75,7 @@ class Component:
                  preprocessing: bool = False):
         self.__cnf: Cnf = cnf
         self.__circuit: Circuit = circuit
+        self.__use_more_solvers: bool = use_more_solvers
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__incidence_graph: IncidenceGraph = incidence_graph
         self.__new_cut_set_threshold: float = new_cut_set_threshold
@@ -91,12 +95,16 @@ class Component:
 
         self.__statistics: Statistics = statistics
 
-        clause_id_set = self.__incidence_graph.clause_id_set(copy=False)
-        self.__solver: Solver = Solver(cnf=cnf,
-                                       clause_id_set=clause_id_set,
-                                       sat_solver_enum=sat_solver_enum,
-                                       first_implied_literals_enum=self.__first_implied_literals_enum if not preprocessing else il_enum.FirstImpliedLiteralsEnum.BACKBONE,
-                                       statistics=self.__statistics.solver_statistics)
+        # Solver
+        if (not use_more_solvers) and (solver is not None):
+            self.__solver: Solver = solver
+        else:
+            clause_id_set = self.__incidence_graph.clause_id_set(copy=False)
+            self.__solver: Solver = Solver(cnf=cnf,
+                                           clause_id_set=clause_id_set,
+                                           sat_solver_enum=sat_solver_enum,
+                                           first_implied_literals_enum=self.__first_implied_literals_enum if not preprocessing else il_enum.FirstImpliedLiteralsEnum.BACKBONE,
+                                           statistics=self.__statistics.solver_statistics)
 
         self.__assignment_list: List[int] = assignment_list
 
@@ -254,8 +262,10 @@ class Component:
                 self.__assignment_list.pop()
             self.__incidence_graph.restore_backup_literal_set(implied_literals_set_func)
 
+        model = self.__solver.get_model(self.__assignment_list)
+
         # The formula is unsatisfiable
-        if not self.__solver.is_satisfiable(self.__assignment_list):
+        if model is None:
             self.__statistics.component_statistics.unsatisfiable.add_count(1)   # counter
             return self.__circuit.create_constant_leaf(False)
 
@@ -331,8 +341,19 @@ class Component:
 
             node_id_set = set()
             for incidence_graph in incidence_graph_set:
+                # Assignment
+                if self.__use_more_solvers:
+                    assignment_list = self.__assignment_list
+                else:
+                    missing_variable_set = self.__incidence_graph.variable_set(copy=False).difference(incidence_graph.variable_set(copy=False))
+                    extended_assignment_list = [var if var in model else -var for var in missing_variable_set]
+                    assignment_list = self.__assignment_list.copy()
+                    assignment_list.extend(extended_assignment_list)
+
                 component_temp = Component(cnf=self.__cnf,
-                                           assignment_list=self.__assignment_list,
+                                           use_more_solvers=self.__use_more_solvers,
+                                           solver=None if self.__use_more_solvers else self.__solver,
+                                           assignment_list=assignment_list,
                                            circuit=self.__circuit,
                                            new_cut_set_threshold=self.__new_cut_set_threshold,
                                            new_cut_set_threshold_reduction=self.__new_cut_set_threshold_reduction,
