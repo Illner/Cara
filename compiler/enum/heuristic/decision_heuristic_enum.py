@@ -15,6 +15,7 @@ class DecisionHeuristicEnum(IntEnum):
     DLCS_DLIS = 9                   # DLCS score with DLIS as a tie-breaker
     EUPC = 10                       # Exact Unit Propagation Count
     VSIDS = 11
+    VSADS = 12
 
 
 decision_heuristic_enum_names = [dh.name for dh in DecisionHeuristicEnum]

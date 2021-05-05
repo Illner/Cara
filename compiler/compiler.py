@@ -15,6 +15,7 @@ from compiler.component_caching.standard_caching_scheme import StandardCachingSc
 
 # Import decision heuristic
 from compiler.decision_heuristic.vsids_heuristic import VsidsHeuristic
+from compiler.decision_heuristic.vsads_heuristic import VsadsHeuristic
 from compiler.decision_heuristic.random_heuristic import RandomHeuristic
 from compiler.decision_heuristic.jeroslow_wang_heuristic import JeroslowWangHeuristic
 from compiler.decision_heuristic.literal_count_heuristic import LiteralCountHeuristic
@@ -254,6 +255,11 @@ class Compiler:
         # VSIDS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.VSIDS:
             self.__decision_heuristic = VsidsHeuristic(preselection_heuristic=preselection_heuristic)
+            return
+
+        # VSADS
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.VSADS:
+            self.__decision_heuristic = VsadsHeuristic(preselection_heuristic=preselection_heuristic)
             return
 
         raise c_exception.FunctionNotImplementedException("set_decision_heuristic",
