@@ -14,6 +14,7 @@ class DecisionHeuristicEnum(IntEnum):
     DLIS = 8                        # Dynamic Largest Individual Sum
     DLCS_DLIS = 9                   # DLCS score with DLIS as a tie-breaker
     EUPC = 10                       # Exact Unit Propagation Count
+    VSIDS = 11
 
 
 decision_heuristic_enum_names = [dh.name for dh in DecisionHeuristicEnum]

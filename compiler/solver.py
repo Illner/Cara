@@ -318,6 +318,18 @@ class Solver:
         backbone_literal_set.difference_update(set(assignment_list))
 
         return backbone_literal_set
+
+    def get_vsids_score(self) -> List[int]:
+        """
+        :return: a list of VSIDS scores
+        :raises SatSolverDoesNotSupportOperationException: if the SAT solver is not MiniSAT
+        """
+
+        # The SAT solver is not MiniSAT
+        if not isinstance(self.__sat_main, Minisat22):
+            raise c_exception.SatSolverDoesNotSupportOperationException(self.__sat_solver_enum, "get VSIDS score")
+
+        return self.__sat_main.get_activity()
     # endregion
 
     # region Static method

@@ -31,3 +31,13 @@ class TryingGetVariableFromEmptyCutSetException(CompilerException):
     def __init__(self):
         self.message = "Trying to get a variable from the empty cut set!"
         super().__init__(self.message)
+
+
+class SatSolverDoesNotSupportOperationException(CompilerException):
+    """
+    The SAT solver does not support this operation
+    """
+
+    def __init__(self, solver: Union[ss_enum.SatSolverEnum, ss_enum.PropagateSatSolverEnum], operation_name: str):
+        self.message = f"The SAT solver ({solver.name}) does not support this operation ({operation_name})!"
+        super().__init__(self.message)
