@@ -294,6 +294,8 @@ class Component:
         self.__statistics.component_statistics.generate_key_cache.add_count(1)      # counter
         value = self.__component_caching.get(key)
         if value is not None:
+            self.__statistics.component_statistics.cached_formula_length.add_count(self.__incidence_graph.number_of_edges())  # counter
+
             node_id = self.__circuit.create_and_node({value}.union(implied_literal_id_set))
             remove_implied_literals(implied_literal_set)    # restore the implied literals
 

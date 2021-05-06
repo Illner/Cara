@@ -22,6 +22,7 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter empty_incidence_graph
     Private StatisticsComponentCounter generate_key_cache
     Private StatisticsComponentCounter cached
+    Private StatisticsComponentCounter cached_formula_length
     Private StatisticsComponentCounter disjoint
     Private StatisticsComponentCounter decision_variable
     Private StatisticsComponentCounter recompute_cut_set
@@ -59,6 +60,9 @@ class ComponentStatistics(StatisticsTemplateAbstract):
 
         self.__cached: StatisticsComponentCounter = StatisticsComponentCounter("component cache - cached")
         self._component_list.append(self.__cached)
+
+        self.__cached_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("component cache - cached - formula length")
+        self._component_list.append(self.__cached_formula_length)
 
         self.__disjoint: StatisticsComponentCounter = StatisticsComponentCounter("disjoint", True)
         self._component_list.append(self.__disjoint)
@@ -120,6 +124,10 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def cached(self) -> StatisticsComponentCounter:
         return self.__cached
+
+    @property
+    def cached_formula_length(self) -> StatisticsComponentCounter:
+        return self.__cached_formula_length
 
     @property
     def disjoint(self) -> StatisticsComponentCounter:
