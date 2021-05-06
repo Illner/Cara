@@ -13,7 +13,7 @@ import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import formula.enum.eliminating_redundant_clauses_enum as erc_enum
-import compiler.component_caching.component_caching_enum as cc_enum
+import compiler.enum.component_caching_enum as cc_enum
 import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
