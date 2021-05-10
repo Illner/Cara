@@ -23,6 +23,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter generate_key_cache
     Private StatisticsComponentCounter component_caching_hit
     Private StatisticsComponentCounter component_caching_formula_length
+    Private StatisticsComponentCounter component_caching_after_hit
+    Private StatisticsComponentCounter component_caching_after_formula_length
     Private StatisticsComponentCounter split
     Private StatisticsComponentCounter decision_variable
     Private StatisticsComponentCounter recompute_cut_set
@@ -58,11 +60,17 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__generate_key_cache: StatisticsComponentCounter = StatisticsComponentCounter("component cache - generate key cache", True)
         self._component_list.append(self.__generate_key_cache)
 
-        self.__component_caching_hit: StatisticsComponentCounter = StatisticsComponentCounter("component caching - hit")
+        self.__component_caching_hit: StatisticsComponentCounter = StatisticsComponentCounter("component caching (before BCP) - hit")
         self._component_list.append(self.__component_caching_hit)
 
-        self.__component_caching_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("component caching - formula length")
+        self.__component_caching_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("component caching (before BCP) - formula length")
         self._component_list.append(self.__component_caching_formula_length)
+
+        self.__component_caching_after_hit: StatisticsComponentCounter = StatisticsComponentCounter("component caching (after BCP) - hit")
+        self._component_list.append(self.__component_caching_after_hit)
+
+        self.__component_caching_after_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("component caching (after BCP) - formula length")
+        self._component_list.append(self.__component_caching_after_formula_length)
 
         self.__split: StatisticsComponentCounter = StatisticsComponentCounter("split", True)
         self._component_list.append(self.__split)
@@ -128,6 +136,14 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def component_caching_formula_length(self) -> StatisticsComponentCounter:
         return self.__component_caching_formula_length
+
+    @property
+    def component_caching_after_hit(self) -> StatisticsComponentCounter:
+        return self.__component_caching_after_hit
+
+    @property
+    def component_caching_after_formula_length(self) -> StatisticsComponentCounter:
+        return self.__component_caching_after_formula_length
 
     @property
     def split(self) -> StatisticsComponentCounter:

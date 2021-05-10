@@ -321,7 +321,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-erc",
                              "--eliminating_redundant_clauses",
                              action="store",
-                             default=erc_enum.EliminatingRedundantClausesEnum.SUBSUMPTION.name,
+                             default=erc_enum.EliminatingRedundantClausesEnum.NONE.name,
                              type=str,
                              choices=erc_enum.eliminating_redundant_clauses_enum_names,
                              help="procedure that will be applied for determining redundant clauses")
@@ -368,7 +368,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-hpvs",
                              "--hp_variable_simplification",
                              action="store",
-                             default=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL.name,
+                             default=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE.name,
                              type=str,
                              choices=hpvs_enum.hpvs_enum_names,
                              help="type of hypergraph partitioning variable simplification")

@@ -336,7 +336,21 @@ class Component:
             return node_id
 
         # Component caching (after unit propagation)
-        # TODO
+        key_after_unit_propagation = None
+        if not new_component:
+            key_after_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
+            value = self.__component_caching.get(key_after_unit_propagation)
+            # Hit
+            if value is not None:
+                self.__statistics.component_statistics.component_caching_after_formula_length.add_count(self.__incidence_graph.number_of_edges())   # counter
+                self.__statistics.component_statistics.component_caching_after_hit.add_count(1)     # counter
+
+                node_id = self.__circuit.create_and_node({value}.union(implied_literal_id_set))
+
+                remove_implied_literals(implied_literal_set)    # restore the implied literals
+                return node_id
+            else:
+                self.__statistics.component_statistics.component_caching_after_hit.add_count(0)  # counter
 
         # 2-CNF
         if (bc_enum.BaseClassEnum.TWO_CNF in self.__base_class_enum_set) and self.__incidence_graph.is_2_cnf():
@@ -348,7 +362,7 @@ class Component:
             node_id = self.__circuit.create_and_node({node_id_temp}.union(implied_literal_id_set))
 
             # Component caching
-            # self.__component_caching.add(key, node_id_temp)
+            self.__component_caching.add(key_after_unit_propagation, node_id_temp)
             self.__component_caching.add(key_before_unit_propagation, node_id)
 
             remove_implied_literals(implied_literal_set)  # restore the implied literals
@@ -366,7 +380,7 @@ class Component:
                 node_id = self.__circuit.create_and_node({node_id_temp}.union(implied_literal_id_set))
 
                 # Component caching
-                # self.__component_caching.add(key, node_id_temp)
+                self.__component_caching.add(key_after_unit_propagation, node_id_temp)
                 self.__component_caching.add(key_before_unit_propagation, node_id)
 
                 remove_implied_literals(implied_literal_set)  # restore the implied literals
@@ -418,7 +432,7 @@ class Component:
             node_id = self.__circuit.create_and_node({node_id_temp}.union(implied_literal_id_set))
 
             # Component caching
-            # self.__component_caching.add(key, node_id_temp)
+            self.__component_caching.add(key_after_unit_propagation, node_id_temp)
             self.__component_caching.add(key_before_unit_propagation, node_id)
 
             remove_implied_literals(implied_literal_set)    # restore the implied literals
@@ -497,7 +511,7 @@ class Component:
         node_id = self.__circuit.create_and_node({decision_node_id}.union(implied_literal_id_set))
 
         # Component caching
-        # self.__component_caching.add(key, decision_node_id)
+        self.__component_caching.add(key_after_unit_propagation, decision_node_id)
         self.__component_caching.add(key_before_unit_propagation, node_id)
 
         remove_implied_literals(implied_literal_set)    # Restore the implied literals
