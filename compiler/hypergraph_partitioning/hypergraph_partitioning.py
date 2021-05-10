@@ -870,14 +870,14 @@ class HypergraphPartitioning:
         if result_cache_cut_set is not None:
             self.remove_reduction_incidence_graph(incidence_graph)
 
-            self.__statistics.cached.add_count(1)  # counter
+            self.__statistics.cache_hit.add_count(1)  # counter
             self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
             return result_cache_cut_set
         else:
             if result_cache_key is not None:
                 key, (variable_id_order_id_dictionary, _) = result_cache_key
 
-            self.__statistics.cached.add_count(0)  # counter
+            self.__statistics.cache_hit.add_count(0)  # counter
 
         cut_set = set()
 

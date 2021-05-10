@@ -16,7 +16,7 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer generate_key_cache
     Private StatisticsComponentTimer get_cut_set
     
-    Private StatisticsComponentCounter cached
+    Private StatisticsComponentCounter cache_hit
     Private StatisticsComponentCounter cut_set_size
     """
 
@@ -38,8 +38,8 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
         self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get cut set")
         self._component_list.append(self.__get_cut_set)
 
-        self.__cached: StatisticsComponentCounter = StatisticsComponentCounter("cached")
-        self._component_list.append(self.__cached)
+        self.__cache_hit: StatisticsComponentCounter = StatisticsComponentCounter("cache - hit")
+        self._component_list.append(self.__cache_hit)
 
         self.__cut_set_size: StatisticsComponentCounter = StatisticsComponentCounter("cut set - size")
         self._component_list.append(self.__cut_set_size)
@@ -66,8 +66,8 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
         return self.__get_cut_set
 
     @property
-    def cached(self) -> StatisticsComponentCounter:
-        return self.__cached
+    def cache_hit(self) -> StatisticsComponentCounter:
+        return self.__cache_hit
 
     @property
     def cut_set_size(self) -> StatisticsComponentCounter:

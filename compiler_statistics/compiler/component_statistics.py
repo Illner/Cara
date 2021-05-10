@@ -21,12 +21,12 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter isolated_variable
     Private StatisticsComponentCounter empty_incidence_graph
     Private StatisticsComponentCounter generate_key_cache
-    Private StatisticsComponentCounter cached
-    Private StatisticsComponentCounter cached_formula_length
-    Private StatisticsComponentCounter disjoint
+    Private StatisticsComponentCounter component_caching_hit
+    Private StatisticsComponentCounter component_caching_formula_length
+    Private StatisticsComponentCounter split
     Private StatisticsComponentCounter decision_variable
     Private StatisticsComponentCounter recompute_cut_set
-    Private StatisticsComponentCounter cut_set_try_cache_cached
+    Private StatisticsComponentCounter cut_set_try_cache_hit
     Private StatisticsComponentCounter two_cnf_formula_length
     Private StatisticsComponentCounter renamable_horn_cnf_formula_length
     """
@@ -40,7 +40,7 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get cut set")
         self._component_list.append(self.__get_cut_set)
 
-        self.__get_decision_variable_from_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("decision variable from cut set")
+        self.__get_decision_variable_from_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get decision variable")
         self._component_list.append(self.__get_decision_variable_from_cut_set)
 
         self.__unsatisfiable: StatisticsComponentCounter = StatisticsComponentCounter("unsatisfiable subformulae", True)
@@ -58,14 +58,14 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__generate_key_cache: StatisticsComponentCounter = StatisticsComponentCounter("component cache - generate key cache", True)
         self._component_list.append(self.__generate_key_cache)
 
-        self.__cached: StatisticsComponentCounter = StatisticsComponentCounter("component cache - cached")
-        self._component_list.append(self.__cached)
+        self.__component_caching_hit: StatisticsComponentCounter = StatisticsComponentCounter("component caching - hit")
+        self._component_list.append(self.__component_caching_hit)
 
-        self.__cached_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("component cache - cached - formula length")
-        self._component_list.append(self.__cached_formula_length)
+        self.__component_caching_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("component caching - formula length")
+        self._component_list.append(self.__component_caching_formula_length)
 
-        self.__disjoint: StatisticsComponentCounter = StatisticsComponentCounter("disjoint", True)
-        self._component_list.append(self.__disjoint)
+        self.__split: StatisticsComponentCounter = StatisticsComponentCounter("split", True)
+        self._component_list.append(self.__split)
 
         self.__decision_variable: StatisticsComponentCounter = StatisticsComponentCounter("decision variable", True)
         self._component_list.append(self.__decision_variable)
@@ -76,8 +76,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__cut_set_try_cache: StatisticsComponentTimer = StatisticsComponentTimer("cut set try cache")
         self._component_list.append(self.__cut_set_try_cache)
 
-        self.__cut_set_try_cache_cached: StatisticsComponentCounter = StatisticsComponentCounter("cut set try cache - cached")
-        self._component_list.append(self.__cut_set_try_cache_cached)
+        self.__cut_set_try_cache_hit: StatisticsComponentCounter = StatisticsComponentCounter("cut set try cache - hit")
+        self._component_list.append(self.__cut_set_try_cache_hit)
 
         self.__two_cnf_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("2-CNF - formula length")
         self._component_list.append(self.__two_cnf_formula_length)
@@ -122,16 +122,16 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         return self.__generate_key_cache
 
     @property
-    def cached(self) -> StatisticsComponentCounter:
-        return self.__cached
+    def component_caching_hit(self) -> StatisticsComponentCounter:
+        return self.__component_caching_hit
 
     @property
-    def cached_formula_length(self) -> StatisticsComponentCounter:
-        return self.__cached_formula_length
+    def component_caching_formula_length(self) -> StatisticsComponentCounter:
+        return self.__component_caching_formula_length
 
     @property
-    def disjoint(self) -> StatisticsComponentCounter:
-        return self.__disjoint
+    def split(self) -> StatisticsComponentCounter:
+        return self.__split
 
     @property
     def decision_variable(self) -> StatisticsComponentCounter:
@@ -146,8 +146,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         return self.__cut_set_try_cache
 
     @property
-    def cut_set_try_cache_cached(self) -> StatisticsComponentCounter:
-        return self.__cut_set_try_cache_cached
+    def cut_set_try_cache_hit(self) -> StatisticsComponentCounter:
+        return self.__cut_set_try_cache_hit
 
     @property
     def two_cnf_formula_length(self) -> StatisticsComponentCounter:
