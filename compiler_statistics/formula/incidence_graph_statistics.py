@@ -19,6 +19,7 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer create_incidence_graphs_for_components
     Private StatisticsComponentTimer copy_incidence_graph
     Private StatisticsComponentTimer clause_id_set
+    Private StatisticsComponentTimer is_connected
     Private StatisticsComponentTimer number_of_components
     Private StatisticsComponentTimer variable_set
     Private StatisticsComponentTimer subsumption_variable
@@ -60,6 +61,9 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
         self.__copy_incidence_graph: StatisticsComponentTimer = StatisticsComponentTimer("copy")
         self._component_list.append(self.__copy_incidence_graph)
+
+        self.__is_connected: StatisticsComponentTimer = StatisticsComponentTimer("is connected")
+        self._component_list.append(self.__is_connected)
 
         self.__number_of_components: StatisticsComponentTimer = StatisticsComponentTimer("get number of components")
         self._component_list.append(self.__number_of_components)
@@ -136,6 +140,10 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     @property
     def clause_id_set(self) -> StatisticsComponentTimer:
         return self.__clause_id_set
+
+    @property
+    def is_connected(self) -> StatisticsComponentTimer:
+        return self.__is_connected
 
     @property
     def number_of_components(self) -> StatisticsComponentTimer:

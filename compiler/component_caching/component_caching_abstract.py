@@ -1,11 +1,10 @@
 # Import
-from typing import Dict, Union
 from abc import ABC, abstractmethod
+from typing import Dict, Union, Set, List
 from formula.incidence_graph import IncidenceGraph
 
 # TODO Cleaning strategy
 # TODO Heap activity
-# TODO Subsumed clauses
 
 
 class ComponentCachingAbstract(ABC):
@@ -14,7 +13,8 @@ class ComponentCachingAbstract(ABC):
     """
 
     """
-    Private Dict<str, int> cache        # key: hash, value: an identifier of a node
+    Private Dict<str, int> cache                # key: hash, value: an identifier of a node
+    Private Set<str> multi_occurrence_cache
     
     Protected str delimiter
     Protected str end_delimiter
@@ -23,6 +23,7 @@ class ComponentCachingAbstract(ABC):
 
     def __init__(self):
         self.__cache: Dict[str, int] = dict()
+        self.__multi_occurrence_cache: Set[str] = set()
 
         self._delimiter = ","
         self._end_delimiter = f"{self._delimiter}0{self._delimiter}"
@@ -83,4 +84,43 @@ class ComponentCachingAbstract(ABC):
             return False
 
         return True
+    # endregion
+
+    # region Protected method
+    def _add_multi_occurrence_cache(self, key: str) -> None:
+        """
+        Add a new record to the cache.
+        If the record already exists in the cache, nothing happens.
+        :param key: the key
+        :return: None
+        """
+
+        self.__multi_occurrence_cache.add(key)
+
+    def _exist_multi_occurrence_cache(self, key: str) -> bool:
+        """
+        :return: True if the key exists in the cache. Otherwise, False is returned.
+        """
+
+        return key in self.__multi_occurrence_cache
+
+    def _clear_multi_occurrence_cache(self) -> None:
+        """
+        Clear the cache
+        :return: None
+        """
+
+        self.__multi_occurrence_cache = set()
+
+    def _generate_key_multi_occurrence_cache(self, clause_list: List[int]) -> str:
+        """
+        Generate a key for caching
+        Cache: multi_occurrence_cache
+        :param clause_list: a clause (should be sorted)
+        :return: the generated key
+        """
+
+        clause_key_string = ",".join(map(str, clause_list))
+
+        return clause_key_string
     # endregion

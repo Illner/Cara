@@ -16,7 +16,7 @@ class StandardCachingScheme(ComponentCachingAbstract):
     def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[str, None]:
         clause_list = []
 
-        for clause_id in sorted(incidence_graph.clause_id_set(copy=False, multi_occurrence=False)):
+        for clause_id in sorted(incidence_graph.clause_id_set(copy=False)):
             literal_set = incidence_graph.get_clause(clause_id)
             clause_list.append(sorted(literal_set))
 

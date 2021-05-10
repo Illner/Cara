@@ -3,3 +3,8 @@
 ) UP redundancy
 ) DIMACS NNF - DIMACS CNF
 ) Hypergraph weights
+
+) remove literal - time
+) create components
+) get clauses - multi
+) cache - 2

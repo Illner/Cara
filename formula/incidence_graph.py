@@ -514,7 +514,12 @@ class IncidenceGraph(Graph):
         :return: True if the incidence graph is connected. Otherwise, False is returned.
         """
 
-        return nx.is_connected(self)
+        self.__statistics.is_connected.start_stopwatch()    # timer (start)
+
+        is_connected = nx.is_connected(self)
+
+        self.__statistics.is_connected.stop_stopwatch()     # timer (stop)
+        return is_connected
 
     def number_of_components(self) -> int:
         """
@@ -616,11 +621,10 @@ class IncidenceGraph(Graph):
 
         return super().number_of_nodes()
 
-    def clause_id_set(self, copy: bool, multi_occurrence: bool = True, multi_occurrence_literal: bool = True) -> Set[int]:
+    def clause_id_set(self, copy: bool, multi_occurrence: bool = True) -> Set[int]:
         """
         :param copy: True if a copy is returned
         :param multi_occurrence: should be multi-occurrent clauses kept (a copy is returned)
-        :param multi_occurrence_literal: True if multi-occurrence is based on literals, False for variables
         :return: a set of clauses that are in the incidence graph
         """
 
@@ -637,7 +641,7 @@ class IncidenceGraph(Graph):
         clause_id_set_without_multi_occurrence = set()
 
         for clause_id in clause_id_set:
-            clause_temp = self.get_clause(clause_id) if multi_occurrence_literal else self.clause_id_neighbour_set(clause_id)
+            clause_temp = self.get_clause(clause_id)
             clause_key_string = ",".join(map(str, sorted(clause_temp)))
 
             if clause_key_string not in cache:
