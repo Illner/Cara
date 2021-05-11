@@ -76,7 +76,7 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
 
         # Compute score for literals
         for clause_id in incidence_graph.clause_id_set(copy=False):
-            clause = incidence_graph.get_clause(clause_id)
+            clause = incidence_graph.get_clause(clause_id, copy=False)
 
             for literal in implied_literal_dictionary:
                 implied_literal_set, complementary_implied_literal_set = implied_literal_dictionary[literal]

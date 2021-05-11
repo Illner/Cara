@@ -31,6 +31,7 @@ class IncidenceGraph(Graph):
     Private Set<int> variable_set
     Private Set<int> clause_id_set
     Private Set<int> satisfied_clause_set
+    Private Dict<int, Set<int>> clause_dictionary                           # key: a clause, value: a set of literals that appear in the clause
     Private Dict<int, Set<int>> adjacency_literal_static_dictionary         # key: a literal, value: a set of clauses (nodes) where the literal appears
     Private Dict<int, Set<int>> adjacency_literal_dynamic_dictionary        # key: a literal, value: a set of clauses (nodes) where the literal appears
     Private bool update_adjacency_literal_dynamic_dictionary
@@ -69,6 +70,7 @@ class IncidenceGraph(Graph):
         self.__variable_set: Set[int] = set()
         self.__clause_id_set: Set[int] = set()
         self.__satisfied_clause_set: Set[int] = set()
+        self.__clause_dictionary: Dict[int, Set[int]] = dict()
         self.__adjacency_literal_static_dictionary: Dict[int, Set[int]] = dict()
         self.__adjacency_literal_dynamic_dictionary: Dict[int, Set[int]] = dict()
         self.__update_adjacency_literal_dynamic_dictionary: bool = True             # because of variable simplification
@@ -288,7 +290,9 @@ class IncidenceGraph(Graph):
         # adjacency_literal_dynamic_dictionary
         if self.__update_adjacency_literal_dynamic_dictionary:
             literal = self.__get_literal_from_clause(variable, clause_id)
+
             self.__adjacency_literal_dynamic_dictionary[literal].remove(clause_id)
+            self.__clause_dictionary[clause_id].remove(literal)
 
         self.__update_clause_length(clause_id, increment_by_one=False)  # update the length
         super().remove_edge(variable_hash, clause_id_hash)
@@ -307,7 +311,9 @@ class IncidenceGraph(Graph):
         if self.__update_adjacency_literal_dynamic_dictionary:
             variable = self.__unhash(variable_hash)
             literal = self.__get_literal_from_clause(variable, clause_id)
+
             self.__adjacency_literal_dynamic_dictionary[literal].add(clause_id)
+            self.__clause_dictionary[clause_id].add(literal)
 
         self.__update_clause_length(clause_id, increment_by_one=True)   # update the length
         super().add_edge(variable_hash, clause_id_hash)
@@ -337,13 +343,13 @@ class IncidenceGraph(Graph):
         for clause_id in self.clause_id_set(copy=False, multi_occurrence=False):
             # No renaming function
             if renaming_function is None:
-                cnf.append(self.get_clause(clause_id))
+                cnf.append(self.get_clause(clause_id, copy=False))
 
             # Renaming function exists
             else:
                 clause_temp = []
 
-                for lit in self.get_clause(clause_id):
+                for lit in self.get_clause(clause_id, copy=False):
                     if abs(lit) in renaming_function:
                         clause_temp.append(-lit)
                     else:
@@ -384,7 +390,7 @@ class IncidenceGraph(Graph):
             if clause_a_id in clause_dictionary:
                 clause_a = clause_dictionary[clause_a_id]
             else:
-                clause_a = self.get_clause(clause_a_id)
+                clause_a = self.get_clause(clause_a_id, copy=False)
                 clause_dictionary[clause_a_id] = clause_a
 
             for j in range(i + 1, len(clause_id_list)):
@@ -397,7 +403,7 @@ class IncidenceGraph(Graph):
                 if clause_b_id in clause_dictionary:
                     clause_b = clause_dictionary[clause_b_id]
                 else:
-                    clause_b = self.get_clause(clause_b_id)
+                    clause_b = self.get_clause(clause_b_id, copy=False)
                     clause_dictionary[clause_b_id] = clause_b
 
                 a_subset_b = clause_a.issubset(clause_b)
@@ -473,6 +479,9 @@ class IncidenceGraph(Graph):
         # Clause length
         self.__clause_length_dictionary[clause_id] = 0
         self.__length_set_clauses_dictionary[0].add(clause_id)
+
+        if self.__update_adjacency_literal_dynamic_dictionary:
+            self.__clause_dictionary[clause_id] = set()
 
         self.__clause_id_set.add(clause_id)
         self.add_node(clause_id_hash, value=clause_id, bipartite=1)
@@ -597,26 +606,27 @@ class IncidenceGraph(Graph):
 
         return len(self[clause_id_hash])
 
-    def get_clause(self, clause_id: int) -> Set[int]:
+    def get_clause(self, clause_id: int, copy: bool) -> Set[int]:
         """
         Return a clause with the given identifier
         :param clause_id: the clause's id
+        :param copy: True if a copy is returned
         :return: the clause (a set of literals)
         :raises ClauseIdDoesNotExistException: if the clause does not exist in the incidence graph
         """
 
         self.__statistics.get_clause.start_stopwatch()  # timer (start)
 
-        variable_set = self.clause_id_neighbour_set(clause_id)
-        literal_set = set()
+        clause_id_hash = self.__clause_id_hash(clause_id)
 
-        for variable in variable_set:
-            literal = self.__get_literal_from_clause(variable, clause_id)
-            literal_set.add(literal)
+        # The clause does not exist in the incidence graph
+        if not self.__node_exist(clause_id_hash):
+            raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
-        self.__statistics.get_clause.stop_stopwatch()   # timer (stop)
+        clause = self.__clause_dictionary[clause_id]
 
-        return literal_set
+        self.__statistics.get_clause.stop_stopwatch()  # timer (stop)
+        return clause.copy() if copy else clause
 
     def number_of_nodes(self) -> int:
         """
@@ -645,7 +655,7 @@ class IncidenceGraph(Graph):
         clause_id_set_without_multi_occurrence = set()
 
         for clause_id in clause_id_set:
-            clause_temp = self.get_clause(clause_id)
+            clause_temp = self.get_clause(clause_id, copy=False)
             clause_key_string = ",".join(map(str, sorted(clause_temp)))
 
             if clause_key_string not in cache:
@@ -1475,7 +1485,7 @@ class IncidenceGraph(Graph):
         clause_id_list = sorted(self.clause_id_set(copy=False))
 
         for clause_id in clause_id_list:
-            clause = sorted(self.get_clause(clause_id))
+            clause = sorted(self.get_clause(clause_id, copy=False))
             string_temp = "\n".join((string_temp, f"Clause {clause_id}: {clause}"))
 
         return string_temp

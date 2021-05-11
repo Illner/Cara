@@ -43,7 +43,7 @@ class RenamableHornFormulaRecognition:
         cnf: PySat2Cnf = PySat2Cnf()
 
         for clause_id in incidence_graph.clause_id_set(copy=False):
-            clause = incidence_graph.get_clause(clause_id)
+            clause = incidence_graph.get_clause(clause_id, copy=False)
             clause_len = len(clause)
             previous_y: Union[int, None] = None
 

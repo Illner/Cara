@@ -43,7 +43,7 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
 
         # Compute the approximated set
         for binary_clause_id in incidence_graph.get_binary_clause_set(copy=False):
-            clause = list(incidence_graph.get_clause(binary_clause_id))
+            clause = list(incidence_graph.get_clause(binary_clause_id, copy=False))
 
             # The clause is not binary
             if len(clause) != 2:

@@ -61,14 +61,14 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__component_caching_generate_key: StatisticsComponentTimer = StatisticsComponentTimer("component caching (before BCP) - generate key")
         self._component_list.append(self.__component_caching_generate_key)
 
-        self.__component_caching_after_generate_key: StatisticsComponentTimer = StatisticsComponentTimer("component caching (after BCP) - generate key")
-        self._component_list.append(self.__component_caching_after_generate_key)
-
         self.__component_caching_hit: StatisticsComponentCounter = StatisticsComponentCounter("component caching (before BCP) - hit")
         self._component_list.append(self.__component_caching_hit)
 
         self.__component_caching_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("component caching (before BCP) - formula length")
         self._component_list.append(self.__component_caching_formula_length)
+
+        self.__component_caching_after_generate_key: StatisticsComponentTimer = StatisticsComponentTimer("component caching (after BCP) - generate key")
+        self._component_list.append(self.__component_caching_after_generate_key)
 
         self.__component_caching_after_hit: StatisticsComponentCounter = StatisticsComponentCounter("component caching (after BCP) - hit")
         self._component_list.append(self.__component_caching_after_hit)
@@ -134,16 +134,16 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         return self.__component_caching_generate_key
 
     @property
-    def component_caching_after_generate_key(self) -> StatisticsComponentTimer:
-        return self.__component_caching_after_generate_key
-
-    @property
     def component_caching_hit(self) -> StatisticsComponentCounter:
         return self.__component_caching_hit
 
     @property
     def component_caching_formula_length(self) -> StatisticsComponentCounter:
         return self.__component_caching_formula_length
+
+    @property
+    def component_caching_after_generate_key(self) -> StatisticsComponentTimer:
+        return self.__component_caching_after_generate_key
 
     @property
     def component_caching_after_hit(self) -> StatisticsComponentCounter:
