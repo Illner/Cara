@@ -19,6 +19,7 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer create_incidence_graphs_for_components
     Private StatisticsComponentTimer copy_incidence_graph
     Private StatisticsComponentTimer get_clause
+    Private StatisticsComponentTimer get_sorted_clause
     Private StatisticsComponentTimer clause_id_set
     Private StatisticsComponentTimer is_connected
     Private StatisticsComponentTimer number_of_components
@@ -71,6 +72,9 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
         self.__get_clause: StatisticsComponentTimer = StatisticsComponentTimer("get clause")
         self._component_list.append(self.__get_clause)
+
+        self.__get_sorted_clause: StatisticsComponentTimer = StatisticsComponentTimer("get sorted clause")
+        self._component_list.append(self.__get_sorted_clause)
 
         self.__clause_id_set: StatisticsComponentTimer = StatisticsComponentTimer("get clauses")
         self._component_list.append(self.__clause_id_set)
@@ -144,6 +148,10 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     @property
     def get_clause(self) -> StatisticsComponentTimer:
         return self.__get_clause
+
+    @property
+    def get_sorted_clause(self):
+        return self.__get_sorted_clause
 
     @property
     def clause_id_set(self) -> StatisticsComponentTimer:

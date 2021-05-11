@@ -20,7 +20,7 @@ class BasicCachingScheme(ComponentCachingAbstract):
         clause_list = []
 
         for clause_id in incidence_graph.clause_id_set(copy=False):
-            clause_sorted_list = sorted(incidence_graph.get_clause(clause_id, copy=False))
+            clause_sorted_list = incidence_graph.get_sorted_clause(clause_id, copy=False)
 
             clause_key_string = self._generate_key_multi_occurrence_cache(clause_sorted_list)
             # Multi-occurrent clause

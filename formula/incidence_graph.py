@@ -32,6 +32,7 @@ class IncidenceGraph(Graph):
     Private Set<int> clause_id_set
     Private Set<int> satisfied_clause_set
     Private Dict<int, Set<int>> clause_dictionary                           # key: a clause, value: a set of literals that appear in the clause
+    Private Dict<int, List<int>> sorted_clause_cache                        # key: a clause, value: a sorted list of literals that appear in the clause
     Private Dict<int, Set<int>> adjacency_literal_static_dictionary         # key: a literal, value: a set of clauses (nodes) where the literal appears
     Private Dict<int, Set<int>> adjacency_literal_dynamic_dictionary        # key: a literal, value: a set of clauses (nodes) where the literal appears
     Private bool update_adjacency_literal_dynamic_dictionary
@@ -71,6 +72,7 @@ class IncidenceGraph(Graph):
         self.__clause_id_set: Set[int] = set()
         self.__satisfied_clause_set: Set[int] = set()
         self.__clause_dictionary: Dict[int, Set[int]] = dict()
+        self.__sorted_clause_cache: Dict[int, List[int]] = dict()
         self.__adjacency_literal_static_dictionary: Dict[int, Set[int]] = dict()
         self.__adjacency_literal_dynamic_dictionary: Dict[int, Set[int]] = dict()
         self.__update_adjacency_literal_dynamic_dictionary: bool = True             # because of variable simplification
@@ -294,6 +296,9 @@ class IncidenceGraph(Graph):
             self.__adjacency_literal_dynamic_dictionary[literal].remove(clause_id)
             self.__clause_dictionary[clause_id].remove(literal)
 
+            if clause_id in self.__sorted_clause_cache:
+                del self.__sorted_clause_cache[clause_id]
+
         self.__update_clause_length(clause_id, increment_by_one=False)  # update the length
         super().remove_edge(variable_hash, clause_id_hash)
 
@@ -314,6 +319,9 @@ class IncidenceGraph(Graph):
 
             self.__adjacency_literal_dynamic_dictionary[literal].add(clause_id)
             self.__clause_dictionary[clause_id].add(literal)
+
+            if clause_id in self.__sorted_clause_cache:
+                del self.__sorted_clause_cache[clause_id]
 
         self.__update_clause_length(clause_id, increment_by_one=True)   # update the length
         super().add_edge(variable_hash, clause_id_hash)
@@ -628,6 +636,34 @@ class IncidenceGraph(Graph):
         self.__statistics.get_clause.stop_stopwatch()  # timer (stop)
         return clause.copy() if copy else clause
 
+    def get_sorted_clause(self, clause_id: int, copy: bool) -> List[int]:
+        """
+        Return a sorted clause with the given identifier
+        :param clause_id: the clause's id
+        :param copy: True if a copy is returned
+        :return: the sorted clause (a list of literals)
+        :raises ClauseIdDoesNotExistException: if the clause does not exist in the incidence graph
+        """
+
+        self.__statistics.get_sorted_clause.start_stopwatch()   # timer (start)
+
+        clause_id_hash = self.__clause_id_hash(clause_id)
+
+        # The clause does not exist in the incidence graph
+        if not self.__node_exist(clause_id_hash):
+            raise ig_exception.ClauseIdDoesNotExistException(clause_id)
+
+        # Cache
+        if clause_id in self.__sorted_clause_cache:
+            self.__statistics.get_sorted_clause.stop_stopwatch()    # timer (stop)
+            return self.__sorted_clause_cache[clause_id].copy() if copy else self.__sorted_clause_cache[clause_id]
+
+        clause_sorted_list = sorted(self.__clause_dictionary[clause_id])
+        self.__sorted_clause_cache[clause_id] = clause_sorted_list
+
+        self.__statistics.get_sorted_clause.stop_stopwatch()    # timer (stop)
+        return clause_sorted_list.copy() if copy else clause_sorted_list
+
     def number_of_nodes(self) -> int:
         """
         :return: the number of nodes
@@ -655,8 +691,8 @@ class IncidenceGraph(Graph):
         clause_id_set_without_multi_occurrence = set()
 
         for clause_id in clause_id_set:
-            clause_temp = self.get_clause(clause_id, copy=False)
-            clause_key_string = ",".join(map(str, sorted(clause_temp)))
+            clause_sorted_list = self.get_sorted_clause(clause_id, copy=False)
+            clause_key_string = ",".join(map(str, clause_sorted_list))
 
             if clause_key_string not in cache:
                 cache[clause_key_string] = clause_id
@@ -1485,7 +1521,7 @@ class IncidenceGraph(Graph):
         clause_id_list = sorted(self.clause_id_set(copy=False))
 
         for clause_id in clause_id_list:
-            clause = sorted(self.get_clause(clause_id, copy=False))
+            clause = self.get_sorted_clause(clause_id, copy=False)
             string_temp = "\n".join((string_temp, f"Clause {clause_id}: {clause}"))
 
         return string_temp
