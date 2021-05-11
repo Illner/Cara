@@ -605,12 +605,16 @@ class IncidenceGraph(Graph):
         :raises ClauseIdDoesNotExistException: if the clause does not exist in the incidence graph
         """
 
+        self.__statistics.get_clause.start_stopwatch()  # timer (start)
+
         variable_set = self.clause_id_neighbour_set(clause_id)
         literal_set = set()
 
         for variable in variable_set:
             literal = self.__get_literal_from_clause(variable, clause_id)
             literal_set.add(literal)
+
+        self.__statistics.get_clause.stop_stopwatch()   # timer (stop)
 
         return literal_set
 

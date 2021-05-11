@@ -15,12 +15,13 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer get_decision_variable_from_cut_set
     Private StatisticsComponentTimer cut_set_try_cache
     Private StatisticsComponentTimer implied_literals_preselection_heuristic
+    Private StatisticsComponentTimer component_caching_generate_key
+    Private StatisticsComponentTimer component_caching_after_generate_key
     
     Private StatisticsComponentCounter unsatisfiable
     Private StatisticsComponentCounter implied_literal
     Private StatisticsComponentCounter isolated_variable
     Private StatisticsComponentCounter empty_incidence_graph
-    Private StatisticsComponentCounter generate_key_cache
     Private StatisticsComponentCounter component_caching_hit
     Private StatisticsComponentCounter component_caching_formula_length
     Private StatisticsComponentCounter component_caching_after_hit
@@ -57,8 +58,11 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__empty_incidence_graph: StatisticsComponentCounter = StatisticsComponentCounter("empty incidence graph", True)
         self._component_list.append(self.__empty_incidence_graph)
 
-        self.__generate_key_cache: StatisticsComponentCounter = StatisticsComponentCounter("component cache - generate key cache", True)
-        self._component_list.append(self.__generate_key_cache)
+        self.__component_caching_generate_key: StatisticsComponentTimer = StatisticsComponentTimer("component caching (before BCP) - generate key")
+        self._component_list.append(self.__component_caching_generate_key)
+
+        self.__component_caching_after_generate_key: StatisticsComponentTimer = StatisticsComponentTimer("component caching (after BCP) - generate key")
+        self._component_list.append(self.__component_caching_after_generate_key)
 
         self.__component_caching_hit: StatisticsComponentCounter = StatisticsComponentCounter("component caching (before BCP) - hit")
         self._component_list.append(self.__component_caching_hit)
@@ -126,8 +130,12 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         return self.__empty_incidence_graph
 
     @property
-    def generate_key_cache(self) -> StatisticsComponentCounter:
-        return self.__generate_key_cache
+    def component_caching_generate_key(self) -> StatisticsComponentTimer:
+        return self.__component_caching_generate_key
+
+    @property
+    def component_caching_after_generate_key(self) -> StatisticsComponentTimer:
+        return self.__component_caching_after_generate_key
 
     @property
     def component_caching_hit(self) -> StatisticsComponentCounter:

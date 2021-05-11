@@ -293,8 +293,10 @@ class Component:
                 return self.__circuit.create_constant_leaf(False)
 
         # Component caching (before unit propagation)
+        self.__statistics.component_statistics.component_caching_generate_key.start_stopwatch()     # timer (start)
         key_before_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
-        self.__statistics.component_statistics.generate_key_cache.add_count(1)  # counter
+        self.__statistics.component_statistics.component_caching_generate_key.stop_stopwatch()      # timer (stop)
+
         value = self.__component_caching.get(key_before_unit_propagation)
         # Hit
         if value is not None:
@@ -338,7 +340,10 @@ class Component:
         # Component caching (after unit propagation)
         key_after_unit_propagation = None
         if not new_component:
+            self.__statistics.component_statistics.component_caching_after_generate_key.start_stopwatch()   # timer (start)
             key_after_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
+            self.__statistics.component_statistics.component_caching_after_generate_key.stop_stopwatch()    # timer (stop)
+
             value = self.__component_caching.get(key_after_unit_propagation)
             # Hit
             if value is not None:
