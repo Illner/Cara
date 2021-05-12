@@ -6,11 +6,14 @@ Python 3.6+ (64 bit)
 
 ## Packages
 * <a href="https://pypi.org/project/sortedcontainers/" target="_blank">sortedcontainers</a> 2.3.0 (Windows / Linux / macOS)
-* <a href="https://pypi.org/project/python-sat/" target="_blank">python-sat</a> 0.1.6.dev11 (Windows / Linux / macOS)
 * <a href="https://pypi.org/project/hypernetx/" target="_blank">hypernetx</a> 0.3.7 (Windows / Linux / macOS)
 * <a href="https://pypi.org/project/matplotlib/" target="_blank">matplotlib</a> 3.3.4 (Windows / Linux / macOS)
 * <a href="https://pypi.org/project/numpy/" target="_blank">numpy</a> 1.20.2 (Windows / Linux / macOS)
 * <a href="https://pypi.org/project/kahypar/" target="_blank">kahypar</a> 1.1.6 (Linux / macOS)
+
+
+* <a href="https://pypi.org/project/python-sat/" target="_blank">python-sat</a> 0.1.6.dev11 (Windows / Linux / macOS)
+* <a href="https://github.com/Illner/pysat/" target="_blank">extended python-sat</a> 0.1.6.dev11 (Windows / Linux / macOS) (support VSIDS and VSADS decision heuristic)
 
 You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 python-sat==0.1.6.dev11 hypernetx==0.3.7 matplotlib==3.3.4 numpy==1.20.2** kahypar==1.1.6
 
@@ -38,6 +41,8 @@ optional arguments:
   + find all backbone literals before the compilation (default: False)
 + **-uos, --use_one_solver**
   + use only one SAT solver for all components (default: False)
++ **-cc_abcp, --cc_after_bcp**
+  + use component caching after BCP (default: False)
 * **-bc {TWO_CNF,RENAMABLE_HORN_CNF}, --base_class {TWO_CNF,RENAMABLE_HORN_CNF}**
   + types of base classes in the circuit's leaves (literal leaves are mandatory) (default: None)
 * **-dh {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,BACKBONE_SEARCH,DLCS,DLIS,DLCS_DLIS,EUPC}, --decision_heuristic {RANDOM,JEROSLOW_WANG_ONE_SIDED,JEROSLOW_WANG_TWO_SIDED,CLAUSE_REDUCTION,WEIGHTED_BINARIES,BACKBONE_SEARCH,DLCS,DLIS,DLCS_DLIS,EUPC}**

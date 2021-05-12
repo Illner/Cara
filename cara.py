@@ -45,6 +45,7 @@ def main(main_args):
                             implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum[main_args.il_preselection_heuristic],
                             first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum[main_args.first_implied_literals],
                             component_caching_enum=cc_enum.ComponentCachingEnum[main_args.component_caching],
+                            component_caching_after_unit_propagation=main_args.cc_after_bcp,
                             eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum[main_args.eliminating_redundant_clauses],
                             eliminating_redundant_clauses_threshold=main_args.erc_threshold,
                             hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum[main_args.hp_caching],
@@ -221,6 +222,11 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="use only one SAT solver for all components")
+    parser_temp.add_argument("-cc_abcp",
+                             "--cc_after_bcp",
+                             action="store_true",
+                             default=False,
+                             help="use component caching after BCP")
     parser_temp.add_argument("-bc",
                              "--base_class",
                              action="append",

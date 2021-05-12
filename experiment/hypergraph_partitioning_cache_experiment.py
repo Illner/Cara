@@ -93,6 +93,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                                                                                       implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.CRA,
                                                                                       first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP,
                                                                                       component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                                                                                      component_caching_after_unit_propagation=True,
                                                                                       eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.SUBSUMPTION,
                                                                                       eliminating_redundant_clauses_threshold=500,
                                                                                       hp_cache_enum=hp_cache_enum,
@@ -134,7 +135,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                             # Cache performance - cache_performance_dictionary
                             if key not in cache_performance_dictionary:
                                 cache_performance_dictionary[key] = []
-                            cache_performance = convert_none_to_0(statistics.hypergraph_partitioning_statistics.cached.average_count)
+                            cache_performance = convert_none_to_0(statistics.hypergraph_partitioning_statistics.cache_hit.average_count)
                             cache_performance_dictionary[key].append(cache_performance)
 
                             print(f"Cache performance: {cache_performance}")

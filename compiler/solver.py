@@ -23,6 +23,7 @@ class Solver:
     """
     Private PySatCnf cnf
     Private Set<int> variable_set
+    Private bool extended_pysat_imported
     Private Set<int> first_implied_literal_set  # first implied literals (without any assumption)
     Private SatSolverEnum sat_solver_enum
 
@@ -103,6 +104,12 @@ class Solver:
             raise c_exception.SatSolverIsNotSupportedException(self.__sat_solver_enum)
 
         self.__statistics.first_implied_literals.start_stopwatch()  # timer (start - first_implied_literals)
+
+        # Check if the extended version of PySAT is imported
+        if "get_activity" in dir(Minisat22):
+            self.__extended_pysat_imported: bool = True
+        else:
+            self.__extended_pysat_imported: bool = False
 
         # Backbones
         from compiler.backbones import Backbones
@@ -323,11 +330,15 @@ class Solver:
         """
         :return: a list of VSIDS scores
         :raises SatSolverDoesNotSupportOperationException: if the SAT solver is not MiniSAT
+        :raises SomethingWrongException: if the extended version of PySAT is not imported
         """
 
         # The SAT solver is not MiniSAT
         if not isinstance(self.__sat_main, Minisat22):
             raise c_exception.SatSolverDoesNotSupportOperationException(self.__sat_solver_enum, "get VSIDS score")
+
+        if not self.__extended_pysat_imported:
+            raise ca_exception.SomethingWrongException("the extended version of PySAT (https://github.com/Illner/pysat) is needed to be installed")
 
         return self.__sat_main.get_activity()
     # endregion

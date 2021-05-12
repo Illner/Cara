@@ -37,6 +37,7 @@ class Component:
     Private float new_cut_set_threshold_reduction
     Private Set<BaseClassEnum> base_class_enum_set
     Private int eliminating_redundant_clauses_threshold
+    Private bool component_caching_after_unit_propagation
     
     Private IncidenceGraph incidence_graph
     Private ComponentCachingAbstract component_caching
@@ -63,6 +64,7 @@ class Component:
                  incidence_graph: IncidenceGraph,
                  decision_heuristic: DecisionHeuristicAbstract,
                  component_caching: ComponentCachingAbstract,
+                 component_caching_after_unit_propagation: bool,
                  eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum,
                  eliminating_redundant_clauses_threshold: Union[int, None],
                  hypergraph_partitioning: HypergraphPartitioning,
@@ -81,6 +83,7 @@ class Component:
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__base_class_enum_set: Set[bc_enum.BaseClassEnum] = base_class_enum_set
+        self.__component_caching_after_unit_propagation: bool = component_caching_after_unit_propagation
         self.__eliminating_redundant_clauses_threshold: Union[int, None] = eliminating_redundant_clauses_threshold
 
         self.__component_caching: ComponentCachingAbstract = component_caching
@@ -339,7 +342,7 @@ class Component:
 
         # Component caching (after unit propagation)
         key_after_unit_propagation = None
-        if not new_component:
+        if self.__component_caching_after_unit_propagation and not new_component:
             self.__statistics.component_statistics.component_caching_after_generate_key.start_stopwatch()   # timer (start)
             key_after_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
             self.__statistics.component_statistics.component_caching_after_generate_key.stop_stopwatch()    # timer (stop)
@@ -418,6 +421,7 @@ class Component:
                                            incidence_graph=incidence_graph,
                                            decision_heuristic=self.__decision_heuristic,
                                            component_caching=self.__component_caching,
+                                           component_caching_after_unit_propagation=self.__component_caching_after_unit_propagation,
                                            eliminating_redundant_clauses_enum=self.__eliminating_redundant_clauses_enum,
                                            eliminating_redundant_clauses_threshold=self.__eliminating_redundant_clauses_threshold,
                                            hypergraph_partitioning=self.__hypergraph_partitioning,

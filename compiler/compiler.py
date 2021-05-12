@@ -66,6 +66,7 @@ class Compiler:
     Private ComponentCachingAbstract component_caching
     Private int eliminating_redundant_clauses_threshold
     Private DecisionHeuristicAbstract decision_heuristic
+    Private bool component_caching_after_unit_propagation
     Private HypergraphPartitioning hypergraph_partitioning
     Private EliminatingRedundantClausesEnum eliminating_redundant_clauses_enum
     Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
@@ -94,6 +95,7 @@ class Compiler:
                  implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
                  component_caching_enum: cc_enum.ComponentCachingEnum,
+                 component_caching_after_unit_propagation: bool,
                  eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum,
                  eliminating_redundant_clauses_threshold: Union[int, None],
                  hp_cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
@@ -129,6 +131,7 @@ class Compiler:
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__base_class_enum_set: Set[bs_enum.BaseClassEnum] = base_class_enum_set
+        self.__component_caching_after_unit_propagation: bool = component_caching_after_unit_propagation
         self.__eliminating_redundant_clauses_threshold: Union[int, None] = eliminating_redundant_clauses_threshold
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
@@ -321,6 +324,7 @@ class Compiler:
                                   incidence_graph=incidence_graph,
                                   decision_heuristic=self.__decision_heuristic,
                                   component_caching=self.__component_caching,
+                                  component_caching_after_unit_propagation=self.__component_caching_after_unit_propagation,
                                   eliminating_redundant_clauses_enum=self.__eliminating_redundant_clauses_enum,
                                   eliminating_redundant_clauses_threshold=self.__eliminating_redundant_clauses_threshold,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
