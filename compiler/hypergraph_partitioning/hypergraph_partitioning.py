@@ -34,8 +34,8 @@ class HypergraphPartitioning:
     """
     Private Cnf cnf
     Private float ub_factor
-    Private int subsumption_threshold
     Private Set<int> hyperedge_set
+    Private int subsumption_threshold
     Private int total_number_of_nodes
     
     Private Tuple<int, int> limit_number_of_clauses_cache       # (lower_bound, upper_bound) - None = no limit
@@ -121,7 +121,7 @@ class HypergraphPartitioning:
 
         # UBfactor
         ub_factor = round(ub_factor, 2)
-        if ub_factor < 0.01 or ub_factor > 0.49:    # 1% - 49%
+        if (ub_factor < 0.01) or (ub_factor > 0.49):    # 1% - 49%
             raise hp_exception.InvalidUBfactorException(ub_factor)
         self.__ub_factor: float = ub_factor
 
@@ -144,12 +144,12 @@ class HypergraphPartitioning:
     def __create_hmetis_paths(self) -> None:
         """
         Create paths
-        Paths: input_file, output_file_1, output_file_2
+        Path: input_file, output_file_1, output_file_2
         :return: None
         """
 
-        now = str(datetime.now().time())
-        now_postfix = now.replace(":", "_").replace(".", "_").replace(" ", "_")
+        now_time_str = str(datetime.now().time())
+        now_postfix = now_time_str.replace(":", "_").replace(".", "_").replace(" ", "_")
 
         self.__input_file_hmetis_path = Path(os.path.join(HypergraphPartitioning.__TEMP_DIRECTORY_PATH, f"hmetis_hypergraph_{now_postfix}.graph"))
         self.__output_file_1_hmetis_path = Path(str(self.__input_file_hmetis_path) + ".part.1")
@@ -254,31 +254,38 @@ class HypergraphPartitioning:
     def __variable_simplification(self, solver: Solver, assignment_list: List[int]) -> Dict[int, Set[int]]:
         """
         Compute variable simplification using implicit unit propagation
-        :param solver: the solver
+        :param solver: a solver
         :param assignment_list: a partial assignment (for the solver)
         :return: a dictionary where a key is a variable (representant),
         and the value is a set of variables that can be merged with the variable to reduce the hypergraph size
         """
 
-        # None
-        if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE:
-            return dict()
-
         self.__statistics.variable_simplification.start_stopwatch()     # timer (start)
 
-        implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list, variable_restriction_set=None)
-
-        # The formula is unsatisfiable (it should not happen at all)
-        if implicit_bcp_dictionary is None:
+        # None
+        if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE:
             self.__statistics.variable_simplification.stop_stopwatch()  # timer (stop)
             return dict()
 
         # EQUIV_SIMPL
         if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL:
+            implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list, variable_restriction_set=None)
+
+            # The formula is unsatisfiable (it should not happen at all)
+            if implicit_bcp_dictionary is None:
+                warnings.warn("Unexpected situation (variable simplification - unsatisfiable formula)!")
+
+                self.__statistics.variable_simplification.stop_stopwatch()  # timer (stop)
+                return dict()
+
             dominated_variable_set = set()
             equivalence_dictionary: Dict[int, Set[int]] = dict()
 
             for var in implicit_bcp_dictionary:
+                # The variable is already dominated
+                if var in dominated_variable_set:
+                    continue
+
                 first_temp, second_temp = implicit_bcp_dictionary[var]
 
                 # var is an implied "variable" (should not happen if implicit unit propagation is used for implied literals)
@@ -308,7 +315,6 @@ class HypergraphPartitioning:
             self.__statistics.variable_simplification.stop_stopwatch()  # timer (stop)
             return equivalence_dictionary
 
-        self.__statistics.variable_simplification.stop_stopwatch()  # timer (stop)
         raise c_exception.FunctionNotImplementedException("variable_simplification",
                                                           f"this type of variable simplification ({self.__variable_simplification_enum.name}) is not implemented")
 
@@ -318,18 +324,18 @@ class HypergraphPartitioning:
         Initialize the static weights.
         If the type of weights is not STATIC, nothing happens.
         Variable: node_weight_dictionary, hyperedge_weight_dictionary
-        :param initial_incidence_graph: an incidence graph
+        :param initial_incidence_graph: an initial incidence graph
         :return: None
         """
 
         self.__statistics.set_static_weights.start_stopwatch()  # timer (start)
 
-        # Node's weight
+        # Nodes' weight
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.STATIC:
             for node_id in range(self.__total_number_of_nodes):
                 self.__node_weight_dictionary[node_id] = 1  # TODO STATIC
 
-        # Hyperedge's weight
+        # Hyperedges' weight
         if self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.STATIC:
             for hyperedge_id in self.__hyperedge_set:
                 self.__hyperedge_weight_dictionary[hyperedge_id] = 1    # TODO STATIC
@@ -339,7 +345,7 @@ class HypergraphPartitioning:
     def __set_dynamic_weights(self, incidence_graph: IncidenceGraph) -> None:
         """
         Initialize the dynamic weights based on the incidence graph.
-        If the type of weights is not Dynamic, nothing happens.
+        If the type of weights is not DYNAMIC, nothing happens.
         Variable: node_weight_dictionary, hyperedge_weight_dictionary
         :param incidence_graph: an incidence graph
         :return: None
@@ -347,14 +353,14 @@ class HypergraphPartitioning:
 
         self.__statistics.set_dynamic_weights.start_stopwatch()     # timer (start)
 
-        # Node's weight
+        # Nodes' weight
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.DYNAMIC:
-            self.__node_weight_dictionary = dict()
+            self.__node_weight_dictionary = dict()  # reset
             pass    # TODO DYNAMIC
 
-        # Hyperedge's weight
+        # Hyperedges' weight
         if self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.DYNAMIC:
-            self.__hyperedge_weight_dictionary = dict()
+            self.__hyperedge_weight_dictionary = dict()     # reset
             pass    # TODO DYNAMIC
 
         self.__statistics.set_dynamic_weights.stop_stopwatch()      # timer (stop)
@@ -371,14 +377,14 @@ class HypergraphPartitioning:
         if (node_id < 0) or (node_id >= self.__total_number_of_nodes):
             raise hp_exception.NodeDoesNotExistException(node_id)
 
-        # No weight
+        # NONE
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE:
             return 1
 
-        # STATIC/DYNAMIC weight
+        # STATIC or DYNAMIC
         if (self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.STATIC) or \
            (self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.DYNAMIC):
-            # Something wrong
+            # The weight has not been created
             if node_id not in self.__node_weight_dictionary:
                 raise hp_exception.NodeDoesNotExistException(node_id)
 
@@ -399,14 +405,14 @@ class HypergraphPartitioning:
         if hyperedge_id not in self.__hyperedge_set:
             raise hp_exception.HyperedgeDoesNotExistException(hyperedge_id)
 
-        # No weight
+        # NONE
         if self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE:
             return 1
 
-        # STATIC/DYNAMIC weight
+        # STATIC or DYNAMIC
         if (self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.STATIC) or \
            (self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.DYNAMIC):
-            # Something wrong
+            # The weight has not been created
             if hyperedge_id not in self.__hyperedge_weight_dictionary:
                 raise hp_exception.HyperedgeDoesNotExistException(hyperedge_id)
 
@@ -429,7 +435,7 @@ class HypergraphPartitioning:
 
         self.__cut_set_cache[key] = cut_set
 
-    def __get_cut_set_cache(self, key: str) -> Union[Set[int], None]:
+    def __get_cut_set_cache(self, key: Union[str, None]) -> Union[Set[int], None]:
         """
         Return a value of the record with the key from the cache.
         If the record does not exist in the cache, None is returned.
@@ -473,9 +479,13 @@ class HypergraphPartitioning:
         mean_dictionary: Dict[int, float] = dict()
         variance_dictionary: Dict[int, float] = dict()
 
+        neighbour_cache: Dict[int, Set[int]] = dict()   # key: variable, value: a set of neighbours
+
         # Compute occurrences and means
         for variable in incidence_graph.variable_set(copy=False):
             clause_id_set = incidence_graph.variable_neighbour_set(variable)
+
+            neighbour_cache[variable] = clause_id_set
 
             # Occurrence
             occurrence_dictionary[variable] = len(clause_id_set)
@@ -484,13 +494,13 @@ class HypergraphPartitioning:
             mean_temp = 0
             for clause_id in clause_id_set:
                 mean_temp += incidence_graph.number_of_neighbours_clause_id(clause_id)
-            # mean_temp = mean_temp / len(clause_id_set)
+            mean_temp = mean_temp / len(clause_id_set)
             mean_dictionary[variable] = mean_temp
 
         # Compute variances
         if use_variance:
             for variable in incidence_graph.variable_set(copy=False):
-                clause_id_set = incidence_graph.variable_neighbour_set(variable)
+                clause_id_set = neighbour_cache[variable]
                 mean_temp = mean_dictionary[variable]
 
                 variance_temp = 0
@@ -510,56 +520,22 @@ class HypergraphPartitioning:
         variable_sorted_list = sorted(variable_property_dictionary, key=variable_property_dictionary.get)
 
         # Mapping
-        variable_id_order_id_dictionary: Dict[int, int] = dict()  # Mapping variable_id -> order_id
-        order_id_variable_id_dictionary: Dict[int, int] = dict()  # Mapping order_id -> variable_id
+        variable_id_order_id_dictionary: Dict[int, int] = dict()  # mapping variable_id -> order_id
+        order_id_variable_id_dictionary: Dict[int, int] = dict()  # mapping order_id -> variable_id
 
         for i, variable in enumerate(variable_sorted_list):
             variable_id_order_id_dictionary[variable] = i
             order_id_variable_id_dictionary[i] = variable
 
-        # def variable_order(ordering_func: List[List[int]], mapping_dictionary_func: Dict[int, float]) -> List[List[int]]:
-        #     result_ordering = []
-        #
-        #     for group_func in ordering_func:
-        #         last_value = None
-        #         new_group = []
-        #
-        #         for var_func in sorted(group_func, key=lambda v_func: mapping_dictionary_func[v_func]):
-        #             value = mapping_dictionary_func[var_func]
-        #
-        #             if (last_value is None) or (value == last_value):
-        #                 new_group.append(var_func)
-        #             else:
-        #                 result_ordering.append(new_group)
-        #                 new_group = [var_func]
-        #
-        #             last_value = value
-        #
-        #         result_ordering.append(new_group)
-        #
-        #     return result_ordering
-        #
-        # variable_ordering = [incidence_graph.variable_list()]
-        # variable_ordering = variable_order(variable_ordering, occurrence_dictionary)
-        # variable_ordering = variable_order(variable_ordering, mean_dictionary)
-        # if use_variance:
-        #     variable_ordering = variable_order(variable_ordering, variance_dictionary)
-        #
-        # # Create an ordering
-        # counter_temp = 0
-        # for group in variable_ordering:
-        #     for var in sorted(group):
-        #         variable_id_order_id_dictionary[var] = counter_temp
-        #         order_id_variable_id_dictionary[counter_temp] = var
-        #         counter_temp += 1
-
         variable_clause_list = []
-        for clause_id in incidence_graph.clause_id_set(copy=False, multi_occurrence=True):
+        for clause_id in incidence_graph.clause_id_set(copy=False):
             variable_set = incidence_graph.clause_id_neighbour_set(clause_id)
             variable_sorted_list = sorted(map(lambda v: variable_id_order_id_dictionary[v], variable_set))
-            variable_clause_list.append(variable_sorted_list)
+            variable_clause_list.append(",".join([str(v) for v in variable_sorted_list]))
 
-        key_string = ",0,".join([",".join(map(str, variable_clause)) for variable_clause in sorted(variable_clause_list)])
+        variable_clause_sorted_list = sorted(variable_clause_list)
+
+        key_string = "_".join(variable_clause_sorted_list)
 
         self.__statistics.generate_key_cache.stop_stopwatch()       # timer (stop)
         return key_string, (variable_id_order_id_dictionary, order_id_variable_id_dictionary)
@@ -742,16 +718,16 @@ class HypergraphPartitioning:
 
                 line_temp.append(clause_id_node_id_dictionary[clause_id])
 
-            line_hyperedge.append(line_temp)
+            line_hyperedge.append(" ".join([str(temp) for temp in line_temp]))
 
-        string_hyperedge = "\n".join([" ".join(map(str, hyperedge)) for hyperedge in line_hyperedge])
+        string_hyperedge = "\n".join(line_hyperedge)
 
         # Node weights
         line_weight = []
         for node_id in range(1, number_of_nodes + 1):
-            line_weight.append(self.__get_node_weight(node_id_clause_id_dictionary[node_id]))
+            line_weight.append(str(self.__get_node_weight(node_id_clause_id_dictionary[node_id])))
 
-        string_weight = "\n".join(map(str, line_weight))
+        string_weight = "\n".join(line_weight)
 
         string_result = "\n".join((f"{number_of_hyperedges} {number_of_nodes} 11",
                                    string_hyperedge,
@@ -774,7 +750,7 @@ class HypergraphPartitioning:
         self.__output_file_2_hmetis_path.unlink(missing_ok=True)
 
         # Save the input file
-        with open(self.__input_file_hmetis_path, "w", encoding="utf8") as input_file:
+        with open(self.__input_file_hmetis_path, "w", encoding="utf-8") as input_file:
             input_file.write(file_string)
 
         program_hmetis_path_temp = HypergraphPartitioning.__WIN_PROGRAM_HMETIS_PATH if env.is_windows() else HypergraphPartitioning.__LINUX_PROGRAM_HMETIS_PATH
@@ -799,6 +775,7 @@ class HypergraphPartitioning:
         # Get the cut set
         variable_partition_0_set = set()
         variable_partition_1_set = set()
+
         with open(self.__output_file_2_hmetis_path, "r", encoding="utf-8") as output_file:
             line_id = 0
 
@@ -813,10 +790,10 @@ class HypergraphPartitioning:
                 try:
                     partition_temp = int(line)
                 except ValueError:
-                    raise hp_exception.SomethingWrongException(f"partition ({line}) in the output file from hMETIS.exe is not a number")
+                    raise hp_exception.SomethingWrongException(f"partition ({line}) in the output file generated from hMETIS.exe is not a number")
 
                 if (partition_temp != 0) and (partition_temp != 1):
-                    raise hp_exception.SomethingWrongException(f"invalid partition ({partition_temp}) in the output file from hMETIS.exe")
+                    raise hp_exception.SomethingWrongException(f"invalid partition ({partition_temp}) in the output file generated from hMETIS.exe")
 
                 variable_set_temp = incidence_graph.clause_id_neighbour_set(node_id_clause_id_dictionary[line_id])
 
@@ -842,7 +819,7 @@ class HypergraphPartitioning:
         :param incidence_graph: an incidence graph
         :param solver: a solver (in case equivSimpl is used)
         :param assignment: a partial assignment (for the solver)
-        :param incidence_graph_is_reduced: True if the incidence graph is already reduced
+        :param incidence_graph_is_reduced: True if the incidence graph has been already reduced
         :return: a cut set of the hypergraph
         """
 
@@ -876,8 +853,7 @@ class HypergraphPartitioning:
         else:
             if result_cache_key is not None:
                 key, (variable_id_order_id_dictionary, _) = result_cache_key
-
-            self.__statistics.cache_hit.add_count(0)  # counter
+                self.__statistics.cache_hit.add_count(0)  # counter
 
         cut_set = set()
 
@@ -895,6 +871,7 @@ class HypergraphPartitioning:
 
         # A cut set does not exist (because of balance etc.) => a variable with the most occurrences is selected
         if not cut_set:
+            self.__statistics.empty_cut_set.add_count(1)    # counter
             cut_set = {incidence_graph.variable_with_most_occurrences()}
 
         # Cache
@@ -980,6 +957,6 @@ class HypergraphPartitioning:
     # region Static method
     @staticmethod
     def remove_reduction_incidence_graph(incidence_graph: IncidenceGraph) -> None:
-        incidence_graph.restore_backup_subsumption_variable()                # subsumption
+        incidence_graph.restore_backup_subsumption_variable()       # subsumption
         incidence_graph.restore_backup_variable_simplification()    # variable simplification
     # endregion

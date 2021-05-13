@@ -18,6 +18,7 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     
     Private StatisticsComponentCounter cache_hit
     Private StatisticsComponentCounter cut_set_size
+    Private StatisticsComponentCounter empty_cut_set
     """
 
     def __init__(self):
@@ -43,6 +44,9 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
 
         self.__cut_set_size: StatisticsComponentCounter = StatisticsComponentCounter("cut set - size")
         self._component_list.append(self.__cut_set_size)
+
+        self.__empty_cut_set: StatisticsComponentCounter = StatisticsComponentCounter("empty cut set", True)
+        self._component_list.append(self.__empty_cut_set)
 
     # region Property
     @property
@@ -72,4 +76,8 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     @property
     def cut_set_size(self) -> StatisticsComponentCounter:
         return self.__cut_set_size
+
+    @property
+    def empty_cut_set(self) -> StatisticsComponentCounter:
+        return self.__empty_cut_set
     # endregion
