@@ -60,7 +60,11 @@ def main(main_args):
                             decision_heuristic_mixed_difference_enum=mdh_enum.MixedDifferenceHeuristicEnum[main_args.dh_mixed_difference_heuristic],
                             implied_literals_preselection_heuristic_prop_z_depth_threshold=main_args.il_ph_prop_z_depth_threshold,
                             implied_literals_preselection_heuristic_prop_z_number_of_variables_lower_bound=main_args.il_ph_prop_z_number_of_variables_lower_bound,
-                            implied_literals_preselection_heuristic_cra_rank=main_args.il_ph_cra_rank)
+                            implied_literals_preselection_heuristic_cra_rank=main_args.il_ph_cra_rank,
+                            decision_heuristic_vsids_d4_version=main_args.dh_vsids_d4_version,
+                            decision_heuristic_vsads_p_constant_factor=main_args.dh_vsads_p_factor,
+                            decision_heuristic_vsads_q_constant_factor=main_args.dh_vsads_q_factor,
+                            decision_heuristic_weight_for_satisfied_clauses=main_args.dh_weight_for_satisfied_clauses)
         print("The formula has been processed!\n")
 
         print("Compiling...")
@@ -247,6 +251,34 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str,
                              choices=mdh_enum.mixed_difference_heuristic_enum_names,
                              help="type of mixed difference heuristic for the decision heuristic (clause reduction heuristic, exact unit propagation count heuristic)")
+    parser_temp.add_argument("-dh_vsids_d4",
+                             "--dh_vsids_d4_version",
+                             action="store",
+                             default=True,
+                             type=bool,
+                             metavar="[True, False]",
+                             help="use \"D4 version\" of VSIDS score for the decision heuristic (VSIDS, VSADS)")
+    parser_temp.add_argument("-dh_vsads_p_f",
+                             "--dh_vsads_p_factor",
+                             action="store",
+                             default=1,
+                             type=float,
+                             metavar="[non-negative number]",
+                             help="constant factor p (VSADS)")
+    parser_temp.add_argument("-dh_vsads_q_f",
+                             "--dh_vsads_q_factor",
+                             action="store",
+                             default=0.5,
+                             type=float,
+                             metavar="[non-negative number]",
+                             help="constant factor q (VSADS)")
+    parser_temp.add_argument("-dh_wfsc",
+                             "--dh_weight_for_satisfied_clauses",
+                             action="store",
+                             default=True,
+                             type=bool,
+                             metavar="[True, False]",
+                             help="use a weight for satisfied clauses (clause reduction heuristic, weighted binaries heuristic, backbone search heuristic)")
     parser_temp.add_argument("-hpuf",
                              "--hp_ub_factor",
                              action="store",

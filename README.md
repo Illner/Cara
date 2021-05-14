@@ -49,6 +49,14 @@ optional arguments:
   + type of decision heuristic (default: CLAUSE_REDUCTION)
 * **-dh_mdh {OK_SOLVER,POSIT_SATZ}, --dh_mixed_difference_heuristic {OK_SOLVER,POSIT_SATZ}**
   + type of mixed difference heuristic for the decision heuristic (clause reduction heuristic, exact unit propagation count heuristic) (default: OK_SOLVER)
+* **-dh_vsids_d4 [True, False], --dh_vsids_d4_version [True, False]**
+  + use "D4 version" of VSIDS score for the decision heuristic (VSIDS, VSADS) (default: True)
+* **-dh_vsads_p_f [non-negative number], --dh_vsads_p_factor [non-negative number]**
+  + constant factor p (VSADS) (default: 1)
+* **-dh_vsads_q_f [non-negative number], --dh_vsads_q_factor [non-negative number]**
+  + constant factor q (VSADS) (default: 0.5)
+* **-dh_wfsc [True, False], --dh_weight_for_satisfied_clauses [True, False]**
+  + use a weight for satisfied clauses (clause reduction heuristic, weighted binaries heuristic, backbone search heuristic) (default: True)
 * **-hpuf [0.01-0.49], --hp_ub_factor [0.01-0.49]**
   + balance factor that is used for hypergraph partitioning (hMETIS - UB factor, KaHyPar - epsilon) (default: 0.1)
 * **-st [non-negative number or None], --subsumption_threshold [non-negative number or None]**

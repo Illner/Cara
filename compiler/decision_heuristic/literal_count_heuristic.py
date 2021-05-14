@@ -56,7 +56,7 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
 
         # AVG
         if function_enum == lchf_enum.LiteralCountHeuristicFunctionEnum.AVG:
-            return self.__avg
+            return LiteralCountHeuristic.__avg
 
         # Not supported
         raise c_exception.FunctionNotImplementedException("get_function",

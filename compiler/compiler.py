@@ -63,20 +63,21 @@ class Compiler:
     Private float new_cut_set_threshold
     Private float new_cut_set_threshold_reduction           # when the cache for cut sets can be used
     Private Set<BaseClassEnum> base_class_enum_set
-    Private ComponentCachingAbstract component_caching
     Private int eliminating_redundant_clauses_threshold
-    Private DecisionHeuristicAbstract decision_heuristic
     Private bool component_caching_after_unit_propagation
+    
+    Private ComponentCachingAbstract component_caching
+    Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
-    Private EliminatingRedundantClausesEnum eliminating_redundant_clauses_enum
     Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
     
     Private SatSolverEnum sat_solver_enum
     Private ImpliedLiteralsEnum implied_literals_enum
-    Private FirstImpliedLiteralsEnum first_implied_literals_enum
     Private HypergraphPartitioningCacheEnum hp_cache_enum
     Private HypergraphPartitioningSoftwareEnum hp_software_enum
+    Private FirstImpliedLiteralsEnum first_implied_literals_enum
     Private HypergraphPartitioningNodeWeightEnum hp_node_weight_type_enum
+    Private EliminatingRedundantClausesEnum eliminating_redundant_clauses_enum
     Private HypergraphPartitioningHyperedgeWeightEnum hp_hyperedge_weight_type_enum
     Private HypergraphPartitioningVariableSimplificationEnum hp_variable_simplification_enum
     """
@@ -110,7 +111,11 @@ class Compiler:
                  decision_heuristic_mixed_difference_enum: mdh_enum.MixedDifferenceHeuristicEnum = mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER,
                  implied_literals_preselection_heuristic_prop_z_depth_threshold: int = 5,
                  implied_literals_preselection_heuristic_prop_z_number_of_variables_lower_bound: Union[int, None] = 10,
-                 implied_literals_preselection_heuristic_cra_rank: float = 0.1):
+                 implied_literals_preselection_heuristic_cra_rank: float = 0.1,
+                 decision_heuristic_vsids_d4_version: bool = True,
+                 decision_heuristic_vsads_p_constant_factor: float = 1,
+                 decision_heuristic_vsads_q_constant_factor: float = 0.5,
+                 decision_heuristic_weight_for_satisfied_clauses: bool = True):
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -129,8 +134,8 @@ class Compiler:
         self.__use_more_solvers: bool = use_more_solvers
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__new_cut_set_threshold: float = new_cut_set_threshold
-        self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__base_class_enum_set: Set[bs_enum.BaseClassEnum] = base_class_enum_set
+        self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__component_caching_after_unit_propagation: bool = component_caching_after_unit_propagation
         self.__eliminating_redundant_clauses_threshold: Union[int, None] = eliminating_redundant_clauses_threshold
 
@@ -143,7 +148,12 @@ class Compiler:
         self.__set_component_caching(component_caching_enum)
 
         # Decision heuristic
-        self.__set_decision_heuristic(decision_heuristic_enum, decision_heuristic_mixed_difference_enum)
+        self.__set_decision_heuristic(decision_heuristic_enum=decision_heuristic_enum,
+                                      mixed_difference_heuristic_enum=decision_heuristic_mixed_difference_enum,
+                                      vsids_d4_version=decision_heuristic_vsids_d4_version,
+                                      vsads_p_constant_factor=decision_heuristic_vsads_p_constant_factor,
+                                      vsads_q_constant_factor=decision_heuristic_vsads_q_constant_factor,
+                                      weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses)
 
         # Implied literals - preselection heuristic
         self.__set_implied_literals_preselection_heuristic(implied_literals_preselection_heuristic_enum=implied_literals_preselection_heuristic_enum,
@@ -189,7 +199,11 @@ class Compiler:
                                                           f"this type of component caching ({component_caching_enum.name}) is not implemented")
 
     def __set_decision_heuristic(self, decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,
-                                 mixed_difference_heuristic_enum: mdh_enum.MixedDifferenceHeuristicEnum):
+                                 mixed_difference_heuristic_enum: mdh_enum.MixedDifferenceHeuristicEnum,
+                                 vsids_d4_version: bool,
+                                 vsads_p_constant_factor: float,
+                                 vsads_q_constant_factor: float,
+                                 weight_for_satisfied_clauses: bool):
         preselection_heuristic = NoneHeuristic()
 
         # RANDOM
@@ -208,7 +222,7 @@ class Compiler:
         # CLAUSE_REDUCTION
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION:
             self.__decision_heuristic = ClauseReductionHeuristic(preselection_heuristic=preselection_heuristic,
-                                                                 weight_for_satisfied_clauses=True,
+                                                                 weight_for_satisfied_clauses=weight_for_satisfied_clauses,
                                                                  mixed_difference_heuristic_enum=mixed_difference_heuristic_enum)
             return
 
@@ -216,7 +230,7 @@ class Compiler:
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.WEIGHTED_BINARIES:
             self.__decision_heuristic = WeightedBinariesHeuristic(preselection_heuristic=preselection_heuristic,
                                                                   mixed_difference_heuristic_enum=mixed_difference_heuristic_enum,
-                                                                  weight_for_satisfied_clauses=True,
+                                                                  weight_for_satisfied_clauses=weight_for_satisfied_clauses,
                                                                   backbone_search_heuristic=False)
             return
 
@@ -224,7 +238,7 @@ class Compiler:
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.BACKBONE_SEARCH:
             self.__decision_heuristic = WeightedBinariesHeuristic(preselection_heuristic=preselection_heuristic,
                                                                   mixed_difference_heuristic_enum=mixed_difference_heuristic_enum,
-                                                                  weight_for_satisfied_clauses=True,
+                                                                  weight_for_satisfied_clauses=weight_for_satisfied_clauses,
                                                                   backbone_search_heuristic=True)
             return
 
@@ -257,12 +271,16 @@ class Compiler:
 
         # VSIDS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.VSIDS:
-            self.__decision_heuristic = VsidsHeuristic(preselection_heuristic=preselection_heuristic)
+            self.__decision_heuristic = VsidsHeuristic(preselection_heuristic=preselection_heuristic,
+                                                       d4_version=vsids_d4_version)
             return
 
         # VSADS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.VSADS:
-            self.__decision_heuristic = VsadsHeuristic(preselection_heuristic=preselection_heuristic)
+            self.__decision_heuristic = VsadsHeuristic(preselection_heuristic=preselection_heuristic,
+                                                       p_constant_factor=vsads_p_constant_factor,
+                                                       q_constant_factor=vsads_q_constant_factor,
+                                                       vsids_d4_version=vsids_d4_version)
             return
 
         raise c_exception.FunctionNotImplementedException("set_decision_heuristic",
@@ -271,7 +289,7 @@ class Compiler:
     def __set_implied_literals_preselection_heuristic(self, implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                                                       prop_z_depth_threshold: int, prop_z_number_of_variables_lower_bound: Union[int, None],
                                                       cra_rank: float):
-        # None
+        # NONE
         if implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.NONE:
             self.__implied_literals_preselection_heuristic = NoneHeuristic()
             return

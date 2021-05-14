@@ -71,8 +71,11 @@ class DecisionHeuristicAbstract(ABC):
             positive, negative = implicit_bcp_dictionary[variable]
 
             # Implied literal
-            if (positive is None) or (negative is None):
-                return variable, dict()
+            # if (positive is None) or (negative is None):
+            #     return variable, dict()
+
+            positive = set() if positive is None else positive
+            negative = set() if negative is None else negative
 
             positive_temp = positive.union({variable})
             complementary_positive_temp = set(map(lambda l: -1 * l, positive_temp))

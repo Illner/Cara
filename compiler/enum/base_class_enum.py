@@ -8,5 +8,5 @@ class BaseClassEnum(IntEnum):
     RENAMABLE_HORN_CNF = 2
 
 
-base_class_enum_names = [bs.name for bs in BaseClassEnum]
-base_class_enum_values = [bs.value for bs in BaseClassEnum]
+base_class_enum_names = [bc.name for bc in BaseClassEnum]
+base_class_enum_values = [bc.value for bc in BaseClassEnum]

@@ -33,7 +33,6 @@ class SolverTest(TestAbstract):
 
                         cnf = Cnf(file_path)
                         solver = Solver(cnf=cnf,
-                                        clause_id_set=None,
                                         sat_solver_enum=sat_solver,
                                         first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP)
 

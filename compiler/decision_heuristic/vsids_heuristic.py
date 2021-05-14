@@ -11,14 +11,21 @@ class VsidsHeuristic(DecisionHeuristicAbstract):
     VSIDS - decision heuristic
     """
 
-    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract):
+    """
+    Private bool d4_version
+    """
+
+    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract, d4_version: bool = True):
         super().__init__(preselection_heuristic)
+
+        self.__d4_version: bool = d4_version
 
     # region Override method
     def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
-        vsids_score_list = solver.get_vsids_score()
+        vsids_score_list = solver.get_vsids_score(d4_version=self.__d4_version)
+
         score_dictionary: Dict[int, int] = dict()   # key: a variable, value: score of the variable
 
         # Compute score

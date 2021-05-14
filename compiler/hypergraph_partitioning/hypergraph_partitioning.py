@@ -288,11 +288,8 @@ class HypergraphPartitioning:
 
                 first_temp, second_temp = implicit_bcp_dictionary[var]
 
-                # var is an implied "variable" (should not happen if implicit unit propagation is used for implied literals)
-                if first_temp is None:
-                    first_temp = set()
-                if second_temp is None:
-                    second_temp = set()
+                first_temp = set() if first_temp is None else first_temp
+                second_temp = set() if second_temp is None else second_temp
 
                 if len(first_temp) > len(second_temp):
                     first_temp, second_temp = second_temp, first_temp

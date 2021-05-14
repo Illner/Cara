@@ -43,10 +43,11 @@ class ExactUnitPropagationCountHeuristic(DecisionHeuristicAbstract):
             temp_positive, temp_negative = implicit_bcp_dictionary[variable]
 
             # Implied literal
-            if (temp_positive is None) or (temp_negative is None):
-                return variable
+            # if (temp_positive is None) or (temp_negative is None):
+            #     return variable
 
-            v_p, v_n = len(temp_positive), len(temp_negative)
+            v_p = 0 if temp_positive is None else len(temp_positive)
+            v_n = 0 if temp_negative is None else len(temp_negative)
 
             # OK_SOLVER
             if self.__mixed_difference_heuristic_enum == mdf_enum.MixedDifferenceHeuristicEnum.OK_SOLVER:
