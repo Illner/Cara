@@ -120,7 +120,7 @@ class ComponentCachingAbstract(ABC):
         :return: the generated key
         """
 
-        clause_key_string = ",".join(map(str, clause_list))
+        clause_key_string = self._delimiter.join([str(lit) for lit in clause_list])
 
         return clause_key_string
     # endregion

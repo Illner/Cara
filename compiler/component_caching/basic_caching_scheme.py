@@ -28,10 +28,10 @@ class BasicCachingScheme(ComponentCachingAbstract):
                 continue
 
             self._add_multi_occurrence_cache(clause_key_string)
-            clause_list.append(clause_sorted_list)
+            clause_list.append(clause_key_string)
 
-        key_string = self._end_delimiter_2.join((self._delimiter.join(map(str, variable_sorted_list)),
-                                                 self._end_delimiter.join([self._delimiter.join(map(str, clause)) for clause in sorted(clause_list)])))
+        key_string = self._end_delimiter_2.join((self._delimiter.join([str(v) for v in variable_sorted_list]),
+                                                 self._end_delimiter.join(sorted(clause_list))))
 
         self._clear_multi_occurrence_cache()    # cache
         return key_string
