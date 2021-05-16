@@ -4,8 +4,6 @@
 ) DIMACS NNF - DIMACS CNF
 ) Hypergraph weights
 
-) remove literal - time
-) create components
 ) first implied literals - uos
 ) Implied literals - new component - fix
 

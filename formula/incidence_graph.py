@@ -78,7 +78,6 @@ class IncidenceGraph(Graph):
         self.__update_adjacency_literal_dynamic_dictionary: bool = True             # because of variable simplification
 
         # Clause length
-        # self.__unit_clause_set: Set[int] = set()
         self.__clause_length_dictionary: Dict[int, int] = dict()
         self.__length_set_clauses_dictionary: Dict[int, Set[int]] = {0: set(), 1: set(), 2: set()}
 
@@ -172,11 +171,6 @@ class IncidenceGraph(Graph):
         if value_after not in self.__length_set_clauses_dictionary:
             self.__length_set_clauses_dictionary[value_after] = set()
         self.__length_set_clauses_dictionary[value_after].add(clause_id)
-
-        # if value_after == 1:
-        #     self.__unit_clause_set.add(clause_id)
-        # elif clause_id in self.__unit_clause_set:
-        #     self.__unit_clause_set.remove(clause_id)
 
     def __node_exist(self, node_hash: str) -> bool:
         """
@@ -387,7 +381,7 @@ class IncidenceGraph(Graph):
         # The variable does not exist in the clause
         raise ig_exception.VariableDoesNotExistInClauseException(variable, clause_id)
 
-    # region Redundant clauses
+    # region Eliminating redundant clauses
     def __get_redundant_clauses_subsumption(self) -> Set[int]:
         subsumed_clause_set = set()
         clause_dictionary: [int, Set[int]] = dict()     # key: clause, value: a set of literals that occur in the clause
@@ -441,7 +435,7 @@ class IncidenceGraph(Graph):
         return subsumed_clause_set
 
     def __get_redundant_clauses_up_redundancy(self) -> Set[int]:
-        return set()
+        raise NotImplementedError()
     # endregion
     # endregion
 
@@ -692,7 +686,7 @@ class IncidenceGraph(Graph):
 
         for clause_id in clause_id_set:
             clause_sorted_list = self.get_sorted_clause(clause_id, copy=False)
-            clause_key_string = ",".join(map(str, clause_sorted_list))
+            clause_key_string = ",".join([str(lit) for lit in clause_sorted_list])
 
             if clause_key_string not in cache:
                 cache[clause_key_string] = clause_id
@@ -847,7 +841,7 @@ class IncidenceGraph(Graph):
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
 
-        # Eliminated redundant clauses
+        # Eliminating redundant clauses
         if eliminating_redundant_clauses_enum is not None:
             eliminated_redundant_clause_set = self.get_redundant_clauses(eliminating_redundant_clauses_enum)
         else:
@@ -883,6 +877,9 @@ class IncidenceGraph(Graph):
         isolated_variable_set = set()
 
         for i, literal in enumerate(literal_list):
+            if abs(literal) in isolated_variable_set:
+                continue
+
             erc_enum_temp = None if i < len(literal_list) - 1 else eliminating_redundant_clauses_enum
             isolated_variable_set.update(self.remove_literal(literal, erc_enum_temp))
 
@@ -1183,7 +1180,6 @@ class IncidenceGraph(Graph):
         result = self.__convert_to_cnf(psc_enum.PySatCnfEnum.CNF)
 
         self.__statistics.convert_to_cnf.stop_stopwatch()   # timer (stop)
-
         return result
 
     def convert_to_2_cnf(self) -> PySat2Cnf:
@@ -1198,7 +1194,6 @@ class IncidenceGraph(Graph):
         result = self.__convert_to_cnf(psc_enum.PySatCnfEnum.TWO_CNF)
 
         self.__statistics.convert_to_2_cnf.stop_stopwatch()     # timer (stop)
-
         return result
 
     def convert_to_horn_cnf(self, renaming_function: Union[Set[int], None] = None) -> PySatHornCnf:
@@ -1214,7 +1209,6 @@ class IncidenceGraph(Graph):
         result = self.__convert_to_cnf(psc_enum.PySatCnfEnum.HORN_CNF, renaming_function)
 
         self.__statistics.convert_to_horn_cnf.stop_stopwatch()      # timer (stop)
-
         return result
 
     def is_2_cnf(self) -> bool:
@@ -1272,13 +1266,12 @@ class IncidenceGraph(Graph):
                                                                                      neg_assigned_literal_set=neg_assigned_literal_set,
                                                                                      variable_restriction_set=self.__variable_set)
 
-        self.__statistics.renamable_horn_formula_recognition_check.stop_stopwatch()     # timer (stop)
-
         if result is not None:
             self.__statistics.renamable_horn_formula_ratio.add_count(1)     # counter
         else:
             self.__statistics.renamable_horn_formula_ratio.add_count(0)     # counter
 
+        self.__statistics.renamable_horn_formula_recognition_check.stop_stopwatch()     # timer (stop)
         return result
     # endregion
 
@@ -1292,9 +1285,8 @@ class IncidenceGraph(Graph):
         literal_set = set()
 
         for binary_clause_id in binary_clause_set:
-            for variable in self.clause_id_neighbour_set(binary_clause_id):
-                literal = self.__get_literal_from_clause(variable, binary_clause_id)
-                literal_set.add(literal)
+            clause = self.get_clause(binary_clause_id, copy=False)
+            literal_set.update(clause)
 
         return literal_set
 
@@ -1474,10 +1466,10 @@ class IncidenceGraph(Graph):
                 if self.__is_node_variable(node_hash):
                     continue
 
-                clause_id = self.nodes[node_hash]["value"]
+                clause_id = self.__unhash(node_hash)
                 incidence_graph_temp.add_clause_id(clause_id)
                 for neighbour_hash in self.neighbors(node_hash):
-                    variable = self.nodes[neighbour_hash]["value"]
+                    variable = self.__unhash(neighbour_hash)
                     literal = self.__get_literal_from_clause(variable, clause_id)
                     incidence_graph_temp.add_edge(literal, clause_id)
 
@@ -1485,6 +1477,27 @@ class IncidenceGraph(Graph):
 
         self.__statistics.create_incidence_graphs_for_components.stop_stopwatch()   # timer (stop)
         return incidence_graph_set
+
+    def get_connected_components(self) -> List[Set[int]]:
+        """
+        :return: a list of connected components where a set of variables represents a connected component
+        """
+
+        self.__statistics.get_connected_components.start_stopwatch()    # timer (start)
+
+        # The incidence graph is connected => one component
+        if self.is_connected():
+            self.__statistics.get_connected_components.stop_stopwatch()     # timer (stop)
+            return [self.variable_set(copy=False)]
+
+        connected_component_list = []
+
+        for component in nx.connected_components(self):
+            connected_component_list.append(set(map(lambda variable_hash: self.__unhash(variable_hash),
+                                                    filter(lambda node_hash: self.__is_node_variable(node_hash), component))))
+
+        self.__statistics.get_connected_components.stop_stopwatch()     # timer (stop)
+        return connected_component_list
 
     def copy_incidence_graph(self) -> TIncidenceGraph:
         """
@@ -1500,10 +1513,10 @@ class IncidenceGraph(Graph):
             if self.__is_node_variable(node_hash):
                 continue
 
-            clause_id = self.nodes[node_hash]["value"]
+            clause_id = self.__unhash(node_hash)
             copy.add_clause_id(clause_id)
             for neighbour_hash in self.neighbors(node_hash):
-                variable = self.nodes[neighbour_hash]["value"]
+                variable = self.__unhash(neighbour_hash)
                 literal = self.__get_literal_from_clause(variable, clause_id)
                 copy.add_edge(literal, clause_id)
 
@@ -1518,9 +1531,9 @@ class IncidenceGraph(Graph):
     # region Magic method
     def __str__(self):
         string_temp = ""
-        clause_id_list = sorted(self.clause_id_set(copy=False))
+        clause_id_sorted_list = sorted(self.clause_id_set(copy=False))
 
-        for clause_id in clause_id_list:
+        for clause_id in clause_id_sorted_list:
             clause = self.get_sorted_clause(clause_id, copy=False)
             string_temp = "\n".join((string_temp, f"Clause {clause_id}: {clause}"))
 
