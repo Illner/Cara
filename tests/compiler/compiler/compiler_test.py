@@ -9,11 +9,12 @@ from tests.test_abstract import TestAbstract
 import exception.cara_exception as c_exception
 
 # Import enum
+import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
+import compiler.enum.component_caching_enum as cc_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import formula.enum.eliminating_redundant_clauses_enum as erc_enum
-import compiler.enum.component_caching_enum as cc_enum
 import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
@@ -57,74 +58,76 @@ class CompilerTest(TestAbstract):
                                                                 for decision_heuristic_vsids_d4_version in [True, False]:
                                                                     for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
                                                                         for component_caching_enum in cc_enum.component_caching_enum_values:
-                                                                            try:
-                                                                                count += 1
+                                                                            for base_class_enum_set in [set()]:     #, {bc_enum.BaseClassEnum.TWO_CNF}, {bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}, {bc_enum.BaseClassEnum.TWO_CNF, bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}]:
+                                                                                try:
+                                                                                    count += 1
 
-                                                                                actual_result = "\n".join((actual_result,
-                                                                                                           f"File: {file_name}, "
-                                                                                                           f"implied literals: {il_enum.ImpliedLiteralsEnum._value2member_map_[implied_literals_enum].name}, "
-                                                                                                           f"first implied literals: {il_enum.FirstImpliedLiteralsEnum._value2member_map_[first_implied_literals_enum].name}, "
-                                                                                                           f"cache: {hpc_enum.HypergraphPartitioningCacheEnum._value2member_map_[hp_cache_enum].name}, "
-                                                                                                           f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum._value2member_map_[hp_variable_simplification_enum].name}, "
-                                                                                                           f"subsumed threshold: {subsumed_threshold}, "
-                                                                                                           f"new cut set threshold: {new_cut_set_threshold}, "
-                                                                                                           f"preprocessing: {preprocessing}, "
-                                                                                                           f"decision heuristic: {dh_enum.DecisionHeuristicEnum._value2member_map_[decision_heuristic_enum].name}, "
-                                                                                                           f"implied literals - preselection heuristic: {ph_enum.PreselectionHeuristicEnum._value2member_map_[implied_literals_preselection_heuristic_enum].name}, "
-                                                                                                           f"component caching: {cc_enum.ComponentCachingEnum._value2member_map_[component_caching_enum].name}, "
-                                                                                                           f"eliminating redundant clauses: {erc_enum.EliminatingRedundantClausesEnum._value2member_map_[eliminating_redundant_clauses_enum].name}, "
-                                                                                                           f"eliminating redundant clauses threshold: {eliminating_redundant_clauses_threshold}, "
-                                                                                                           f"use more solvers: {use_more_solvers}, "
-                                                                                                           f"component caching after BCP: {component_caching_after_unit_propagation}, "
-                                                                                                           f"decision heuristic - \"D4 version\" of VSIDS score: {decision_heuristic_vsids_d4_version}, "
-                                                                                                           f"decision heuristic - weight for satisfied clauses: {decision_heuristic_weight_for_satisfied_clauses}"))
+                                                                                    actual_result = "\n".join((actual_result,
+                                                                                                               f"File: {file_name}, "
+                                                                                                               f"implied literals: {il_enum.ImpliedLiteralsEnum._value2member_map_[implied_literals_enum].name}, "
+                                                                                                               f"first implied literals: {il_enum.FirstImpliedLiteralsEnum._value2member_map_[first_implied_literals_enum].name}, "
+                                                                                                               f"cache: {hpc_enum.HypergraphPartitioningCacheEnum._value2member_map_[hp_cache_enum].name}, "
+                                                                                                               f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum._value2member_map_[hp_variable_simplification_enum].name}, "
+                                                                                                               f"subsumed threshold: {subsumed_threshold}, "
+                                                                                                               f"new cut set threshold: {new_cut_set_threshold}, "
+                                                                                                               f"preprocessing: {preprocessing}, "
+                                                                                                               f"decision heuristic: {dh_enum.DecisionHeuristicEnum._value2member_map_[decision_heuristic_enum].name}, "
+                                                                                                               f"implied literals - preselection heuristic: {ph_enum.PreselectionHeuristicEnum._value2member_map_[implied_literals_preselection_heuristic_enum].name}, "
+                                                                                                               f"component caching: {cc_enum.ComponentCachingEnum._value2member_map_[component_caching_enum].name}, "
+                                                                                                               f"eliminating redundant clauses: {erc_enum.EliminatingRedundantClausesEnum._value2member_map_[eliminating_redundant_clauses_enum].name}, "
+                                                                                                               f"eliminating redundant clauses threshold: {eliminating_redundant_clauses_threshold}, "
+                                                                                                               f"use more solvers: {use_more_solvers}, "
+                                                                                                               f"component caching after BCP: {component_caching_after_unit_propagation}, "
+                                                                                                               f"decision heuristic - \"D4 version\" of VSIDS score: {decision_heuristic_vsids_d4_version}, "
+                                                                                                               f"decision heuristic - weight for satisfied clauses: {decision_heuristic_weight_for_satisfied_clauses}, "
+                                                                                                               f"base class: {str(base_class_enum_set)}"))
 
-                                                                                cnf = Cnf(file_path)
-                                                                                compiler = Compiler(cnf=cnf,
-                                                                                                    smooth=True,
-                                                                                                    ub_factor=0.1,
-                                                                                                    preprocessing=preprocessing,
-                                                                                                    use_more_solvers=use_more_solvers,
-                                                                                                    subsumption_threshold=subsumed_threshold,
-                                                                                                    new_cut_set_threshold=new_cut_set_threshold,
-                                                                                                    decision_heuristic_enum=decision_heuristic_enum,
-                                                                                                    sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                                                                                                    base_class_enum_set=set(),
-                                                                                                    implied_literals_enum=implied_literals_enum,
-                                                                                                    implied_literals_preselection_heuristic_enum=implied_literals_preselection_heuristic_enum,
-                                                                                                    first_implied_literals_enum=first_implied_literals_enum,
-                                                                                                    component_caching_enum=component_caching_enum,
-                                                                                                    component_caching_after_unit_propagation=component_caching_after_unit_propagation,
-                                                                                                    eliminating_redundant_clauses_enum=eliminating_redundant_clauses_enum,
-                                                                                                    eliminating_redundant_clauses_threshold=eliminating_redundant_clauses_threshold,
-                                                                                                    hp_cache_enum=hp_cache_enum,
-                                                                                                    hp_software_enum=hp_software_enum,
-                                                                                                    hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
-                                                                                                    hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
-                                                                                                    hp_variable_simplification_enum=hp_variable_simplification_enum,
-                                                                                                    hp_limit_number_of_clauses_cache=(None, 500),
-                                                                                                    hp_limit_number_of_variables_cache=(None, 500),
-                                                                                                    decision_heuristic_vsids_d4_version=decision_heuristic_vsids_d4_version,
-                                                                                                    decision_heuristic_weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses)
-                                                                                circuit = compiler.create_circuit()
-                                                                                number_of_models = circuit.model_counting(set())
-                                                                                real_number_of_models = int(cnf.comments)
+                                                                                    cnf = Cnf(file_path)
+                                                                                    compiler = Compiler(cnf=cnf,
+                                                                                                        smooth=True,
+                                                                                                        ub_factor=0.1,
+                                                                                                        preprocessing=preprocessing,
+                                                                                                        use_more_solvers=use_more_solvers,
+                                                                                                        subsumption_threshold=subsumed_threshold,
+                                                                                                        new_cut_set_threshold=new_cut_set_threshold,
+                                                                                                        decision_heuristic_enum=decision_heuristic_enum,
+                                                                                                        sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
+                                                                                                        base_class_enum_set=base_class_enum_set,
+                                                                                                        implied_literals_enum=implied_literals_enum,
+                                                                                                        implied_literals_preselection_heuristic_enum=implied_literals_preselection_heuristic_enum,
+                                                                                                        first_implied_literals_enum=first_implied_literals_enum,
+                                                                                                        component_caching_enum=component_caching_enum,
+                                                                                                        component_caching_after_unit_propagation=component_caching_after_unit_propagation,
+                                                                                                        eliminating_redundant_clauses_enum=eliminating_redundant_clauses_enum,
+                                                                                                        eliminating_redundant_clauses_threshold=eliminating_redundant_clauses_threshold,
+                                                                                                        hp_cache_enum=hp_cache_enum,
+                                                                                                        hp_software_enum=hp_software_enum,
+                                                                                                        hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
+                                                                                                        hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
+                                                                                                        hp_variable_simplification_enum=hp_variable_simplification_enum,
+                                                                                                        hp_limit_number_of_clauses_cache=(None, 500),
+                                                                                                        hp_limit_number_of_variables_cache=(None, 500),
+                                                                                                        decision_heuristic_vsids_d4_version=decision_heuristic_vsids_d4_version,
+                                                                                                        decision_heuristic_weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses)
+                                                                                    circuit = compiler.create_circuit()
+                                                                                    number_of_models = circuit.model_counting(set())
+                                                                                    real_number_of_models = int(cnf.comments)
 
-                                                                                if number_of_models == real_number_of_models:
-                                                                                    actual_result = "\n".join((actual_result, f"Correct", ""))
-                                                                                    result_temp = "|"
-                                                                                else:
-                                                                                    actual_result = "\n".join((actual_result, f"Incorrect: {number_of_models} vs {real_number_of_models}", ""))
-                                                                                    result_temp = "X"
+                                                                                    if number_of_models == real_number_of_models:
+                                                                                        actual_result = "\n".join((actual_result, f"Correct", ""))
+                                                                                        result_temp = "|"
+                                                                                    else:
+                                                                                        actual_result = "\n".join((actual_result, f"Incorrect: {number_of_models} vs {real_number_of_models}", ""))
+                                                                                        result_temp = "X"
 
-                                                                                print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "), flush=True)
+                                                                                    print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "), flush=True)
 
-                                                                                if count % 1000 == 0:
-                                                                                    print()
+                                                                                    if count % 1000 == 0:
+                                                                                        print()
 
-                                                                            except (c_exception.CaraException, Exception) as err:
-                                                                                print(f"\nError - {str(err)}", end="\n", flush=True)
-                                                                                actual_result = "\n".join((actual_result, str(err), ""))
+                                                                                except (c_exception.CaraException, Exception) as err:
+                                                                                    print(f"\nError - {str(err)}", end="\n", flush=True)
+                                                                                    actual_result = "\n".join((actual_result, str(err), ""))
 
         print()
         return actual_result

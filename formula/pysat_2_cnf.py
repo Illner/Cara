@@ -69,6 +69,7 @@ class PySat2Cnf(PySatCnf):
 
         result_model: List[int] = []
 
+        # Variable restriction
         if variable_restriction_set is None:
             variable_to_try_set = self.get_variable_set(copy=True)
         else:

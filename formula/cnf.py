@@ -395,5 +395,5 @@ class Cnf:
 
     @property
     def incidence_graph_statistics(self) -> IncidenceGraphStatistics:
-        return self.get_incidence_graph().statistics
+        return self.get_incidence_graph(copy=False).statistics
     # endregion

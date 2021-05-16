@@ -67,7 +67,7 @@ class PySatCnf(CNF):
                 variable_set.remove(var)
 
         variable_list = list(variable_set)
-        mask_iterator = itertools.product([0, 1], repeat=len(variable_list))
+        mask_iterator = itertools.product([+1, -1], repeat=len(variable_list))
 
         solver = Minisat22(bootstrap_with=self.clauses)
         for lit in assignment_list:
@@ -81,10 +81,7 @@ class PySatCnf(CNF):
             # Create an assignment
             for i, sign in enumerate(mask):
                 var = variable_list[i]
-                if sign:
-                    assignment_temp.append(var)
-                else:
-                    assignment_temp.append(-var)
+                assignment_temp.append(sign * var)
 
             is_sat = solver.solve(assumptions=assignment_temp)
 
@@ -100,8 +97,8 @@ class PySatCnf(CNF):
         result = " ".join(('p cnf', str(self.number_of_variables), str(self.number_of_clauses)))
 
         for clause in self.clauses:
-            clause_temp = [-lit if abs(lit) in renaming_function else lit for lit in clause]
-            result = "\n".join((result, " ".join((" ".join(map(str, sorted(clause_temp))), "0"))))
+            clause_temp = [str(-lit) if abs(lit) in renaming_function else str(lit) for lit in clause]
+            result = "\n".join((result, " ".join((" ".join(sorted(clause_temp)), "0"))))
 
         return result
     # endregion
