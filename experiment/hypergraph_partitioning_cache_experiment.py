@@ -92,6 +92,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                                                                                       implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                                                                       implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.CRA,
                                                                                       first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP,
+                                                                                      first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
                                                                                       component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
                                                                                       component_caching_after_unit_propagation=True,
                                                                                       eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.SUBSUMPTION,

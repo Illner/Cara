@@ -32,7 +32,7 @@ from compiler.preselection_heuristic.clause_reduction_approximation_heuristic im
 import exception.cara_exception as c_exception
 
 # Import enum
-import compiler.enum.base_class_enum as bs_enum
+import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.component_caching_enum as cc_enum
@@ -53,12 +53,9 @@ class Compiler:
     """
 
     """
-    Private Cnf cnf
     Private bool smooth
-    Private Circuit circuit
     Private bool preprocessing
     Private bool use_more_solvers
-    Private Statistics statistics
     Private bool cut_set_try_cache
     Private float new_cut_set_threshold
     Private float new_cut_set_threshold_reduction           # when the cache for cut sets can be used
@@ -66,10 +63,14 @@ class Compiler:
     Private int eliminating_redundant_clauses_threshold
     Private bool component_caching_after_unit_propagation
     
+    Private Cnf cnf
+    Private Circuit circuit
+    Private Statistics statistics
     Private ComponentCachingAbstract component_caching
     Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
     Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
+    Private PreselectionHeuristicAbstract first_implied_literals_preselection_heuristic
     
     Private SatSolverEnum sat_solver_enum
     Private ImpliedLiteralsEnum implied_literals_enum
@@ -91,10 +92,11 @@ class Compiler:
                  new_cut_set_threshold: float,
                  decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,
                  sat_solver_enum: ss_enum.SatSolverEnum,
-                 base_class_enum_set: Set[bs_enum.BaseClassEnum],
+                 base_class_enum_set: Set[bc_enum.BaseClassEnum],
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
+                 first_implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                  component_caching_enum: cc_enum.ComponentCachingEnum,
                  component_caching_after_unit_propagation: bool,
                  eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum,
@@ -108,10 +110,13 @@ class Compiler:
                  hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  cut_set_try_cache: bool = False,
                  new_cut_set_threshold_reduction: float = 1,
-                 decision_heuristic_mixed_difference_enum: mdh_enum.MixedDifferenceHeuristicEnum = mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER,
                  implied_literals_preselection_heuristic_prop_z_depth_threshold: int = 5,
                  implied_literals_preselection_heuristic_prop_z_number_of_variables_lower_bound: Union[int, None] = 10,
                  implied_literals_preselection_heuristic_cra_rank: float = 0.1,
+                 first_implied_literals_preselection_heuristic_prop_z_depth_threshold: int = 5,
+                 first_implied_literals_preselection_heuristic_prop_z_number_of_variables_lower_bound: Union[int, None] = 10,
+                 first_implied_literals_preselection_heuristic_cra_rank: float = 0.1,
+                 decision_heuristic_mixed_difference_enum: mdh_enum.MixedDifferenceHeuristicEnum = mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER,
                  decision_heuristic_vsids_d4_version: bool = True,
                  decision_heuristic_vsads_p_constant_factor: float = 1,
                  decision_heuristic_vsads_q_constant_factor: float = 0.5,
@@ -134,7 +139,7 @@ class Compiler:
         self.__use_more_solvers: bool = use_more_solvers
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__new_cut_set_threshold: float = new_cut_set_threshold
-        self.__base_class_enum_set: Set[bs_enum.BaseClassEnum] = base_class_enum_set
+        self.__base_class_enum_set: Set[bc_enum.BaseClassEnum] = base_class_enum_set
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__component_caching_after_unit_propagation: bool = component_caching_after_unit_propagation
         self.__eliminating_redundant_clauses_threshold: Union[int, None] = eliminating_redundant_clauses_threshold
@@ -161,6 +166,13 @@ class Compiler:
                                                            prop_z_number_of_variables_lower_bound=implied_literals_preselection_heuristic_prop_z_number_of_variables_lower_bound,
                                                            cra_rank=implied_literals_preselection_heuristic_cra_rank)
 
+        # First implied literals - preselection heuristic
+        self.__set_first_implied_literals_preselection_heuristic(first_implied_literals_preselection_heuristic_enum=first_implied_literals_preselection_heuristic_enum,
+                                                                 prop_z_depth_threshold=first_implied_literals_preselection_heuristic_prop_z_depth_threshold,
+                                                                 prop_z_number_of_variables_lower_bound=first_implied_literals_preselection_heuristic_prop_z_number_of_variables_lower_bound,
+                                                                 cra_rank=first_implied_literals_preselection_heuristic_cra_rank)
+
+        # Hypergraph partitioning
         self.__hypergraph_partitioning = HypergraphPartitioning(cnf=self.__cnf,
                                                                 ub_factor=ub_factor,
                                                                 subsumption_threshold=subsumption_threshold,
@@ -173,9 +185,11 @@ class Compiler:
                                                                 limit_number_of_variables_cache=hp_limit_number_of_variables_cache,
                                                                 statistics=self.__statistics.hypergraph_partitioning_statistics)
 
+        # TODO check parameters (first implied literals)
+
     # region Private method
     def __set_component_caching(self, component_caching_enum: cc_enum.ComponentCachingEnum):
-        # None
+        # NONE
         if component_caching_enum == cc_enum.ComponentCachingEnum.NONE:
             self.__component_caching = NoneCaching()
             return
@@ -312,25 +326,51 @@ class Compiler:
                                                           f"this type of preselection heuristic ({implied_literals_preselection_heuristic_enum.name}) is not implemented")
     # endregion
 
+    def __set_first_implied_literals_preselection_heuristic(self, first_implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
+                                                            prop_z_depth_threshold: int, prop_z_number_of_variables_lower_bound: Union[int, None],
+                                                            cra_rank: float):
+        # NONE
+        if first_implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.NONE:
+            self.__first_implied_literals_preselection_heuristic = NoneHeuristic(statistics=self.__statistics.preselection_heuristic_first_implied_literals_statistics)
+            return
+
+        # PROP_Z
+        if first_implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.PROP_Z:
+            self.__first_implied_literals_preselection_heuristic = PropZHeuristic(depth_threshold=prop_z_depth_threshold,
+                                                                                  number_of_variables_lower_bound=prop_z_number_of_variables_lower_bound,
+                                                                                  statistics=self.__statistics.preselection_heuristic_first_implied_literals_statistics)
+            return
+
+        # CRA
+        if first_implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.CRA:
+            self.__first_implied_literals_preselection_heuristic = ClauseReductionApproximationHeuristic(rank=cra_rank,
+                                                                                                         total_number_of_variables=self.__cnf.real_number_of_variables,
+                                                                                                         statistics=self.__statistics.preselection_heuristic_first_implied_literals_statistics)
+            return
+
+        raise c_exception.FunctionNotImplementedException("set_first_implied_literals_preselection_heuristic",
+                                                          f"this type of preselection heuristic ({first_implied_literals_preselection_heuristic_enum.name}) is not implemented")
+
     # region Public method
     def create_circuit(self) -> Circuit:
         """
+        Create the circuit
         :return: the created circuit
         """
 
         self.__statistics.compiler_statistics.create_circuit.start_stopwatch()  # timer (start - create_circuit)
 
-        incidence_graph: IncidenceGraph = self.__cnf.get_incidence_graph()
+        incidence_graph: IncidenceGraph = self.__cnf.get_incidence_graph(copy=False)
         incidence_graph_set: Set[IncidenceGraph] = {incidence_graph}
 
         # More components exist
-        if incidence_graph.number_of_components() > 1:
+        if not incidence_graph.is_connected():
             incidence_graph_set = incidence_graph.create_incidence_graphs_for_components()
 
         node_id_set: Set[int] = set()
         for incidence_graph in incidence_graph_set:
             # Renamable Horn CNF
-            if bs_enum.BaseClassEnum.RENAMABLE_HORN_CNF in self.__base_class_enum_set:
+            if bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF in self.__base_class_enum_set:
                 incidence_graph.initialize_renamable_horn_formula_recognition()
 
             component = Component(cnf=self.__cnf,
@@ -353,6 +393,7 @@ class Compiler:
                                   implied_literals_enum=self.__implied_literals_enum,
                                   implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                   first_implied_literals_enum=self.__first_implied_literals_enum,
+                                  first_implied_literals_preselection_heuristic=self.__first_implied_literals_preselection_heuristic,
                                   statistics=self.__statistics,
                                   preprocessing=self.__preprocessing)
             node_id = component.create_circuit(depth=1)
@@ -368,8 +409,7 @@ class Compiler:
             self.__circuit.set_root(root_id)
 
         # Add unused variables
-        node_id_set = set()
-        variable_in_circuit_set = self.__circuit.get_node(self.__circuit.root_id)._get_variable_in_circuit_set(copy=False)
+        variable_in_circuit_set = self.__circuit.get_node(root_id)._get_variable_in_circuit_set(copy=False)
         variable_in_formula_set = self.__cnf.get_variable_set(copy=False)
         unused_variable_set = variable_in_formula_set.difference(variable_in_circuit_set)
 
@@ -377,14 +417,15 @@ class Compiler:
         sorted_list_temp = sorted(set(range(1, self.__cnf.number_of_variables + 1)).difference(variable_in_formula_set))
         unused_variable_set.update(set(sorted_list_temp[:number_of_unused_variables]))
 
+        node_id_set = set()
         for var in unused_variable_set:
             child_id_set = self.__circuit.create_literal_leaf_set({var, -var})
             node_id = self.__circuit.create_or_node(child_id_set, decision_variable=var)
             node_id_set.add(node_id)
 
         if node_id_set:
-            node_id = self.__circuit.create_and_node({root_id}.union(node_id_set))
-            self.__circuit.set_root(node_id)
+            root_id = self.__circuit.create_and_node({root_id}.union(node_id_set))
+            self.__circuit.set_root(root_id)
 
         self.__statistics.compiler_statistics.smooth.start_stopwatch()  # timer (start - smooth)
 

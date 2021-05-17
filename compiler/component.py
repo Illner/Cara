@@ -45,6 +45,7 @@ class Component:
     Private HypergraphPartitioning hypergraph_partitioning
     Private EliminatingRedundantClausesEnum eliminating_redundant_clauses_enum
     Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
+    Private PreselectionHeuristicAbstract first_implied_literals_preselection_heuristic
     
     Private SatSolverEnum sat_solver_enum
     Private ImpliedLiteralsEnum implied_literals_enum
@@ -73,6 +74,7 @@ class Component:
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  implied_literals_preselection_heuristic: PreselectionHeuristicAbstract,
                  first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
+                 first_implied_literals_preselection_heuristic: PreselectionHeuristicAbstract,
                  statistics: Statistics,
                  preprocessing: bool = False):
         self.__cnf: Cnf = cnf
@@ -90,6 +92,7 @@ class Component:
         self.__decision_heuristic: DecisionHeuristicAbstract = decision_heuristic
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
         self.__implied_literals_preselection_heuristic: PreselectionHeuristicAbstract = implied_literals_preselection_heuristic
+        self.__first_implied_literals_preselection_heuristic: PreselectionHeuristicAbstract = first_implied_literals_preselection_heuristic
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
@@ -432,6 +435,7 @@ class Component:
                                            implied_literals_enum=self.__implied_literals_enum,
                                            implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                            first_implied_literals_enum=self.__first_implied_literals_enum,
+                                           first_implied_literals_preselection_heuristic=self.__first_implied_literals_preselection_heuristic,
                                            statistics=self.__statistics)
                 cut_set_restriction = cut_set.intersection(incidence_graph.variable_set(copy=False))
                 node_id = component_temp.create_circuit(depth=(depth + 1),
