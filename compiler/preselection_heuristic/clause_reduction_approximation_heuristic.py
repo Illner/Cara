@@ -3,6 +3,7 @@ import math
 from typing import Set, Dict, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
+from compiler_statistics.compiler.preselection_heuristic_statistics import PreselectionHeuristicStatistics
 
 # Import exception
 import exception.compiler.heuristic_exception as h_exception
@@ -19,8 +20,9 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
     Private int number_of_returned_variables
     """
 
-    def __init__(self, rank: float, total_number_of_variables: int, number_of_returned_variables: Union[int, None] = None):
-        super().__init__()
+    def __init__(self, rank: float, total_number_of_variables: int, number_of_returned_variables: Union[int, None] = None,
+                 statistics: Union[PreselectionHeuristicStatistics, None] = None):
+        super().__init__(statistics)
 
         self.__rank: float = rank
         self.__total_number_of_variables: int = total_number_of_variables
@@ -33,12 +35,18 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
 
     # region Override method
     def preselect_variables(self, variable_restriction_set: Union[Set[int], None], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
+        self._statistics.get_preselected_variables.start_stopwatch()    # timer (start)
+
         variable_restriction_set = incidence_graph.variable_set(copy=False) if variable_restriction_set is None else variable_restriction_set
 
         approximated_set_dictionary: Dict[int, Set[int]] = dict()           # key: literal, value: set of literals
         occurrences_in_binary_clauses_dictionary: Dict[int, int] = dict()   # key: literal, value: number of binary clauses where the literal occurs
 
         if len(variable_restriction_set) <= self.__number_of_returned_variables:
+            self._update_statistics(preselected_variable_set=variable_restriction_set,
+                                    variable_restriction_set=variable_restriction_set)
+
+            self._statistics.get_preselected_variables.stop_stopwatch()     # timer (stop)
             return variable_restriction_set
 
         # Compute the approximated set
@@ -90,5 +98,9 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
         variable_set = sorted(score_dictionary, key=score_dictionary.get, reverse=True)
         variable_set = set(variable_set[:self.__number_of_returned_variables])
 
+        self._update_statistics(preselected_variable_set=variable_set,
+                                variable_restriction_set=variable_restriction_set)
+
+        self._statistics.get_preselected_variables.stop_stopwatch()     # timer (stop)
         return variable_set
     # endregion

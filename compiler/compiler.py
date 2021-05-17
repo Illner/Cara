@@ -291,19 +291,21 @@ class Compiler:
                                                       cra_rank: float):
         # NONE
         if implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.NONE:
-            self.__implied_literals_preselection_heuristic = NoneHeuristic()
+            self.__implied_literals_preselection_heuristic = NoneHeuristic(statistics=self.__statistics.preselection_heuristic_implied_literals_statistics)
             return
 
         # PROP_Z
         if implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.PROP_Z:
             self.__implied_literals_preselection_heuristic = PropZHeuristic(depth_threshold=prop_z_depth_threshold,
-                                                                            number_of_variables_lower_bound=prop_z_number_of_variables_lower_bound)
+                                                                            number_of_variables_lower_bound=prop_z_number_of_variables_lower_bound,
+                                                                            statistics=self.__statistics.preselection_heuristic_implied_literals_statistics)
             return
 
         # CRA
         if implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.CRA:
             self.__implied_literals_preselection_heuristic = ClauseReductionApproximationHeuristic(rank=cra_rank,
-                                                                                                   total_number_of_variables=self.__cnf.real_number_of_variables)
+                                                                                                   total_number_of_variables=self.__cnf.real_number_of_variables,
+                                                                                                   statistics=self.__statistics.preselection_heuristic_implied_literals_statistics)
             return
 
         raise c_exception.FunctionNotImplementedException("set_implied_literals_preselection_heuristic",

@@ -7,6 +7,7 @@ from compiler_statistics.compiler.solver_statistics import SolverStatistics
 from compiler_statistics.compiler.compiler_statistics import CompilerStatistics
 from compiler_statistics.compiler.component_statistics import ComponentStatistics
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
+from compiler_statistics.compiler.preselection_heuristic_statistics import PreselectionHeuristicStatistics
 from compiler_statistics.compiler.hypergraph_partitioning_statistics import HypergraphPartitioningStatistics
 
 
@@ -24,6 +25,8 @@ class Statistics:
     Private ComponentStatistics component_statistics
     Private IncidenceGraphStatistics incidence_graph_statistics
     Private HypergraphPartitioningStatistics hypergraph_partitioning_statistics
+    Private PreselectionHeuristicStatistics preselection_heuristic_implied_literals_statistics
+    Private PreselectionHeuristicStatistics preselection_heuristic_first_implied_literals_statistics
     """
 
     def __init__(self, cnf_statistics: Union[CnfStatistics, None] = None,
@@ -60,6 +63,14 @@ class Statistics:
         self.__component_statistics: ComponentStatistics = ComponentStatistics()
         self.__template_list.append(self.__component_statistics)
 
+        # Preselection heuristic - implied literals
+        self.__preselection_heuristic_implied_literals_statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics(name="implied literals")
+        self.__template_list.append(self.__preselection_heuristic_implied_literals_statistics)
+
+        # Preselection heuristic - first implied literals
+        self.__preselection_heuristic_first_implied_literals_statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics(name="first implied literals")
+        self.__template_list.append(self.__preselection_heuristic_first_implied_literals_statistics)
+
     # region Magic method
     def __str__(self):
         string_temp = ""
@@ -94,4 +105,12 @@ class Statistics:
     @property
     def component_statistics(self) -> ComponentStatistics:
         return self.__component_statistics
+
+    @property
+    def preselection_heuristic_implied_literals_statistics(self) -> PreselectionHeuristicStatistics:
+        return self.__preselection_heuristic_implied_literals_statistics
+
+    @property
+    def preselection_heuristic_first_implied_literals_statistics(self) -> PreselectionHeuristicStatistics:
+        return self.__preselection_heuristic_first_implied_literals_statistics
     # endregion

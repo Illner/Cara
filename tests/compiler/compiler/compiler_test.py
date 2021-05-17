@@ -53,11 +53,11 @@ class CompilerTest(TestAbstract):
                                             for component_caching_after_unit_propagation in [True, False]:
                                                 for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
                                                     for first_implied_literals_enum in il_enum.first_implied_literals_enum_values:
-                                                        for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
-                                                            for implied_literals_enum in il_enum.implied_literals_enum_values:
-                                                                for decision_heuristic_vsids_d4_version in [True, False]:
-                                                                    for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
-                                                                        for component_caching_enum in cc_enum.component_caching_enum_values:
+                                                        for implied_literals_enum in il_enum.implied_literals_enum_values:
+                                                            for decision_heuristic_vsids_d4_version in [True, False]:
+                                                                for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
+                                                                    for component_caching_enum in cc_enum.component_caching_enum_values:
+                                                                        for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
                                                                             for base_class_enum_set in [set()]:     #, {bc_enum.BaseClassEnum.TWO_CNF}, {bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}, {bc_enum.BaseClassEnum.TWO_CNF, bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}]:
                                                                                 try:
                                                                                     count += 1

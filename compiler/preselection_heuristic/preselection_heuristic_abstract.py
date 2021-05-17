@@ -3,6 +3,7 @@ import random
 from typing import Set, Union
 from abc import ABC, abstractmethod
 from formula.incidence_graph import IncidenceGraph
+from compiler_statistics.compiler.preselection_heuristic_statistics import PreselectionHeuristicStatistics
 
 
 class PreselectionHeuristicAbstract(ABC):
@@ -10,8 +11,16 @@ class PreselectionHeuristicAbstract(ABC):
     Preselection heuristic
     """
 
-    def __init__(self):
-        pass
+    """
+    Protected PreselectionHeuristicStatistics statistics
+    """
+
+    def __init__(self, statistics: Union[PreselectionHeuristicStatistics, None] = None):
+        # Statistics
+        if statistics is None:
+            self._statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics()
+        else:
+            self._statistics: PreselectionHeuristicStatistics = statistics
 
     # region Abstract method
     @abstractmethod
@@ -45,4 +54,17 @@ class PreselectionHeuristicAbstract(ABC):
         else:
             randomly_picked_variable_set = set(random.sample(complement_variable_set, number_of_missing_variables))
             current_variable_set.update(randomly_picked_variable_set)
+
+    def _update_statistics(self, preselected_variable_set: Set[int], variable_restriction_set: Set[int]) -> None:
+        preselected_variable_set_len = len(preselected_variable_set)
+        variable_restriction_set_len = len(variable_restriction_set)
+
+        # All variables are preselected
+        if preselected_variable_set_len == variable_restriction_set_len:
+            self._statistics.all_variables_preselected.add_count(1)
+        else:
+            self._statistics.all_variables_preselected.add_count(0)
+
+        self._statistics.number_of_preselected_variables.add_count(preselected_variable_set_len)
+        self._statistics.ratio_of_preselected_variables.add_count(preselected_variable_set_len / variable_restriction_set_len)
     # endregion

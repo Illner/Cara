@@ -139,6 +139,10 @@ class Component:
         :return: a set of implied literals
         """
 
+        # The incidence graph is empty
+        if self.__incidence_graph.number_of_nodes() == 0:
+            return set()
+
         # NONE
         if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.NONE:
             return set()
@@ -157,11 +161,9 @@ class Component:
            self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP_ITERATION:
             only_one_iteration = True if self.__implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP else False
 
-            self.__statistics.component_statistics.implied_literals_preselection_heuristic.start_stopwatch()    # timer (start - preselection heuristic)
             preselection_set = self.__implied_literals_preselection_heuristic.preselect_variables(variable_restriction_set=None,
                                                                                                   incidence_graph=self.__incidence_graph,
                                                                                                   depth=depth)
-            self.__statistics.component_statistics.implied_literals_preselection_heuristic.stop_stopwatch()     # timer (stop - preselection heuristic)
 
             result = self.__solver.iterative_implicit_unit_propagation(assignment_list=self.__assignment_list,
                                                                        only_one_iteration=only_one_iteration,
