@@ -11,11 +11,13 @@ class ComponentStatistics(StatisticsTemplateAbstract):
 
     """
     Private StatisticsComponentTimer get_implied_literals
+    Private StatisticsComponentTimer get_first_implied_literals
     Private StatisticsComponentTimer get_cut_set
     Private StatisticsComponentTimer get_decision_variable_from_cut_set
     Private StatisticsComponentTimer cut_set_try_cache
     Private StatisticsComponentTimer component_caching_generate_key
     Private StatisticsComponentTimer component_caching_after_generate_key
+    Private StatisticsComponentTimer is_suggested_new_cut_set
     
     Private StatisticsComponentCounter unsatisfiable
     Private StatisticsComponentCounter implied_literal
@@ -38,6 +40,9 @@ class ComponentStatistics(StatisticsTemplateAbstract):
 
         self.__get_implied_literals: StatisticsComponentTimer = StatisticsComponentTimer("get implied literals")
         self._component_list.append(self.__get_implied_literals)
+
+        self.__get_first_implied_literals: StatisticsComponentTimer = StatisticsComponentTimer("get first implied literals")
+        self._component_list.append(self.__get_first_implied_literals)
 
         self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get cut set")
         self._component_list.append(self.__get_cut_set)
@@ -84,6 +89,9 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__recompute_cut_set: StatisticsComponentCounter = StatisticsComponentCounter("recompute cut set")
         self._component_list.append(self.__recompute_cut_set)
 
+        self.__is_suggested_new_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("is suggested new cut set")
+        self._component_list.append(self.__is_suggested_new_cut_set)
+
         self.__cut_set_try_cache: StatisticsComponentTimer = StatisticsComponentTimer("cut set try cache")
         self._component_list.append(self.__cut_set_try_cache)
 
@@ -100,6 +108,10 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def get_implied_literals(self) -> StatisticsComponentTimer:
         return self.__get_implied_literals
+
+    @property
+    def get_first_implied_literals(self) -> StatisticsComponentTimer:
+        return self.__get_first_implied_literals
 
     @property
     def get_cut_set(self) -> StatisticsComponentTimer:
@@ -160,6 +172,10 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def recompute_cut_set(self) -> StatisticsComponentCounter:
         return self.__recompute_cut_set
+
+    @property
+    def is_suggested_new_cut_set(self) -> StatisticsComponentTimer:
+        return self.__is_suggested_new_cut_set
 
     @property
     def cut_set_try_cache(self) -> StatisticsComponentTimer:

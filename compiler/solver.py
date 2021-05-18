@@ -25,11 +25,10 @@ class Solver:
     Private PySatCnf cnf
     Private Set<int> variable_set
     Private bool extended_pysat_imported
-    Private Set<int> first_implied_literal_set  # first implied literals (without any assumption)
     Private SatSolverEnum sat_solver_enum
+    Private Set<int> first_implied_literal_set  # first implied literals (without any assumption)
 
     Private Backbones backbones
-    
     Private SolverStatistics statistics
 
     Private Solver sat_main                     # main SAT solver
@@ -40,7 +39,7 @@ class Solver:
 
     def __init__(self, cnf: Cnf,
                  sat_solver_enum: ss_enum.SatSolverEnum,
-                 first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
+                 first_implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  clause_id_set: Union[Set[int], None] = None,
                  incidence_graph: Union[IncidenceGraph, None] = None,
                  propagate_sat_solver_enum: Union[ss_enum.PropagateSatSolverEnum, None] = None,
@@ -143,12 +142,12 @@ class Solver:
         self.__first_implied_literal_set: Set[int] = set()
 
         # IMPLICIT_BCP, IMPLICIT_BCP_ITERATION
-        if (first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP) or \
-           (first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP_ITERATION):
-            only_one_iteration = True if first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP else False
+        if (first_implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP) or \
+           (first_implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP_ITERATION):
+            only_one_iteration = True if first_implied_literals_enum == il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP else False
             temp = self.iterative_implicit_unit_propagation([], only_one_iteration=only_one_iteration)
         # BACKBONE
-        elif first_implied_literals_enum == il_enum.FirstImpliedLiteralsEnum.BACKBONE:
+        elif first_implied_literals_enum == il_enum.ImpliedLiteralsEnum.BACKBONE:
             temp = self.get_backbone_literals([])
         # Not supported
         else:

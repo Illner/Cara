@@ -37,7 +37,7 @@ class HypergraphPartitioningTest(TestAbstract):
                 cnf = Cnf(file_path)
                 solver = Solver(cnf=cnf,
                                 sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                                first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP)
+                                first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP)
 
                 for cache_enum in hpc_enum.hpc_enum_values:
                     for variable_simplification_enum in hpvs_enum.hpvs_enum_values:

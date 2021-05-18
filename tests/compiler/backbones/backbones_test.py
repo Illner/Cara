@@ -33,7 +33,7 @@ class BackbonesTest(TestAbstract):
                     cnf = Cnf(file_path)
                     solver = Solver(cnf=cnf,
                                     sat_solver_enum=sat_solver_enum,
-                                    first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP)
+                                    first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP)
 
                     number_of_backbone_literals = solver.get_backbone_literals([])
                     real_number_of_backbone_literals = int(cnf.comments)

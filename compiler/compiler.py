@@ -1,5 +1,6 @@
 # Import
 from formula.cnf import Cnf
+from compiler.solver import Solver
 from circuit.circuit import Circuit
 from typing import Set, Tuple, Union
 from compiler.component import Component
@@ -52,17 +53,7 @@ class Compiler:
     Compiler
     """
 
-    """
-    Private bool smooth
-    Private bool preprocessing
-    Private bool use_more_solvers
-    Private bool cut_set_try_cache
-    Private float new_cut_set_threshold
-    Private float new_cut_set_threshold_reduction           # when the cache for cut sets can be used
-    Private Set<BaseClassEnum> base_class_enum_set
-    Private int eliminating_redundant_clauses_threshold
-    Private bool component_caching_after_unit_propagation
-    
+    """    
     Private Cnf cnf
     Private Circuit circuit
     Private Statistics statistics
@@ -72,11 +63,21 @@ class Compiler:
     Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
     Private PreselectionHeuristicAbstract first_implied_literals_preselection_heuristic
     
+    Private bool smooth
+    Private bool preprocessing
+    Private bool cut_set_try_cache
+    Private float new_cut_set_threshold
+    Private float new_cut_set_threshold_reduction           # when the cache for cut sets can be used
+    Private Set<BaseClassEnum> base_class_enum_set
+    Private int eliminating_redundant_clauses_threshold
+    Private bool component_caching_after_unit_propagation
+    Private bool component_caching_before_unit_propagation
+    
     Private SatSolverEnum sat_solver_enum
     Private ImpliedLiteralsEnum implied_literals_enum
     Private HypergraphPartitioningCacheEnum hp_cache_enum
+    Private ImpliedLiteralsEnum first_implied_literals_enum
     Private HypergraphPartitioningSoftwareEnum hp_software_enum
-    Private FirstImpliedLiteralsEnum first_implied_literals_enum
     Private HypergraphPartitioningNodeWeightEnum hp_node_weight_type_enum
     Private EliminatingRedundantClausesEnum eliminating_redundant_clauses_enum
     Private HypergraphPartitioningHyperedgeWeightEnum hp_hyperedge_weight_type_enum
@@ -87,7 +88,6 @@ class Compiler:
                  smooth: bool,
                  ub_factor: float,
                  preprocessing: bool,
-                 use_more_solvers: bool,
                  subsumption_threshold: Union[int, None],
                  new_cut_set_threshold: float,
                  decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,
@@ -95,9 +95,10 @@ class Compiler:
                  base_class_enum_set: Set[bc_enum.BaseClassEnum],
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
-                 first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum,
+                 first_implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  first_implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                  component_caching_enum: cc_enum.ComponentCachingEnum,
+                 component_caching_before_unit_propagation: bool,
                  component_caching_after_unit_propagation: bool,
                  eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum,
                  eliminating_redundant_clauses_threshold: Union[int, None],
@@ -136,17 +137,17 @@ class Compiler:
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
         self.__preprocessing: bool = preprocessing
-        self.__use_more_solvers: bool = use_more_solvers
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__base_class_enum_set: Set[bc_enum.BaseClassEnum] = base_class_enum_set
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__component_caching_after_unit_propagation: bool = component_caching_after_unit_propagation
+        self.__component_caching_before_unit_propagation: bool = component_caching_before_unit_propagation
         self.__eliminating_redundant_clauses_threshold: Union[int, None] = eliminating_redundant_clauses_threshold
 
         self.__sat_solver_enum: ss_enum.SatSolverEnum = sat_solver_enum
         self.__implied_literals_enum: il_enum.ImpliedLiteralsEnum = implied_literals_enum
-        self.__first_implied_literals_enum: il_enum.FirstImpliedLiteralsEnum = first_implied_literals_enum
+        self.__first_implied_literals_enum: il_enum.ImpliedLiteralsEnum = first_implied_literals_enum
         self.__eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum = eliminating_redundant_clauses_enum
 
         # Component caching
@@ -184,8 +185,6 @@ class Compiler:
                                                                 limit_number_of_clauses_cache=hp_limit_number_of_clauses_cache,
                                                                 limit_number_of_variables_cache=hp_limit_number_of_variables_cache,
                                                                 statistics=self.__statistics.hypergraph_partitioning_statistics)
-
-        # TODO check parameters (first implied literals)
 
     # region Private method
     def __set_component_caching(self, component_caching_enum: cc_enum.ComponentCachingEnum):
@@ -373,30 +372,35 @@ class Compiler:
             if bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF in self.__base_class_enum_set:
                 incidence_graph.initialize_renamable_horn_formula_recognition()
 
+            # Solver
+            solver = Solver(cnf=self.__cnf,
+                            sat_solver_enum=self.__sat_solver_enum,
+                            first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BACKBONE if self.__preprocessing else il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP,
+                            incidence_graph=incidence_graph,
+                            statistics=self.__statistics.solver_statistics)
+
             component = Component(cnf=self.__cnf,
-                                  use_more_solvers=self.__use_more_solvers,
-                                  solver=None,
-                                  assignment_list=[],
+                                  solver=solver,
                                   circuit=self.__circuit,
+                                  assignment_list=[],
                                   new_cut_set_threshold=self.__new_cut_set_threshold,
                                   new_cut_set_threshold_reduction=self.__new_cut_set_threshold_reduction,
                                   cut_set_try_cache=self.__cut_set_try_cache,
                                   incidence_graph=incidence_graph,
                                   decision_heuristic=self.__decision_heuristic,
                                   component_caching=self.__component_caching,
+                                  component_caching_before_unit_propagation=self.__component_caching_before_unit_propagation,
                                   component_caching_after_unit_propagation=self.__component_caching_after_unit_propagation,
                                   eliminating_redundant_clauses_enum=self.__eliminating_redundant_clauses_enum,
                                   eliminating_redundant_clauses_threshold=self.__eliminating_redundant_clauses_threshold,
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
-                                  sat_solver_enum=self.__sat_solver_enum,
                                   base_class_enum_set=self.__base_class_enum_set,
                                   implied_literals_enum=self.__implied_literals_enum,
                                   implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                   first_implied_literals_enum=self.__first_implied_literals_enum,
                                   first_implied_literals_preselection_heuristic=self.__first_implied_literals_preselection_heuristic,
-                                  statistics=self.__statistics,
-                                  preprocessing=self.__preprocessing)
-            node_id = component.create_circuit(depth=1)
+                                  statistics=self.__statistics)
+            node_id = component.create_circuit()
             node_id_set.add(node_id)
 
         # More components have to be connected
@@ -427,15 +431,13 @@ class Compiler:
             root_id = self.__circuit.create_and_node({root_id}.union(node_id_set))
             self.__circuit.set_root(root_id)
 
-        self.__statistics.compiler_statistics.smooth.start_stopwatch()  # timer (start - smooth)
-
         # Smooth
         if self.__smooth:
+            self.__statistics.compiler_statistics.smooth.start_stopwatch()  # timer (start - smooth)
             self.__circuit.smooth()
+            self.__statistics.compiler_statistics.smooth.stop_stopwatch()   # timer (stop - smooth)
 
-        self.__statistics.compiler_statistics.smooth.stop_stopwatch()   # timer (stop - smooth)
         self.__statistics.compiler_statistics.create_circuit.stop_stopwatch()   # timer (stop - create_circuit)
-
         return self.circuit
     # endregion
 

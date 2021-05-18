@@ -34,7 +34,7 @@ class SolverTest(TestAbstract):
                         cnf = Cnf(file_path)
                         solver = Solver(cnf=cnf,
                                         sat_solver_enum=sat_solver,
-                                        first_implied_literals_enum=il_enum.FirstImpliedLiteralsEnum.IMPLICIT_BCP)
+                                        first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP)
 
                         # Unit propagation
                         unit_propagation = solver.unit_propagation(assumption)

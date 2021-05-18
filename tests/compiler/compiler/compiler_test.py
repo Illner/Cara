@@ -45,21 +45,21 @@ class CompilerTest(TestAbstract):
             for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
                 for subsumed_threshold in [100, None]:
                     for new_cut_set_threshold in [0, 0.5, 1]:
-                        for preprocessing in [True, False]:
+                        for preprocessing in [False, True]:
                             for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
                                 for eliminating_redundant_clauses_threshold in [100, None]:
                                     for hp_cache_enum in hpc_enum.hpc_enum_values:
-                                        for use_more_solvers in [False, True]:
-                                            for component_caching_after_unit_propagation in [True, False]:
-                                                for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
-                                                    for decision_heuristic_vsids_d4_version in [True, False]:
-                                                        for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
-                                                            for component_caching_enum in cc_enum.component_caching_enum_values:
-                                                                for first_implied_literals_enum in il_enum.first_implied_literals_enum_values:
-                                                                    for implied_literals_enum in il_enum.implied_literals_enum_values:
-                                                                        for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
-                                                                            for first_implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
-                                                                                for base_class_enum_set in [set()]:     #, {bc_enum.BaseClassEnum.TWO_CNF}, {bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}, {bc_enum.BaseClassEnum.TWO_CNF, bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}]:
+                                        for component_caching_enum in cc_enum.component_caching_enum_values:
+                                            for first_implied_literals_enum in il_enum.implied_literals_enum_values:
+                                                for implied_literals_enum in il_enum.implied_literals_enum_values:
+                                                    for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
+                                                        for first_implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
+                                                            for base_class_enum_set in [set()]:
+                                                                for component_caching_before_unit_propagation in [True, False]:
+                                                                    for component_caching_after_unit_propagation in [True, False]:
+                                                                        for decision_heuristic_vsids_d4_version in [True, False]:
+                                                                            for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
+                                                                                for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
                                                                                     try:
                                                                                         count += 1
 
@@ -67,7 +67,7 @@ class CompilerTest(TestAbstract):
                                                                                                                    f"File: {file_name}, "
                                                                                                                    f"implied literals: {il_enum.ImpliedLiteralsEnum._value2member_map_[implied_literals_enum].name}, "
                                                                                                                    f"implied literals - preselection heuristic: {ph_enum.PreselectionHeuristicEnum._value2member_map_[implied_literals_preselection_heuristic_enum].name}, "
-                                                                                                                   f"first implied literals: {il_enum.FirstImpliedLiteralsEnum._value2member_map_[first_implied_literals_enum].name}, "
+                                                                                                                   f"first implied literals: {il_enum.ImpliedLiteralsEnum._value2member_map_[first_implied_literals_enum].name}, "
                                                                                                                    f"first implied literals - preselection heuristic: {ph_enum.PreselectionHeuristicEnum._value2member_map_[first_implied_literals_preselection_heuristic_enum].name}, "
                                                                                                                    f"cache: {hpc_enum.HypergraphPartitioningCacheEnum._value2member_map_[hp_cache_enum].name}, "
                                                                                                                    f"variable simplification: {hpvs_enum.HypergraphPartitioningVariableSimplificationEnum._value2member_map_[hp_variable_simplification_enum].name}, "
@@ -78,7 +78,7 @@ class CompilerTest(TestAbstract):
                                                                                                                    f"component caching: {cc_enum.ComponentCachingEnum._value2member_map_[component_caching_enum].name}, "
                                                                                                                    f"eliminating redundant clauses: {erc_enum.EliminatingRedundantClausesEnum._value2member_map_[eliminating_redundant_clauses_enum].name}, "
                                                                                                                    f"eliminating redundant clauses threshold: {eliminating_redundant_clauses_threshold}, "
-                                                                                                                   f"use more solvers: {use_more_solvers}, "
+                                                                                                                   f"component caching before BCP: {component_caching_before_unit_propagation}, "
                                                                                                                    f"component caching after BCP: {component_caching_after_unit_propagation}, "
                                                                                                                    f"decision heuristic - \"D4 version\" of VSIDS score: {decision_heuristic_vsids_d4_version}, "
                                                                                                                    f"decision heuristic - weight for satisfied clauses: {decision_heuristic_weight_for_satisfied_clauses}, "
@@ -89,7 +89,6 @@ class CompilerTest(TestAbstract):
                                                                                                             smooth=True,
                                                                                                             ub_factor=0.1,
                                                                                                             preprocessing=preprocessing,
-                                                                                                            use_more_solvers=use_more_solvers,
                                                                                                             subsumption_threshold=subsumed_threshold,
                                                                                                             new_cut_set_threshold=new_cut_set_threshold,
                                                                                                             decision_heuristic_enum=decision_heuristic_enum,
@@ -100,6 +99,7 @@ class CompilerTest(TestAbstract):
                                                                                                             first_implied_literals_enum=first_implied_literals_enum,
                                                                                                             first_implied_literals_preselection_heuristic_enum=first_implied_literals_preselection_heuristic_enum,
                                                                                                             component_caching_enum=component_caching_enum,
+                                                                                                            component_caching_before_unit_propagation=component_caching_before_unit_propagation,
                                                                                                             component_caching_after_unit_propagation=component_caching_after_unit_propagation,
                                                                                                             eliminating_redundant_clauses_enum=eliminating_redundant_clauses_enum,
                                                                                                             eliminating_redundant_clauses_threshold=eliminating_redundant_clauses_threshold,

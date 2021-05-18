@@ -3,6 +3,3 @@
 ) UP redundancy
 ) DIMACS NNF - DIMACS CNF
 ) Hypergraph weights
-
-) first implied literals - uos
-) Implied literals - new component - fix
