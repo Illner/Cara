@@ -37,6 +37,10 @@ class IncidenceGraph(Graph):
     Private Dict<int, Set<int>> adjacency_literal_dynamic_dictionary        # key: a literal, value: a set of clauses (nodes) where the literal appears
     Private bool update_adjacency_literal_dynamic_dictionary
     
+    Private Dict<str, int> unhash_dictionary
+    Private Dict<int, str> variable_hash_dictionary
+    Private Dict<int, str> clause_id_hash_dictionary
+    
     Private IncidenceGraphStatistics statistics
     
     # Clause length
@@ -77,6 +81,10 @@ class IncidenceGraph(Graph):
         self.__adjacency_literal_dynamic_dictionary: Dict[int, Set[int]] = dict()
         self.__update_adjacency_literal_dynamic_dictionary: bool = True             # because of variable simplification
 
+        self.__unhash_dictionary: Dict[str, int] = dict()
+        self.__variable_hash_dictionary: Dict[int, str] = dict()
+        self.__clause_id_hash_dictionary: Dict[int, str] = dict()
+
         # Clause length
         self.__clause_length_dictionary: Dict[int, int] = dict()
         self.__length_set_clauses_dictionary: Dict[int, Set[int]] = {0: set(), 1: set(), 2: set()}
@@ -108,27 +116,36 @@ class IncidenceGraph(Graph):
         # Backup - subsumption - variable
         self.__subsumption_variable_backup_dictionary: Dict[int, Set[str]] = dict()
 
-    # region Static method
-    @staticmethod
-    def __variable_hash(variable: int) -> str:
+    # region Private method
+    def __variable_hash(self, variable: int) -> str:
         """
         :param variable: the variable
         :return: a hash key for the variable
         """
 
-        return f"v{variable}"
+        if variable in self.__variable_hash_dictionary:
+            return self.__variable_hash_dictionary[variable]
 
-    @staticmethod
-    def __clause_id_hash(clause_id: int) -> str:
+        result = f"v{variable}"
+        self.__variable_hash_dictionary[variable] = result
+
+        return result
+
+    def __clause_id_hash(self, clause_id: int) -> str:
         """
         :param clause_id: the identifier of the clause
         :return: a hash key for the clause's id
         """
 
-        return f"c{clause_id}"
+        if clause_id in self.__clause_id_hash_dictionary:
+            return self.__clause_id_hash_dictionary[clause_id]
 
-    @staticmethod
-    def __unhash(id_hash: str) -> int:
+        result = f"c{clause_id}"
+        self.__clause_id_hash_dictionary[clause_id] = result
+
+        return result
+
+    def __unhash(self, id_hash: str) -> int:
         """
         Unhash the hash
         :param id_hash: the hash
@@ -136,15 +153,17 @@ class IncidenceGraph(Graph):
         :raises SomethingWrongException: if the hash is invalid
         """
 
+        if id_hash in self.__unhash_dictionary:
+            return self.__unhash_dictionary[id_hash]
+
         try:
             id = int(id_hash[1:])
         except ValueError:
             raise c_exception.SomethingWrongException(f"invalid hash ({id_hash})")
 
+        self.__unhash_dictionary[id_hash] = id
         return id
-    # endregion
 
-    # region Private method
     def __update_clause_length(self, clause_id: int, increment_by_one: bool) -> None:
         """
         Increment or decrement the length of the clause by one
@@ -178,7 +197,29 @@ class IncidenceGraph(Graph):
         :return: True if the node exists in the incidence graph. Otherwise, False is returned.
         """
 
-        if node_hash in self.nodes:
+        if node_hash in self:
+            return True
+
+        return False
+
+    def __variable_exist(self, variable: int) -> bool:
+        """
+        :param variable: a variable
+        :return: True if the variable exists in the incidence graph. Otherwise, False is returned.
+        """
+
+        if variable in self.__variable_set:
+            return True
+
+        return False
+
+    def __clause_id_exist(self, clause_id: int) -> bool:
+        """
+        :param clause_id: the identifier of the clause
+        :return: True if the clause exists in the incidence graph. Otherwise, False is returned.
+        """
+
+        if clause_id in self.__clause_id_set:
             return True
 
         return False
