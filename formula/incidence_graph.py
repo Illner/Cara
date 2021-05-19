@@ -476,7 +476,8 @@ class IncidenceGraph(Graph):
         return subsumed_clause_set
 
     def __get_redundant_clauses_up_redundancy(self) -> Set[int]:
-        raise NotImplementedError()
+        return set()
+        # raise NotImplementedError()
     # endregion
     # endregion
 
@@ -701,8 +702,6 @@ class IncidenceGraph(Graph):
         :raises ClauseIdDoesNotExistException: if the clause does not exist in the incidence graph
         """
 
-        self.__statistics.get_clause.start_stopwatch()  # timer (start)
-
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The clause does not exist in the incidence graph
@@ -711,7 +710,6 @@ class IncidenceGraph(Graph):
 
         clause = self.__clause_dictionary[clause_id]
 
-        self.__statistics.get_clause.stop_stopwatch()  # timer (stop)
         return clause.copy() if copy else clause
 
     def get_sorted_clause(self, clause_id: int, copy: bool) -> List[int]:
@@ -723,8 +721,6 @@ class IncidenceGraph(Graph):
         :raises ClauseIdDoesNotExistException: if the clause does not exist in the incidence graph
         """
 
-        self.__statistics.get_sorted_clause.start_stopwatch()   # timer (start)
-
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The clause does not exist in the incidence graph
@@ -733,13 +729,11 @@ class IncidenceGraph(Graph):
 
         # Cache
         if clause_id in self.__sorted_clause_cache:
-            self.__statistics.get_sorted_clause.stop_stopwatch()    # timer (stop)
             return self.__sorted_clause_cache[clause_id].copy() if copy else self.__sorted_clause_cache[clause_id]
 
         clause_sorted_list = sorted(self.__clause_dictionary[clause_id])
         self.__sorted_clause_cache[clause_id] = clause_sorted_list
 
-        self.__statistics.get_sorted_clause.stop_stopwatch()    # timer (stop)
         return clause_sorted_list.copy() if copy else clause_sorted_list
 
     def number_of_nodes(self) -> int:
@@ -756,12 +750,9 @@ class IncidenceGraph(Graph):
         :return: a set of clauses that are in the incidence graph
         """
 
-        self.__statistics.clause_id_set.start_stopwatch()   # timer (start)
-
         clause_id_set = self.__clause_id_set.copy() if copy else self.__clause_id_set
 
         if multi_occurrence:
-            self.__statistics.clause_id_set.stop_stopwatch()    # timer (stop)
             return clause_id_set
 
         # Multi-occurrent clauses are not kept
@@ -786,7 +777,6 @@ class IncidenceGraph(Graph):
                 clause_id_set_without_multi_occurrence.add(clause_id)
                 cache[clause_key_string] = clause_id
 
-        self.__statistics.clause_id_set.stop_stopwatch()    # timer (stop)
         return clause_id_set_without_multi_occurrence
 
     def clause_id_list(self, multi_occurrence: bool = True) -> List[int]:
@@ -810,11 +800,8 @@ class IncidenceGraph(Graph):
         :return: a set of variables that are in the incidence graph
         """
 
-        self.__statistics.variable_set.start_stopwatch()    # timer (start)
-
         variable_set = self.__variable_set.copy() if copy else self.__variable_set
 
-        self.__statistics.variable_set.stop_stopwatch()     # timer (stop)
         return variable_set
 
     def variable_list(self) -> List[int]:
@@ -887,8 +874,6 @@ class IncidenceGraph(Graph):
         if not self.__node_exist(variable_hash):
             raise ig_exception.VariableDoesNotExistException(variable)
 
-        self.__statistics.remove_literal.start_stopwatch()      # timer (start)
-
         isolated_variable_set = set()
 
         # Backup
@@ -954,7 +939,6 @@ class IncidenceGraph(Graph):
 
         self.__eliminated_redundant_clauses_backup_dictionary[variable] = eliminated_clause_node_dictionary
 
-        self.__statistics.remove_literal.stop_stopwatch()       # timer (stop)
         return isolated_variable_set
 
     def remove_literal_list(self, literal_list: List[int], eliminating_redundant_clauses_enum: Union[erc_enum.EliminatingRedundantClausesEnum, None]) -> Set[int]:
@@ -990,8 +974,6 @@ class IncidenceGraph(Graph):
         last_literal = self.__assigned_literal_list[-1]
         if last_literal != literal:
             raise ig_exception.TryingRestoreLiteralIsNotLastOneRemovedException(literal, last_literal)
-
-        self.__statistics.restore_backup_literal.start_stopwatch()      # timer (start)
 
         # Eliminated redundant clauses
         eliminated_clause_node_dictionary = self.__eliminated_redundant_clauses_backup_dictionary[variable]
@@ -1043,8 +1025,6 @@ class IncidenceGraph(Graph):
 
         del self.__variable_node_backup_dictionary[variable]
 
-        self.__statistics.restore_backup_literal.stop_stopwatch()       # timer (stop)
-
     def restore_backup_literal_set(self, literal_set: Set[int]) -> None:
         while len(literal_set):
             last_literal = self.__assigned_literal_list[-1]
@@ -1066,7 +1046,6 @@ class IncidenceGraph(Graph):
         :return: None
         """
 
-        self.__statistics.merge_variable_simplification.start_stopwatch()   # timer (start)
         self.__update_adjacency_literal_dynamic_dictionary = False
 
         variable_to_delete_set = set()
@@ -1100,16 +1079,12 @@ class IncidenceGraph(Graph):
         for variable in variable_to_delete_set:
             self.__temporarily_remove_variable(variable)
 
-        self.__statistics.merge_variable_simplification.stop_stopwatch()    # timer (stop)
-
     def restore_backup_variable_simplification(self) -> None:
         """
         Restore all nodes and edges that are mention in the backup.
         The backup will be cleared.
         :return: None
         """
-
-        self.__statistics.restore_backup_variable_simplification.start_stopwatch()  # timer (start)
 
         # Add nodes and edges
         for variable in self.__removed_edge_backup_dictionary:
@@ -1132,7 +1107,6 @@ class IncidenceGraph(Graph):
         self.__added_edge_backup_dictionary = dict()
 
         self.__update_adjacency_literal_dynamic_dictionary = True
-        self.__statistics.restore_backup_variable_simplification.stop_stopwatch()   # timer (stop)
     # endregion
 
     # region Subsumption - variable
@@ -1216,15 +1190,11 @@ class IncidenceGraph(Graph):
         if not self.__node_exist(clause_id_hash):
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
-        self.__statistics.remove_subsumed_clause_variable.start_stopwatch()  # timer (start)
-
         clause_neighbour_set = set(self.neighbors(clause_id_hash))
         self.__subsumption_variable_backup_dictionary[clause_id] = clause_neighbour_set
 
         # Delete the clause node
         self.__temporarily_remove_clause_id(clause_id)
-
-        self.__statistics.remove_subsumed_clause_variable.stop_stopwatch()   # timer (stop)
 
     def remove_subsumed_clause_variable_set(self, clause_id_set: Set[int]) -> None:
         for clause_id in clause_id_set:
@@ -1237,8 +1207,6 @@ class IncidenceGraph(Graph):
         :return: None
         """
 
-        self.__statistics.restore_backup_subsumption_variable.start_stopwatch()  # timer (start)
-
         for clause_id in self.__subsumption_variable_backup_dictionary:
             clause_id_hash = self.__clause_id_hash(clause_id)
             neighbour_hash_set = self.__subsumption_variable_backup_dictionary[clause_id]
@@ -1248,8 +1216,6 @@ class IncidenceGraph(Graph):
                 self.__add_edge(neighbour_hash, clause_id_hash)
 
         self.__subsumption_variable_backup_dictionary = dict()
-
-        self.__statistics.restore_backup_subsumption_variable.stop_stopwatch()   # timer (stop)
     # endregion
 
     # region TwoCnf, HornCnf

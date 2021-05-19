@@ -21,7 +21,6 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     
     Private StatisticsComponentCounter unsatisfiable
     Private StatisticsComponentCounter implied_literal
-    Private StatisticsComponentCounter isolated_variable
     Private StatisticsComponentCounter empty_incidence_graph
     Private StatisticsComponentCounter component_caching_hit
     Private StatisticsComponentCounter component_caching_formula_length
@@ -55,9 +54,6 @@ class ComponentStatistics(StatisticsTemplateAbstract):
 
         self.__implied_literal: StatisticsComponentCounter = StatisticsComponentCounter("implied literal")
         self._component_list.append(self.__implied_literal)
-
-        self.__isolated_variable: StatisticsComponentCounter = StatisticsComponentCounter("isolated variable")
-        self._component_list.append(self.__isolated_variable)
 
         self.__empty_incidence_graph: StatisticsComponentCounter = StatisticsComponentCounter("empty incidence graph", True)
         self._component_list.append(self.__empty_incidence_graph)
@@ -128,10 +124,6 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def implied_literal(self) -> StatisticsComponentCounter:
         return self.__implied_literal
-
-    @property
-    def isolated_variable(self) -> StatisticsComponentCounter:
-        return self.__isolated_variable
 
     @property
     def empty_incidence_graph(self) -> StatisticsComponentCounter:

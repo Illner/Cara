@@ -278,7 +278,6 @@ class Component:
         """
 
         isolated_variable_set = self.__incidence_graph.remove_literal_list(literal_list, self.__get_eliminating_redundant_clauses_enum())
-        self.__statistics.component_statistics.isolated_variable.add_count(len(isolated_variable_set))  # counter
 
         literal_set_temp = set(filter(lambda l: abs(l) not in isolated_variable_set, literal_list))
         self.__assignment_list.extend(literal_set_temp)

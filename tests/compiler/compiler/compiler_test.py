@@ -42,24 +42,24 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
-                for subsumed_threshold in [100, None]:
-                    for new_cut_set_threshold in [0, 0.5, 1]:
-                        for preprocessing in [False, True]:
-                            for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
-                                for eliminating_redundant_clauses_threshold in [100, None]:
-                                    for hp_cache_enum in hpc_enum.hpc_enum_values:
-                                        for component_caching_enum in cc_enum.component_caching_enum_values:
-                                            for first_implied_literals_enum in il_enum.implied_literals_enum_values:
-                                                for implied_literals_enum in il_enum.implied_literals_enum_values:
-                                                    for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
-                                                        for first_implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
-                                                            for base_class_enum_set in [set()]:
-                                                                for component_caching_before_unit_propagation in [True, False]:
-                                                                    for component_caching_after_unit_propagation in [True, False]:
-                                                                        for decision_heuristic_vsids_d4_version in [True, False]:
-                                                                            for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
-                                                                                for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
+            for preprocessing in [False, True]:
+                for component_caching_enum in cc_enum.component_caching_enum_values:
+                    for first_implied_literals_enum in il_enum.implied_literals_enum_values:
+                        for implied_literals_enum in il_enum.implied_literals_enum_values:
+                            for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
+                                for first_implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
+                                    for base_class_enum_set in [set()]:
+                                        for component_caching_before_unit_propagation in [True, False]:
+                                            for component_caching_after_unit_propagation in [True, False]:
+                                                for decision_heuristic_vsids_d4_version in [True, False]:
+                                                    for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
+                                                        for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
+                                                            for subsumed_threshold in [100, None]:
+                                                                for new_cut_set_threshold in [0, 0.5, 1]:
+                                                                    for hp_cache_enum in hpc_enum.hpc_enum_values:
+                                                                        for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
+                                                                            for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
+                                                                                for eliminating_redundant_clauses_threshold in [100, None]:
                                                                                     try:
                                                                                         count += 1
 
