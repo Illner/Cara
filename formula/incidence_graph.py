@@ -561,6 +561,49 @@ class IncidenceGraph(Graph):
 
         self.__add_edge(variable_hash, clause_id_hash)
 
+    def add_clause(self, clause_id: int, clause_set: Set[int]) -> None:
+        """
+        Add a new clause to the incidence graph
+        :param clause_id: the identifier of the clause
+        :param clause_set: the clause
+        :return: None
+        :raises ClauseIdAlreadyExistsException: if the clause already exists in the incidence graph
+        """
+
+        clause_id_hash = self.__clause_id_hash(clause_id)
+
+        # The clause already exists in the incidence graph
+        if self.__node_exist(clause_id_hash):
+            raise ig_exception.ClauseIdAlreadyExistsException(clause_id)
+
+        self.add_clause_id(clause_id)
+
+        for literal in clause_set:
+            variable = abs(literal)
+            variable_hash = self.__variable_hash(variable)
+
+            # The variable does not exist in the incidence graph
+            if not self.__node_exist(variable_hash):
+                self.add_variable(variable)
+
+            # adjacency_literal_static_dictionary
+            self.__adjacency_literal_static_dictionary[literal].add(clause_id)
+
+            # adjacency_literal_dynamic_dictionary
+            if self.__update_adjacency_literal_dynamic_dictionary:
+                self.__adjacency_literal_dynamic_dictionary[literal].add(clause_id)
+                self.__clause_dictionary[clause_id].add(literal)
+
+            super().add_edge(variable_hash, clause_id_hash)
+
+        clause_len = len(clause_set)
+
+        self.__clause_length_dictionary[clause_id] = clause_len
+
+        if clause_len not in self.__length_set_clauses_dictionary:
+            self.__length_set_clauses_dictionary[clause_len] = set()
+        self.__length_set_clauses_dictionary[clause_len].add(clause_id)
+
     def is_connected(self) -> bool:
         """
         :return: True if the incidence graph is connected. Otherwise, False is returned.
@@ -1508,11 +1551,8 @@ class IncidenceGraph(Graph):
                     continue
 
                 clause_id = self.__unhash(node_hash)
-                incidence_graph_temp.add_clause_id(clause_id)
-                for neighbour_hash in self.neighbors(node_hash):
-                    variable = self.__unhash(neighbour_hash)
-                    literal = self.__get_literal_from_clause(variable, clause_id)
-                    incidence_graph_temp.add_edge(literal, clause_id)
+                clause_set = self.get_clause(clause_id, copy=False)
+                incidence_graph_temp.add_clause(clause_id, clause_set)
 
             incidence_graph_set.add(incidence_graph_temp)
 
@@ -1555,11 +1595,8 @@ class IncidenceGraph(Graph):
                 continue
 
             clause_id = self.__unhash(node_hash)
-            copy.add_clause_id(clause_id)
-            for neighbour_hash in self.neighbors(node_hash):
-                variable = self.__unhash(neighbour_hash)
-                literal = self.__get_literal_from_clause(variable, clause_id)
-                copy.add_edge(literal, clause_id)
+            clause_set = self.get_clause(clause_id, copy=False)
+            copy.add_clause(clause_id, clause_set)
 
         # Renamable Horn formula recognition
         if self.__renamable_horn_formula_recognition is not None:
