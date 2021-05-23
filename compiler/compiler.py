@@ -45,6 +45,7 @@ import compiler.enum.heuristic.literal_count_heuristic_function_enum as lchf_enu
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
+import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_patoh_sugparam_enum as hpps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
 
@@ -87,8 +88,8 @@ class Compiler:
     def __init__(self, cnf: Union[Cnf, str],
                  smooth: bool,
                  statistics: bool,
-                 ub_factor: float,
                  preprocessing: bool,
+                 imbalance_factor: float,
                  subsumption_threshold: Union[int, None],
                  new_cut_set_threshold: float,
                  decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,
@@ -108,6 +109,7 @@ class Compiler:
                  hp_node_weight_type_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
                  hp_hyperedge_weight_type_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum,
                  hp_variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
+                 hp_patoh_sugparam_enum: hpps_enum.PatohSugparamEnum = hpps_enum.PatohSugparamEnum.SPEED,
                  hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  cut_set_try_cache: bool = False,
@@ -177,7 +179,7 @@ class Compiler:
 
         # Hypergraph partitioning
         self.__hypergraph_partitioning = HypergraphPartitioning(cnf=self.__cnf,
-                                                                ub_factor=ub_factor,
+                                                                imbalance_factor=imbalance_factor,
                                                                 subsumption_threshold=subsumption_threshold,
                                                                 cache_enum=hp_cache_enum,
                                                                 software_enum=hp_software_enum,
@@ -186,6 +188,7 @@ class Compiler:
                                                                 variable_simplification_enum=hp_variable_simplification_enum,
                                                                 limit_number_of_clauses_cache=hp_limit_number_of_clauses_cache,
                                                                 limit_number_of_variables_cache=hp_limit_number_of_variables_cache,
+                                                                patoh_sugparam_enum=hp_patoh_sugparam_enum,
                                                                 statistics=self.__statistics.hypergraph_partitioning_statistics)
 
     # region Private method

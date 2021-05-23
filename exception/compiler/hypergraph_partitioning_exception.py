@@ -59,13 +59,13 @@ class HyperedgeDoesNotExistException(HypergraphPartitioningException):
         super().__init__(self.message)
 
 
-class InvalidUBfactorException(HypergraphPartitioningException):
+class InvalidImbalanceFactorException(HypergraphPartitioningException):
     """
-    Invalid UB factor
+    Invalid imbalance factor
     """
 
-    def __init__(self, ub_factor: float):
-        self.message = f"The UB factor ({ub_factor}) has to be a real number between 0.01 (1%) and 0.49 (49%)!"
+    def __init__(self, imbalance_factor: float):
+        self.message = f"The imbalance factor ({imbalance_factor}) has to be a real number between 0.01 (1%) and 0.49 (49%)!"
         super().__init__(self.message)
 
 

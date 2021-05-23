@@ -33,7 +33,7 @@ class HypergraphPartitioning:
 
     """
     Private Cnf cnf
-    Private float ub_factor
+    Private float imbalance_factor
     Private Set<int> hyperedge_set
     Private int subsumption_threshold
     Private int total_number_of_nodes
@@ -48,6 +48,7 @@ class HypergraphPartitioning:
     
     Private HypergraphPartitioningStatistics statistics
     
+    Private PatohSugparamEnum patoh_sugparam_enum
     Private HypergraphPartitioningCacheEnum cache_enum
     Private HypergraphPartitioningSoftwareEnum software_enum
     Private HypergraphPartitioningNodeWeightEnum node_weight_enum
@@ -76,7 +77,7 @@ class HypergraphPartitioning:
     __CONFIG_KAHYPAR_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "KaHyPar", "config.ini"))
 
     def __init__(self, cnf: Cnf,
-                 ub_factor: float,
+                 imbalance_factor: float,
                  subsumption_threshold: Union[int, None],
                  cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                  software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
@@ -85,6 +86,7 @@ class HypergraphPartitioning:
                  variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
                  limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]],
                  limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]],
+                 patoh_sugparam_enum: hpps_enum.PatohSugparamEnum = hpps_enum.PatohSugparamEnum.SPEED,
                  statistics: Union[HypergraphPartitioningStatistics, None] = None):
         # Statistics
         if statistics is None:
@@ -98,6 +100,7 @@ class HypergraphPartitioning:
         self.__total_number_of_nodes: int = cnf.real_number_of_clauses
 
         self.__cache_enum: hpc_enum.HypergraphPartitioningCacheEnum = cache_enum
+        self.__patoh_sugparam_enum: hpps_enum.PatohSugparamEnum = patoh_sugparam_enum
         self.__software_enum: hps_enum.HypergraphPartitioningSoftwareEnum = software_enum
         self.__node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum = node_weight_enum
         self.__hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum = hyperedge_weight_enum
@@ -119,11 +122,11 @@ class HypergraphPartitioning:
             raise hp_exception.InvalidLimitCacheException(lnovc_l_temp, lnovc_u_temp, "limit_number_of_variables_cache")
         self.__limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = limit_number_of_variables_cache
 
-        # UBfactor
-        ub_factor = round(ub_factor, 2)
-        if (ub_factor < 0.01) or (ub_factor > 0.49):    # 1% - 49%
-            raise hp_exception.InvalidUBfactorException(ub_factor)
-        self.__ub_factor: float = ub_factor
+        # Imbalance factor
+        imbalance_factor = round(imbalance_factor, 2)
+        if (imbalance_factor < 0.01) or (imbalance_factor > 0.49):    # 1% - 49%
+            raise hp_exception.InvalidImbalanceFactorException(imbalance_factor)
+        self.__imbalance_factor: float = imbalance_factor
 
         # Weights
         self.__node_weight_dictionary: Dict[int, int] = dict()
@@ -249,7 +252,7 @@ class HypergraphPartitioning:
             # Windows or undefined
             raise hp_exception.SoftwareIsNotSupportedOnSystemException(self.__software_enum.name)
 
-        warnings.warn("No software for hypergraph partitioning is used!")
+        warnings.warn("No software for hypergraph partitioning is being used!")
 
     def __variable_simplification(self, solver: Solver, assignment_list: List[int]) -> Dict[int, Set[int]]:
         """
@@ -621,12 +624,12 @@ class HypergraphPartitioning:
         number_of_nodes, number_of_hyperedges, xpins_list, pins_list, node_weight_list, hyperedge_weight_list, node_id_clause_id_dictionary = self.__create_hypergraph(incidence_graph)
         patoh_data: PatohData = PatohData(number_of_nodes=number_of_nodes, number_of_hyperedges=number_of_hyperedges,
                                           node_weight_list=node_weight_list, hyperedge_weight_list=hyperedge_weight_list,
-                                          xpins=xpins_list, pins=pins_list, epsilon=self.__ub_factor)
+                                          xpins=xpins_list, pins=pins_list, epsilon=self.__imbalance_factor)
 
         # PaToH library
         try:
             # PATOH_InitializeParameters
-            result_code = self.__PATOH_InitializeParameters(patoh_data.parameters_ref(), 1, hpps_enum.PatohSugparamEnum.PATOH_SUGPARAM_SPEED.value)
+            result_code = self.__PATOH_InitializeParameters(patoh_data.parameters_ref(), 1, self.__patoh_sugparam_enum.value)
             if result_code:
                 raise hp_exception.SomethingWrongWithPatohLibraryException("PATOH_InitializeParameters", str(result_code))
 
@@ -669,7 +672,7 @@ class HypergraphPartitioning:
         kahypar_context.loadINIconfiguration(str(HypergraphPartitioning.__CONFIG_KAHYPAR_PATH))
 
         kahypar_context.setK(2)
-        kahypar_context.setEpsilon(self.__ub_factor)
+        kahypar_context.setEpsilon(self.__imbalance_factor)
         kahypar_context.suppressOutput(True)
 
         number_of_nodes, number_of_hyperedges, xpins_list, pins_list, node_weight_list, hyperedge_weight_list, node_id_clause_id_dictionary = self.__create_hypergraph(incidence_graph)
@@ -755,7 +758,7 @@ class HypergraphPartitioning:
         devnull = open(os.devnull, 'w')
         subprocess.run([program_hmetis_path_temp,
                         self.__input_file_hmetis_path,
-                        str(2), str(100 * self.__ub_factor)],
+                        str(2), str(100 * self.__imbalance_factor)],
                        stdout=devnull)
 
         # A cut set does not exist (because of balance etc.)

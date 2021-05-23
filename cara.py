@@ -21,6 +21,7 @@ import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
+import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_patoh_sugparam_enum as hpps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
 # Constant
@@ -34,8 +35,8 @@ def main(main_args):
         compiler = Compiler(cnf=main_args.input_file,
                             smooth=main_args.smooth,
                             statistics=main_args.statistics,
-                            ub_factor=main_args.hp_ub_factor,
                             preprocessing=main_args.preprocessing,
+                            imbalance_factor=main_args.hp_imbalance_factor,
                             subsumption_threshold=main_args.subsumption_threshold,
                             new_cut_set_threshold=main_args.new_cut_set_threshold,
                             decision_heuristic_enum=dh_enum.DecisionHeuristicEnum[main_args.decision_heuristic],
@@ -55,6 +56,7 @@ def main(main_args):
                             hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                             hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                             hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum[main_args.hp_variable_simplification],
+                            hp_patoh_sugparam_enum=hpps_enum.PatohSugparamEnum[main_args.hp_patoh_sugparam],
                             hp_limit_number_of_clauses_cache=(None, main_args.hp_limit_number_of_clauses),
                             hp_limit_number_of_variables_cache=(None, main_args.hp_limit_number_of_variables),
                             cut_set_try_cache=main_args.cut_set_try_cache,
@@ -294,13 +296,13 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str_to_bool_parser,
                              metavar="[True, False]",
                              help="use a weight for satisfied clauses (clause reduction heuristic, weighted binaries heuristic, backbone search heuristic)")
-    parser_temp.add_argument("-hp_uf",
-                             "--hp_ub_factor",
+    parser_temp.add_argument("-hp_if",
+                             "--hp_imbalance_factor",
                              action="store",
                              default=0.1,
                              type=float,
                              metavar="[0.01-0.49]",
-                             help="balance factor that is used for hypergraph partitioning (hMETIS - UB factor, KaHyPar - epsilon)")
+                             help="imbalance factor that is used for hypergraph partitioning (hMETIS - UBfactor, PaToH - final_imbal, KaHyPar - epsilon)")
     parser_temp.add_argument("-st",
                              "--subsumption_threshold",
                              action="store",
@@ -453,6 +455,13 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str,
                              choices=hpvs_enum.hpvs_enum_names,
                              help="type of hypergraph partitioning variable simplification")
+    parser_temp.add_argument("-hp_patoh_s",
+                             "--hp_patoh_sugparam",
+                             action="store",
+                             default=hpps_enum.PatohSugparamEnum.SPEED.name,
+                             type=str,
+                             choices=hpps_enum.patoh_sugparam_enum_names,
+                             help="SBProbType parameter in PaToH")
     parser_temp.add_argument("-ncstr",
                              "--new_cut_set_threshold_reduction",
                              action="store",

@@ -49,12 +49,12 @@ class HypergraphPartitioningTest(TestAbstract):
 
                             hypergraph_partitioning = HypergraphPartitioning(cnf,
                                                                              cache_enum=cache_enum,
-                                                                             variable_simplification_enum=variable_simplification_enum,
-                                                                             ub_factor=0.10,
+                                                                             imbalance_factor=0.10,
                                                                              subsumption_threshold=None,
                                                                              software_enum=self.__software_enum,
                                                                              node_weight_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                                                              hyperedge_weight_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
+                                                                             variable_simplification_enum=variable_simplification_enum,
                                                                              limit_number_of_clauses_cache=(None, None),
                                                                              limit_number_of_variables_cache=(None, None))
 

@@ -81,8 +81,8 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
 
                         timeout_exceeded, exception, _, statistics = self._experiment(file_name=file_name, file_path=file_path,
                                                                                       smooth=False,
-                                                                                      ub_factor=0.1,
                                                                                       preprocessing=False,
+                                                                                      imbalance_factor=0.1,
                                                                                       subsumed_threshold=500,
                                                                                       new_cut_set_threshold=new_cut_set_threshold,
                                                                                       decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
