@@ -9,6 +9,7 @@ class StatisticsComponentCounter:
 
     """
     Private str name
+    Private bool active
     Private bool show_only_number_of_calls
     
     Private int number_of_calls
@@ -17,8 +18,9 @@ class StatisticsComponentCounter:
     Private float max_count
     """
 
-    def __init__(self, name: str, show_only_number_of_calls: bool = False):
+    def __init__(self, name: str, active: bool = True, show_only_number_of_calls: bool = False):
         self.__name: str = name
+        self.__active: bool = active
         self.__show_only_number_of_calls: bool = show_only_number_of_calls
 
         self.__number_of_calls: int = 0
@@ -31,6 +33,10 @@ class StatisticsComponentCounter:
         """
         None is considered as 0.
         """
+
+        # The statistic is not active
+        if not self.__active:
+            return
 
         if count is None:
             count = 0
@@ -91,4 +97,8 @@ class StatisticsComponentCounter:
             return None
 
         return self.__sum_count / self.__number_of_calls
+
+    @property
+    def active(self) -> bool:
+        return self.__active
     # endregion

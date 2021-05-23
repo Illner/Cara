@@ -87,6 +87,7 @@ class CompilerTest(TestAbstract):
                                                                                         cnf = Cnf(file_path)
                                                                                         compiler = Compiler(cnf=cnf,
                                                                                                             smooth=True,
+                                                                                                            statistics=False,
                                                                                                             ub_factor=0.1,
                                                                                                             preprocessing=preprocessing,
                                                                                                             subsumption_threshold=subsumed_threshold,

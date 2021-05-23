@@ -113,6 +113,7 @@ class ExperimentAbstract(ABC):
 
         compiler = Compiler(cnf=file_path,
                             smooth=smooth,
+                            statistics=True,
                             ub_factor=ub_factor,
                             preprocessing=preprocessing,
                             subsumption_threshold=subsumed_threshold,

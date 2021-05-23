@@ -86,6 +86,7 @@ class Compiler:
 
     def __init__(self, cnf: Union[Cnf, str],
                  smooth: bool,
+                 statistics: bool,
                  ub_factor: float,
                  preprocessing: bool,
                  subsumption_threshold: Union[int, None],
@@ -126,10 +127,11 @@ class Compiler:
         # CNF
         if isinstance(cnf, Cnf):
             self.__cnf: Cnf = cnf
-            self.__statistics: Statistics = Statistics(cnf_statistics=self.__cnf.cnf_statistics,
+            self.__statistics: Statistics = Statistics(active=statistics,
+                                                       cnf_statistics=self.__cnf.cnf_statistics,
                                                        incidence_graph_statistics=self.__cnf.incidence_graph_statistics)
         else:
-            self.__statistics: Statistics = Statistics()
+            self.__statistics: Statistics = Statistics(active=statistics)
             self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
                                   cnf_statistics=self.__statistics.cnf_statistics,
                                   incidence_graph_statistics=self.__statistics.incidence_graph_statistics)

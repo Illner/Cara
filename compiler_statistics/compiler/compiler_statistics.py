@@ -14,13 +14,17 @@ class CompilerStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer smooth
     """
 
-    def __init__(self):
+    def __init__(self, active: bool):
         super().__init__("Compiler")
 
-        self.__create_circuit: StatisticsComponentTimer = StatisticsComponentTimer("create circuit", True)
+        self.__create_circuit: StatisticsComponentTimer = StatisticsComponentTimer(name="create circuit",
+                                                                                   active=active,
+                                                                                   show_only_sum_time=True)
         self._component_list.append(self.__create_circuit)
 
-        self.__smooth: StatisticsComponentTimer = StatisticsComponentTimer("smooth", True)
+        self.__smooth: StatisticsComponentTimer = StatisticsComponentTimer(name="smooth",
+                                                                           active=active,
+                                                                           show_only_sum_time=True)
         self._component_list.append(self.__smooth)
 
     # region Public method

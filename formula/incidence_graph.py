@@ -98,7 +98,7 @@ class IncidenceGraph(Graph):
 
         # Statistics
         if statistics is None:
-            self.__statistics: IncidenceGraphStatistics = IncidenceGraphStatistics()
+            self.__statistics: IncidenceGraphStatistics = IncidenceGraphStatistics(active=False)
         else:
             self.__statistics: IncidenceGraphStatistics = statistics
 

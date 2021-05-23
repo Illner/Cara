@@ -14,6 +14,7 @@ class StatisticsComponentTimer:
 
     """
     Private str name
+    Private bool active
     Private bool show_only_sum_time
 
     Private int number_of_calls
@@ -24,8 +25,9 @@ class StatisticsComponentTimer:
     Private float stopwatch_time        # nanoseconds
     """
 
-    def __init__(self, name: str, show_only_sum_time: bool = False):
+    def __init__(self, name: str, active: bool = True, show_only_sum_time: bool = False):
         self.__name: str = name
+        self.__active: bool = active
         self.__show_only_sum_time: bool = show_only_sum_time
 
         self.__number_of_calls: int = 0
@@ -71,6 +73,10 @@ class StatisticsComponentTimer:
         :raises StopwatchIsAlreadyRunningException: if the stopwatch is already running
         """
 
+        # The statistic is not active
+        if not self.__active:
+            return
+
         # The stopwatch is already running
         if self.__stopwatch_time is not None:
             raise s_exception.StopwatchIsAlreadyRunningException(self.name)
@@ -83,6 +89,10 @@ class StatisticsComponentTimer:
         :return: None
         :raises StopwatchHasNotBeenStartedException: if the stopwatch has not been started
         """
+
+        # The statistic is not active
+        if not self.__active:
+            return
 
         # The stopwatch has not been started
         if self.__stopwatch_time is None:
@@ -152,4 +162,8 @@ class StatisticsComponentTimer:
             return None
 
         return self.__sum_time / self.__number_of_calls
+
+    @property
+    def active(self) -> bool:
+        return self.__active
     # endregion

@@ -64,7 +64,7 @@ class Cnf:
 
         # Statistics - CNF
         if cnf_statistics is None:
-            self.__cnf_statistics: CnfStatistics = CnfStatistics()
+            self.__cnf_statistics: CnfStatistics = CnfStatistics(active=False)
         else:
             self.__cnf_statistics: CnfStatistics = cnf_statistics
         # Statistics - incidence graph

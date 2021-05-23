@@ -28,52 +28,52 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter get_redundant_clauses_size
     """
 
-    def __init__(self):
+    def __init__(self, active: bool):
         super().__init__("Incidence graph")
 
-        self.__create_incidence_graphs_for_components: StatisticsComponentTimer = StatisticsComponentTimer("create components")
+        self.__create_incidence_graphs_for_components: StatisticsComponentTimer = StatisticsComponentTimer(name="create components", active=active)
         self._component_list.append(self.__create_incidence_graphs_for_components)
 
-        self.__get_connected_components: StatisticsComponentTimer = StatisticsComponentTimer("get connected components")
+        self.__get_connected_components: StatisticsComponentTimer = StatisticsComponentTimer(name="get connected components", active=active)
         self._component_list.append(self.__get_connected_components)
 
-        self.__copy_incidence_graph: StatisticsComponentTimer = StatisticsComponentTimer("copy")
+        self.__copy_incidence_graph: StatisticsComponentTimer = StatisticsComponentTimer(name="copy", active=active)
         self._component_list.append(self.__copy_incidence_graph)
 
-        self.__is_connected: StatisticsComponentTimer = StatisticsComponentTimer("is connected")
+        self.__is_connected: StatisticsComponentTimer = StatisticsComponentTimer(name="is connected", active=active)
         self._component_list.append(self.__is_connected)
 
-        self.__number_of_components: StatisticsComponentTimer = StatisticsComponentTimer("get number of components")
+        self.__number_of_components: StatisticsComponentTimer = StatisticsComponentTimer(name="get number of components", active=active)
         self._component_list.append(self.__number_of_components)
 
-        self.__subsumption_variable: StatisticsComponentTimer = StatisticsComponentTimer("subsumption - variable")
+        self.__subsumption_variable: StatisticsComponentTimer = StatisticsComponentTimer(name="subsumption - variable", active=active)
         self._component_list.append(self.__subsumption_variable)
 
-        self.__renamable_horn_formula_recognition_initialization: StatisticsComponentTimer = StatisticsComponentTimer("renamable Horn formula recognition - initialization")
+        self.__renamable_horn_formula_recognition_initialization: StatisticsComponentTimer = StatisticsComponentTimer(name="renamable Horn formula recognition - initialization", active=active)
         self._component_list.append(self.__renamable_horn_formula_recognition_initialization)
 
-        self.__renamable_horn_formula_recognition_check: StatisticsComponentTimer = StatisticsComponentTimer("renamable Horn formula recognition - check")
+        self.__renamable_horn_formula_recognition_check: StatisticsComponentTimer = StatisticsComponentTimer(name="renamable Horn formula recognition - check", active=active)
         self._component_list.append(self.__renamable_horn_formula_recognition_check)
 
-        self.__renamable_horn_formula_ratio: StatisticsComponentCounter = StatisticsComponentCounter("renamable Horn formula - ratio")
+        self.__renamable_horn_formula_ratio: StatisticsComponentCounter = StatisticsComponentCounter(name="renamable Horn formula - ratio", active=active)
         self._component_list.append(self.__renamable_horn_formula_ratio)
 
-        self.__two_cnf_ratio: StatisticsComponentCounter = StatisticsComponentCounter("2-CNF - ratio")
+        self.__two_cnf_ratio: StatisticsComponentCounter = StatisticsComponentCounter(name="2-CNF - ratio", active=active)
         self._component_list.append(self.__two_cnf_ratio)
 
-        self.__convert_to_cnf: StatisticsComponentTimer = StatisticsComponentTimer("convert - CNF")
+        self.__convert_to_cnf: StatisticsComponentTimer = StatisticsComponentTimer(name="convert - CNF", active=active)
         self._component_list.append(self.__convert_to_cnf)
 
-        self.__convert_to_2_cnf: StatisticsComponentTimer = StatisticsComponentTimer("convert - 2-CNF")
+        self.__convert_to_2_cnf: StatisticsComponentTimer = StatisticsComponentTimer(name="convert - 2-CNF", active=active)
         self._component_list.append(self.__convert_to_2_cnf)
 
-        self.__convert_to_horn_cnf: StatisticsComponentTimer = StatisticsComponentTimer("convert - HornCNF")
+        self.__convert_to_horn_cnf: StatisticsComponentTimer = StatisticsComponentTimer(name="convert - HornCNF", active=active)
         self._component_list.append(self.__convert_to_horn_cnf)
 
-        self.__get_redundant_clauses: StatisticsComponentTimer = StatisticsComponentTimer("get redundant clauses")
+        self.__get_redundant_clauses: StatisticsComponentTimer = StatisticsComponentTimer(name="get redundant clauses", active=active)
         self._component_list.append(self.__get_redundant_clauses)
 
-        self.__get_redundant_clauses_size: StatisticsComponentCounter = StatisticsComponentCounter("get redundant clauses - size")
+        self.__get_redundant_clauses_size: StatisticsComponentCounter = StatisticsComponentCounter(name="get redundant clauses - size", active=active)
         self._component_list.append(self.__get_redundant_clauses_size)
 
     # region Property

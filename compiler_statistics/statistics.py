@@ -17,6 +17,7 @@ class Statistics:
     """
 
     """
+    Private bool active
     Private List<StatisticsTemplateAbstract> template_list
     
     Private CnfStatistics cnf_statistics
@@ -29,46 +30,48 @@ class Statistics:
     Private PreselectionHeuristicStatistics preselection_heuristic_first_implied_literals_statistics
     """
 
-    def __init__(self, cnf_statistics: Union[CnfStatistics, None] = None,
+    def __init__(self, active: bool,
+                 cnf_statistics: Union[CnfStatistics, None] = None,
                  incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = None):
+        self.__active: bool = active
         self.__template_list: List[StatisticsTemplateAbstract] = []
 
         # Compiler
-        self.__compiler_statistics: CompilerStatistics = CompilerStatistics()
+        self.__compiler_statistics: CompilerStatistics = CompilerStatistics(active=True)
         self.__template_list.append(self.__compiler_statistics)
 
         # CNF
         if cnf_statistics is None:
-            self.__cnf_statistics: CnfStatistics = CnfStatistics()
+            self.__cnf_statistics: CnfStatistics = CnfStatistics(active=active)
         else:
             self.__cnf_statistics: CnfStatistics = cnf_statistics
         self.__template_list.append(self.__cnf_statistics)
 
         # Incidence graph
         if incidence_graph_statistics is None:
-            self.__incidence_graph_statistics: IncidenceGraphStatistics = IncidenceGraphStatistics()
+            self.__incidence_graph_statistics: IncidenceGraphStatistics = IncidenceGraphStatistics(active=active)
         else:
             self.__incidence_graph_statistics: IncidenceGraphStatistics = incidence_graph_statistics
         self.__template_list.append(self.__incidence_graph_statistics)
 
         # Solver
-        self.__solver_statistics: SolverStatistics = SolverStatistics()
+        self.__solver_statistics: SolverStatistics = SolverStatistics(active=active)
         self.__template_list.append(self.__solver_statistics)
 
         # Hypergraph partitioning
-        self.__hypergraph_partitioning_statistics: HypergraphPartitioningStatistics = HypergraphPartitioningStatistics()
+        self.__hypergraph_partitioning_statistics: HypergraphPartitioningStatistics = HypergraphPartitioningStatistics(active=active)
         self.__template_list.append(self.__hypergraph_partitioning_statistics)
 
         # Component
-        self.__component_statistics: ComponentStatistics = ComponentStatistics()
+        self.__component_statistics: ComponentStatistics = ComponentStatistics(active=active)
         self.__template_list.append(self.__component_statistics)
 
         # Preselection heuristic - implied literals
-        self.__preselection_heuristic_implied_literals_statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics(name="implied literals")
+        self.__preselection_heuristic_implied_literals_statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics(name="implied literals", active=active)
         self.__template_list.append(self.__preselection_heuristic_implied_literals_statistics)
 
         # Preselection heuristic - first implied literals
-        self.__preselection_heuristic_first_implied_literals_statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics(name="first implied literals")
+        self.__preselection_heuristic_first_implied_literals_statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics(name="first implied literals", active=active)
         self.__template_list.append(self.__preselection_heuristic_first_implied_literals_statistics)
 
     # region Magic method
@@ -113,4 +116,8 @@ class Statistics:
     @property
     def preselection_heuristic_first_implied_literals_statistics(self) -> PreselectionHeuristicStatistics:
         return self.__preselection_heuristic_first_implied_literals_statistics
+
+    @property
+    def active(self) -> bool:
+        return self.__active
     # endregion

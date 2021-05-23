@@ -33,6 +33,7 @@ def main(main_args):
 
         compiler = Compiler(cnf=main_args.input_file,
                             smooth=main_args.smooth,
+                            statistics=main_args.statistics,
                             ub_factor=main_args.hp_ub_factor,
                             preprocessing=main_args.preprocessing,
                             subsumption_threshold=main_args.subsumption_threshold,
@@ -85,9 +86,10 @@ def main(main_args):
             file.write(str(circuit))
 
         # Statistics
-        statistics_file = main_args.output_file + ".stat"
-        with open(statistics_file, "w", encoding="utf-8") as file:
-            file.write(str(statistics))
+        if main_args.statistics:
+            statistics_file = main_args.output_file + ".stat"
+            with open(statistics_file, "w", encoding="utf-8") as file:
+                file.write(str(statistics))
 
         print("The files have been generated!")
     except (c_exception.CaraException, Exception) as err:
@@ -220,6 +222,11 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="smooth the circuit")
+    parser_temp.add_argument("-stat",
+                             "--statistics",
+                             action="store_true",
+                             default=False,
+                             help="generate statistics")
     parser_temp.add_argument("-p",
                              "--preprocessing",
                              action="store_true",

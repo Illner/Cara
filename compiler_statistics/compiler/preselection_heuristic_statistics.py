@@ -17,7 +17,7 @@ class PreselectionHeuristicStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter prop_z_number_of_variables_occur_both_positive_and_negative_in_binary_clauses
     """
 
-    def __init__(self, name: str = ""):
+    def __init__(self, active: bool, name: str = ""):
         if name == "":
             temp = "Preselection heuristic"
         else:
@@ -25,20 +25,20 @@ class PreselectionHeuristicStatistics(StatisticsTemplateAbstract):
 
         super().__init__(temp)
 
-        self.__get_preselected_variables: StatisticsComponentTimer = StatisticsComponentTimer("get preselected variables")
+        self.__get_preselected_variables: StatisticsComponentTimer = StatisticsComponentTimer(name="get preselected variables", active=active)
         self._component_list.append(self.__get_preselected_variables)
 
-        self.__all_variables_preselected: StatisticsComponentCounter = StatisticsComponentCounter("all variables preselected")
+        self.__all_variables_preselected: StatisticsComponentCounter = StatisticsComponentCounter(name="all variables preselected", active=active)
         self._component_list.append(self.__all_variables_preselected)
 
-        self.__ratio_of_preselected_variables: StatisticsComponentCounter = StatisticsComponentCounter("ratio of preselected variables")
+        self.__ratio_of_preselected_variables: StatisticsComponentCounter = StatisticsComponentCounter(name="ratio of preselected variables", active=active)
         self._component_list.append(self.__ratio_of_preselected_variables)
 
-        self.__number_of_preselected_variables: StatisticsComponentCounter = StatisticsComponentCounter("number of preselected variables")
+        self.__number_of_preselected_variables: StatisticsComponentCounter = StatisticsComponentCounter(name="number of preselected variables", active=active)
         self._component_list.append(self.__number_of_preselected_variables)
 
         self.__prop_z_number_of_variables_occur_both_positive_and_negative_in_binary_clauses: StatisticsComponentCounter = \
-            StatisticsComponentCounter("prop_z - number of variables that occur both positive and negative in binary clauses")
+            StatisticsComponentCounter(name="prop_z - number of variables that occur both positive and negative in binary clauses", active=active)
         self._component_list.append(self.__prop_z_number_of_variables_occur_both_positive_and_negative_in_binary_clauses)
 
     # region Property

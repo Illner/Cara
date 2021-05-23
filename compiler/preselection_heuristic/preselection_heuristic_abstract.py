@@ -18,7 +18,7 @@ class PreselectionHeuristicAbstract(ABC):
     def __init__(self, statistics: Union[PreselectionHeuristicStatistics, None] = None):
         # Statistics
         if statistics is None:
-            self._statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics()
+            self._statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics(active=False)
         else:
             self._statistics: PreselectionHeuristicStatistics = statistics
 

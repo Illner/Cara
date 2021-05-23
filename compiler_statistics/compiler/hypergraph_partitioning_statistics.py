@@ -21,31 +21,35 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter empty_cut_set
     """
 
-    def __init__(self):
+    def __init__(self, active: bool):
         super().__init__("Hypergraph partitioning")
 
-        self.__variable_simplification: StatisticsComponentTimer = StatisticsComponentTimer("variable simplification")
+        self.__variable_simplification: StatisticsComponentTimer = StatisticsComponentTimer(name="variable simplification", active=active)
         self._component_list.append(self.__variable_simplification)
 
-        self.__set_static_weights: StatisticsComponentTimer = StatisticsComponentTimer("set static weights", True)
+        self.__set_static_weights: StatisticsComponentTimer = StatisticsComponentTimer(name="set static weights",
+                                                                                       active=active,
+                                                                                       show_only_sum_time=True)
         self._component_list.append(self.__set_static_weights)
 
-        self.__set_dynamic_weights: StatisticsComponentTimer = StatisticsComponentTimer("set dynamic weights")
+        self.__set_dynamic_weights: StatisticsComponentTimer = StatisticsComponentTimer(name="set dynamic weights", active=active)
         self._component_list.append(self.__set_dynamic_weights)
 
-        self.__generate_key_cache: StatisticsComponentTimer = StatisticsComponentTimer("generate key cache")
+        self.__generate_key_cache: StatisticsComponentTimer = StatisticsComponentTimer(name="generate key cache", active=active)
         self._component_list.append(self.__generate_key_cache)
 
-        self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get cut set")
+        self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer(name="get cut set", active=active)
         self._component_list.append(self.__get_cut_set)
 
-        self.__cache_hit: StatisticsComponentCounter = StatisticsComponentCounter("cache - hit")
+        self.__cache_hit: StatisticsComponentCounter = StatisticsComponentCounter(name="cache - hit", active=active)
         self._component_list.append(self.__cache_hit)
 
-        self.__cut_set_size: StatisticsComponentCounter = StatisticsComponentCounter("cut set - size")
+        self.__cut_set_size: StatisticsComponentCounter = StatisticsComponentCounter(name="cut set - size", active=active)
         self._component_list.append(self.__cut_set_size)
 
-        self.__empty_cut_set: StatisticsComponentCounter = StatisticsComponentCounter("empty cut set", True)
+        self.__empty_cut_set: StatisticsComponentCounter = StatisticsComponentCounter(name="empty cut set",
+                                                                                      active=active,
+                                                                                      show_only_number_of_calls=True)
         self._component_list.append(self.__empty_cut_set)
 
     # region Property

@@ -51,7 +51,7 @@ class Solver:
 
         # Statistics
         if statistics is None:
-            self.__statistics: SolverStatistics = SolverStatistics()
+            self.__statistics: SolverStatistics = SolverStatistics(active=False)
         else:
             self.__statistics: SolverStatistics = statistics
 

@@ -34,70 +34,78 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter renamable_horn_cnf_formula_length
     """
 
-    def __init__(self):
+    def __init__(self, active: bool):
         super().__init__("Component")
 
-        self.__get_implied_literals: StatisticsComponentTimer = StatisticsComponentTimer("get implied literals")
+        self.__get_implied_literals: StatisticsComponentTimer = StatisticsComponentTimer(name="get implied literals", active=active)
         self._component_list.append(self.__get_implied_literals)
 
-        self.__get_first_implied_literals: StatisticsComponentTimer = StatisticsComponentTimer("get first implied literals")
+        self.__get_first_implied_literals: StatisticsComponentTimer = StatisticsComponentTimer(name="get first implied literals", active=active)
         self._component_list.append(self.__get_first_implied_literals)
 
-        self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get cut set")
+        self.__get_cut_set: StatisticsComponentTimer = StatisticsComponentTimer(name="get cut set", active=active)
         self._component_list.append(self.__get_cut_set)
 
-        self.__get_decision_variable_from_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("get decision variable")
+        self.__get_decision_variable_from_cut_set: StatisticsComponentTimer = StatisticsComponentTimer(name="get decision variable", active=active)
         self._component_list.append(self.__get_decision_variable_from_cut_set)
 
-        self.__unsatisfiable: StatisticsComponentCounter = StatisticsComponentCounter("unsatisfiable subformulae", True)
+        self.__unsatisfiable: StatisticsComponentCounter = StatisticsComponentCounter(name="unsatisfiable subformulae",
+                                                                                      active=active,
+                                                                                      show_only_number_of_calls=True)
         self._component_list.append(self.__unsatisfiable)
 
-        self.__implied_literal: StatisticsComponentCounter = StatisticsComponentCounter("implied literal")
+        self.__implied_literal: StatisticsComponentCounter = StatisticsComponentCounter(name="implied literal", active=active)
         self._component_list.append(self.__implied_literal)
 
-        self.__empty_incidence_graph: StatisticsComponentCounter = StatisticsComponentCounter("empty incidence graph", True)
+        self.__empty_incidence_graph: StatisticsComponentCounter = StatisticsComponentCounter(name="empty incidence graph",
+                                                                                              active=active,
+                                                                                              show_only_number_of_calls=True)
         self._component_list.append(self.__empty_incidence_graph)
 
-        self.__component_caching_generate_key: StatisticsComponentTimer = StatisticsComponentTimer("component caching (before BCP) - generate key")
+        self.__component_caching_generate_key: StatisticsComponentTimer = StatisticsComponentTimer(name="component caching (before BCP) - generate key", active=active)
         self._component_list.append(self.__component_caching_generate_key)
 
-        self.__component_caching_hit: StatisticsComponentCounter = StatisticsComponentCounter("component caching (before BCP) - hit")
+        self.__component_caching_hit: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (before BCP) - hit", active=active)
         self._component_list.append(self.__component_caching_hit)
 
-        self.__component_caching_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("component caching (before BCP) - formula length")
+        self.__component_caching_formula_length: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (before BCP) - formula length", active=active)
         self._component_list.append(self.__component_caching_formula_length)
 
-        self.__component_caching_after_generate_key: StatisticsComponentTimer = StatisticsComponentTimer("component caching (after BCP) - generate key")
+        self.__component_caching_after_generate_key: StatisticsComponentTimer = StatisticsComponentTimer(name="component caching (after BCP) - generate key", active=active)
         self._component_list.append(self.__component_caching_after_generate_key)
 
-        self.__component_caching_after_hit: StatisticsComponentCounter = StatisticsComponentCounter("component caching (after BCP) - hit")
+        self.__component_caching_after_hit: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (after BCP) - hit", active=active)
         self._component_list.append(self.__component_caching_after_hit)
 
-        self.__component_caching_after_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("component caching (after BCP) - formula length")
+        self.__component_caching_after_formula_length: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (after BCP) - formula length", active=active)
         self._component_list.append(self.__component_caching_after_formula_length)
 
-        self.__split: StatisticsComponentCounter = StatisticsComponentCounter("split", True)
+        self.__split: StatisticsComponentCounter = StatisticsComponentCounter(name="split",
+                                                                              active=active,
+                                                                              show_only_number_of_calls=True)
         self._component_list.append(self.__split)
 
-        self.__decision_variable: StatisticsComponentCounter = StatisticsComponentCounter("decision variable", True)
+        self.__decision_variable: StatisticsComponentCounter = StatisticsComponentCounter(name="decision variable",
+                                                                                          active=active,
+                                                                                          show_only_number_of_calls=True)
         self._component_list.append(self.__decision_variable)
 
-        self.__recompute_cut_set: StatisticsComponentCounter = StatisticsComponentCounter("recompute cut set")
+        self.__recompute_cut_set: StatisticsComponentCounter = StatisticsComponentCounter(name="recompute cut set", active=active)
         self._component_list.append(self.__recompute_cut_set)
 
-        self.__is_suggested_new_cut_set: StatisticsComponentTimer = StatisticsComponentTimer("is suggested new cut set")
+        self.__is_suggested_new_cut_set: StatisticsComponentTimer = StatisticsComponentTimer(name="is suggested new cut set", active=active)
         self._component_list.append(self.__is_suggested_new_cut_set)
 
-        self.__cut_set_try_cache: StatisticsComponentTimer = StatisticsComponentTimer("cut set try cache")
+        self.__cut_set_try_cache: StatisticsComponentTimer = StatisticsComponentTimer(name="cut set try cache", active=active)
         self._component_list.append(self.__cut_set_try_cache)
 
-        self.__cut_set_try_cache_hit: StatisticsComponentCounter = StatisticsComponentCounter("cut set try cache - hit")
+        self.__cut_set_try_cache_hit: StatisticsComponentCounter = StatisticsComponentCounter(name="cut set try cache - hit", active=active)
         self._component_list.append(self.__cut_set_try_cache_hit)
 
-        self.__two_cnf_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("2-CNF - formula length")
+        self.__two_cnf_formula_length: StatisticsComponentCounter = StatisticsComponentCounter(name="2-CNF - formula length", active=active)
         self._component_list.append(self.__two_cnf_formula_length)
 
-        self.__renamable_horn_cnf_formula_length: StatisticsComponentCounter = StatisticsComponentCounter("renamable Horn formula - formula length")
+        self.__renamable_horn_cnf_formula_length: StatisticsComponentCounter = StatisticsComponentCounter(name="renamable Horn formula - formula length", active=active)
         self._component_list.append(self.__renamable_horn_cnf_formula_length)
 
     # region Property

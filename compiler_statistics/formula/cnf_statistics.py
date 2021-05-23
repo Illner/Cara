@@ -13,10 +13,12 @@ class CnfStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer create
     """
 
-    def __init__(self):
+    def __init__(self, active: bool):
         super().__init__("CNF")
 
-        self.__create: StatisticsComponentTimer = StatisticsComponentTimer("create", True)
+        self.__create: StatisticsComponentTimer = StatisticsComponentTimer(name="create",
+                                                                           active=active,
+                                                                           show_only_sum_time=True)
         self._component_list.append(self.__create)
 
     # region Public method

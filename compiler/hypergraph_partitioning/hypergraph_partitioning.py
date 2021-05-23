@@ -88,7 +88,7 @@ class HypergraphPartitioning:
                  statistics: Union[HypergraphPartitioningStatistics, None] = None):
         # Statistics
         if statistics is None:
-            self.__statistics: HypergraphPartitioningStatistics = HypergraphPartitioningStatistics()
+            self.__statistics: HypergraphPartitioningStatistics = HypergraphPartitioningStatistics(active=False)
         else:
             self.__statistics: HypergraphPartitioningStatistics = statistics
 

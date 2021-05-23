@@ -20,31 +20,31 @@ class SolverStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer backbone_literals
     """
 
-    def __init__(self):
+    def __init__(self, active: bool):
         super().__init__("Solver")
 
-        self.__initialize: StatisticsComponentTimer = StatisticsComponentTimer("initialize")
+        self.__initialize: StatisticsComponentTimer = StatisticsComponentTimer(name="initialize", active=active)
         self._component_list.append(self.__initialize)
 
-        self.__first_implied_literals: StatisticsComponentTimer = StatisticsComponentTimer("first implied literals")
+        self.__first_implied_literals: StatisticsComponentTimer = StatisticsComponentTimer(name="first implied literals", active=active)
         self._component_list.append(self.__first_implied_literals)
 
-        self.__is_satisfiable: StatisticsComponentTimer = StatisticsComponentTimer("is satisfiable")
+        self.__is_satisfiable: StatisticsComponentTimer = StatisticsComponentTimer(name="is satisfiable", active=active)
         self._component_list.append(self.__is_satisfiable)
 
-        self.__unit_propagation: StatisticsComponentTimer = StatisticsComponentTimer("unit propagation")
+        self.__unit_propagation: StatisticsComponentTimer = StatisticsComponentTimer(name="unit propagation", active=active)
         self._component_list.append(self.__unit_propagation)
 
-        self.__implicit_unit_propagation: StatisticsComponentTimer = StatisticsComponentTimer("implicit unit propagation")
+        self.__implicit_unit_propagation: StatisticsComponentTimer = StatisticsComponentTimer(name="implicit unit propagation", active=active)
         self._component_list.append(self.__implicit_unit_propagation)
 
-        self.__iterative_implicit_unit_propagation: StatisticsComponentTimer = StatisticsComponentTimer("iterative implicit unit propagation")
+        self.__iterative_implicit_unit_propagation: StatisticsComponentTimer = StatisticsComponentTimer(name="iterative implicit unit propagation", active=active)
         self._component_list.append(self.__iterative_implicit_unit_propagation)
 
-        self.__iterative_implicit_unit_propagation_iteration: StatisticsComponentCounter = StatisticsComponentCounter("iterative implicit unit propagation - iteration")
+        self.__iterative_implicit_unit_propagation_iteration: StatisticsComponentCounter = StatisticsComponentCounter(name="iterative implicit unit propagation - iteration", active=active)
         self._component_list.append(self.__iterative_implicit_unit_propagation_iteration)
 
-        self.__backbone_literals: StatisticsComponentTimer = StatisticsComponentTimer("backbone literals")
+        self.__backbone_literals: StatisticsComponentTimer = StatisticsComponentTimer(name="backbone literals", active=active)
         self._component_list.append(self.__backbone_literals)
 
     # region Property
