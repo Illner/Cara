@@ -52,8 +52,9 @@ class PatohData:
         self.__parameters: PatohInitializeParameters = PatohInitializeParameters()
         self.__parameters._k = 2
         self.__parameters.seed = -1  # random seed
-        self.__parameters.init_imbal = epsilon
+        self.__parameters.init_imbal = epsilon * 2
         self.__parameters.final_imbal = epsilon
+        self.__parameters.fast_initbal_mult = 1.5
 
     # region Public method
     def cwghts_ctypes(self) -> ctypes:
