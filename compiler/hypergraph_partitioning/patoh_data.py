@@ -30,7 +30,7 @@ class PatohData:
 
     def __init__(self, number_of_nodes: int, number_of_hyperedges: int,
                  node_weight_list: List[int], hyperedge_weight_list: List[int],
-                 xpins: List[int], pins: List[int]):
+                 xpins: List[int], pins: List[int], epsilon: float):
         # Input
         self.__c: int = number_of_nodes
         self.__n: int = number_of_hyperedges
@@ -52,6 +52,7 @@ class PatohData:
         self.__parameters: PatohInitializeParameters = PatohInitializeParameters()
         self.__parameters._k = 2
         self.__parameters.seed = -1  # random seed
+        self.__parameters.final_imbal = epsilon
 
     # region Public method
     def cwghts_ctypes(self) -> ctypes:

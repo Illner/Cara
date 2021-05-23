@@ -621,7 +621,7 @@ class HypergraphPartitioning:
         number_of_nodes, number_of_hyperedges, xpins_list, pins_list, node_weight_list, hyperedge_weight_list, node_id_clause_id_dictionary = self.__create_hypergraph(incidence_graph)
         patoh_data: PatohData = PatohData(number_of_nodes=number_of_nodes, number_of_hyperedges=number_of_hyperedges,
                                           node_weight_list=node_weight_list, hyperedge_weight_list=hyperedge_weight_list,
-                                          xpins=xpins_list, pins=pins_list)
+                                          xpins=xpins_list, pins=pins_list, epsilon=self.__ub_factor)
 
         # PaToH library
         try:

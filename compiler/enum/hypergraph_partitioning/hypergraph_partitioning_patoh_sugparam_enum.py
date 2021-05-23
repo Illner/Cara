@@ -4,6 +4,7 @@ from enum import IntEnum, unique
 
 @unique
 class PatohSugparamEnum(IntEnum):
+    PATOH_SUGPARAM_DEFAULT = 0
     PATOH_SUGPARAM_SPEED = 1
     PATOH_SUGPARAM_QUALITY = 2
 
