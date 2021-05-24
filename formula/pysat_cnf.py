@@ -2,8 +2,8 @@
 import itertools
 from pysat.formula import CNF
 from pysat.solvers import Minisat22
-from typing import Set, List, Union
 from other.sorted_list import SortedList
+from typing import Set, List, Union, Tuple, Dict
 
 
 class PySatCnf(CNF):
@@ -93,17 +93,44 @@ class PySatCnf(CNF):
 
         return number_of_models
 
-    def str_renaming_function(self, renaming_function: Set[int]) -> str:
+    def str_renaming_function(self, horn_renaming_function: Set[int]) -> str:
         result = " ".join(('p cnf', str(self.number_of_variables), str(self.number_of_clauses)))
 
         for clause in self.clauses:
-            clause_temp = [str(-lit) if abs(lit) in renaming_function else str(lit) for lit in clause]
+            clause_temp = [str(-lit) if abs(lit) in horn_renaming_function else str(lit) for lit in clause]
             result = "\n".join((result, " ".join((" ".join(sorted(clause_temp)), "0"))))
 
         return result
-    # endregion
 
-    # region Public method
+    def str_with_mapping(self, horn_renaming_function: Set[int]) -> Tuple[str, Dict[int, int]]:
+        result = " ".join(('p cnf', str(self.number_of_variables), str(self.number_of_clauses)))
+
+        variable_index_temp: int = 1
+        variable_dictionary: Dict[int, int] = dict()    # mapping
+
+        for clause in self.clauses:
+            clause_temp = []
+
+            for lit in clause:
+                var = abs(lit)
+
+                # Mapping
+                if var not in variable_dictionary:
+                    variable_dictionary[var] = variable_index_temp
+                    variable_index_temp += 1
+
+                var_map = variable_dictionary[var]
+                lit_map = -var_map if lit < 0 else var_map
+
+                if var in horn_renaming_function:
+                    clause_temp.append(str(-lit_map))
+                else:
+                    clause_temp.append(str(lit_map))
+
+            result = "\n".join((result, " ".join((" ".join(sorted(clause_temp)), "0"))))
+
+        return result, variable_dictionary
+
     def get_variable_set(self, copy: bool):
         """
         :param copy: True if a copy is returned
@@ -129,7 +156,7 @@ class PySatCnf(CNF):
 
     # region Magic method
     def __str__(self):
-        return self.str_renaming_function(renaming_function=set())
+        return self.str_renaming_function(horn_renaming_function=set())
 
     def __repr__(self):
         clause_sorted_list = SortedList()

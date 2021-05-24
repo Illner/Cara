@@ -1,5 +1,5 @@
 # Import
-from typing import Set
+from typing import Set, Tuple, Dict
 from formula.pysat_horn_cnf import PySatHornCnf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
@@ -76,6 +76,9 @@ class RenamableHornCnfLeaf(LeafAbstract):
 
     def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
         raise c_exception.OperationIsNotSupportedException("minimum default cardinality")
+
+    def str_with_mapping(self) -> Tuple[str, Dict[int, int]]:
+        return self.__cnf.str_with_mapping(horn_renaming_function=self.__renaming_function)
     # endregion
 
     # region Private method
@@ -101,7 +104,7 @@ class RenamableHornCnfLeaf(LeafAbstract):
 
     # region Magic method
     def __str__(self):
-        return self.__cnf.str_renaming_function(self.__renaming_function)
+        return self.__cnf.str_renaming_function(horn_renaming_function=self.__renaming_function)
     # endregion
 
     # region Property

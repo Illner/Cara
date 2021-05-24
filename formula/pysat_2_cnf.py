@@ -1,7 +1,7 @@
 # Import
-from typing import Set, List, Union
 from formula.pysat_cnf import PySatCnf
 from pysat.solvers import Minisat22, Glucose4
+from typing import Set, List, Union, Tuple, Dict
 
 # Import exception
 import exception.formula.formula_exception as f_exception
@@ -102,6 +102,9 @@ class PySat2Cnf(PySatCnf):
             return None
 
         return result_model
+
+    def str_with_mapping(self) -> Tuple[str, Dict[int, int]]:
+        return super().str_with_mapping(horn_renaming_function=set())
     # endregion
 
     # region Magic method

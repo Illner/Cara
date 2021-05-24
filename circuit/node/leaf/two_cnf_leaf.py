@@ -1,5 +1,5 @@
 # Import
-from typing import Set
+from typing import Set, Tuple, Dict
 from formula.pysat_2_cnf import PySat2Cnf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
@@ -72,6 +72,9 @@ class TwoCnfLeaf(LeafAbstract):
 
     def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
         raise c_exception.OperationIsNotSupportedException("minimum default cardinality")
+
+    def str_with_mapping(self) -> Tuple[str, Dict[int, int]]:
+        return self.__cnf.str_with_mapping()
     # endregion
 
     # region Magic method

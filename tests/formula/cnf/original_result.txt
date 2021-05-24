@@ -1,6 +1,6 @@
 
 clause_not_number_invalid.cnf
-DIMACS CNF format is invalid in the file! (invalid clause (-4 a 0) defined on line 9)
+DIMACS CNF format is invalid in the file! (invalid clause (-4 a 0) defined at line 9)
 
 clause_undefined_variable_valid.cnf
 Number of clauses: 9
@@ -63,7 +63,7 @@ Factors encoded in variables 1-21 and 22-42
 The second clause: (23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42)
 
 missing_0_invalid.cnf
-DIMACS CNF format is invalid in the file! (the clause (-1 3) defined on line 7 doesn't end with 0)
+DIMACS CNF format is invalid in the file! (the clause (-1 3) defined at line 7 doesn't end with 0)
 
 missing_p_line_invalid.cnf
 P line is not mentioned at all or is mentioned after the clauses!

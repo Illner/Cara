@@ -168,22 +168,71 @@ A 2 9 12
 O 4 2 7 13
 
 horn_cnf_less_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the RENAMABLE_HORN_CNF leaf (R) defined on line 16 has an invalid number of parameters)
+DIMACS NNF format is invalid in the file! (the RENAMABLE_HORN_CNF leaf (R) defined at line 16 has an invalid number of parameters)
+
+horn_cnf_mapping_less_params_invalid.nnf
+DIMACS NNF format is invalid in the file! (the number of variables (4) and the number of variables in the mapping (3) are different at line 16 in the leaf node)
+
+horn_cnf_mapping_more_params_invalid.nnf
+DIMACS NNF format is invalid in the file! (the number of variables (4) and the number of variables in the mapping (5) are different at line 16 in the leaf node)
+
+horn_cnf_mapping_negative_variable_invalid.nnf
+DIMACS NNF format is invalid in the file! (the variable (-3) in the mapping mentioned at line 16 in the leaf node is negative)
+
+horn_cnf_mapping_not_number_variable_invalid.nnf
+DIMACS NNF format is invalid in the file! (some variable in the mapping (R 3 4 2 1 b 3) mentioned at line 16 in the leaf node is not an integer)
+
+horn_cnf_mapping_not_number_variables_invalid.nnf
+DIMACS NNF format is invalid in the file! (the size of DIMACS CNF (3) or the number of variables (a) mentioned at line 16 in the leaf node is not an integer)
+
+horn_cnf_mapping_valid.nnf
+C CaraCompiler
+C Name: Circuit
+C Type: D_BDMC
+C Decomposability: True
+C Determinism: True
+C Smoothness: False
+C AND_NODE: 5
+C OR_NODE: 3
+C CONSTANT: 0
+C LITERAL: 7
+C TWO_CNF: 0
+C RENAMABLE_HORN_CNF: 1
+nnf 16 23 4
+L -3
+L -2
+L 1
+A 3 0 1 2
+L 3
+O 3 2 3 4
+L -4
+A 2 5 6
+L 4
+A 2 2 8
+A 2 1 4
+L 2
+O 2 2 10 11
+A 2 9 12
+R 3 4 1 2 4 3
+p cnf 4 2
+-3 1 2 0
+-4 1 0
+O 4 3 7 13 14
 
 horn_cnf_missing_p_line_invalid.nnf
-DIMACS NNF format is invalid in the file! (the formula mentioned on line 16 has an invalid DIMACS format (P line is not mentioned at all or is mentioned after the clauses!))
+DIMACS NNF format is invalid in the file! (the formula mentioned at line 16 has an invalid DIMACS format (P line is not mentioned at all or is mentioned after the clauses!))
 
 horn_cnf_more_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the RENAMABLE_HORN_CNF leaf (R 3 6) defined on line 16 has an invalid number of parameters)
+DIMACS NNF format is invalid in the file! (the number of variables (6) and the number of variables in the mapping (0) are different at line 16 in the leaf node)
 
 horn_cnf_not_number_size_invalid.nnf
-DIMACS NNF format is invalid in the file! (the size of DIMACS CNF (s) mentioned on line 16 in the leaf node is not an integer)
+DIMACS NNF format is invalid in the file! (the size of DIMACS CNF (s) mentioned at line 16 in the leaf node is not an integer)
 
 horn_cnf_size_less_invalid.nnf
 DIMACS NNF format is invalid in the file! (the line (19) starts with an invalid char (2 -4 0))
 
 horn_cnf_size_more_invalid.nnf
-DIMACS NNF format is invalid in the file! (the formula mentioned on line 16 has an invalid DIMACS format (DIMACS CNF format is invalid in the file! (the clause (O 4 3 7 13 14) defined on line 20 doesn't end with 0)))
+DIMACS NNF format is invalid in the file! (the formula mentioned at line 16 has an invalid DIMACS format (DIMACS CNF format is invalid in the file! (the clause (O 4 3 7 13 14) defined at line 20 doesn't end with 0)))
 
 horn_cnf_valid.nnf
 C CaraCompiler
@@ -213,7 +262,7 @@ A 2 1 4
 L 2
 O 2 2 10 11
 A 2 9 12
-R 3
+R 3 4 1 2 3 4
 p cnf 4 2
 -3 1 2 0
 -4 2 0
@@ -305,67 +354,67 @@ A 2 9 12
 O 4 2 7 13
 
 node_and_less_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value (2) and the number of children (1) mentioned on line 16 in the AND node don't correspond)
+DIMACS NNF format is invalid in the file! (the c value (2) and the number of children (1) mentioned at line 16 in the AND node don't correspond)
 
 node_and_more_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value (2) and the number of children (3) mentioned on line 10 in the AND node don't correspond)
+DIMACS NNF format is invalid in the file! (the c value (2) and the number of children (3) mentioned at line 10 in the AND node don't correspond)
 
 node_and_negative_c_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value (-2) mentioned on line 12 in the AND node is negative)
+DIMACS NNF format is invalid in the file! (the c value (-2) mentioned at line 12 in the AND node is negative)
 
 node_and_no_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the AND node (A) defined on line 16 has an invalid number of parameters)
+DIMACS NNF format is invalid in the file! (the AND node (A) defined at line 16 has an invalid number of parameters)
 
 node_and_not_number_c_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value or some id of a node (A a 6 5) mentioned on line 10 in the AND node is not an integer)
+DIMACS NNF format is invalid in the file! (the c value or some id of a node (A a 6 5) mentioned at line 10 in the AND node is not an integer)
 
 node_and_not_number_node_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value or some id of a node (A 2 1 a) mentioned on line 13 in the AND node is not an integer)
+DIMACS NNF format is invalid in the file! (the c value or some id of a node (A 2 1 a) mentioned at line 13 in the AND node is not an integer)
 
 node_literal_less_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the literal leaf (L) defined on line 4 has an invalid number of parameters)
+DIMACS NNF format is invalid in the file! (the literal leaf (L) defined at line 4 has an invalid number of parameters)
 
 node_literal_more_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the literal leaf (L -3 1) defined on line 3 has an invalid number of parameters)
+DIMACS NNF format is invalid in the file! (the literal leaf (L -3 1) defined at line 3 has an invalid number of parameters)
 
 node_literal_not_number_invalid.nnf
-DIMACS NNF format is invalid in the file! (the literal (a) mentioned on line 4 in the leaf node is not an integer)
+DIMACS NNF format is invalid in the file! (the literal (a) mentioned at line 4 in the leaf node is not an integer)
 
 node_not_exist_invalid.nnf
-DIMACS NNF format is invalid in the file! (the node (child) with the id (8) mentioned on line 6 in the AND node has not been seen yet)
+DIMACS NNF format is invalid in the file! (the node (child) with the id (8) mentioned at line 6 in the AND node has not been seen yet)
 
 node_or_less_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value (2) and the number of children (1) mentioned on line 8 in the OR node don't correspond)
+DIMACS NNF format is invalid in the file! (the c value (2) and the number of children (1) mentioned at line 8 in the OR node don't correspond)
 
 node_or_more_j_invalid.nnf
-DIMACS NNF format is invalid in the file! (the j value (5) mentioned on line 15 in the OR node is not a valid number)
+DIMACS NNF format is invalid in the file! (the j value (5) mentioned at line 15 in the OR node is not a valid number)
 
 node_or_more_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value (2) and the number of children (3) mentioned on line 8 in the OR node don't correspond)
+DIMACS NNF format is invalid in the file! (the c value (2) and the number of children (3) mentioned at line 8 in the OR node don't correspond)
 
 node_or_negative_c_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value (-2) mentioned on line 8 in the OR node is negative)
+DIMACS NNF format is invalid in the file! (the c value (-2) mentioned at line 8 in the OR node is negative)
 
 node_or_negative_j_invalid.nnf
-DIMACS NNF format is invalid in the file! (the j value (-2) mentioned on line 15 in the OR node is not a valid number)
+DIMACS NNF format is invalid in the file! (the j value (-2) mentioned at line 15 in the OR node is not a valid number)
 
 node_or_no_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the OR node (O) defined on line 8 has an invalid number of parameters)
+DIMACS NNF format is invalid in the file! (the OR node (O) defined at line 8 has an invalid number of parameters)
 
 node_or_not_number_c_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value, j value or some id of a node (O 3 a 4 3) mentioned on line 8 in the OR node is not an integer)
+DIMACS NNF format is invalid in the file! (the c value, j value or some id of a node (O 3 a 4 3) mentioned at line 8 in the OR node is not an integer)
 
 node_or_not_number_j_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value, j value or some id of a node (O a 2 11 10) mentioned on line 15 in the OR node is not an integer)
+DIMACS NNF format is invalid in the file! (the c value, j value or some id of a node (O a 2 11 10) mentioned at line 15 in the OR node is not an integer)
 
 node_or_not_number_node_invalid.nnf
-DIMACS NNF format is invalid in the file! (the c value, j value or some id of a node (O 4 2 a 7) mentioned on line 17 in the OR node is not an integer)
+DIMACS NNF format is invalid in the file! (the c value, j value or some id of a node (O 4 2 a 7) mentioned at line 17 in the OR node is not an integer)
 
 not_horn_cnf_invalid.nnf
-DIMACS NNF format is invalid in the file! (the formula mentioned on line 16 in the leaf node is not renamable Horn formula)
+DIMACS NNF format is invalid in the file! (the formula mentioned at line 16 in the leaf node is not renamable Horn formula)
 
 not_two_cnf_invalid.nnf
-DIMACS NNF format is invalid in the file! (the formula mentioned on line 16 in the leaf node is not 2-CNF)
+DIMACS NNF format is invalid in the file! (the formula mentioned at line 16 in the leaf node is not 2-CNF)
 
 optional_end_%_valid.nnf
 C CaraCompiler
@@ -5404,34 +5453,84 @@ A 2 1 4
 L 2
 O 2 2 10 11
 A 2 9 12
-T 4
+T 4 2 1 2
 p cnf 2 3
 1 2 0
 -1 2 0
 -1 -2 0
-R 3
+R 3 4 1 2 3 4
 p cnf 4 2
 -3 1 2 0
 -4 2 0
 O 4 4 7 13 14 15
 
 two_cnf_less_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the TWO_CNF leaf (T) defined on line 16 has an invalid number of parameters)
+DIMACS NNF format is invalid in the file! (the TWO_CNF leaf (T) defined at line 16 has an invalid number of parameters)
+
+two_cnf_mapping_less_params_invalid.nnf
+DIMACS NNF format is invalid in the file! (the number of variables (2) and the number of variables in the mapping (1) are different at line 16 in the leaf node)
+
+two_cnf_mapping_more_params_invalid.nnf
+DIMACS NNF format is invalid in the file! (the number of variables (2) and the number of variables in the mapping (3) are different at line 16 in the leaf node)
+
+two_cnf_mapping_negative_variable_invalid.nnf
+DIMACS NNF format is invalid in the file! (the variable (-1) in the mapping mentioned at line 16 in the leaf node is negative)
+
+two_cnf_mapping_not_number_variable_invalid.nnf
+DIMACS NNF format is invalid in the file! (some variable in the mapping (T 4 2 a 2) mentioned at line 16 in the leaf node is not an integer)
+
+two_cnf_mapping_not_number_variables_invalid.nnf
+DIMACS NNF format is invalid in the file! (the size of DIMACS CNF (4) or the number of variables (b) mentioned at line 16 in the leaf node is not an integer)
+
+two_cnf_mapping_valid.nnf
+C CaraCompiler
+C Name: Circuit
+C Type: D_BDMC
+C Decomposability: True
+C Determinism: True
+C Smoothness: False
+C AND_NODE: 5
+C OR_NODE: 3
+C CONSTANT: 0
+C LITERAL: 7
+C TWO_CNF: 1
+C RENAMABLE_HORN_CNF: 0
+nnf 16 24 4
+L -3
+L -2
+L 1
+A 3 0 1 2
+L 3
+O 3 2 3 4
+L -4
+A 2 5 6
+L 4
+A 2 2 8
+A 2 1 4
+L 2
+O 2 2 10 11
+A 2 9 12
+T 4 2 1 2
+p cnf 2 3
+1 2 0
+-1 2 0
+-1 -2 0
+O 4 3 7 13 14
 
 two_cnf_missing_p_line_invalid.nnf
-DIMACS NNF format is invalid in the file! (the formula mentioned on line 16 has an invalid DIMACS format (P line is not mentioned at all or is mentioned after the clauses!))
+DIMACS NNF format is invalid in the file! (the formula mentioned at line 16 has an invalid DIMACS format (P line is not mentioned at all or is mentioned after the clauses!))
 
 two_cnf_more_params_invalid.nnf
-DIMACS NNF format is invalid in the file! (the TWO_CNF leaf (T 4 2) defined on line 16 has an invalid number of parameters)
+DIMACS NNF format is invalid in the file! (the number of variables (2) and the number of variables in the mapping (0) are different at line 16 in the leaf node)
 
 two_cnf_not_number_size_invalid.nnf
-DIMACS NNF format is invalid in the file! (the size of DIMACS CNF (a) mentioned on line 16 in the leaf node is not an integer)
+DIMACS NNF format is invalid in the file! (the size of DIMACS CNF (a) mentioned at line 16 in the leaf node is not an integer)
 
 two_cnf_size_less_invalid.nnf
 DIMACS NNF format is invalid in the file! (the line (19) starts with an invalid char (-1 2 0))
 
 two_cnf_size_more_invalid.nnf
-DIMACS NNF format is invalid in the file! (the formula mentioned on line 16 has an invalid DIMACS format (DIMACS CNF format is invalid in the file! (the clause (O 4 3 7 13 14) defined on line 21 doesn't end with 0)))
+DIMACS NNF format is invalid in the file! (the formula mentioned at line 16 has an invalid DIMACS format (DIMACS CNF format is invalid in the file! (the clause (O 4 3 7 13 14) defined at line 21 doesn't end with 0)))
 
 two_cnf_valid.nnf
 C CaraCompiler
@@ -5461,7 +5560,7 @@ A 2 1 4
 L 2
 O 2 2 10 11
 A 2 9 12
-T 4
+T 4 2 1 2
 p cnf 2 3
 1 2 0
 -1 2 0

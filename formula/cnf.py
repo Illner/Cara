@@ -39,7 +39,8 @@ class Cnf:
     Private IncidenceGraph incidence_graph
     """
 
-    def __init__(self, dimacs_cnf_source: Union[str, StringIO], starting_line_id: int = 0,
+    def __init__(self, dimacs_cnf_source: Union[str, StringIO],
+                 starting_line_id: int = 0, variable_mapping: Union[Dict[int, int], None] = None,
                  cnf_statistics: Union[CnfStatistics, None] = None,
                  incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = None):
         # region Initialization
@@ -73,14 +74,18 @@ class Cnf:
         # Incidence graph
         self.__incidence_graph: Union[IncidenceGraph, None] = None
 
-        self.__create_cnf(dimacs_cnf_source, starting_line_id)
+        variable_mapping = dict() if variable_mapping is None else variable_mapping
+        self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+                          starting_line_id=starting_line_id,
+                          variable_mapping=variable_mapping)
 
     # region Private method
-    def __create_cnf(self, dimacs_cnf_source: Union[str, StringIO], starting_line_id: int) -> None:
+    def __create_cnf(self, dimacs_cnf_source: Union[str, StringIO], starting_line_id: int, variable_mapping: Dict[int, int]) -> None:
         """
         Convert the formula from the file/IO into our structure
         :param dimacs_cnf_source: the file/IO, which is in the DIMACS CNF format
         :param starting_line_id: the starting line ID
+        :param variable_mapping: the mapping between variables (optional)
         :return: None
         :raises InvalidDimacsCnfFormatException, PLineIsNotMentionedException: if the DIMACS CNF format in the file/IO is invalid
         """
@@ -155,12 +160,19 @@ class Cnf:
 
                 # Invalid line
                 if line_array_temp.pop() != "0":
-                    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined on line {line_id} doesn't end with 0")
+                    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
 
                 clause_set_temp = set()
                 try:
                     for lit in line_array_temp:
                         lit = int(lit)
+                        var = abs(lit)
+
+                        # Mapping
+                        if var in variable_mapping:
+                            var_map = variable_mapping[var]
+                            lit_map = -var_map if lit < 0 else var_map
+                            lit = lit_map
 
                         # (lit v lit) in the clause
                         if lit in clause_set_temp:
@@ -173,7 +185,7 @@ class Cnf:
 
                         clause_set_temp.add(lit)
                 except ValueError:
-                    raise f_exception.InvalidDimacsCnfFormatException(f"invalid clause ({line}) defined on line {line_id}")
+                    raise f_exception.InvalidDimacsCnfFormatException(f"invalid clause ({line}) defined at line {line_id}")
 
                 # The clause is empty or contains two opposite literals
                 if not clause_set_temp:

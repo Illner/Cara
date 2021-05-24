@@ -152,13 +152,13 @@ class Circuit:
 
                     # Invalid line
                     if len(line_array_temp) != 2:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the literal leaf ({line}) defined on line {line_id} has an invalid number of parameters")
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the literal leaf ({line}) defined at line {line_id} has an invalid number of parameters")
 
                     # Parse the literal
                     try:
                         literal_temp = int(line_array_temp[1])
                     except ValueError:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the literal ({line_array_temp[1]}) mentioned on line {line_id} in the leaf node is not an integer")
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the literal ({line_array_temp[1]}) mentioned at line {line_id} in the leaf node is not an integer")
 
                     root_id = self.create_literal_leaf(literal_temp, use_unique_node_cache=False)
                     continue
@@ -169,29 +169,29 @@ class Circuit:
 
                     # Invalid line
                     if len(line_array_temp) < 3:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the AND node ({line}) defined on line {line_id} has an invalid number of parameters")
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the AND node ({line}) defined at line {line_id} has an invalid number of parameters")
 
                     # Parse the IDs
                     child_id_set_temp = set()
                     try:
                         c_temp = int(line_array_temp[1])
                         if c_temp < 0:
-                            raise c_exception.InvalidDimacsNnfFormatException(f"the c value ({c_temp}) mentioned on line {line_id} in the AND node is negative")
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the c value ({c_temp}) mentioned at line {line_id} in the AND node is negative")
 
                         for i in range(2, len(line_array_temp)):
                             id_temp = int(line_array_temp[i])
 
                             # Check if the node with the id has been already declared
                             if not self.node_id_exist(id_temp):
-                                raise c_exception.InvalidDimacsNnfFormatException(f"the node (child) with the id ({id_temp}) mentioned on line {line_id} in the AND node has not been seen yet")
+                                raise c_exception.InvalidDimacsNnfFormatException(f"the node (child) with the id ({id_temp}) mentioned at line {line_id} in the AND node has not been seen yet")
 
                             child_id_set_temp.add(id_temp)
 
                         # The c value and the number of children don't correspond
                         if len(child_id_set_temp) != c_temp:
-                            raise c_exception.InvalidDimacsNnfFormatException(f"the c value ({c_temp}) and the number of children ({len(child_id_set_temp)}) mentioned on line {line_id} in the AND node don't correspond")
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the c value ({c_temp}) and the number of children ({len(child_id_set_temp)}) mentioned at line {line_id} in the AND node don't correspond")
                     except ValueError:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the c value or some id of a node ({line}) mentioned on line {line_id} in the AND node is not an integer")
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the c value or some id of a node ({line}) mentioned at line {line_id} in the AND node is not an integer")
 
                     root_id = self.create_and_node(child_id_set_temp, use_unique_node_cache=False)
                     continue
@@ -202,18 +202,18 @@ class Circuit:
 
                     # Invalid line
                     if len(line_array_temp) < 4:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the OR node ({line}) defined on line {line_id} has an invalid number of parameters")
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the OR node ({line}) defined at line {line_id} has an invalid number of parameters")
 
                     # Parse the IDs
                     child_id_set_temp = set()
                     try:
                         j_temp = int(line_array_temp[1])
                         if (j_temp < 0) or (j_temp > n):
-                            raise c_exception.InvalidDimacsNnfFormatException(f"the j value ({j_temp}) mentioned on line {line_id} in the OR node is not a valid number")
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the j value ({j_temp}) mentioned at line {line_id} in the OR node is not a valid number")
 
                         c_temp = int(line_array_temp[2])
                         if c_temp < 0:
-                            raise c_exception.InvalidDimacsNnfFormatException(f"the c value ({c_temp}) mentioned on line {line_id} in the OR node is negative")
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the c value ({c_temp}) mentioned at line {line_id} in the OR node is negative")
 
                         j_temp = None if j_temp == 0 else j_temp
 
@@ -222,20 +222,20 @@ class Circuit:
 
                             # Check if the node with the id has been already declared
                             if not self.node_id_exist(id_temp):
-                                raise c_exception.InvalidDimacsNnfFormatException(f"the node (child) with the id ({id_temp}) mentioned on line {line_id} in the OR node has not been seen yet")
+                                raise c_exception.InvalidDimacsNnfFormatException(f"the node (child) with the id ({id_temp}) mentioned at line {line_id} in the OR node has not been seen yet")
 
                             child_id_set_temp.add(id_temp)
 
                         # The c value and the number of children don't correspond
                         if len(child_id_set_temp) != c_temp:
-                            raise c_exception.InvalidDimacsNnfFormatException(f"the c value ({c_temp}) and the number of children ({len(child_id_set_temp)}) mentioned on line {line_id} in the OR node don't correspond")
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the c value ({c_temp}) and the number of children ({len(child_id_set_temp)}) mentioned at line {line_id} in the OR node don't correspond")
                     except ValueError:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the c value, j value or some id of a node ({line}) mentioned on line {line_id} in the OR node is not an integer")
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the c value, j value or some id of a node ({line}) mentioned at line {line_id} in the OR node is not an integer")
 
                     root_id = self.create_or_node(child_id_set_temp, decision_variable=j_temp, use_unique_node_cache=False)
                     continue
 
-                # 2-CNF / renamable Horn CNF leaf
+                # 2-CNF or renamable Horn CNF leaf
                 if line.startswith("T") or line.startswith("t") or \
                    line.startswith("R") or line.startswith("r"):
 
@@ -249,14 +249,47 @@ class Circuit:
                     line_array_temp = line.split()
 
                     # Invalid line
-                    if len(line_array_temp) != 2:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the {node_type_temp.name} leaf ({line}) defined on line {line_id} has an invalid number of parameters")
+                    if len(line_array_temp) < 2:
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the {node_type_temp.name} leaf ({line}) defined at line {line_id} has an invalid number of parameters")
 
-                    # Parse the size of DIMACS CNF
+                    # Version without mapping
+                    if len(line_array_temp) == 2:
+                        use_mapping_temp = False
+                    # Version with mapping
+                    else:
+                        use_mapping_temp = True
+
+                    # Parse the size of DIMACS CNF and the number of variables
                     try:
                         size_of_dimacs_cnf_temp = int(line_array_temp[1])
+
+                        if use_mapping_temp:
+                            number_of_variables_temp = int(line_array_temp[2])
                     except ValueError:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the size of DIMACS CNF ({line_array_temp[1]}) mentioned on line {line_id} in the leaf node is not an integer")
+                        if use_mapping_temp:
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the size of DIMACS CNF ({line_array_temp[1]}) or the number of variables ({line_array_temp[2]}) mentioned at line {line_id} in the leaf node is not an integer")
+                        else:
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the size of DIMACS CNF ({line_array_temp[1]}) mentioned at line {line_id} in the leaf node is not an integer")
+
+                    # The mapping does not contain all variables
+                    if use_mapping_temp and (len(line_array_temp) != (3 + number_of_variables_temp)):
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the number of variables ({line_array_temp[2]}) and the number of variables in the mapping ({len(line_array_temp) - 3}) are different at line {line_id} in the leaf node")
+
+                    variable_mapping_temp: Dict[int, int] = dict()
+
+                    # Parse the mapping
+                    if use_mapping_temp:
+                        try:
+                            for i in range(number_of_variables_temp):
+                                var_temp = int(line_array_temp[3 + i])
+
+                                # The variable is negative
+                                if var_temp < 0:
+                                    raise c_exception.InvalidDimacsNnfFormatException(f"the variable ({line_array_temp[3 + i]}) in the mapping mentioned at line {line_id} in the leaf node is negative")
+
+                                variable_mapping_temp[i + 1] = var_temp
+                        except ValueError:
+                            raise c_exception.InvalidDimacsNnfFormatException(f"some variable in the mapping ({line}) mentioned at line {line_id} in the leaf node is not an integer")
 
                     dimacs_cnf_temp = ""
                     for _ in range(size_of_dimacs_cnf_temp):
@@ -264,9 +297,11 @@ class Circuit:
 
                     io_temp = StringIO(initial_value=dimacs_cnf_temp)
                     try:
-                        cnf_temp = Cnf(io_temp, starting_line_id=line_id)
+                        cnf_temp = Cnf(dimacs_cnf_source=io_temp,
+                                       starting_line_id=line_id,
+                                       variable_mapping=variable_mapping_temp)
                     except f_exception.FormulaException as err:
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the formula mentioned on line {line_id} has an invalid DIMACS format ({err})")
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the formula mentioned at line {line_id} has an invalid DIMACS format ({err})")
 
                     # 2-CNF
                     if node_type_temp == nt_enum.NodeTypeEnum.TWO_CNF:
@@ -275,7 +310,7 @@ class Circuit:
 
                             root_id = self.create_2_cnf_leaf(two_cnf_temp)
                         except f_exception.FormulaIsNot2CnfException:
-                            raise c_exception.InvalidDimacsNnfFormatException(f"the formula mentioned on line {line_id} in the leaf node is not 2-CNF")
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the formula mentioned at line {line_id} in the leaf node is not 2-CNF")
 
                     # Renamable Horn CNF
                     else:
@@ -286,7 +321,7 @@ class Circuit:
 
                             root_id = self.create_renamable_horn_cnf_leaf(horn_cnf_temp, renaming_function_temp)
                         except f_exception.FormulaIsNotHornException:
-                            raise c_exception.InvalidDimacsNnfFormatException(f"the formula mentioned on line {line_id} in the leaf node is not renamable Horn formula")
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the formula mentioned at line {line_id} in the leaf node is not renamable Horn formula")
 
                     line_id += size_of_dimacs_cnf_temp
                     continue
@@ -1213,14 +1248,16 @@ class Circuit:
                     string = "\n".join((string, f"O {j} {len(child_to_list)} {str(child_to_sorted_list)}"))
                     continue
 
-                # 2-CNF leaf
-                if isinstance(node, TwoCnfLeaf):
-                    string = "\n".join((string, f"T {node.number_of_clauses + 1}", str(node)))
-                    continue
+                # 2-CNF or renamable Horn CNF leaf
+                if isinstance(node, TwoCnfLeaf) or isinstance(node, RenamableHornCnfLeaf):
+                    char_temp = "T" if isinstance(node, TwoCnfLeaf) else "R"
 
-                # Renamable Horn CNF leaf
-                if isinstance(node, RenamableHornCnfLeaf):
-                    string = "\n".join((string, f"R {node.number_of_clauses + 1}", str(node)))
+                    # string = "\n".join((string, f"{char_temp} {node.number_of_clauses + 1}", str(node)))
+
+                    string_temp, mapping_temp = node.str_with_mapping()
+                    mapping_temp = sorted(mapping_temp, key=mapping_temp.get, reverse=False)
+
+                    string = "\n".join((string, f"{char_temp} {node.number_of_clauses + 1} {node.number_of_variables} {' '.join(map(str, mapping_temp))}", string_temp))
                     continue
 
                 raise c_exception.SomethingWrongException(f"this type of node ({type(node)}) is not implemented in __str__ (circuit)")
