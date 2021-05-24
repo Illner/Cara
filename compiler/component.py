@@ -486,7 +486,7 @@ class Component:
                 self.__statistics.component_statistics.component_caching_after_hit.add_count(0)  # counter
 
         # 2-CNF
-        if (bc_enum.BaseClassEnum.TWO_CNF in self.__base_class_enum_set) and self.__incidence_graph.is_2_cnf():
+        if (bc_enum.BaseClassEnum.TWO_CNF in self.__base_class_enum_set) and (self.__incidence_graph.number_of_variables() > 1) and self.__incidence_graph.is_2_cnf():
             two_cnf = self.__incidence_graph.convert_to_2_cnf()
 
             self.__statistics.component_statistics.two_cnf_formula_length.add_count(two_cnf.formula_length)     # counter
@@ -502,7 +502,7 @@ class Component:
             return node_id
 
         # Renamable Horn CNF
-        if bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF in self.__base_class_enum_set:
+        if (bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF in self.__base_class_enum_set) and (self.__incidence_graph.number_of_variables() > 1):
             renaming_function_temp = self.__incidence_graph.is_renamable_horn_formula()
             if renaming_function_temp is not None:
                 horn_cnf = self.__incidence_graph.convert_to_horn_cnf(renaming_function_temp)
