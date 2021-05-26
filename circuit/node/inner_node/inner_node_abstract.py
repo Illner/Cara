@@ -110,13 +110,19 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     # endregion
 
     # region Protected method
-    def _update(self, call_parent_update: bool = True) -> None:
+    def _update(self, call_parent_update: bool = True, smooth: bool = False) -> None:
         """
         Update the properties of the circuit.
         Called when something changes in the circuit and properties (nodes in the circuit, ...) need to be recomputed.
         :param call_parent_update: True for calling the update functions of parents recursively
+        :param smooth: True if the function is called because of smoothness
         :return: None
+        :raises TryingUpdateCircuitWithMappingNodesException: if it is a mapping node and smooth=False
         """
+
+        # Mapping node
+        if (self.node_type == nt_enum.NodeTypeEnum.MAPPING_NODE) and not smooth:
+            raise c_exception.TryingUpdateCircuitWithMappingNodesException()
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
         self._set_variable_in_circuit_set(variable_in_circuit_set_temp)
@@ -137,7 +143,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         # Notice my parents
         if call_parent_update:
             for parent in self._parent_set:
-                parent._update()
+                parent._update(smooth=smooth)
 
         # Clear caches
         self._clear_caches()
@@ -288,11 +294,12 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         self._parent_set.remove(parent_to_delete)
 
-    def _add_child(self, new_child: NodeAbstract, call_update: bool = True) -> None:
+    def _add_child(self, new_child: NodeAbstract, smooth: bool = False, call_update: bool = True) -> None:
         """
         Add the child (new_child) to the set of children (child_set).
         If the child already exists in the set, nothing happens.
         :param new_child: a new child
+        :param smooth: True if the function is called because of smoothness
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
         :return: None
@@ -305,12 +312,13 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._child_set.add(new_child)
 
         if call_update:
-            self._update()
+            self._update(smooth=smooth)
 
-    def _remove_child(self, child_to_delete: NodeAbstract, call_update: bool = True) -> None:
+    def _remove_child(self, child_to_delete: NodeAbstract, smooth: bool = False, call_update: bool = True) -> None:
         """
         Remove the child (child_to_delete) from the set of children (child_set)
         :param child_to_delete: a child
+        :param smooth: True if the function is called because of smoothness
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
         :return: None
@@ -324,7 +332,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._child_set.remove(child_to_delete)
 
         if call_update:
-            self._update()
+            self._update(smooth=smooth)
 
     def _get_child_set(self, copy: bool) -> Set[NodeAbstract]:
         """

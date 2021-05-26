@@ -187,3 +187,13 @@ class OperationIsNotSupportedException(CircuitException):
     def __init__(self, operation_name: str):
         self.message = f"The operation ({operation_name}) is not supported for this type of circuit!"
         super().__init__(self.message)
+
+
+class TryingUpdateCircuitWithMappingNodesException(CircuitException):
+    """
+    Trying to update the circuit that contains mapping nodes
+    """
+
+    def __init__(self):
+        self.message = "Trying to update the circuit that contains mapping nodes!"
+        super().__init__(self.message)

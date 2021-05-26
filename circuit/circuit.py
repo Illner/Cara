@@ -493,28 +493,34 @@ class Circuit:
             raise c_exception.AssumptionSetContainsComplementLiteralsException(complementary_literals_set_temp, assumption_and_exist_set)
 
     @staticmethod
-    def __add_edge(from_node: InnerNodeAbstract, to_node: NodeAbstract, call_update: bool = True) -> None:
+    def __add_edge(from_node: InnerNodeAbstract, to_node: NodeAbstract, smooth: bool = False, call_update: bool = True) -> None:
         """
-        Add an oriented edge (from_node -> to_node) in the circuit.
+        Add an oriented edge (from_node -> to_node) in the circuit
+        :param smooth: True if the function is called because of smoothness
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
         :return: None
         """
 
-        to_node._add_parent(from_node)
-        from_node._add_child(to_node, call_update)
+        to_node._add_parent(new_parent=from_node)
+        from_node._add_child(new_child=to_node,
+                             smooth=smooth,
+                             call_update=call_update)
 
     @staticmethod
-    def __remove_edge(from_node: InnerNodeAbstract, to_node: NodeAbstract, call_update: bool = True) -> None:
+    def __remove_edge(from_node: InnerNodeAbstract, to_node: NodeAbstract, smooth: bool = False, call_update: bool = True) -> None:
         """
-        Remove an oriented edge (from_node -> to_node) in the circuit.
+        Remove an oriented edge (from_node -> to_node) in the circuit
+        :param smooth: True if the function is called because of smoothness
         :param call_update: True for calling the update function after this modification.
         If the parameter is set to False, then the circuit may be inconsistent after this modification.
         :return: None
         """
 
-        to_node._remove_parent(from_node)
-        from_node._remove_child(to_node, call_update)
+        to_node._remove_parent(parent_to_delete=from_node)
+        from_node._remove_child(child_to_delete=to_node,
+                                smooth=smooth,
+                                call_update=call_update)
 
     @staticmethod
     def __generate_key_cache(child_id_set: Set[int]) -> str:
@@ -985,8 +991,14 @@ class Circuit:
                 if difference_set:
                     and_node = self.__smooth_create_and_node(child.id, difference_set)
 
-                    self.__remove_edge(node, child, False)
-                    self.__add_edge(node, and_node, False)
+                    self.__remove_edge(from_node=node,
+                                       to_node=child,
+                                       smooth=True,
+                                       call_update=False)
+                    self.__add_edge(from_node=node,
+                                    to_node=and_node,
+                                    smooth=True,
+                                    call_update=False)
 
         # Update properties for all inner nodes in the circuit
         leaf_set = set()
@@ -1121,7 +1133,9 @@ class Circuit:
         if to_id_node in from_node.get_child_id_list():
             return
 
-        self.__add_edge(from_node, to_node)
+        self.__add_edge(from_node=from_node,
+                        to_node=to_node,
+                        smooth=False)
 
         # Recheck the type of the circuit
         self.check_circuit_type()
