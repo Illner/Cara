@@ -924,7 +924,8 @@ class Circuit:
 
         number_of_models = self.model_counting(assumption_set, use_cache)
 
-        restricted_assumption_set_temp = self.__root._create_restricted_assumption_set(assumption_set)
+        restricted_assumption_set_temp = self.__root._create_restricted_assumption_set(assumption_set=assumption_set,
+                                                                                       mapping_id_variable_id_dictionary=None)
 
         return number_of_models == 2**(self.number_of_variables - len(restricted_assumption_set_temp))
 

@@ -1,7 +1,7 @@
 
 Creating and connecting nodes
 
-__create_circuit_1
+_create_circuit_1
 ID: 0 Node type: CONSTANT Variables in the circuit:  Literals in the circuit:  Nodes in the circuit: 0 Parent list (IDs): 2 Constant: True
 ID: 1 Node type: LITERAL Variables in the circuit: 3 Literals in the circuit: -3 Nodes in the circuit: 1 Parent list (IDs): 2 6 Literal: -3
 ID: 2 Node type: AND_NODE Variables in the circuit: 3 Literals in the circuit: -3 Nodes in the circuit: 0 1 2 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 0 1 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 1  LITERAL: 1  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
@@ -11,7 +11,7 @@ ID: 5 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: 2 
 ID: 6 Node type: OR_NODE Variables in the circuit: 3 Literals in the circuit: -3 Nodes in the circuit: 0 1 2 6 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 1 2 Parent list (IDs): 8 The node types in the circuit: AND_NODE: 1  OR_NODE: 1  MAPPING_NODE: 0  CONSTANT: 1  LITERAL: 1  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
 ID: 7 Node type: OR_NODE Variables in the circuit: 1 2 Literals in the circuit: 1 2 Nodes in the circuit: 3 4 5 7 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 3 4 5 Parent list (IDs): 8 The node types in the circuit: AND_NODE: 0  OR_NODE: 1  MAPPING_NODE: 0  CONSTANT: 1  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
 ID: 8 Node type: AND_NODE Variables in the circuit: 1 2 3 Literals in the circuit: -3 1 2 Nodes in the circuit: 0 1 2 3 4 5 6 7 8 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: False Children list (IDs): 6 7 Parent list (IDs):  The node types in the circuit: AND_NODE: 2  OR_NODE: 2  MAPPING_NODE: 0  CONSTANT: 2  LITERAL: 3  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
-__create_circuit_2
+_create_circuit_2
 ID: 0 Node type: LITERAL Variables in the circuit: 3 Literals in the circuit: -3 Nodes in the circuit: 0 Parent list (IDs): 4 Literal: -3
 ID: 1 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Nodes in the circuit: 1 Parent list (IDs): 4 5 Literal: 1
 ID: 2 Node type: CONSTANT Variables in the circuit:  Literals in the circuit:  Nodes in the circuit: 2 Parent list (IDs): 5 Constant: False
@@ -19,7 +19,7 @@ ID: 3 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: 2 
 ID: 4 Node type: OR_NODE Variables in the circuit: 1 3 Literals in the circuit: -3 1 Nodes in the circuit: 0 1 4 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 0 1 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 0  OR_NODE: 1  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
 ID: 5 Node type: OR_NODE Variables in the circuit: 1 2 Literals in the circuit: 1 2 Nodes in the circuit: 1 2 3 5 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 1 2 3 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 0  OR_NODE: 1  MAPPING_NODE: 0  CONSTANT: 1  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
 ID: 6 Node type: AND_NODE Variables in the circuit: 1 2 3 Literals in the circuit: -3 1 2 Nodes in the circuit: 0 1 2 3 4 5 6 Decomposable: False Decomposable_in_circuit: False Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: False Children list (IDs): 4 5 Parent list (IDs):  The node types in the circuit: AND_NODE: 1  OR_NODE: 2  MAPPING_NODE: 0  CONSTANT: 1  LITERAL: 3  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
-__create_circuit_3
+_create_circuit_3
 ID: 0 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: -1 Nodes in the circuit: 0 Parent list (IDs): 8 9 Literal: -1
 ID: 1 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: 2 Nodes in the circuit: 1 Parent list (IDs): 8 10 Literal: 2
 ID: 2 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: -2 Nodes in the circuit: 2 Parent list (IDs): 9 11 Literal: -2
@@ -45,7 +45,7 @@ ID: 21 Node type: AND_NODE Variables in the circuit: 1 2 3 4 Literals in the cir
 ID: 22 Node type: CONSTANT Variables in the circuit:  Literals in the circuit:  Nodes in the circuit: 22 Parent list (IDs):  Constant: False
 ID: 23 Node type: CONSTANT Variables in the circuit:  Literals in the circuit:  Nodes in the circuit: 23 Parent list (IDs):  Constant: True
 ID: 24 Node type: OR_NODE Variables in the circuit: 1 2 3 4 Literals in the circuit: -4 -3 -2 -1 1 2 3 4 Nodes in the circuit: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 24 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 20 21 Parent list (IDs):  The node types in the circuit: AND_NODE: 10  OR_NODE: 5  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 8  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
-__create_circuit_4
+_create_circuit_4
 ID: 0 Node type: LITERAL Variables in the circuit: 4 Literals in the circuit: -4 Nodes in the circuit: 0 Parent list (IDs): 6 12 Literal: -4
 ID: 1 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Nodes in the circuit: 1 Parent list (IDs): 6 Literal: 1
 ID: 2 Node type: LITERAL Variables in the circuit: 5 Literals in the circuit: -5 Nodes in the circuit: 2 Parent list (IDs): 7 13 Literal: -5
@@ -68,7 +68,7 @@ ID: 18 Node type: AND_NODE Variables in the circuit: 1 2 3 4 5 6 7 Literals in t
 ID: 19 Node type: CONSTANT Variables in the circuit:  Literals in the circuit:  Nodes in the circuit: 19 Parent list (IDs):  Constant: False
 ID: 20 Node type: CONSTANT Variables in the circuit:  Literals in the circuit:  Nodes in the circuit: 20 Parent list (IDs):  Constant: True
 ID: 21 Node type: OR_NODE Variables in the circuit: 1 2 3 4 5 6 7 Literals in the circuit: -7 -6 -5 -4 -3 -2 -1 1 2 3 7 Nodes in the circuit: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 21 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 17 18 Parent list (IDs):  The node types in the circuit: AND_NODE: 4  OR_NODE: 5  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 11  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: 7
-__create_circuit_5
+_create_circuit_5
 ID: 0 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: -1 Nodes in the circuit: 0 Parent list (IDs): 8 Literal: -1
 ID: 1 Node type: LITERAL Variables in the circuit: 3 Literals in the circuit: -3 Nodes in the circuit: 1 Parent list (IDs): 9 Literal: -3
 ID: 2 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Nodes in the circuit: 2 Parent list (IDs): 10 Literal: 1
@@ -86,6 +86,56 @@ ID: 13 Node type: AND_NODE Variables in the circuit: 1 2 3 4 5 Literals in the c
 ID: 14 Node type: CONSTANT Variables in the circuit:  Literals in the circuit:  Nodes in the circuit: 14 Parent list (IDs):  Constant: False
 ID: 15 Node type: CONSTANT Variables in the circuit:  Literals in the circuit:  Nodes in the circuit: 15 Parent list (IDs):  Constant: True
 ID: 16 Node type: OR_NODE Variables in the circuit: 1 2 3 4 5 Literals in the circuit: -5 -4 -3 -2 -1 1 2 3 Nodes in the circuit: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 16 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: False Children list (IDs): 12 13 Parent list (IDs):  The node types in the circuit: AND_NODE: 2  OR_NODE: 5  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 8  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: 1
+_create_circuit_6
+ID: 0 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Nodes in the circuit: 0 Parent list (IDs): 4 Literal: 1
+ID: 1 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: 2 Nodes in the circuit: 1 Parent list (IDs): 4 Literal: 2
+ID: 2 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: -2 Nodes in the circuit: 2 Parent list (IDs): 5 Literal: -2
+ID: 3 Node type: LITERAL Variables in the circuit: 3 Literals in the circuit: 3 Nodes in the circuit: 3 Parent list (IDs): 5 Literal: 3
+ID: 4 Node type: AND_NODE Variables in the circuit: 1 2 Literals in the circuit: 1 2 Nodes in the circuit: 0 1 4 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 0 1 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 5 Node type: AND_NODE Variables in the circuit: 2 3 Literals in the circuit: -2 3 Nodes in the circuit: 2 3 5 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 2 3 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 6 Node type: OR_NODE Variables in the circuit: 1 2 3 Literals in the circuit: -2 1 2 3 Nodes in the circuit: 0 1 2 3 4 5 6 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 4 5 Parent list (IDs): 7 8 The node types in the circuit: AND_NODE: 2  OR_NODE: 1  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 4  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
+ID: 7 Node type: MAPPING_NODE Variables in the circuit: 4 5 6 Literals in the circuit: -5 4 5 6 Nodes in the circuit: 0 1 2 3 4 5 6 7 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: False Children list (IDs): 6 Parent list (IDs): 8 The node types in the circuit: AND_NODE: 2  OR_NODE: 1  MAPPING_NODE: 1  CONSTANT: 0  LITERAL: 4  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Mapping: {4: 1, 5: 2, 6: 3}
+ID: 8 Node type: AND_NODE Variables in the circuit: 1 2 3 4 5 6 Literals in the circuit: -5 -2 1 2 3 4 5 6 Nodes in the circuit: 0 1 2 3 4 5 6 7 8 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: False Children list (IDs): 6 7 Parent list (IDs):  The node types in the circuit: AND_NODE: 3  OR_NODE: 1  MAPPING_NODE: 1  CONSTANT: 0  LITERAL: 4  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+_create_circuit_7
+ID: 0 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Nodes in the circuit: 0 Parent list (IDs): 4 Literal: 1
+ID: 1 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: 2 Nodes in the circuit: 1 Parent list (IDs): 4 Literal: 2
+ID: 2 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: -2 Nodes in the circuit: 2 Parent list (IDs): 5 Literal: -2
+ID: 3 Node type: LITERAL Variables in the circuit: 3 Literals in the circuit: 3 Nodes in the circuit: 3 Parent list (IDs): 5 Literal: 3
+ID: 4 Node type: AND_NODE Variables in the circuit: 1 2 Literals in the circuit: 1 2 Nodes in the circuit: 0 1 4 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 0 1 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 5 Node type: AND_NODE Variables in the circuit: 2 3 Literals in the circuit: -2 3 Nodes in the circuit: 2 3 5 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 2 3 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 6 Node type: OR_NODE Variables in the circuit: 1 2 3 Literals in the circuit: -2 1 2 3 Nodes in the circuit: 0 1 2 3 4 5 6 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 4 5 Parent list (IDs): 14 The node types in the circuit: AND_NODE: 2  OR_NODE: 1  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 4  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
+ID: 7 Node type: LITERAL Variables in the circuit: 4 Literals in the circuit: 4 Nodes in the circuit: 7 Parent list (IDs): 11 Literal: 4
+ID: 8 Node type: LITERAL Variables in the circuit: 5 Literals in the circuit: 5 Nodes in the circuit: 8 Parent list (IDs): 11 Literal: 5
+ID: 9 Node type: LITERAL Variables in the circuit: 5 Literals in the circuit: -5 Nodes in the circuit: 9 Parent list (IDs): 12 Literal: -5
+ID: 10 Node type: LITERAL Variables in the circuit: 6 Literals in the circuit: 6 Nodes in the circuit: 10 Parent list (IDs): 12 Literal: 6
+ID: 11 Node type: AND_NODE Variables in the circuit: 4 5 Literals in the circuit: 4 5 Nodes in the circuit: 7 8 11 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 7 8 Parent list (IDs): 13 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 12 Node type: AND_NODE Variables in the circuit: 5 6 Literals in the circuit: -5 6 Nodes in the circuit: 9 10 12 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 9 10 Parent list (IDs): 13 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 13 Node type: OR_NODE Variables in the circuit: 4 5 6 Literals in the circuit: -5 4 5 6 Nodes in the circuit: 7 8 9 10 11 12 13 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 11 12 Parent list (IDs): 14 The node types in the circuit: AND_NODE: 2  OR_NODE: 1  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 4  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
+ID: 14 Node type: AND_NODE Variables in the circuit: 1 2 3 4 5 6 Literals in the circuit: -5 -2 1 2 3 4 5 6 Nodes in the circuit: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: False Children list (IDs): 6 13 Parent list (IDs):  The node types in the circuit: AND_NODE: 5  OR_NODE: 2  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 8  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+_create_circuit_8
+ID: 0 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Nodes in the circuit: 0 Parent list (IDs): 2 Literal: 1
+ID: 1 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: 2 Nodes in the circuit: 1 Parent list (IDs): 2 Literal: 2
+ID: 2 Node type: AND_NODE Variables in the circuit: 1 2 Literals in the circuit: 1 2 Nodes in the circuit: 0 1 2 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 0 1 Parent list (IDs): 3 4 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 3 Node type: MAPPING_NODE Variables in the circuit: 3 4 Literals in the circuit: 3 4 Nodes in the circuit: 0 1 2 3 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 2 Parent list (IDs): 4 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 1  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Mapping: {3: 1, 4: 2}
+ID: 4 Node type: OR_NODE Variables in the circuit: 1 2 3 4 Literals in the circuit: 1 2 3 4 Nodes in the circuit: 0 1 2 3 4 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 2 3 Parent list (IDs): 5 6 The node types in the circuit: AND_NODE: 1  OR_NODE: 1  MAPPING_NODE: 1  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
+ID: 5 Node type: MAPPING_NODE Variables in the circuit: 5 6 7 8 Literals in the circuit: 5 6 7 8 Nodes in the circuit: 0 1 2 3 4 5 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: False Children list (IDs): 4 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 1  OR_NODE: 1  MAPPING_NODE: 2  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Mapping: {5: 1, 6: 2, 7: 3, 8: 4}
+ID: 6 Node type: AND_NODE Variables in the circuit: 1 2 3 4 5 6 7 8 Literals in the circuit: 1 2 3 4 5 6 7 8 Nodes in the circuit: 0 1 2 3 4 5 6 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: False Children list (IDs): 4 5 Parent list (IDs):  The node types in the circuit: AND_NODE: 2  OR_NODE: 1  MAPPING_NODE: 2  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+_create_circuit_9
+ID: 0 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Nodes in the circuit: 0 Parent list (IDs): 2 Literal: 1
+ID: 1 Node type: LITERAL Variables in the circuit: 2 Literals in the circuit: 2 Nodes in the circuit: 1 Parent list (IDs): 2 Literal: 2
+ID: 2 Node type: AND_NODE Variables in the circuit: 1 2 Literals in the circuit: 1 2 Nodes in the circuit: 0 1 2 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 0 1 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 3 Node type: LITERAL Variables in the circuit: 3 Literals in the circuit: 3 Nodes in the circuit: 3 Parent list (IDs): 5 Literal: 3
+ID: 4 Node type: LITERAL Variables in the circuit: 4 Literals in the circuit: 4 Nodes in the circuit: 4 Parent list (IDs): 5 Literal: 4
+ID: 5 Node type: AND_NODE Variables in the circuit: 3 4 Literals in the circuit: 3 4 Nodes in the circuit: 3 4 5 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 3 4 Parent list (IDs): 6 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 6 Node type: OR_NODE Variables in the circuit: 1 2 3 4 Literals in the circuit: 1 2 3 4 Nodes in the circuit: 0 1 2 3 4 5 6 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 2 5 Parent list (IDs): 14 The node types in the circuit: AND_NODE: 2  OR_NODE: 1  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 4  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
+ID: 7 Node type: LITERAL Variables in the circuit: 5 Literals in the circuit: 5 Nodes in the circuit: 7 Parent list (IDs): 9 Literal: 5
+ID: 8 Node type: LITERAL Variables in the circuit: 6 Literals in the circuit: 6 Nodes in the circuit: 8 Parent list (IDs): 9 Literal: 6
+ID: 9 Node type: AND_NODE Variables in the circuit: 5 6 Literals in the circuit: 5 6 Nodes in the circuit: 7 8 9 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 7 8 Parent list (IDs): 13 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 10 Node type: LITERAL Variables in the circuit: 7 Literals in the circuit: 7 Nodes in the circuit: 10 Parent list (IDs): 12 Literal: 7
+ID: 11 Node type: LITERAL Variables in the circuit: 8 Literals in the circuit: 8 Nodes in the circuit: 11 Parent list (IDs): 12 Literal: 8
+ID: 12 Node type: AND_NODE Variables in the circuit: 7 8 Literals in the circuit: 7 8 Nodes in the circuit: 10 11 12 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 10 11 Parent list (IDs): 13 The node types in the circuit: AND_NODE: 1  OR_NODE: 0  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 2  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
+ID: 13 Node type: OR_NODE Variables in the circuit: 5 6 7 8 Literals in the circuit: 5 6 7 8 Nodes in the circuit: 7 8 9 10 11 12 13 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: False Smoothness_in_circuit: False Children list (IDs): 9 12 Parent list (IDs): 14 The node types in the circuit: AND_NODE: 2  OR_NODE: 1  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 4  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0  Decision variable: None
+ID: 14 Node type: AND_NODE Variables in the circuit: 1 2 3 4 5 6 7 8 Literals in the circuit: 1 2 3 4 5 6 7 8 Nodes in the circuit: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: False Children list (IDs): 6 13 Parent list (IDs):  The node types in the circuit: AND_NODE: 5  OR_NODE: 2  MAPPING_NODE: 0  CONSTANT: 0  LITERAL: 8  TWO_CNF: 0  RENAMABLE_HORN_CNF: 0 
 
 Modification
 Before modification
@@ -178,6 +228,201 @@ Satisfiability (negative)
 
 The circuit is not decomposable! Satisfiability is not supported if the circuit is not decomposable.
 
+Satisfiability (mapping)
+
+_create_circuit_6
+Node: 0, cache: False, sat: True
+Node: 1, cache: False, sat: True
+Node: 2, cache: False, sat: True
+Node: 3, cache: False, sat: True
+Node: 4, cache: False, sat: True
+Node: 5, cache: False, sat: True
+Node: 6, cache: False, sat: True
+Node: 7, cache: False, sat: True
+Node: 8, cache: False, sat: True
+Assumption: -3 -1, cache: False, sat: False
+Assumption: -6 -4, cache: False, sat: False
+Assumption: -1 2, cache: False, sat: False
+Assumption: -4 5, cache: False, sat: False
+Assumption: -4 2, cache: False, sat: True
+Assumption: -4 1 6, cache: False, sat: True
+Assumption: -7 -5 -3 -1, cache: False, sat: False
+Assumption: 1 2 5 6, cache: False, sat: True
+Assumption: 3 4 7 8, cache: False, sat: True
+Assumption: -7 -6 -4 -1, cache: False, sat: False
+Assumption: -8 -6, cache: False, sat: True
+Assumption: -4 -1, cache: False, sat: True
+Node: 0, cache: True, sat: True
+Node: 1, cache: True, sat: True
+Node: 2, cache: True, sat: True
+Node: 3, cache: True, sat: True
+Node: 4, cache: True, sat: True
+Node: 5, cache: True, sat: True
+Node: 6, cache: True, sat: True
+Node: 7, cache: True, sat: True
+Node: 8, cache: True, sat: True
+Assumption: -3 -1, cache: True, sat: False
+Assumption: -6 -4, cache: True, sat: False
+Assumption: -1 2, cache: True, sat: False
+Assumption: -4 5, cache: True, sat: False
+Assumption: -4 2, cache: True, sat: True
+Assumption: -4 1 6, cache: True, sat: True
+Assumption: -7 -5 -3 -1, cache: True, sat: False
+Assumption: 1 2 5 6, cache: True, sat: True
+Assumption: 3 4 7 8, cache: True, sat: True
+Assumption: -7 -6 -4 -1, cache: True, sat: False
+Assumption: -8 -6, cache: True, sat: True
+Assumption: -4 -1, cache: True, sat: True
+_create_circuit_7
+Node: 0, cache: False, sat: True
+Node: 1, cache: False, sat: True
+Node: 2, cache: False, sat: True
+Node: 3, cache: False, sat: True
+Node: 4, cache: False, sat: True
+Node: 5, cache: False, sat: True
+Node: 6, cache: False, sat: True
+Node: 7, cache: False, sat: True
+Node: 8, cache: False, sat: True
+Node: 9, cache: False, sat: True
+Node: 10, cache: False, sat: True
+Node: 11, cache: False, sat: True
+Node: 12, cache: False, sat: True
+Node: 13, cache: False, sat: True
+Node: 14, cache: False, sat: True
+Assumption: -3 -1, cache: False, sat: False
+Assumption: -6 -4, cache: False, sat: False
+Assumption: -1 2, cache: False, sat: False
+Assumption: -4 5, cache: False, sat: False
+Assumption: -4 2, cache: False, sat: True
+Assumption: -4 1 6, cache: False, sat: True
+Assumption: -7 -5 -3 -1, cache: False, sat: False
+Assumption: 1 2 5 6, cache: False, sat: True
+Assumption: 3 4 7 8, cache: False, sat: True
+Assumption: -7 -6 -4 -1, cache: False, sat: False
+Assumption: -8 -6, cache: False, sat: True
+Assumption: -4 -1, cache: False, sat: True
+Node: 0, cache: True, sat: True
+Node: 1, cache: True, sat: True
+Node: 2, cache: True, sat: True
+Node: 3, cache: True, sat: True
+Node: 4, cache: True, sat: True
+Node: 5, cache: True, sat: True
+Node: 6, cache: True, sat: True
+Node: 7, cache: True, sat: True
+Node: 8, cache: True, sat: True
+Node: 9, cache: True, sat: True
+Node: 10, cache: True, sat: True
+Node: 11, cache: True, sat: True
+Node: 12, cache: True, sat: True
+Node: 13, cache: True, sat: True
+Node: 14, cache: True, sat: True
+Assumption: -3 -1, cache: True, sat: False
+Assumption: -6 -4, cache: True, sat: False
+Assumption: -1 2, cache: True, sat: False
+Assumption: -4 5, cache: True, sat: False
+Assumption: -4 2, cache: True, sat: True
+Assumption: -4 1 6, cache: True, sat: True
+Assumption: -7 -5 -3 -1, cache: True, sat: False
+Assumption: 1 2 5 6, cache: True, sat: True
+Assumption: 3 4 7 8, cache: True, sat: True
+Assumption: -7 -6 -4 -1, cache: True, sat: False
+Assumption: -8 -6, cache: True, sat: True
+Assumption: -4 -1, cache: True, sat: True
+_create_circuit_8
+Node: 0, cache: False, sat: True
+Node: 1, cache: False, sat: True
+Node: 2, cache: False, sat: True
+Node: 3, cache: False, sat: True
+Node: 4, cache: False, sat: True
+Node: 5, cache: False, sat: True
+Node: 6, cache: False, sat: True
+Assumption: -3 -1, cache: False, sat: False
+Assumption: -6 -4, cache: False, sat: True
+Assumption: -1 2, cache: False, sat: True
+Assumption: -4 5, cache: False, sat: True
+Assumption: -4 2, cache: False, sat: True
+Assumption: -4 1 6, cache: False, sat: True
+Assumption: -7 -5 -3 -1, cache: False, sat: False
+Assumption: 1 2 5 6, cache: False, sat: True
+Assumption: 3 4 7 8, cache: False, sat: True
+Assumption: -7 -6 -4 -1, cache: False, sat: False
+Assumption: -8 -6, cache: False, sat: False
+Assumption: -4 -1, cache: False, sat: False
+Node: 0, cache: True, sat: True
+Node: 1, cache: True, sat: True
+Node: 2, cache: True, sat: True
+Node: 3, cache: True, sat: True
+Node: 4, cache: True, sat: True
+Node: 5, cache: True, sat: True
+Node: 6, cache: True, sat: True
+Assumption: -3 -1, cache: True, sat: False
+Assumption: -6 -4, cache: True, sat: True
+Assumption: -1 2, cache: True, sat: True
+Assumption: -4 5, cache: True, sat: True
+Assumption: -4 2, cache: True, sat: True
+Assumption: -4 1 6, cache: True, sat: True
+Assumption: -7 -5 -3 -1, cache: True, sat: False
+Assumption: 1 2 5 6, cache: True, sat: True
+Assumption: 3 4 7 8, cache: True, sat: True
+Assumption: -7 -6 -4 -1, cache: True, sat: False
+Assumption: -8 -6, cache: True, sat: False
+Assumption: -4 -1, cache: True, sat: False
+_create_circuit_9
+Node: 0, cache: False, sat: True
+Node: 1, cache: False, sat: True
+Node: 2, cache: False, sat: True
+Node: 3, cache: False, sat: True
+Node: 4, cache: False, sat: True
+Node: 5, cache: False, sat: True
+Node: 6, cache: False, sat: True
+Node: 7, cache: False, sat: True
+Node: 8, cache: False, sat: True
+Node: 9, cache: False, sat: True
+Node: 10, cache: False, sat: True
+Node: 11, cache: False, sat: True
+Node: 12, cache: False, sat: True
+Node: 13, cache: False, sat: True
+Node: 14, cache: False, sat: True
+Assumption: -3 -1, cache: False, sat: False
+Assumption: -6 -4, cache: False, sat: True
+Assumption: -1 2, cache: False, sat: True
+Assumption: -4 5, cache: False, sat: True
+Assumption: -4 2, cache: False, sat: True
+Assumption: -4 1 6, cache: False, sat: True
+Assumption: -7 -5 -3 -1, cache: False, sat: False
+Assumption: 1 2 5 6, cache: False, sat: True
+Assumption: 3 4 7 8, cache: False, sat: True
+Assumption: -7 -6 -4 -1, cache: False, sat: False
+Assumption: -8 -6, cache: False, sat: False
+Assumption: -4 -1, cache: False, sat: False
+Node: 0, cache: True, sat: True
+Node: 1, cache: True, sat: True
+Node: 2, cache: True, sat: True
+Node: 3, cache: True, sat: True
+Node: 4, cache: True, sat: True
+Node: 5, cache: True, sat: True
+Node: 6, cache: True, sat: True
+Node: 7, cache: True, sat: True
+Node: 8, cache: True, sat: True
+Node: 9, cache: True, sat: True
+Node: 10, cache: True, sat: True
+Node: 11, cache: True, sat: True
+Node: 12, cache: True, sat: True
+Node: 13, cache: True, sat: True
+Node: 14, cache: True, sat: True
+Assumption: -3 -1, cache: True, sat: False
+Assumption: -6 -4, cache: True, sat: True
+Assumption: -1 2, cache: True, sat: True
+Assumption: -4 5, cache: True, sat: True
+Assumption: -4 2, cache: True, sat: True
+Assumption: -4 1 6, cache: True, sat: True
+Assumption: -7 -5 -3 -1, cache: True, sat: False
+Assumption: 1 2 5 6, cache: True, sat: True
+Assumption: 3 4 7 8, cache: True, sat: True
+Assumption: -7 -6 -4 -1, cache: True, sat: False
+Assumption: -8 -6, cache: True, sat: False
+Assumption: -4 -1, cache: True, sat: False
+
 Model counting
 
 Node: 0, cache: False, count of models: 1
@@ -241,9 +486,9 @@ Assumption: 1 2, cache: True, count of models: 2
 
 Model counting (negative)
 
-__create_circuit_1
+_create_circuit_1
 The circuit is not smooth! Model counting is not supported if the circuit is not smooth.
-__create_circuit_2
+_create_circuit_2
 The circuit is not decomposable! Model counting is not supported if the circuit is not decomposable.
 
 Minimum default-cardinality

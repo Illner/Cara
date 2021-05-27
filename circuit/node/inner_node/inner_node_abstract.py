@@ -23,6 +23,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     Protected Set<NodeAbstract> child_set
     Protected Set<Leaf> leaf_set
     Protected Set<InnerNodeAbstract> parent_set
+    Private Dict<int, int> variable_id_mapping_id_dictionary
     Private Dict<NodeTypeEnum.value, int> node_type_in_circuit_counter_dict
 
     Private bool decomposable                   # The node satisfies decomposability
@@ -34,10 +35,12 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     """
 
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum, child_set: Set[NodeAbstract],
-                 decomposable: bool = True, deterministic: bool = True, smoothness: bool = True):
+                 decomposable: bool = True, deterministic: bool = True, smoothness: bool = True,
+                 variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None):
         self._child_set: Set[NodeAbstract] = child_set
         self._parent_set: Set[TInnerNodeAbstract] = set()
         self.__node_type_in_circuit_counter_dict: Union[Dict[nt_enum.NodeTypeEnum.value, int], None] = None
+        self.__variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = variable_id_mapping_id_dictionary
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
 
@@ -117,7 +120,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         :param call_parent_update: True for calling the update functions of parents recursively
         :param smooth: True if the function is called because of smoothness
         :return: None
-        :raises TryingUpdateCircuitWithMappingNodesException: if it is a mapping node and smooth=False
+        :raises TryingUpdateCircuitWithMappingNodesException: if this is a mapping node and smooth=False
         """
 
         # Mapping node
@@ -263,7 +266,16 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         :return: (variable_set, literal_set)
         """
 
-        return self._union_variable_and_literal_in_circuit_set_over_set(self._child_set)
+        variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_set(self._child_set)
+
+        # Mapping is used
+        if self.__variable_id_mapping_id_dictionary is not None:
+            variable_in_circuit_set_temp = self.use_mapping_on_variable_set(variable_set=variable_in_circuit_set_temp,
+                                                                            mapping_dictionary=self.__variable_id_mapping_id_dictionary)
+            literal_in_circuit_set_temp = self.use_mapping_on_literal_set(literal_set=literal_in_circuit_set_temp,
+                                                                          mapping_dictionary=self.__variable_id_mapping_id_dictionary)
+
+        return variable_in_circuit_set_temp, literal_in_circuit_set_temp
 
     def _add_parent(self, new_parent: TInnerNodeAbstract) -> None:
         """

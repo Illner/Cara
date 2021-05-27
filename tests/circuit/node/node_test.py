@@ -4,11 +4,12 @@ from typing import List, Union
 from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
 from circuit.node.node_abstract import NodeAbstract
-from circuit.node.leaf.constant_leaf import ConstantLeaf
 from circuit.node.leaf.literal_leaf import LiteralLeaf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
-from circuit.node.inner_node.and_inner_node import AndInnerNode
+from circuit.node.leaf.constant_leaf import ConstantLeaf
 from circuit.node.inner_node.or_inner_node import OrInnerNode
+from circuit.node.inner_node.and_inner_node import AndInnerNode
+from circuit.node.inner_node.mapping_inner_node import MappingInnerNode
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
 # Import exception
@@ -29,6 +30,7 @@ class NodeTest(TestAbstract):
                      ("Detecting a cycle", self.__test_3),
                      ("Satisfiability", self.__test_4),
                      ("Satisfiability (negative)", self.__test_5),
+                     ("Satisfiability (mapping)", self.__test_11),
                      ("Model counting", self.__test_6),
                      ("Model counting (negative)", self.__test_7),
                      ("Minimum default-cardinality", self.__test_8),
@@ -46,7 +48,7 @@ class NodeTest(TestAbstract):
 
     # region Static method
     @staticmethod
-    def __create_circuit_1() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def _create_circuit_1() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_1)
         Decomposable
@@ -66,7 +68,7 @@ class NodeTest(TestAbstract):
         return [n_0, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8]
 
     @staticmethod
-    def __create_circuit_2() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def _create_circuit_2() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_2)
         Non-decomposable
@@ -84,7 +86,7 @@ class NodeTest(TestAbstract):
         return [n_0, n_1, n_2, n_3, n_4, n_5, n_6]
 
     @staticmethod
-    def __create_circuit_3() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def _create_circuit_3() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_3)
         Decomposable
@@ -127,7 +129,7 @@ class NodeTest(TestAbstract):
                 n_17, n_18, n_19, n_20, n_21, n_22, n_23, n_24]
 
     @staticmethod
-    def __create_circuit_4() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def _create_circuit_4() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_4)
         Decomposable
@@ -167,7 +169,7 @@ class NodeTest(TestAbstract):
                 n_17, n_18, n_19, n_20, n_21]
 
     @staticmethod
-    def __create_circuit_5() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+    def _create_circuit_5() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
         """
         Create a circuit (circuit_5)
         Decomposable
@@ -198,6 +200,112 @@ class NodeTest(TestAbstract):
         n_16 = OrInnerNode({n_12, n_13}, 16, 1)
 
         return [n_0, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8, n_9, n_10, n_11, n_12, n_13, n_14, n_15, n_16]
+
+    @staticmethod
+    def _create_circuit_6() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+        """
+        Create a circuit (circuit_6)
+        Decomposable
+        Non-deterministic
+        Non-smooth
+        """
+
+        n_0 = LiteralLeaf(1, 0)
+        n_1 = LiteralLeaf(2, 1)
+        n_2 = LiteralLeaf(-2, 2)
+        n_3 = LiteralLeaf(3, 3)
+
+        n_4 = AndInnerNode({n_0, n_1}, 4)
+        n_5 = AndInnerNode({n_2, n_3}, 5)
+
+        n_6 = OrInnerNode({n_4, n_5}, 6)
+        n_7 = MappingInnerNode(n_6, {4: 1, 5: 2, 6: 3}, {1: 4, 2: 5, 3: 6}, 7)
+
+        n_8 = AndInnerNode({n_6, n_7}, 8)
+
+        return [n_0, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8]
+
+    @staticmethod
+    def _create_circuit_7() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+        """
+        Create a circuit (circuit_7)
+        Decomposable
+        Non-deterministic
+        Non-smooth
+        """
+
+        n_0 = LiteralLeaf(1, 0)
+        n_1 = LiteralLeaf(2, 1)
+        n_2 = LiteralLeaf(-2, 2)
+        n_3 = LiteralLeaf(3, 3)
+
+        n_4 = AndInnerNode({n_0, n_1}, 4)
+        n_5 = AndInnerNode({n_2, n_3}, 5)
+        n_6 = OrInnerNode({n_4, n_5}, 6)
+
+        n_7 = LiteralLeaf(4, 7)
+        n_8 = LiteralLeaf(5, 8)
+        n_9 = LiteralLeaf(-5, 9)
+        n_10 = LiteralLeaf(6, 10)
+
+        n_11 = AndInnerNode({n_7, n_8}, 11)
+        n_12 = AndInnerNode({n_9, n_10}, 12)
+        n_13 = OrInnerNode({n_11, n_12}, 13)
+
+        n_14 = AndInnerNode({n_6, n_13}, 14)
+
+        return [n_0, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8, n_9, n_10, n_11, n_12, n_13, n_14]
+
+    @staticmethod
+    def _create_circuit_8() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+        """
+        Create a circuit (circuit_8)
+        Decomposable
+        Non-deterministic
+        Non-smooth
+        """
+
+        n_0 = LiteralLeaf(1, 0)
+        n_1 = LiteralLeaf(2, 1)
+
+        n_2 = AndInnerNode({n_0, n_1}, 2)
+        n_3 = MappingInnerNode(n_2, {3: 1, 4: 2}, {1: 3, 2: 4}, 3)
+
+        n_4 = OrInnerNode({n_2, n_3}, 4)
+        n_5 = MappingInnerNode(n_4, {5: 1, 6: 2, 7: 3, 8: 4}, {1: 5, 2: 6, 3: 7, 4: 8}, 5)
+
+        n_6 = AndInnerNode({n_4, n_5}, 6)
+
+        return [n_0, n_1, n_2, n_3, n_4, n_5, n_6]
+
+    @staticmethod
+    def _create_circuit_9() -> List[Union[NodeAbstract, LeafAbstract, InnerNodeAbstract]]:
+        """
+        Create a circuit (circuit_9)
+        Decomposable
+        Non-deterministic
+        Non-smooth
+        """
+
+        n_0 = LiteralLeaf(1, 0)
+        n_1 = LiteralLeaf(2, 1)
+        n_2 = AndInnerNode({n_0, n_1}, 2)
+        n_3 = LiteralLeaf(3, 3)
+        n_4 = LiteralLeaf(4, 4)
+        n_5 = AndInnerNode({n_3, n_4}, 5)
+        n_6 = OrInnerNode({n_2, n_5}, 6)
+
+        n_7 = LiteralLeaf(5, 7)
+        n_8 = LiteralLeaf(6, 8)
+        n_9 = AndInnerNode({n_7, n_8}, 9)
+        n_10 = LiteralLeaf(7, 10)
+        n_11 = LiteralLeaf(8, 11)
+        n_12 = AndInnerNode({n_10, n_11}, 12)
+        n_13 = OrInnerNode({n_9, n_12}, 13)
+
+        n_14 = AndInnerNode({n_6, n_13}, 14)
+
+        return [n_0, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8, n_9, n_10, n_11, n_12, n_13, n_14]
     # endregion
 
     # region Private method
@@ -209,8 +317,10 @@ class NodeTest(TestAbstract):
         """
 
         result = ""
-        circuits = [NodeTest.__create_circuit_1, NodeTest.__create_circuit_2,
-                    NodeTest.__create_circuit_3, NodeTest.__create_circuit_4, NodeTest.__create_circuit_5]
+        circuits = [NodeTest._create_circuit_1, NodeTest._create_circuit_2,
+                    NodeTest._create_circuit_3, NodeTest._create_circuit_4, NodeTest._create_circuit_5,
+                    NodeTest._create_circuit_6, NodeTest._create_circuit_7,
+                    NodeTest._create_circuit_8, NodeTest._create_circuit_9]
 
         for circuit in circuits:
             try:
@@ -235,7 +345,7 @@ class NodeTest(TestAbstract):
         result = ""
         try:
             # Before modification
-            node_list = NodeTest.__create_circuit_2()
+            node_list = NodeTest._create_circuit_2()
             result = "Before modification"
             for node in node_list:
                 result = "\n".join((result, repr(node)))
@@ -277,7 +387,7 @@ class NodeTest(TestAbstract):
 
         result = ""
         try:
-            node_list = NodeTest.__create_circuit_1()
+            node_list = NodeTest._create_circuit_1()
 
             node_list[2]._add_child(node_list[8])
             node_list[8]._add_parent(node_list[2])
@@ -295,7 +405,7 @@ class NodeTest(TestAbstract):
 
         result = ""
         try:
-            node_list = NodeTest.__create_circuit_1()
+            node_list = NodeTest._create_circuit_1()
             root = node_list[-1]
 
             for cache in range(2):
@@ -330,7 +440,7 @@ class NodeTest(TestAbstract):
 
         result = ""
         try:
-            node_list = NodeTest.__create_circuit_2()
+            node_list = NodeTest._create_circuit_2()
             root = node_list[-1]
             root.is_satisfiable(set(), set())
         except c_exception.CaraException as err:
@@ -347,7 +457,7 @@ class NodeTest(TestAbstract):
 
         result = ""
         try:
-            node_list = NodeTest.__create_circuit_3()
+            node_list = NodeTest._create_circuit_3()
             root = node_list[-1]
 
             for cache in range(2):
@@ -372,7 +482,7 @@ class NodeTest(TestAbstract):
         """
 
         result = ""
-        circuits = [NodeTest.__create_circuit_1, NodeTest.__create_circuit_2]
+        circuits = [NodeTest._create_circuit_1, NodeTest._create_circuit_2]
 
         for circuit in circuits:
             try:
@@ -395,7 +505,7 @@ class NodeTest(TestAbstract):
 
         result = ""
         try:
-            node_list = NodeTest.__create_circuit_5()
+            node_list = NodeTest._create_circuit_5()
             root = node_list[-1]
             variable_set = root._get_variable_in_circuit_set(copy=True)
 
@@ -426,7 +536,7 @@ class NodeTest(TestAbstract):
 
         result = ""
         try:
-            node_list = NodeTest.__create_circuit_2()
+            node_list = NodeTest._create_circuit_2()
             root = node_list[-1]
             root.minimum_default_cardinality(set(), set())
         except c_exception.CaraException as err:
@@ -446,7 +556,7 @@ class NodeTest(TestAbstract):
         # is_satisfiable
         result = "\n".join((result, "is_satisfiable"))
         try:
-            node_list = NodeTest.__create_circuit_1()
+            node_list = NodeTest._create_circuit_1()
             root = node_list[-1]
 
             result = "\n".join((result, f"Sat: {root.is_satisfiable({-1}, set())}"))
@@ -492,7 +602,7 @@ class NodeTest(TestAbstract):
         # minimum_default_cardinality
         result = "\n".join((result, "minimum_default_cardinality"))
         try:
-            node_list = NodeTest.__create_circuit_5()
+            node_list = NodeTest._create_circuit_5()
             root = node_list[-1]
 
             result = "\n".join((result, f"Minimum cardinality: {root.minimum_default_cardinality({-1, 3}, {4, 5})}"))
@@ -526,6 +636,37 @@ class NodeTest(TestAbstract):
             result = "\n".join((result, f"Minimum cardinality: {root.minimum_default_cardinality({-1, 3}, {4, 5})}"))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
+
+        return result
+
+    def __test_11(self) -> str:
+        """
+        A test for satisfiability (mapping).
+        Positive
+        :return: the result of the test
+        """
+
+        result = ""
+        circuits = [NodeTest._create_circuit_6, NodeTest._create_circuit_7,
+                    NodeTest._create_circuit_8, NodeTest._create_circuit_9]
+        for circuit in circuits:
+            try:
+                result = "\n".join((result, circuit.__name__))
+
+                node_list = circuit()
+                root = node_list[-1]
+
+                for cache in range(2):
+                    for node in node_list:
+                        result = "\n".join((result, f"Node: {node.id}, cache: {bool(cache)}, sat: {node.is_satisfiable(set(), set(), use_cache=bool(cache))}"))
+
+                    # Assumption
+                    assumption_list_temp = [{-1, -3}, {-4, -6}, {2, -1}, {5, -4}, {2, -4}, {6, 1, -4}, {-1, -3, -5, -7}, {1, 2, 5, 6}, {3, 4, 7, 8}, {-1, -4, -6, -7}, {-6, -8}, {-1, -4}]
+                    for assumption in assumption_list_temp:
+                        result = "\n".join((result, f"Assumption: {SortedList(assumption)}, cache: {bool(cache)}, sat: {root.is_satisfiable(assumption, set(), use_cache=bool(cache))}"))
+
+            except c_exception.CaraException as err:
+                result = "\n".join((result, str(err)))
 
         return result
     # endregion

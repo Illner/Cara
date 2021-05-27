@@ -1,11 +1,11 @@
 # Import
 import math
 import warnings
-from typing import Set, Union
+from typing import Set, Union, Dict
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
-# Import
+# Import exception
 import exception.circuit.circuit_exception as c_exception
 
 # Import enum
@@ -102,13 +102,17 @@ class OrInnerNode(InnerNodeAbstract):
         self._set_deterministic(self._is_deterministic())
         self._set_smoothness(self._is_smooth())
 
-    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True,
+                       mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                       variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> bool:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Satisfiability is not supported if the circuit is not decomposable.")
 
-        restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set)
-        restricted_exist_quantification_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set)
+        restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set=assumption_set,
+                                                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+        restricted_exist_quantification_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set=exist_quantification_set,
+                                                                                                    variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
         key = ""    # initialization
@@ -120,7 +124,11 @@ class OrInnerNode(InnerNodeAbstract):
 
         result = False
         for child in self._child_set:
-            result_temp = child.is_satisfiable(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
+            result_temp = child.is_satisfiable(assumption_set=restricted_assumption_set_temp,
+                                               exist_quantification_set=restricted_exist_quantification_set_temp,
+                                               use_cache=use_cache,
+                                               mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary,
+                                               variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
             # The child is satisfied => this node is satisfied
             if result_temp:
                 result = True
@@ -132,7 +140,9 @@ class OrInnerNode(InnerNodeAbstract):
 
         return result
 
-    def model_counting(self, assumption_set: Set[int], use_cache: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], use_cache: bool = True,
+                       mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                       variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> int:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Model counting is not supported if the circuit is not decomposable.")
@@ -145,7 +155,8 @@ class OrInnerNode(InnerNodeAbstract):
         if not self.smoothness_in_circuit:
             raise c_exception.CircuitIsNotSmoothException("Model counting is not supported if the circuit is not smooth.")
 
-        restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set)
+        restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set=assumption_set,
+                                                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
         key = ""    # initialization
@@ -157,7 +168,10 @@ class OrInnerNode(InnerNodeAbstract):
 
         number_of_models = 0
         for child in self._child_set:
-            number_of_models += child.model_counting(restricted_assumption_set_temp)
+            number_of_models += child.model_counting(assumption_set=restricted_assumption_set_temp,
+                                                     use_cache=use_cache,
+                                                     mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary,
+                                                     variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
         if use_cache:
@@ -165,13 +179,17 @@ class OrInnerNode(InnerNodeAbstract):
 
         return number_of_models
 
-    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True,
+                                    mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                                    variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> float:
         # The circuit is not decomposable
         if not self.decomposable_in_circuit:
             raise c_exception.CircuitIsNotDecomposableException("Minimum default-cardinality is not supported if the circuit is not decomposable.")
 
-        restricted_observation_set_temp = self._create_restricted_assumption_set(observation_set)
-        restricted_default_set_temp = self._create_restricted_exist_quantification_set(default_set)
+        restricted_observation_set_temp = self._create_restricted_assumption_set(assumption_set=observation_set,
+                                                                                 mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+        restricted_default_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set=default_set,
+                                                                                       variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
         key = ""    # initialization
@@ -183,7 +201,11 @@ class OrInnerNode(InnerNodeAbstract):
 
         default_cardinality = math.inf
         for child in self._child_set:
-            temp = child.minimum_default_cardinality(observation_set, default_set)
+            temp = child.minimum_default_cardinality(observation_set=restricted_observation_set_temp,
+                                                     default_set=restricted_default_set_temp,
+                                                     use_cache=use_cache,
+                                                     mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary,
+                                                     variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
             if temp < default_cardinality:
                 default_cardinality = temp
 

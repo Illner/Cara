@@ -1,5 +1,5 @@
 # Import
-from typing import Set
+from typing import Set, Dict
 
 # Import exception
 from exception.cara_exception import CaraException
@@ -196,4 +196,14 @@ class TryingUpdateCircuitWithMappingNodesException(CircuitException):
 
     def __init__(self):
         self.message = "Trying to update the circuit that contains mapping nodes!"
+        super().__init__(self.message)
+
+
+class MappingIsIncompleteException(CircuitException):
+    """
+    The mapping is incomplete
+    """
+
+    def __init__(self, mapping_dictionary: Dict[int, int], variable_or_literal_in_circuit: Set[int]):
+        self.message = f"The mapping ({mapping_dictionary}) is incomplete in the sub-circuit ({variable_or_literal_in_circuit})!"
         super().__init__(self.message)

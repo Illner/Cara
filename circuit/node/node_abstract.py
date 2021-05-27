@@ -3,6 +3,9 @@ from abc import ABC, abstractmethod
 from other.sorted_list import SortedList
 from typing import Set, Dict, Union, TypeVar
 
+# Import exception
+import exception.circuit.circuit_exception as c_exception
+
 # Import enum
 import circuit.node.node_type_enum as nt_enum
 
@@ -49,20 +52,62 @@ class NodeAbstract(ABC):
 
     # region Abstract method
     @abstractmethod
-    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True,
+                       mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                       variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> bool:
         pass
 
     @abstractmethod
-    def model_counting(self, assumption_set: Set[int], use_cache: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], use_cache: bool = True,
+                       mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                       variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> int:
         pass
 
     @abstractmethod
-    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True,
+                                    mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                                    variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> float:
         pass
 
     @abstractmethod
     def get_node_size(self) -> int:
         pass
+    # endregion
+
+    # region Static method
+    @staticmethod
+    def use_mapping_on_literal_set(literal_set: Set[int], mapping_dictionary: Dict[int, int]) -> Set[int]:
+        """
+        :param literal_set: a literal set
+        :param mapping_dictionary: a variable mapping dictionary
+        :return: a literal set after applying the mapping function
+        :raises MappingIsIncompleteException: if some literal does not exist in the mapping
+        """
+
+        try:
+            result = set(map(lambda l: mapping_dictionary[abs(l)] if l > 0 else -mapping_dictionary[abs(l)], literal_set))
+        except KeyError:
+            raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_dictionary,
+                                                           variable_or_literal_in_circuit=literal_set)
+
+        return result
+
+    @staticmethod
+    def use_mapping_on_variable_set(variable_set: Set[int], mapping_dictionary: Dict[int, int]) -> Set[int]:
+        """
+        :param variable_set: a variable set
+        :param mapping_dictionary: a variable mapping dictionary
+        :return: a variable set after applying the mapping function
+        :raises MappingIsIncompleteException: if some variable does not exist in the mapping
+        """
+
+        try:
+            result = set(map(lambda v: mapping_dictionary[v], variable_set))
+        except KeyError:
+            raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_dictionary,
+                                                           variable_or_literal_in_circuit=variable_set)
+
+        return result
     # endregion
 
     # region Protected method
@@ -342,46 +387,51 @@ class NodeAbstract(ABC):
         :return: the generated key based on the assumption_set, exist_quantification_set and variable_in_circuit_set
         """
 
-        assumption_list_temp = []
-        exist_quantification_list_temp = []
+        assumption_list_temp = sorted(map(str, assumption_set))
+        exist_quantification_list_temp = sorted(map(str, exist_quantification_set))
 
-        variable_iterator = self.__variable_in_circuit_sorted_list.irange()
-        for v in variable_iterator:
-            # The assumption list
-            if v in assumption_set:
-                assumption_list_temp.append("1")
-            elif -v in assumption_set:
-                assumption_list_temp.append("0")
-            else:
-                assumption_list_temp.append("-")
-
-            # The exist quantification list
-            if v in exist_quantification_set:
-                exist_quantification_list_temp.append("1")
-            elif -v in exist_quantification_set:
-                exist_quantification_list_temp.append("0")
-            else:
-                exist_quantification_list_temp.append("-")
-
-        key_string = ''.join((''.join(assumption_list_temp), ''.join(exist_quantification_list_temp)))
+        key_string = ',0,'.join((','.join(assumption_list_temp), ','.join(exist_quantification_list_temp)))
 
         return key_string
 
-    def _create_restricted_assumption_set(self, assumption_set: Set[int]) -> Set[int]:
+    def _create_restricted_assumption_set(self, assumption_set: Set[int], mapping_id_variable_id_dictionary: Union[Dict[int, int], None]) -> Set[int]:
         """
         :param assumption_set: an assumption set
+        :param mapping_id_variable_id_dictionary: a variable mapping dictionary (None = no mapping)
         :return: the restricted assumption set
+        :raises MappingIsIncompleteException: if the mapping is incomplete in the circuit
         """
 
-        return set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
+        # Mapping is used
+        if mapping_id_variable_id_dictionary is not None:
+            try:
+                result = set(filter(lambda l: self._exist_variable_in_circuit_set(mapping_id_variable_id_dictionary[abs(l)]), assumption_set))
+            except KeyError:
+                raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
+                                                               variable_or_literal_in_circuit=self._get_variable_in_circuit_set(copy=False))
+        else:
+            result = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
 
-    def _create_restricted_exist_quantification_set(self, exist_quantification_set: Set[int]) -> Set[int]:
+        return result
+
+    def _create_restricted_exist_quantification_set(self, exist_quantification_set: Set[int], variable_id_mapping_id_dictionary: Union[Dict[int, int], None]) -> Set[int]:
         """
         :param exist_quantification_set: an exist quantification set
+        :param variable_id_mapping_id_dictionary: a variable mapping dictionary (None = no mapping)
         :return: the restricted exist quantification set
         """
 
-        return exist_quantification_set.intersection(self._get_variable_in_circuit_set(copy=False))
+        # Mapping is used
+        if variable_id_mapping_id_dictionary is not None:
+            try:
+                result = exist_quantification_set.intersection(map(lambda v: variable_id_mapping_id_dictionary[v], self._get_variable_in_circuit_set(copy=False)))
+            except KeyError:
+                raise c_exception.MappingIsIncompleteException(mapping_dictionary=variable_id_mapping_id_dictionary,
+                                                               variable_or_literal_in_circuit=self._get_variable_in_circuit_set(copy=False))
+        else:
+            result = exist_quantification_set.intersection(self._get_variable_in_circuit_set(copy=False))
+
+        return result
     # endregion
 
     # region Magic method

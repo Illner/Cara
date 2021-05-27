@@ -1,6 +1,6 @@
 # Import
 import math
-from typing import Set
+from typing import Set, Union, Dict
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import enum
@@ -24,19 +24,25 @@ class ConstantLeaf(LeafAbstract):
                          literal_in_circuit_set=set())
 
     # region Override method
-    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True,
+                       mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                       variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> bool:
         if self.constant:
             return True
         else:
             return False
 
-    def model_counting(self, assumption_set: Set[int], use_cache: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], use_cache: bool = True,
+                       mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                       variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> int:
         if self.constant:
             return 1
         else:
             return 0
 
-    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True,
+                                    mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                                    variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> float:
         if self.constant:
             return 0
         else:

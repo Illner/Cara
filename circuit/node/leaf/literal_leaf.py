@@ -1,6 +1,6 @@
 # Import
 import math
-from typing import Set
+from typing import Set, Union, Dict
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import enum
@@ -28,31 +28,58 @@ class LiteralLeaf(LeafAbstract):
                          literal_in_circuit_set={self.__literal})
 
     # region Override method
-    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
+    def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True,
+                       mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                       variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> bool:
+        variable, literal = self.variable, self.literal
+
+        # Mapping is used
+        if variable_id_mapping_id_dictionary is not None:
+            variable = variable_id_mapping_id_dictionary[self.__variable]
+            literal = variable if literal > 0 else -variable
+
         # The assumption set
-        if self.literal in assumption_set:
+        if literal in assumption_set:
             return True
-        if -self.literal in assumption_set:
+        if -literal in assumption_set:
             return False
 
         # The exist quantification set
-        if self.variable in exist_quantification_set:
+        if variable in exist_quantification_set:
             return True
 
         return True
 
-    def model_counting(self, assumption_set: Set[int], use_cache: bool = True) -> int:
+    def model_counting(self, assumption_set: Set[int], use_cache: bool = True,
+                       mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                       variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> int:
+        literal = self.__literal
+
+        # Mapping is used
+        if variable_id_mapping_id_dictionary is not None:
+            variable = variable_id_mapping_id_dictionary[self.__variable]
+            literal = variable if literal > 0 else -variable
+
         # The assumption set
-        if self.literal in assumption_set:
+        if literal in assumption_set:
             return 1
-        if -self.literal in assumption_set:
+        if -literal in assumption_set:
             return 0
 
         return 1
 
-    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True) -> float:
+    def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True,
+                                    mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
+                                    variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> float:
+        variable, literal = self.variable, self.literal
+
+        # Mapping is used
+        if variable_id_mapping_id_dictionary is not None:
+            variable = variable_id_mapping_id_dictionary[self.__variable]
+            literal = variable if literal > 0 else -variable
+
         # The default set contains this variable
-        if self.variable in default_set:
+        if variable in default_set:
             if self.is_positive:
                 return 0
 
@@ -60,10 +87,10 @@ class LiteralLeaf(LeafAbstract):
             return 1
 
         # The observation set contains this literal
-        if self.literal in observation_set:
+        if literal in observation_set:
             return 0    # True
 
-        if -self.literal in observation_set:
+        if -literal in observation_set:
             return math.inf  # False
 
         return 0
