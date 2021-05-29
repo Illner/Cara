@@ -36,9 +36,9 @@ class RenamableHornCnfLeaf(LeafAbstract):
                        mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                        variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> bool:
         restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set=assumption_set,
-                                                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+                                                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
         restricted_exist_quantification_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set=exist_quantification_set,
-                                                                                                    variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
+                                                                                                    mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
         key = ""    # initialization
@@ -49,9 +49,9 @@ class RenamableHornCnfLeaf(LeafAbstract):
                 return value
 
         # Mapping is used
-        if mapping_id_variable_id_dictionary is not None:
+        if variable_id_mapping_id_dictionary is not None:
             restricted_assumption_set_temp = self.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
-                                                                             mapping_dictionary=mapping_id_variable_id_dictionary)
+                                                                             mapping_dictionary=variable_id_mapping_id_dictionary)
 
         restricted_renamed_assumption_set_temp = self.__rename_assignment(restricted_assumption_set_temp)
         model = self.__cnf.get_model(assignment_list=list(restricted_renamed_assumption_set_temp))
@@ -67,7 +67,7 @@ class RenamableHornCnfLeaf(LeafAbstract):
                        mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                        variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> int:
         restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set=assumption_set,
-                                                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+                                                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
         key = ""    # initialization
@@ -78,9 +78,9 @@ class RenamableHornCnfLeaf(LeafAbstract):
                 return value
 
         # Mapping is used
-        if mapping_id_variable_id_dictionary is not None:
+        if variable_id_mapping_id_dictionary is not None:
             restricted_assumption_set_temp = self.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
-                                                                             mapping_dictionary=mapping_id_variable_id_dictionary)
+                                                                             mapping_dictionary=variable_id_mapping_id_dictionary)
 
         restricted_renamed_assumption_set_temp = self.__rename_assignment(restricted_assumption_set_temp)
         number_of_models = self.__cnf.get_number_of_models(assignment_list=list(restricted_renamed_assumption_set_temp))

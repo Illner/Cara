@@ -8,6 +8,7 @@ class ComponentCachingEnum(IntEnum):
     STANDARD_CACHING_SCHEME = 2     # Cachet
     HYBRID_CACHING_SCHEME = 3       # sharpSAT
     BASIC_CACHING_SCHEME = 4
+    CARA_CACHING_SCHEME = 5
 
 
 component_caching_enum_names = [cc.name for cc in ComponentCachingEnum]

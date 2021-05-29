@@ -10,6 +10,7 @@ from compiler.hypergraph_partitioning.hypergraph_partitioning import HypergraphP
 
 # Import component caching
 from compiler.component_caching.none_caching import NoneCaching
+from compiler.component_caching.cara_caching_scheme import CaraCachingScheme
 from compiler.component_caching.basic_caching_scheme import BasicCachingScheme
 from compiler.component_caching.hybrid_caching_scheme import HybridCachingScheme
 from compiler.component_caching.standard_caching_scheme import StandardCachingScheme
@@ -211,6 +212,11 @@ class Compiler:
         # BASIC_CACHING_SCHEME
         if component_caching_enum == cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME:
             self.__component_caching = BasicCachingScheme()
+            return
+
+        # CARA_CACHING_SCHEME
+        if component_caching_enum == cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME:
+            self.__component_caching = CaraCachingScheme()
             return
 
         raise c_exception.FunctionNotImplementedException("set_component_caching",

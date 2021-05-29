@@ -426,19 +426,32 @@ class Component:
                 return self.__circuit.create_constant_leaf(False)
 
         # Component caching (before unit propagation)
-        key_before_unit_propagation = None
+        cache_key_before_unit_propagation = None
+        cache_variable_id_mapping_id_before_unit_propagation = None
         if self.__component_caching_before_unit_propagation:
             self.__statistics.component_statistics.component_caching_generate_key.start_stopwatch()     # timer (start)
-            key_before_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
+            cache_key_before_unit_propagation, cache_mapping_before_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
             self.__statistics.component_statistics.component_caching_generate_key.stop_stopwatch()      # timer (stop)
 
-            value = self.__component_caching.get(key_before_unit_propagation)
+            # Mapping is used
+            if cache_mapping_before_unit_propagation is not None:
+                cache_variable_id_mapping_id_before_unit_propagation, _ = cache_mapping_before_unit_propagation
+
+            cache_id, cache_mapping = self.__component_caching.get(cache_key_before_unit_propagation)
             # Hit
-            if value is not None:
+            if cache_id is not None:
                 self.__statistics.component_statistics.component_caching_formula_length.add_count(self.__incidence_graph.number_of_edges())    # counter
                 self.__statistics.component_statistics.component_caching_hit.add_count(1)  # counter
 
-                return value
+                # Mapping is not used
+                if cache_mapping_before_unit_propagation is None:
+                    return cache_id
+
+                node = self.__circuit.create_mapping_node(child_id=cache_id,
+                                                          variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                          mapping_id_variable_id_dictionary=cache_mapping_before_unit_propagation[1])
+
+                return node
             else:
                 self.__statistics.component_statistics.component_caching_hit.add_count(0)  # counter
 
@@ -460,25 +473,36 @@ class Component:
             self.__statistics.component_statistics.empty_incidence_graph.add_count(1)   # counter
 
             # Component caching
-            self.__component_caching.add(key_before_unit_propagation, node_id)
+            self.__component_caching.add(cache_key_before_unit_propagation, node_id, cache_variable_id_mapping_id_before_unit_propagation)
 
             self.__remove_literals(implied_literal_set)    # restore the implied literals
             return node_id
 
         # Component caching (after unit propagation)
-        key_after_unit_propagation = None
+        cache_key_after_unit_propagation = None
+        cache_variable_id_mapping_id_after_unit_propagation = None
         if self.__component_caching_after_unit_propagation and (implied_literal_set or (not implied_literal_set and not self.__component_caching_before_unit_propagation)):
             self.__statistics.component_statistics.component_caching_after_generate_key.start_stopwatch()   # timer (start)
-            key_after_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
+            cache_key_after_unit_propagation, cache_mapping_after_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
             self.__statistics.component_statistics.component_caching_after_generate_key.stop_stopwatch()    # timer (stop)
 
-            value = self.__component_caching.get(key_after_unit_propagation)
+            # Mapping is used
+            if cache_mapping_after_unit_propagation is not None:
+                cache_variable_id_mapping_id_after_unit_propagation, _ = cache_mapping_after_unit_propagation
+
+            cache_id, cache_mapping = self.__component_caching.get(cache_key_after_unit_propagation)
             # Hit
-            if value is not None:
+            if cache_id is not None:
                 self.__statistics.component_statistics.component_caching_after_formula_length.add_count(self.__incidence_graph.number_of_edges())   # counter
                 self.__statistics.component_statistics.component_caching_after_hit.add_count(1)     # counter
 
-                node_id = self.__circuit.create_and_node({value}.union(implied_literal_id_set))
+                # Mapping is used
+                if cache_mapping_after_unit_propagation is not None:
+                    cache_id = self.__circuit.create_mapping_node(child_id=cache_id,
+                                                                  variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                                  mapping_id_variable_id_dictionary=cache_mapping_after_unit_propagation[1])
+
+                node_id = self.__circuit.create_and_node({cache_id}.union(implied_literal_id_set))
 
                 self.__remove_literals(implied_literal_set)    # restore the implied literals
                 return node_id
@@ -495,8 +519,8 @@ class Component:
             node_id = self.__circuit.create_and_node({node_id_temp}.union(implied_literal_id_set))
 
             # Component caching
-            self.__component_caching.add(key_after_unit_propagation, node_id_temp)
-            self.__component_caching.add(key_before_unit_propagation, node_id)
+            self.__component_caching.add(cache_key_after_unit_propagation, node_id_temp, cache_variable_id_mapping_id_after_unit_propagation)
+            self.__component_caching.add(cache_key_before_unit_propagation, node_id, cache_variable_id_mapping_id_before_unit_propagation)
 
             self.__remove_literals(implied_literal_set)     # restore the implied literals
             return node_id
@@ -513,8 +537,8 @@ class Component:
                 node_id = self.__circuit.create_and_node({node_id_temp}.union(implied_literal_id_set))
 
                 # Component caching
-                self.__component_caching.add(key_after_unit_propagation, node_id_temp)
-                self.__component_caching.add(key_before_unit_propagation, node_id)
+                self.__component_caching.add(cache_key_after_unit_propagation, node_id_temp, cache_variable_id_mapping_id_after_unit_propagation)
+                self.__component_caching.add(cache_key_before_unit_propagation, node_id, cache_variable_id_mapping_id_before_unit_propagation)
 
                 self.__remove_literals(implied_literal_set)     # restore the implied literals
                 return node_id
@@ -536,16 +560,16 @@ class Component:
                                                                                                            model=model,
                                                                                                            implied_literal_set=implied_literal_set)
             # Component caching
-            if self.__component_caching_after_unit_propagation and (key_after_unit_propagation is not None):
+            if self.__component_caching_after_unit_propagation and (cache_key_after_unit_propagation is not None):
                 node_id_temp = self.__circuit.create_and_node(node_id_set)
                 node_id = self.__circuit.create_and_node({node_id_temp}.union(implied_literal_id_set))
 
-                self.__component_caching.add(key_after_unit_propagation, node_id_temp)
-                self.__component_caching.add(key_before_unit_propagation, node_id)
+                self.__component_caching.add(cache_key_after_unit_propagation, node_id_temp, cache_variable_id_mapping_id_after_unit_propagation)
+                self.__component_caching.add(cache_key_before_unit_propagation, node_id, cache_variable_id_mapping_id_before_unit_propagation)
             else:
                 node_id = self.__circuit.create_and_node(node_id_set.union(implied_literal_id_set))
 
-                self.__component_caching.add(key_before_unit_propagation, node_id)
+                self.__component_caching.add(cache_key_before_unit_propagation, node_id, cache_variable_id_mapping_id_before_unit_propagation)
 
             self.__remove_literals(implied_literal_set)     # restore the implied literals
             return node_id
@@ -558,8 +582,8 @@ class Component:
         node_id = self.__circuit.create_and_node({decision_node_id}.union(implied_literal_id_set))
 
         # Component caching
-        self.__component_caching.add(key_after_unit_propagation, decision_node_id)
-        self.__component_caching.add(key_before_unit_propagation, node_id)
+        self.__component_caching.add(cache_key_after_unit_propagation, decision_node_id, cache_variable_id_mapping_id_after_unit_propagation)
+        self.__component_caching.add(cache_key_before_unit_propagation, node_id, cache_variable_id_mapping_id_before_unit_propagation)
 
         self.__remove_literals(implied_literal_set)     # Restore the implied literals
         return node_id

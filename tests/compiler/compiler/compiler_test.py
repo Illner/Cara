@@ -9,7 +9,7 @@ from tests.test_abstract import TestAbstract
 import exception.cara_exception as c_exception
 
 # Import enum
-# import compiler.enum.base_class_enum as bc_enum
+import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.component_caching_enum as cc_enum
@@ -42,24 +42,26 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            for preprocessing in [False, True]:
-                for component_caching_enum in cc_enum.component_caching_enum_values:
-                    for first_implied_literals_enum in il_enum.implied_literals_enum_values:
-                        for implied_literals_enum in il_enum.implied_literals_enum_values:
-                            for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
-                                for first_implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
-                                    for base_class_enum_set in [set()]:
-                                        for component_caching_before_unit_propagation in [True, False]:
-                                            for component_caching_after_unit_propagation in [True, False]:
-                                                for decision_heuristic_vsids_d4_version in [True, False]:
-                                                    for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
-                                                        for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
-                                                            for subsumed_threshold in [100, None]:
-                                                                for new_cut_set_threshold in [0, 0.5, 1]:
-                                                                    for hp_cache_enum in hpc_enum.hpc_enum_values:
-                                                                        for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
-                                                                            for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
-                                                                                for eliminating_redundant_clauses_threshold in [100, None]:
+            # for preprocessing in [False, True]:
+            preprocessing = False
+            for first_implied_literals_enum in il_enum.implied_literals_enum_values:
+                for implied_literals_enum in il_enum.implied_literals_enum_values:
+                    for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
+                        for first_implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
+                            for decision_heuristic_vsids_d4_version in [True, False]:
+                                for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
+                                    for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
+                                        for subsumed_threshold in [100, None]:
+                                            for new_cut_set_threshold in [0, 0.5, 1]:
+                                                for hp_cache_enum in hpc_enum.hpc_enum_values:
+                                                    for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
+                                                        for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
+                                                            for eliminating_redundant_clauses_threshold in [100, None]:
+                                                                for base_class_enum_set in [set(), {bc_enum.BaseClassEnum.TWO_CNF}, {bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}, {bc_enum.BaseClassEnum.TWO_CNF, bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}]:
+                                                                    for component_caching_enum in cc_enum.component_caching_enum_values:
+                                                                        for component_caching_before_unit_propagation in [True, False]:
+                                                                            for component_caching_after_unit_propagation in [True, False]:
+                                                                                for smooth in [True, False]:
                                                                                     try:
                                                                                         count += 1
 
@@ -82,11 +84,12 @@ class CompilerTest(TestAbstract):
                                                                                                                    f"component caching after BCP: {component_caching_after_unit_propagation}, "
                                                                                                                    f"decision heuristic - \"D4 version\" of VSIDS score: {decision_heuristic_vsids_d4_version}, "
                                                                                                                    f"decision heuristic - weight for satisfied clauses: {decision_heuristic_weight_for_satisfied_clauses}, "
-                                                                                                                   f"base class: {str(base_class_enum_set)}"))
+                                                                                                                   f"base class: {str(base_class_enum_set)}, "
+                                                                                                                   f"smooth: {smooth}"))
 
                                                                                         cnf = Cnf(file_path)
                                                                                         compiler = Compiler(cnf=cnf,
-                                                                                                            smooth=True,
+                                                                                                            smooth=smooth,
                                                                                                             statistics=False,
                                                                                                             preprocessing=preprocessing,
                                                                                                             imbalance_factor=0.1,

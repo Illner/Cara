@@ -110,9 +110,9 @@ class OrInnerNode(InnerNodeAbstract):
             raise c_exception.CircuitIsNotDecomposableException("Satisfiability is not supported if the circuit is not decomposable.")
 
         restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set=assumption_set,
-                                                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+                                                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
         restricted_exist_quantification_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set=exist_quantification_set,
-                                                                                                    variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
+                                                                                                    mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
         key = ""    # initialization
@@ -156,7 +156,7 @@ class OrInnerNode(InnerNodeAbstract):
             raise c_exception.CircuitIsNotSmoothException("Model counting is not supported if the circuit is not smooth.")
 
         restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set=assumption_set,
-                                                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+                                                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
         key = ""    # initialization
@@ -187,9 +187,9 @@ class OrInnerNode(InnerNodeAbstract):
             raise c_exception.CircuitIsNotDecomposableException("Minimum default-cardinality is not supported if the circuit is not decomposable.")
 
         restricted_observation_set_temp = self._create_restricted_assumption_set(assumption_set=observation_set,
-                                                                                 mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+                                                                                 variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
         restricted_default_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set=default_set,
-                                                                                       variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
+                                                                                       mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
         key = ""    # initialization

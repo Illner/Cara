@@ -1,5 +1,5 @@
 # Import
-from typing import Union
+from typing import Union, Tuple, Dict
 from formula.incidence_graph import IncidenceGraph
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
 
@@ -13,7 +13,7 @@ class StandardCachingScheme(ComponentCachingAbstract):
         super().__init__()
 
     # region Override method
-    def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[str, None]:
+    def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[str, None], Union[Tuple[Dict[int, int], Dict[int, int]], None]]:
         clause_list = []
 
         for clause_id in incidence_graph.clause_id_set(copy=False):
@@ -22,5 +22,5 @@ class StandardCachingScheme(ComponentCachingAbstract):
 
         key_string = self._end_delimiter.join(clause_list)
 
-        return key_string
+        return key_string, None
     # endregion

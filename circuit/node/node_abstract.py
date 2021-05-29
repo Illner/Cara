@@ -394,39 +394,39 @@ class NodeAbstract(ABC):
 
         return key_string
 
-    def _create_restricted_assumption_set(self, assumption_set: Set[int], mapping_id_variable_id_dictionary: Union[Dict[int, int], None]) -> Set[int]:
+    def _create_restricted_assumption_set(self, assumption_set: Set[int], variable_id_mapping_id_dictionary: Union[Dict[int, int], None]) -> Set[int]:
         """
         :param assumption_set: an assumption set
-        :param mapping_id_variable_id_dictionary: a variable mapping dictionary (None = no mapping)
+        :param variable_id_mapping_id_dictionary: a variable mapping dictionary (None = no mapping)
         :return: the restricted assumption set
         :raises MappingIsIncompleteException: if the mapping is incomplete in the circuit
         """
 
         # Mapping is used
-        if mapping_id_variable_id_dictionary is not None:
+        if variable_id_mapping_id_dictionary is not None:
             try:
-                result = set(filter(lambda l: self._exist_variable_in_circuit_set(mapping_id_variable_id_dictionary[abs(l)]), assumption_set))
+                result = set(filter(lambda l: self._exist_variable_in_circuit_set(variable_id_mapping_id_dictionary[abs(l)]), assumption_set))
             except KeyError:
-                raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
+                raise c_exception.MappingIsIncompleteException(mapping_dictionary=variable_id_mapping_id_dictionary,
                                                                variable_or_literal_in_circuit=self._get_variable_in_circuit_set(copy=False))
         else:
             result = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
 
         return result
 
-    def _create_restricted_exist_quantification_set(self, exist_quantification_set: Set[int], variable_id_mapping_id_dictionary: Union[Dict[int, int], None]) -> Set[int]:
+    def _create_restricted_exist_quantification_set(self, exist_quantification_set: Set[int], mapping_id_variable_id_dictionary: Union[Dict[int, int], None]) -> Set[int]:
         """
         :param exist_quantification_set: an exist quantification set
-        :param variable_id_mapping_id_dictionary: a variable mapping dictionary (None = no mapping)
+        :param mapping_id_variable_id_dictionary: a variable mapping dictionary (None = no mapping)
         :return: the restricted exist quantification set
         """
 
         # Mapping is used
-        if variable_id_mapping_id_dictionary is not None:
+        if mapping_id_variable_id_dictionary is not None:
             try:
-                result = exist_quantification_set.intersection(map(lambda v: variable_id_mapping_id_dictionary[v], self._get_variable_in_circuit_set(copy=False)))
+                result = exist_quantification_set.intersection(map(lambda v: mapping_id_variable_id_dictionary[v], self._get_variable_in_circuit_set(copy=False)))
             except KeyError:
-                raise c_exception.MappingIsIncompleteException(mapping_dictionary=variable_id_mapping_id_dictionary,
+                raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
                                                                variable_or_literal_in_circuit=self._get_variable_in_circuit_set(copy=False))
         else:
             result = exist_quantification_set.intersection(self._get_variable_in_circuit_set(copy=False))

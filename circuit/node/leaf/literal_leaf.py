@@ -34,8 +34,8 @@ class LiteralLeaf(LeafAbstract):
         variable, literal = self.variable, self.literal
 
         # Mapping is used
-        if variable_id_mapping_id_dictionary is not None:
-            variable = variable_id_mapping_id_dictionary[self.__variable]
+        if mapping_id_variable_id_dictionary is not None:
+            variable = mapping_id_variable_id_dictionary[self.__variable]
             literal = variable if literal > 0 else -variable
 
         # The assumption set
@@ -56,8 +56,8 @@ class LiteralLeaf(LeafAbstract):
         literal = self.__literal
 
         # Mapping is used
-        if variable_id_mapping_id_dictionary is not None:
-            variable = variable_id_mapping_id_dictionary[self.__variable]
+        if mapping_id_variable_id_dictionary is not None:
+            variable = mapping_id_variable_id_dictionary[self.__variable]
             literal = variable if literal > 0 else -variable
 
         # The assumption set
@@ -74,8 +74,8 @@ class LiteralLeaf(LeafAbstract):
         variable, literal = self.variable, self.literal
 
         # Mapping is used
-        if variable_id_mapping_id_dictionary is not None:
-            variable = variable_id_mapping_id_dictionary[self.__variable]
+        if mapping_id_variable_id_dictionary is not None:
+            variable = mapping_id_variable_id_dictionary[self.__variable]
             literal = variable if literal > 0 else -variable
 
         # The default set contains this variable

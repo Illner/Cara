@@ -12,6 +12,7 @@ from circuit.node.leaf.constant_leaf import ConstantLeaf
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 from circuit.node.inner_node.or_inner_node import OrInnerNode
 from circuit.node.inner_node.and_inner_node import AndInnerNode
+from circuit.node.inner_node.mapping_inner_node import MappingInnerNode
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 from circuit.node.leaf.renamable_horn_cnf_leaf import RenamableHornCnfLeaf
 
@@ -749,6 +750,57 @@ class Circuit:
 
         return or_node_id
 
+    def create_mapping_node(self, child_id: int, variable_id_mapping_id_dictionary_cache: Dict[int, int], mapping_id_variable_id_dictionary: Dict[int, int]) -> int:
+        """
+        Create a new mapping node in the circuit
+        :param child_id: the child
+        :param variable_id_mapping_id_dictionary_cache: variable_id -> mapping_id (mapping from the node in the cache)
+        :param mapping_id_variable_id_dictionary: mapping_id -> variable_id (from the generated key)
+        :return: the identifier of the node
+        :raises MappingIsIncompleteException: if one of the mappings is invalid
+        :raises NodeWithIDDoesNotExistInCircuitException: if the child's id does not exist in the circuit
+        """
+
+        composed_mapping_variable_cache_variable_id_dictionary: Dict[int, int] = dict()
+        composed_mapping_variable_id_variable_cache_dictionary: Dict[int, int] = dict()
+
+        for variable_cache in variable_id_mapping_id_dictionary_cache:
+            mapping_id = variable_id_mapping_id_dictionary_cache[variable_cache]
+
+            if mapping_id not in mapping_id_variable_id_dictionary:
+                raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
+                                                               variable_or_literal_in_circuit=set(variable_id_mapping_id_dictionary_cache.values()))
+
+            variable_id = mapping_id_variable_id_dictionary[mapping_id]
+
+            composed_mapping_variable_cache_variable_id_dictionary[variable_cache] = variable_id
+            composed_mapping_variable_id_variable_cache_dictionary[variable_id] = variable_cache
+
+        mapping_is_needed = False
+        for variable_cache in composed_mapping_variable_cache_variable_id_dictionary:
+            variable_id = composed_mapping_variable_cache_variable_id_dictionary[variable_cache]
+
+            if variable_cache != variable_id:
+                mapping_is_needed = True
+                break
+
+        child_temp = self.get_node(child_id)
+        # The child's id does not exist in the circuit
+        if child_temp is None:
+            raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(child_id), "trying to create a mapping node with a nonexisting child")
+
+        # Mapping is not needed
+        if not mapping_is_needed:
+            return child_id
+
+        node = MappingInnerNode(child=child_temp,
+                                variable_id_mapping_id_dictionary=composed_mapping_variable_id_variable_cache_dictionary,
+                                mapping_id_variable_id_dictionary=composed_mapping_variable_cache_variable_id_dictionary,
+                                id=self.__get_new_id())
+        self.__add_new_node(node)
+
+        return node.id
+
     def is_circuit_connected(self) -> bool:
         """
         Check if the circuit is connected
@@ -925,7 +977,7 @@ class Circuit:
         number_of_models = self.model_counting(assumption_set, use_cache)
 
         restricted_assumption_set_temp = self.__root._create_restricted_assumption_set(assumption_set=assumption_set,
-                                                                                       mapping_id_variable_id_dictionary=None)
+                                                                                       variable_id_mapping_id_dictionary=None)
 
         return number_of_models == 2**(self.number_of_variables - len(restricted_assumption_set_temp))
 
@@ -1025,7 +1077,8 @@ class Circuit:
             inner_node_set_temp = set()
 
             for inner_node in inner_node_set:
-                inner_node._update(False)
+                inner_node._update(call_parent_update=False,
+                                   smooth=True)
                 visited_inner_node_set.add(inner_node)
 
                 # Add parents whose all children are visited nodes
@@ -1273,6 +1326,14 @@ class Circuit:
                     mapping_temp = sorted(mapping_temp, key=mapping_temp.get, reverse=False)
 
                     string = "\n".join((string, f"{char_temp} {node.number_of_clauses + 1} {node.number_of_variables} {' '.join(map(str, mapping_temp))}", string_temp))
+                    continue
+
+                # Mapping node
+                if isinstance(node, MappingInnerNode):
+                    child_id = node.get_child_id_list()[0]
+                    child_id = id_to_dictionary[child_id]
+
+                    string = "\n".join((string, f"M {child_id} {node.number_of_variables}{node.str_mapping()}"))
                     continue
 
                 raise c_exception.SomethingWrongException(f"this type of node ({type(node)}) is not implemented in __str__ (circuit)")

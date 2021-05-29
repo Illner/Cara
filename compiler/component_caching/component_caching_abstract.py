@@ -1,6 +1,6 @@
 # Import
 from abc import ABC, abstractmethod
-from typing import Dict, Union, Set, List
+from typing import Dict, Union, Set, List, Tuple
 from formula.incidence_graph import IncidenceGraph
 
 # TODO Cleaning strategy
@@ -13,7 +13,10 @@ class ComponentCachingAbstract(ABC):
     """
 
     """
-    Private Dict<str, int> cache                # key: hash, value: an identifier of a node
+    Private int id_counter
+    Private Dict<str, int> hash_key_cache                   # key: hash, value: a key
+    Private Dict<int, int> key_node_cache                   # key: a key, value: an identifier of a node
+    Private Dict<int, Dict<int, int>> key_mapping_cache     # key: a key, value: a variable mapping
     Private Set<str> multi_occurrence_cache
     
     Protected str delimiter
@@ -22,7 +25,10 @@ class ComponentCachingAbstract(ABC):
     """
 
     def __init__(self):
-        self.__cache: Dict[str, int] = dict()
+        self.__id_counter: int = 0
+        self.__hash_key_cache: Dict[str, int] = dict()
+        self.__key_node_cache: Dict[int, int] = dict()
+        self.__key_mapping_cache: Dict[int, Dict[int, int]] = dict()
         self.__multi_occurrence_cache: Set[str] = set()
 
         self._delimiter = ","
@@ -31,59 +37,95 @@ class ComponentCachingAbstract(ABC):
 
     # region Abstract method
     @abstractmethod
-    def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Union[str, None]:
+    def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[str, None], Union[Tuple[Dict[int, int], Dict[int, int]], None]]:
         """
         Generate a key for caching.
-        None is returned if the formula represented by the incidence graph is not cacheable.
+        (None, None) is returned if the formula represented by the incidence graph is not cacheable.
+        (generated_key, None) is returned if the variable mapping is not supported by the caching scheme.
         :param incidence_graph: an incidence graph
-        :return: the generated key based on the incidence graph
+        :return: the generated key based on the incidence graph and both mappings between variables (variable_id -> mapping_id, mapping_id -> variable_id)
         """
 
         pass
     # endregion
 
     # region Public method
-    def add(self, key: Union[str, None], node_id: int) -> None:
+    def add(self, hash_key: Union[str, None], node_id: int, mapping: Union[Dict[int, int], None] = None) -> None:
         """
         Add a new record to the cache.
         If the key is None, nothing happens.
-        If the record already exists in the cache, the value of the record will be updated.
-        :param key: the key
+        If the record already exists in the cache, the value of the record (node_id and mapping) will be updated.
+        :param hash_key: the hash
         :param node_id: the value
+        :param mapping: the variable mapping (optional)
         :return: None
         """
 
         # Invalid key
-        if key is None:
+        if hash_key is None:
             return
 
-        self.__cache[key] = node_id
+        # The key already exists in the cache
+        if self.exist(hash_key):
+            id_key = self.__hash_key_cache[hash_key]
+        else:
+            id_key = self.__get_new_id()
 
-    def get(self, key: Union[str, None]) -> Union[int, None]:
+        self.__hash_key_cache[hash_key] = id_key
+        self.__key_node_cache[id_key] = node_id
+
+        if id_key in self.__key_mapping_cache:
+            del self.__key_mapping_cache[id_key]
+
+        if mapping is not None:
+            self.__key_mapping_cache[id_key] = mapping
+
+    def get(self, hash_key: Union[str, None]) -> Tuple[Union[int, None], Union[Dict[int, int], None]]:
         """
-        Return the value of the record with the key from the cache.
-        If the record does not exist in the cache, None is returned.
-        :param key: the key
-        :return: the record's value if the record exists. Otherwise, None is returned.
+        Return the value of the record (node_id and mapping) with the key from the cache.
+        If the record does not exist in the cache, (None, None) is returned.
+        :param hash_key: the hash
+        :return: the record's value (node_id and mapping) if the record exists. Otherwise, (None, None) is returned.
         """
 
         # The record does not exist
-        if not self.exist(key):
-            return None
+        if not self.exist(hash_key):
+            return None, None
 
-        return self.__cache[key]
+        id_key = self.__hash_key_cache[hash_key]
+        node_id = self.__key_node_cache[id_key]
 
-    def exist(self, key: Union[str, None]) -> bool:
+        mapping = None
+        if id_key in self.__key_mapping_cache:
+            mapping = self.__key_mapping_cache[id_key]
+
+        return node_id, mapping
+
+    def exist(self, hash_key: Union[str, None]) -> bool:
         """
         Check if a record with the key exists in the cache
-        :param key: the key
+        :param hash_key: the hash
         :return: True if the key exists in the cache. Otherwise, False is returned.
         """
 
-        if (key is None) or (key not in self.__cache):
+        if (hash_key is None) or (hash_key not in self.__hash_key_cache):
             return False
 
         return True
+    # endregion
+
+    # region Private method
+    def __get_new_id(self) -> int:
+        """
+        Return a new ID.
+        The ID counter will be incremented.
+        :return: a new ID
+        """
+
+        id_temp = self.__id_counter
+        self.__id_counter += 1
+
+        return id_temp
     # endregion
 
     # region Protected method

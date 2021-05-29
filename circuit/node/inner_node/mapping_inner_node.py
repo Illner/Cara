@@ -20,24 +20,23 @@ class MappingInnerNode(InnerNodeAbstract):
     Private Dict<int, int> variable_id_mapping_id_dictionary
     """
 
-    def __init__(self, child: NodeAbstract, mapping_id_variable_id_dictionary: Dict[int, int],
-                 variable_id_mapping_id_dictionary: Dict[int, int], id: int = 0):
+    def __init__(self, child: NodeAbstract, variable_id_mapping_id_dictionary: Dict[int, int],
+                 mapping_id_variable_id_dictionary: Dict[int, int], id: int = 0):
         self.__mapping_id_variable_id_dictionary: Dict[int, int] = mapping_id_variable_id_dictionary
         self.__variable_id_mapping_id_dictionary: Dict[int, int] = variable_id_mapping_id_dictionary
 
         # Check if the mapping is complete
-        variable_in_mapping_set = set(variable_id_mapping_id_dictionary.keys())
+        variable_in_mapping_set = set(mapping_id_variable_id_dictionary.keys())
         variable_in_circuit_set = child._get_variable_in_circuit_set(copy=False)
 
-        if (len(variable_in_mapping_set) != len(variable_in_circuit_set)) or \
-           (len(variable_in_mapping_set.intersection(variable_in_circuit_set)) != len(variable_in_mapping_set)):
+        if not variable_in_circuit_set.issubset(variable_in_mapping_set):
             raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
                                                            variable_or_literal_in_circuit=variable_in_circuit_set)
 
         super().__init__(id=id,
                          node_type=nt_enum.NodeTypeEnum.MAPPING_NODE,
                          child_set={child},
-                         variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
+                         mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
     # region Override method
     def _update_properties(self) -> None:
@@ -51,9 +50,9 @@ class MappingInnerNode(InnerNodeAbstract):
             raise c_exception.CircuitIsNotDecomposableException("Satisfiability is not supported if the circuit is not decomposable.")
 
         restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set=assumption_set,
-                                                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+                                                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
         restricted_exist_quantification_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set=exist_quantification_set,
-                                                                                                    variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
+                                                                                                    mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
         key = ""    # initialization
@@ -64,8 +63,8 @@ class MappingInnerNode(InnerNodeAbstract):
                 return value
 
         # Mapping is used
-        if mapping_id_variable_id_dictionary is not None:
-            mapping_dictionary_temp = self.__compute_composed_mapping_dictionary(mapping_id_variable_id_dictionary)
+        if variable_id_mapping_id_dictionary is not None:
+            mapping_dictionary_temp = self.__compute_composed_mapping_dictionary(variable_id_mapping_id_dictionary)
             mapping_id_variable_id_dictionary_temp, variable_id_mapping_id_dictionary_temp = mapping_dictionary_temp
         else:
             mapping_id_variable_id_dictionary_temp = self.__mapping_id_variable_id_dictionary
@@ -100,7 +99,7 @@ class MappingInnerNode(InnerNodeAbstract):
             raise c_exception.CircuitIsNotSmoothException("Model counting is not supported if the circuit is not smooth.")
 
         restricted_assumption_set_temp = self._create_restricted_assumption_set(assumption_set=assumption_set,
-                                                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+                                                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
         key = ""  # initialization
@@ -111,8 +110,8 @@ class MappingInnerNode(InnerNodeAbstract):
                 return value
 
         # Mapping is used
-        if mapping_id_variable_id_dictionary is not None:
-            mapping_dictionary_temp = self.__compute_composed_mapping_dictionary(mapping_id_variable_id_dictionary)
+        if variable_id_mapping_id_dictionary is not None:
+            mapping_dictionary_temp = self.__compute_composed_mapping_dictionary(variable_id_mapping_id_dictionary)
             mapping_id_variable_id_dictionary_temp, variable_id_mapping_id_dictionary_temp = mapping_dictionary_temp
         else:
             mapping_id_variable_id_dictionary_temp = self.__mapping_id_variable_id_dictionary
@@ -138,9 +137,9 @@ class MappingInnerNode(InnerNodeAbstract):
             raise c_exception.CircuitIsNotDecomposableException("Minimum default-cardinality is not supported if the circuit is not decomposable.")
 
         restricted_observation_set_temp = self._create_restricted_assumption_set(assumption_set=observation_set,
-                                                                                 mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
+                                                                                 variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
         restricted_default_set_temp = self._create_restricted_exist_quantification_set(exist_quantification_set=default_set,
-                                                                                       variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
+                                                                                       mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
         key = ""    # initialization
@@ -151,8 +150,8 @@ class MappingInnerNode(InnerNodeAbstract):
                 return value
 
         # Mapping is used
-        if mapping_id_variable_id_dictionary is not None:
-            mapping_dictionary_temp = self.__compute_composed_mapping_dictionary(mapping_id_variable_id_dictionary)
+        if variable_id_mapping_id_dictionary is not None:
+            mapping_dictionary_temp = self.__compute_composed_mapping_dictionary(variable_id_mapping_id_dictionary)
             mapping_id_variable_id_dictionary_temp, variable_id_mapping_id_dictionary_temp = mapping_dictionary_temp
         else:
             mapping_id_variable_id_dictionary_temp = self.__mapping_id_variable_id_dictionary
@@ -170,18 +169,29 @@ class MappingInnerNode(InnerNodeAbstract):
             self._add_minimal_default_cardinality_cache(key, default_cardinality)
 
         return default_cardinality
+
+    def str_mapping(self) -> str:
+        result = ""
+        variable_sorted_list = sorted(self.__variable_id_mapping_id_dictionary.keys())
+
+        for variable_id in variable_sorted_list:
+            mapping_id = self.__variable_id_mapping_id_dictionary[variable_id]
+
+            result = " ".join((result, str(variable_id), str(mapping_id)))
+
+        return result
     # endregion
 
     # region Private method
-    def __compute_composed_mapping_dictionary(self, mapping_id_variable_id_dictionary: Dict[int, int]) -> Tuple[Dict[int, int], Dict[int, int]]:
+    def __compute_composed_mapping_dictionary(self, variable_id_mapping_id_dictionary: Dict[int, int]) -> Tuple[Dict[int, int], Dict[int, int]]:
         composed_mapping_id_variable_id_dictionary: Dict[int, int] = dict()
         composed_variable_id_mapping_id_dictionary: Dict[int, int] = dict()
 
-        for mapping_id in mapping_id_variable_id_dictionary:
-            variable_id = mapping_id_variable_id_dictionary[mapping_id]
+        for variable_id in variable_id_mapping_id_dictionary:
+            mapping_id = variable_id_mapping_id_dictionary[variable_id]
 
-            if variable_id in self.__mapping_id_variable_id_dictionary:
-                variable_id = self.__mapping_id_variable_id_dictionary[variable_id]
+            if mapping_id in self.__variable_id_mapping_id_dictionary:
+                mapping_id = self.__variable_id_mapping_id_dictionary[mapping_id]
 
                 composed_mapping_id_variable_id_dictionary[mapping_id] = variable_id
                 composed_variable_id_mapping_id_dictionary[variable_id] = mapping_id
@@ -196,7 +206,7 @@ class MappingInnerNode(InnerNodeAbstract):
     def __repr__(self):
         string_temp = super().__repr__()
 
-        string_temp = " ".join((string_temp, f"Mapping: {self.__mapping_id_variable_id_dictionary}"))
+        string_temp = " ".join((string_temp, f"Mapping: {self.__variable_id_mapping_id_dictionary}"))
 
         return string_temp
     # endregion
