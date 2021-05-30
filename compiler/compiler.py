@@ -216,7 +216,7 @@ class Compiler:
 
         # CARA_CACHING_SCHEME
         if component_caching_enum == cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME:
-            self.__component_caching = CaraCachingScheme()
+            self.__component_caching = CaraCachingScheme(multi_occurrence=False)
             return
 
         raise c_exception.FunctionNotImplementedException("set_component_caching",

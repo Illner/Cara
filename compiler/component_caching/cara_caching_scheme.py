@@ -9,16 +9,24 @@ class CaraCachingScheme(ComponentCachingAbstract):
     Cara caching scheme (c)
     """
 
-    def __init__(self):
+    """
+    Private bool multi_occurrence
+    """
+
+    def __init__(self, multi_occurrence: bool):
         super().__init__()
+
+        self.__multi_occurrence: bool = multi_occurrence
 
     # region Override method
     def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[str, None], Union[Tuple[Dict[int, int], Dict[int, int]], None]]:
-        # Initialize
+        used_clause_set = set()
         occurrence_dictionary: Dict[int, List[int, int]] = dict()       # key: a variable, value: (positive, negative)
         mean_dictionary: Dict[int, List[float, float]] = dict()         # key: a variable, value: (positive, negative)
 
-        for clause_id in incidence_graph.clause_id_set(copy=False):
+        for clause_id in incidence_graph.clause_id_set(copy=False, multi_occurrence=self.__multi_occurrence):
+            used_clause_set.add(clause_id)
+
             clause_set = incidence_graph.get_clause(clause_id, copy=False)
             clause_len = len(clause_set)
 
@@ -52,6 +60,9 @@ class CaraCachingScheme(ComponentCachingAbstract):
 
         clause_mapping_list = []
         for clause_id in incidence_graph.clause_id_set(copy=False):
+            if clause_id not in used_clause_set:
+                continue
+
             clause_set = incidence_graph.get_clause(clause_id, copy=False)
             sorted_clause_mapping = sorted(map(lambda l: variable_id_mapping_id_dictionary[abs(l)] if l > 0 else -variable_id_mapping_id_dictionary[abs(l)], clause_set))
             clause_mapping_list.append(self._delimiter.join([str(lit) for lit in sorted_clause_mapping]))
