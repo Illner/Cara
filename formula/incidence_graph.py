@@ -2,7 +2,7 @@
 import random
 import networkx as nx
 from networkx.classes.graph import Graph
-from typing import Set, Dict, List, Union, TypeVar
+from typing import Set, Dict, List, Union, TypeVar, Tuple
 from formula.renamable_horn_formula_recognition import RenamableHornFormulaRecognition
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 
@@ -1432,11 +1432,12 @@ class IncidenceGraph(Graph):
 
         return max_variable
 
-    def literal_sum_lengths_clauses(self, literal: int, jeroslow_wang: bool = False) -> int:
+    def literal_sum_lengths_clauses(self, literal: int, jeroslow_wang: bool = False, ignore_binary_clauses: bool = False) -> Union[int, Tuple[int, int]]:
         """
         Return the sum of lengths of clauses where the literal occurs
         :param literal: a literal
         :param jeroslow_wang: False for sum(|w|). True for sum(2^-|w|).
+        :param ignore_binary_clauses: True if the binary clauses are ignored
         :return: the sum of lengths of clauses
         :raises VariableDoesNotExistException: if the variable (|literal|) does not exist in the incidence graph
         """
@@ -1449,15 +1450,26 @@ class IncidenceGraph(Graph):
             raise ig_exception.VariableDoesNotExistException(variable)
 
         sum_temp = 0
+        sum_ignore_binary_temp = 0
+
         for clause_id in self.__adjacency_literal_dynamic_dictionary[literal]:
-            temp = self.number_of_neighbours_clause_id(clause_id)
+            clause_len = self.__clause_length_dictionary[clause_id]
 
             # sum(2^-|w|)
             if jeroslow_wang:
-                sum_temp += 2**(-temp)
+                sum_temp += 2**(-clause_len)
+
+                if ignore_binary_clauses and (clause_len > 2):
+                    sum_ignore_binary_temp += 2**(-clause_len)
             # sum(|w|)
             else:
-                sum_temp += temp
+                sum_temp += clause_len
+
+                if ignore_binary_clauses and (clause_len > 2):
+                    sum_ignore_binary_temp += clause_len
+
+        if ignore_binary_clauses:
+            return sum_ignore_binary_temp, sum_temp
 
         return sum_temp
 

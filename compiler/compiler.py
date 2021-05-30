@@ -240,7 +240,8 @@ class Compiler:
            (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.JEROSLOW_WANG_TWO_SIDED):
             one_sided = True if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.JEROSLOW_WANG_ONE_SIDED else False
             self.__decision_heuristic = JeroslowWangHeuristic(preselection_heuristic=preselection_heuristic,
-                                                              one_sided=one_sided)
+                                                              one_sided=one_sided,
+                                                              ignore_binary_clauses=True)
             return
 
         # CLAUSE_REDUCTION
