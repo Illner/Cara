@@ -1,5 +1,5 @@
 # Import
-from typing import Union, Dict, Tuple
+from typing import Union, Dict, Tuple, List
 from formula.incidence_graph import IncidenceGraph
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
 
@@ -14,16 +14,31 @@ class CaraCachingScheme(ComponentCachingAbstract):
 
     # region Override method
     def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[str, None], Union[Tuple[Dict[int, int], Dict[int, int]], None]]:
+        # Initialize
+        occurrence_dictionary: Dict[int, List[int, int]] = dict()       # key: a variable, value: (positive, negative)
+        mean_dictionary: Dict[int, List[float, float]] = dict()         # key: a variable, value: (positive, negative)
+
+        for clause_id in incidence_graph.clause_id_set(copy=False):
+            clause_set = incidence_graph.get_clause(clause_id, copy=False)
+            clause_len = len(clause_set)
+
+            for literal in clause_set:
+                variable = abs(literal)
+                sign = 0 if literal > 0 else 1
+
+                if variable not in occurrence_dictionary:
+                    occurrence_dictionary[variable] = [0, 0]
+                    mean_dictionary[variable] = [0, 0]
+
+                occurrence_dictionary[variable][sign] += 1
+                mean_dictionary[variable][sign] += clause_len
+
         variable_property_dictionary: Dict[int, Tuple[int, int, float, float, int]] = dict()
 
-        # Compute occurrences and means
         for variable in incidence_graph.variable_set(copy=False):
-            occurrence_positive = incidence_graph.literal_number_of_occurrences(variable)
-            occurrence_negative = incidence_graph.literal_number_of_occurrences(-variable)
-            mean_positive = incidence_graph.literal_sum_lengths_clauses(variable)
-            mean_negative = incidence_graph.literal_sum_lengths_clauses(-variable)
-
-            variable_property_dictionary[variable] = occurrence_positive, occurrence_negative, mean_positive, mean_negative, variable
+            occurrence = occurrence_dictionary[variable]
+            mean = mean_dictionary[variable]
+            variable_property_dictionary[variable] = occurrence[0], occurrence[1], mean[0], mean[1], variable
 
         variable_sorted_list = sorted(variable_property_dictionary, key=variable_property_dictionary.get)
 

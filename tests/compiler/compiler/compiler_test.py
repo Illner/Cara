@@ -9,7 +9,7 @@ from tests.test_abstract import TestAbstract
 import exception.cara_exception as c_exception
 
 # Import enum
-import compiler.enum.base_class_enum as bc_enum
+# import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.component_caching_enum as cc_enum
@@ -57,7 +57,7 @@ class CompilerTest(TestAbstract):
                                                     for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
                                                         for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
                                                             for eliminating_redundant_clauses_threshold in [100, None]:
-                                                                for base_class_enum_set in [set(), {bc_enum.BaseClassEnum.TWO_CNF}, {bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}, {bc_enum.BaseClassEnum.TWO_CNF, bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF}]:
+                                                                for base_class_enum_set in [set()]:
                                                                     for component_caching_enum in cc_enum.component_caching_enum_values:
                                                                         for component_caching_before_unit_propagation in [True, False]:
                                                                             for component_caching_after_unit_propagation in [True, False]:
