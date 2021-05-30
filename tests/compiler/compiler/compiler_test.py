@@ -44,6 +44,7 @@ class CompilerTest(TestAbstract):
 
             # for preprocessing in [False, True]:
             preprocessing = False
+            base_class_enum_set = set()
             for first_implied_literals_enum in il_enum.implied_literals_enum_values:
                 for implied_literals_enum in il_enum.implied_literals_enum_values:
                     for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
@@ -54,14 +55,14 @@ class CompilerTest(TestAbstract):
                                         for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
                                             for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
                                                 for eliminating_redundant_clauses_threshold in [100, None]:
-                                                    for base_class_enum_set in [set()]:
-                                                        for component_caching_enum in cc_enum.component_caching_enum_values:
-                                                            for component_caching_before_unit_propagation in [True, False]:
-                                                                for component_caching_after_unit_propagation in [True, False]:
-                                                                    for smooth in [True, False]:
-                                                                        for decision_heuristic_vsids_d4_version in [True, False]:
-                                                                            for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
-                                                                                for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
+                                                    for component_caching_enum in cc_enum.component_caching_enum_values:
+                                                        for component_caching_before_unit_propagation in [True, False]:
+                                                            for component_caching_after_unit_propagation in [True, False]:
+                                                                for smooth in [True, False]:
+                                                                    for decision_heuristic_vsids_d4_version in [True, False]:
+                                                                        for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
+                                                                            for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
+                                                                                for decision_heuristic_ignore_binary_clauses in [True, False]:
                                                                                     try:
                                                                                         count += 1
 
@@ -84,6 +85,7 @@ class CompilerTest(TestAbstract):
                                                                                                                    f"component caching after BCP: {component_caching_after_unit_propagation}, "
                                                                                                                    f"decision heuristic - \"D4 version\" of VSIDS score: {decision_heuristic_vsids_d4_version}, "
                                                                                                                    f"decision heuristic - weight for satisfied clauses: {decision_heuristic_weight_for_satisfied_clauses}, "
+                                                                                                                   f"decision heuristic - ignore binary clauses: {decision_heuristic_ignore_binary_clauses}, "
                                                                                                                    f"base class: {str(base_class_enum_set)}, "
                                                                                                                    f"smooth: {smooth}"))
 
@@ -115,7 +117,8 @@ class CompilerTest(TestAbstract):
                                                                                                             hp_limit_number_of_clauses_cache=(None, 500),
                                                                                                             hp_limit_number_of_variables_cache=(None, 500),
                                                                                                             decision_heuristic_vsids_d4_version=decision_heuristic_vsids_d4_version,
-                                                                                                            decision_heuristic_weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses)
+                                                                                                            decision_heuristic_weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses,
+                                                                                                            decision_heuristic_ignore_binary_clauses=decision_heuristic_ignore_binary_clauses)
                                                                                         circuit = compiler.create_circuit()
                                                                                         number_of_models = circuit.model_counting(set())
                                                                                         real_number_of_models = int(cnf.comments)

@@ -71,7 +71,8 @@ def main(main_args):
                             decision_heuristic_vsids_d4_version=main_args.dh_vsids_d4_version,
                             decision_heuristic_vsads_p_constant_factor=main_args.dh_vsads_p_factor,
                             decision_heuristic_vsads_q_constant_factor=main_args.dh_vsads_q_factor,
-                            decision_heuristic_weight_for_satisfied_clauses=main_args.dh_weight_for_satisfied_clauses)
+                            decision_heuristic_weight_for_satisfied_clauses=main_args.dh_weight_for_satisfied_clauses,
+                            decision_heuristic_ignore_binary_clauses=main_args.dh_ignore_binary_clauses)
         print("The formula has been processed!\n")
 
         print("Compiling...")
@@ -234,17 +235,22 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="find all backbone literals before the compilation")
+    parser_temp.add_argument("-dh_ibc",
+                             "--dh_ignore_binary_clauses",
+                             action="store_true",
+                             default=False,
+                             help="binary clauses will be ignored in the decision heuristic (Jeroslow-Wang, DLCS, DLIS, DLCS-DLIS, VSADS)")
     parser_temp.add_argument("-cc_bbcp",
                              "--cc_before_bcp",
                              action="store",
-                             default=True,
+                             default=False,
                              type=str_to_bool_parser,
                              metavar="[True, False]",
                              help="use component caching before BCP")
     parser_temp.add_argument("-cc_abcp",
                              "--cc_after_bcp",
                              action="store",
-                             default=False,
+                             default=True,
                              type=str_to_bool_parser,
                              metavar="[True, False]",
                              help="use component caching after BCP")

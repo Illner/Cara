@@ -125,7 +125,8 @@ class Compiler:
                  decision_heuristic_vsids_d4_version: bool = True,
                  decision_heuristic_vsads_p_constant_factor: float = 1,
                  decision_heuristic_vsads_q_constant_factor: float = 0.5,
-                 decision_heuristic_weight_for_satisfied_clauses: bool = True):
+                 decision_heuristic_weight_for_satisfied_clauses: bool = True,
+                 decision_heuristic_ignore_binary_clauses: bool = False):
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -164,7 +165,8 @@ class Compiler:
                                       vsids_d4_version=decision_heuristic_vsids_d4_version,
                                       vsads_p_constant_factor=decision_heuristic_vsads_p_constant_factor,
                                       vsads_q_constant_factor=decision_heuristic_vsads_q_constant_factor,
-                                      weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses)
+                                      weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses,
+                                      ignore_binary_clauses=decision_heuristic_ignore_binary_clauses)
 
         # Implied literals - preselection heuristic
         self.__set_implied_literals_preselection_heuristic(implied_literals_preselection_heuristic_enum=implied_literals_preselection_heuristic_enum,
@@ -227,7 +229,8 @@ class Compiler:
                                  vsids_d4_version: bool,
                                  vsads_p_constant_factor: float,
                                  vsads_q_constant_factor: float,
-                                 weight_for_satisfied_clauses: bool):
+                                 weight_for_satisfied_clauses: bool,
+                                 ignore_binary_clauses: bool):
         preselection_heuristic = NoneHeuristic()
 
         # RANDOM
@@ -241,7 +244,7 @@ class Compiler:
             one_sided = True if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.JEROSLOW_WANG_ONE_SIDED else False
             self.__decision_heuristic = JeroslowWangHeuristic(preselection_heuristic=preselection_heuristic,
                                                               one_sided=one_sided,
-                                                              ignore_binary_clauses=True)
+                                                              ignore_binary_clauses=ignore_binary_clauses)
             return
 
         # CLAUSE_REDUCTION
@@ -270,7 +273,7 @@ class Compiler:
         # DLCS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.DLCS:
             self.__decision_heuristic = LiteralCountHeuristic(preselection_heuristic=preselection_heuristic,
-                                                              ignore_binary_clauses=False,
+                                                              ignore_binary_clauses=ignore_binary_clauses,
                                                               function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM,
                                                               tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM)
             return
@@ -278,7 +281,7 @@ class Compiler:
         # DLIS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.DLIS:
             self.__decision_heuristic = LiteralCountHeuristic(preselection_heuristic=preselection_heuristic,
-                                                              ignore_binary_clauses=False,
+                                                              ignore_binary_clauses=ignore_binary_clauses,
                                                               function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX,
                                                               tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX)
             return
@@ -286,7 +289,7 @@ class Compiler:
         # DLCS_DLIS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.DLCS_DLIS:
             self.__decision_heuristic = LiteralCountHeuristic(preselection_heuristic=preselection_heuristic,
-                                                              ignore_binary_clauses=False,
+                                                              ignore_binary_clauses=ignore_binary_clauses,
                                                               function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM,
                                                               tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX)
             return
@@ -306,6 +309,7 @@ class Compiler:
         # VSADS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.VSADS:
             self.__decision_heuristic = VsadsHeuristic(preselection_heuristic=preselection_heuristic,
+                                                       ignore_binary_clauses=ignore_binary_clauses,
                                                        p_constant_factor=vsads_p_constant_factor,
                                                        q_constant_factor=vsads_q_constant_factor,
                                                        vsids_d4_version=vsids_d4_version)
