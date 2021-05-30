@@ -20,12 +20,15 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
     """
     Private function
     Private tie_breaker_function
+    Private bool ignore_binary_clauses
     """
 
-    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract,
+    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract, ignore_binary_clauses: bool,
                  function_enum: lchf_enum.LiteralCountHeuristicFunctionEnum,
                  tie_breaker_function_enum: Union[lchf_enum.LiteralCountHeuristicFunctionEnum, None] = None):
         super().__init__(preselection_heuristic)
+
+        self.__ignore_binary_clauses: bool = ignore_binary_clauses
 
         # (tie-breaker) function
         self.__function = self.__get_function(function_enum)
@@ -70,16 +73,28 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
         if len(preselected_variable_set) == 1:
             return list(preselected_variable_set)[0]
 
-        score_dictionary: Dict[int, Tuple[int, int]] = dict()   # key: variable, value: (score_1, score_2) of the variable
+        score_dictionary: Dict[int, Union[Tuple[int, int], Tuple[int, int, int, int]]] = dict()   # key: variable, value: (score_1, score_2, [score_3, score_4])
 
         # Compute score
         for variable in preselected_variable_set:
-            positive_score = incidence_graph.literal_number_of_occurrences(variable)
-            negative_score = incidence_graph.literal_number_of_occurrences(-variable)
+            positive_score = incidence_graph.literal_number_of_occurrences(literal=variable,
+                                                                           ignore_binary_clauses=self.__ignore_binary_clauses)
+            negative_score = incidence_graph.literal_number_of_occurrences(literal=(-variable),
+                                                                           ignore_binary_clauses=self.__ignore_binary_clauses)
 
-            score_1 = self.__function([positive_score, negative_score])
-            score_2 = self.__tie_breaker_function([positive_score, negative_score])
-            score_dictionary[variable] = score_1, score_2
+            # Binary clauses are ignored
+            if self.__ignore_binary_clauses:
+                score_1 = self.__function([positive_score[0], negative_score[0]])
+                score_2 = self.__function([positive_score[1], negative_score[1]])
+                score_3 = self.__tie_breaker_function([positive_score[0], negative_score[0]])
+                score_4 = self.__tie_breaker_function([positive_score[1], negative_score[1]])
+
+                score_dictionary[variable] = score_1, score_2, score_3, score_4
+            else:
+                score_1 = self.__function([positive_score, negative_score])
+                score_2 = self.__tie_breaker_function([positive_score, negative_score])
+
+                score_dictionary[variable] = score_1, score_2
 
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)

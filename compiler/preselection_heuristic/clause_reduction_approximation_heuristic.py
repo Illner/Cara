@@ -80,7 +80,7 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
             if literal_func in approximated_set_dictionary:
                 approximated_set_dictionary_func = approximated_set_dictionary[literal_func]
 
-            score_func = incidence_graph.literal_set_number_of_occurrences(approximated_set_dictionary_func, binary_clauses_included=True)
+            score_func = incidence_graph.literal_set_number_of_occurrences(approximated_set_dictionary_func)
             for literal in approximated_set_dictionary_func:
                 if literal in occurrences_in_binary_clauses_dictionary:
                     score_func -= occurrences_in_binary_clauses_dictionary[literal]

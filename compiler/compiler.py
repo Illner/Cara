@@ -270,6 +270,7 @@ class Compiler:
         # DLCS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.DLCS:
             self.__decision_heuristic = LiteralCountHeuristic(preselection_heuristic=preselection_heuristic,
+                                                              ignore_binary_clauses=False,
                                                               function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM,
                                                               tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM)
             return
@@ -277,6 +278,7 @@ class Compiler:
         # DLIS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.DLIS:
             self.__decision_heuristic = LiteralCountHeuristic(preselection_heuristic=preselection_heuristic,
+                                                              ignore_binary_clauses=False,
                                                               function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX,
                                                               tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX)
             return
@@ -284,6 +286,7 @@ class Compiler:
         # DLCS_DLIS
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.DLCS_DLIS:
             self.__decision_heuristic = LiteralCountHeuristic(preselection_heuristic=preselection_heuristic,
+                                                              ignore_binary_clauses=False,
                                                               function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM,
                                                               tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX)
             return

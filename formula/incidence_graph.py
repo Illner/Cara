@@ -1340,11 +1340,11 @@ class IncidenceGraph(Graph):
 
         return literal_set
 
-    def literal_number_of_occurrences(self, literal: int, binary_clauses_included: bool = True) -> int:
+    def literal_number_of_occurrences(self, literal: int, ignore_binary_clauses: bool = False) -> Union[int, Tuple[int, int]]:
         """
         Return the number of occurrences of the literal
         :param literal: a literal
-        :param binary_clauses_included: True if binary clauses are included
+        :param ignore_binary_clauses: True if the binary clauses are ignored
         :return: the number of occurrences
         :raises VariableDoesNotExistException: if the variable (|literal|) does not exist in the incidence graph
         """
@@ -1358,15 +1358,15 @@ class IncidenceGraph(Graph):
 
         clause_set = self.__adjacency_literal_dynamic_dictionary[literal]
 
-        if binary_clauses_included:
+        if not ignore_binary_clauses:
             return len(clause_set)
 
-        return len(clause_set.difference(self.__length_set_clauses_dictionary[2]))
+        return len(clause_set.difference(self.__length_set_clauses_dictionary[2])), len(clause_set)
 
-    def literal_set_number_of_occurrences(self, literal_set: Set[int], binary_clauses_included: bool = True) -> int:
+    def literal_set_number_of_occurrences(self, literal_set: Set[int]) -> int:
         sum_temp = 0
         for literal in literal_set:
-            sum_temp += self.literal_number_of_occurrences(literal, binary_clauses_included)
+            sum_temp += self.literal_number_of_occurrences(literal, ignore_binary_clauses=False)
 
         return sum_temp
 

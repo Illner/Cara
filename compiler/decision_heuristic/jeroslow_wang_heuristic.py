@@ -42,12 +42,14 @@ class JeroslowWangHeuristic(DecisionHeuristicAbstract):
 
             # One-sided
             if self.__one_sided:
+                # Binary clauses are ignored
                 if self.__ignore_binary_clauses:
                     score = max(positive_score[0], negative_score[0]), max(positive_score[1], negative_score[1])
                 else:
                     score = max(positive_score, negative_score)
             # Two-sided
             else:
+                # Binary clauses are ignored
                 if self.__ignore_binary_clauses:
                     score = positive_score[0] + negative_score[0], positive_score[1] + negative_score[1]
                 else:
