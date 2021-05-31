@@ -463,6 +463,10 @@ class Compiler:
             self.__circuit.smooth()
             self.__statistics.compiler_statistics.smooth.stop_stopwatch()   # timer (stop - smooth)
 
+        # Statistics
+        self.__statistics.compiled()
+        self.__statistics.set_size(self.__circuit.size)
+
         self.__statistics.compiler_statistics.create_circuit.stop_stopwatch()   # timer (stop - create_circuit)
         return self.circuit
     # endregion

@@ -20,6 +20,9 @@ class Statistics:
     Private bool active
     Private List<StatisticsTemplateAbstract> template_list
     
+    Private int size
+    Private bool compiled
+    
     Private CnfStatistics cnf_statistics
     Private SolverStatistics solver_statistics
     Private CompilerStatistics compiler_statistics
@@ -35,6 +38,9 @@ class Statistics:
                  incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = None):
         self.__active: bool = active
         self.__template_list: List[StatisticsTemplateAbstract] = []
+
+        self.__compiled: bool = False
+        self.__size: Union[int, None] = None
 
         # Compiler
         self.__compiler_statistics: CompilerStatistics = CompilerStatistics(active=True)
@@ -76,12 +82,20 @@ class Statistics:
 
     # region Magic method
     def __str__(self):
-        string_temp = ""
+        string_temp = "\n".join((f"Compiled: {self.__compiled}", f"Size: {self.__size}", ""))
 
         for template in self.__template_list:
             string_temp = "\n".join((string_temp, str(template), ""))
 
         return string_temp
+    # endregion
+
+    # region Public method
+    def compiled(self) -> None:
+        self.__compiled = True
+
+    def set_size(self, size: int) -> None:
+        self.__size = size
     # endregion
 
     # region Property
