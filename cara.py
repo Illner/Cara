@@ -72,7 +72,9 @@ def main(main_args):
                             decision_heuristic_vsads_p_constant_factor=main_args.dh_vsads_p_factor,
                             decision_heuristic_vsads_q_constant_factor=main_args.dh_vsads_q_factor,
                             decision_heuristic_weight_for_satisfied_clauses=main_args.dh_weight_for_satisfied_clauses,
-                            decision_heuristic_ignore_binary_clauses=main_args.dh_ignore_binary_clauses)
+                            decision_heuristic_ignore_binary_clauses=main_args.dh_ignore_binary_clauses,
+                            component_caching_cara_caching_scheme_multi_occurrence=not main_args.cc_cara_caching_scheme_remove_multi_occurrent_clauses,
+                            component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=main_args.cc_cara_caching_scheme_number_of_variables_threshold)
         print("The formula has been processed!\n")
 
         print("Compiling...")
@@ -254,6 +256,20 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str_to_bool_parser,
                              metavar="[True, False]",
                              help="use component caching after BCP")
+    parser_temp.add_argument("-cc_ccs_rmoc",
+                             "--cc_cara_caching_scheme_remove_multi_occurrent_clauses",
+                             action="store",
+                             default=True,
+                             type=str_to_bool_parser,
+                             metavar="[True, False]",
+                             help="multi-occurrent clauses will be removed during the component caching (cara caching scheme)")
+    parser_temp.add_argument("-cc_ccs_novt",
+                             "--cc_cara_caching_scheme_number_of_variables_threshold",
+                             action="store",
+                             default=30,
+                             type=non_negative_int_parser,
+                             metavar="[non-negative number]",
+                             help="if a subformula has at most x variables, the basic caching scheme will be used (cara caching scheme)")
     parser_temp.add_argument("-bc",
                              "--base_class",
                              action="append",

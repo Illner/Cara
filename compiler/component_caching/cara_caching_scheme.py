@@ -1,6 +1,7 @@
 # Import
 from typing import Union, Dict, Tuple, List
 from formula.incidence_graph import IncidenceGraph
+from compiler.component_caching.basic_caching_scheme import BasicCachingScheme
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
 
 
@@ -11,15 +12,23 @@ class CaraCachingScheme(ComponentCachingAbstract):
 
     """
     Private bool multi_occurrence
+    Private BasicCachingScheme basic_caching_scheme
+    Private int basic_caching_scheme_number_of_variables_threshold
     """
 
-    def __init__(self, multi_occurrence: bool):
+    def __init__(self, multi_occurrence: bool, basic_caching_scheme_number_of_variables_threshold: int):
         super().__init__()
 
         self.__multi_occurrence: bool = multi_occurrence
+        self.__basic_caching_scheme: BasicCachingScheme = BasicCachingScheme()
+        self.__basic_caching_scheme_number_of_variables_threshold: int = basic_caching_scheme_number_of_variables_threshold
 
     # region Override method
     def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[str, None], Union[Tuple[Dict[int, int], Dict[int, int]], None]]:
+        # The basic caching scheme is used
+        if incidence_graph.number_of_variables() <= self.__basic_caching_scheme_number_of_variables_threshold:
+            return self.__basic_caching_scheme.generate_key_cache(incidence_graph=incidence_graph)
+
         used_clause_set = set()
         occurrence_dictionary: Dict[int, List[int, int]] = dict()       # key: a variable, value: (positive, negative)
         mean_dictionary: Dict[int, List[float, float]] = dict()         # key: a variable, value: (positive, negative)

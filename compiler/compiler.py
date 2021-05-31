@@ -126,7 +126,9 @@ class Compiler:
                  decision_heuristic_vsads_p_constant_factor: float = 1,
                  decision_heuristic_vsads_q_constant_factor: float = 0.5,
                  decision_heuristic_weight_for_satisfied_clauses: bool = True,
-                 decision_heuristic_ignore_binary_clauses: bool = False):
+                 decision_heuristic_ignore_binary_clauses: bool = False,
+                 component_caching_cara_caching_scheme_multi_occurrence: bool = False,
+                 component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int = 0):
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -157,7 +159,9 @@ class Compiler:
         self.__eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum = eliminating_redundant_clauses_enum
 
         # Component caching
-        self.__set_component_caching(component_caching_enum)
+        self.__set_component_caching(component_caching_enum=component_caching_enum,
+                                     cara_caching_scheme_multi_occurrence=component_caching_cara_caching_scheme_multi_occurrence,
+                                     cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold)
 
         # Decision heuristic
         self.__set_decision_heuristic(decision_heuristic_enum=decision_heuristic_enum,
@@ -195,7 +199,9 @@ class Compiler:
                                                                 statistics=self.__statistics.hypergraph_partitioning_statistics)
 
     # region Private method
-    def __set_component_caching(self, component_caching_enum: cc_enum.ComponentCachingEnum):
+    def __set_component_caching(self, component_caching_enum: cc_enum.ComponentCachingEnum,
+                                cara_caching_scheme_multi_occurrence: bool,
+                                cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int) -> None:
         # NONE
         if component_caching_enum == cc_enum.ComponentCachingEnum.NONE:
             self.__component_caching = NoneCaching()
@@ -218,7 +224,8 @@ class Compiler:
 
         # CARA_CACHING_SCHEME
         if component_caching_enum == cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME:
-            self.__component_caching = CaraCachingScheme(multi_occurrence=False)
+            self.__component_caching = CaraCachingScheme(multi_occurrence=cara_caching_scheme_multi_occurrence,
+                                                         basic_caching_scheme_number_of_variables_threshold=cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold)
             return
 
         raise c_exception.FunctionNotImplementedException("set_component_caching",
@@ -230,7 +237,7 @@ class Compiler:
                                  vsads_p_constant_factor: float,
                                  vsads_q_constant_factor: float,
                                  weight_for_satisfied_clauses: bool,
-                                 ignore_binary_clauses: bool):
+                                 ignore_binary_clauses: bool) -> None:
         preselection_heuristic = NoneHeuristic()
 
         # RANDOM
@@ -320,7 +327,7 @@ class Compiler:
 
     def __set_implied_literals_preselection_heuristic(self, implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                                                       prop_z_depth_threshold: int, prop_z_number_of_variables_lower_bound: Union[int, None],
-                                                      cra_rank: float):
+                                                      cra_rank: float) -> None:
         # NONE
         if implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.NONE:
             self.__implied_literals_preselection_heuristic = NoneHeuristic(statistics=self.__statistics.preselection_heuristic_implied_literals_statistics)
@@ -346,7 +353,7 @@ class Compiler:
 
     def __set_first_implied_literals_preselection_heuristic(self, first_implied_literals_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
                                                             prop_z_depth_threshold: int, prop_z_number_of_variables_lower_bound: Union[int, None],
-                                                            cra_rank: float):
+                                                            cra_rank: float) -> None:
         # NONE
         if first_implied_literals_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.NONE:
             self.__first_implied_literals_preselection_heuristic = NoneHeuristic(statistics=self.__statistics.preselection_heuristic_first_implied_literals_statistics)

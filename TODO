@@ -1,6 +1,5 @@
 ) Minimum cardinality - DualHorn
 ) Minimizing
 ) UP redundancy
-) DIMACS NNF - DIMACS CNF
 ) Hypergraph weights
-) Statistics - size, ...
+) Statistics - compiled, size, ...

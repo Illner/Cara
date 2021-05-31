@@ -275,6 +275,46 @@ p cnf 4 2
 -4 2 0
 O 4 3 7 13 14
 
+mapping_less_params_invalid.nnf
+DIMACS NNF format is invalid in the file! (the number of variables (3) and the number of variables in the mapping (2) are different at line 9 in the mapping node)
+
+mapping_more_params_invalid.nnf
+DIMACS NNF format is invalid in the file! (the number of variables (3) and the number of variables in the mapping (4) are different at line 9 in the mapping node)
+
+mapping_negative_variable_invalid.nnf
+DIMACS NNF format is invalid in the file! (the variable (-6) in the mapping mentioned at line 9 in the mapping node is negative)
+
+mapping_not_number_variable_invalid.nnf
+DIMACS NNF format is invalid in the file! (the child's id or the number of variables (M 6 a 4 1 5 2 6 3) mentioned at line 9 in the mapping node is not an integer)
+
+mapping_not_number_variables_invalid.nnf
+DIMACS NNF format is invalid in the file! (some variable in the mapping (M 6 3 4 1 b 2 6 3) mentioned at line 9 in the mapping node is not an integer)
+
+mapping_valid.nnf
+C CaraCompiler
+C Name: Circuit
+C Type: D_BDMC
+C Decomposability: True
+C Determinism: True
+C Smoothness: False
+C AND_NODE: 3
+C OR_NODE: 1
+C MAPPING_NODE: 1
+C CONSTANT: 0
+C LITERAL: 4
+C TWO_CNF: 0
+C RENAMABLE_HORN_CNF: 0
+nnf 9 9 6
+L 1
+L 2
+A 2 0 1
+L -2
+L 3
+A 2 3 4
+O 0 2 2 5
+M 6 3 4 1 5 2 6 3
+A 2 6 7
+
 missing_n_line_invalid.nnf
 NNF line is not mentioned at all or is mentioned after the nodes!
 

@@ -139,12 +139,14 @@ class Circuit:
                 # Node line
                 # Constant leaf (TRUE)
                 if (line == "A 0") or (line == "a 0"):
-                    root_id = self.create_constant_leaf(True, use_unique_node_cache=False)
+                    root_id = self.create_constant_leaf(constant=True,
+                                                        use_unique_node_cache=False)
                     continue
 
                 # Constant leaf (FALSE)
                 if (line == "O 0 0") or (line == "O 0") or (line == "o 0 0") or (line == "o 0"):
-                    root_id = self.create_constant_leaf(False, use_unique_node_cache=False)
+                    root_id = self.create_constant_leaf(constant=False,
+                                                        use_unique_node_cache=False)
                     continue
 
                 # Literal leaf
@@ -161,7 +163,8 @@ class Circuit:
                     except ValueError:
                         raise c_exception.InvalidDimacsNnfFormatException(f"the literal ({line_array_temp[1]}) mentioned at line {line_id} in the leaf node is not an integer")
 
-                    root_id = self.create_literal_leaf(literal_temp, use_unique_node_cache=False)
+                    root_id = self.create_literal_leaf(literal=literal_temp,
+                                                       use_unique_node_cache=False)
                     continue
 
                 # AND node
@@ -194,7 +197,8 @@ class Circuit:
                     except ValueError:
                         raise c_exception.InvalidDimacsNnfFormatException(f"the c value or some id of a node ({line}) mentioned at line {line_id} in the AND node is not an integer")
 
-                    root_id = self.create_and_node(child_id_set_temp, use_unique_node_cache=False)
+                    root_id = self.create_and_node(child_id_set=child_id_set_temp,
+                                                   use_unique_node_cache=False)
                     continue
 
                 # OR node
@@ -233,7 +237,57 @@ class Circuit:
                     except ValueError:
                         raise c_exception.InvalidDimacsNnfFormatException(f"the c value, j value or some id of a node ({line}) mentioned at line {line_id} in the OR node is not an integer")
 
-                    root_id = self.create_or_node(child_id_set_temp, decision_variable=j_temp, use_unique_node_cache=False)
+                    root_id = self.create_or_node(child_id_set=child_id_set_temp,
+                                                  decision_variable=j_temp,
+                                                  use_unique_node_cache=False)
+                    continue
+
+                # Mapping node
+                if line.startswith("M") or line.startswith("m"):
+                    line_array_temp = line.split()
+
+                    # Invalid line
+                    if len(line_array_temp) < 5:
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the mapping node ({line}) defined at line {line_id} has an invalid number of parameters")
+
+                    # Parse the child and the number of variables
+                    try:
+                        child_id_temp = int(line_array_temp[1])
+                        number_of_variables_temp = int(line_array_temp[2])
+
+                        # Check if the child has been already declared
+                        if not self.node_id_exist(child_id_temp):
+                            raise c_exception.InvalidDimacsNnfFormatException(f"the node (child) with the id ({child_id_temp}) mentioned at line {line_id} in the mapping node has not been seen yet")
+                    except ValueError:
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the child's id or the number of variables ({line}) mentioned at line {line_id} in the mapping node is not an integer")
+
+                    # The mapping does not contain all variables
+                    if len(line_array_temp) != (2 * number_of_variables_temp + 3):
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the number of variables ({number_of_variables_temp}) and the number of variables in the mapping ({(len(line_array_temp) - 3) // 2}) are different at line {line_id} in the mapping node")
+
+                    # Parse the mapping
+                    mapping_id_variable_id_dictionary_temp: Dict[int, int] = dict()
+                    variable_id_mapping_id_dictionary_temp: Dict[int, int] = dict()
+                    try:
+                        for i in range(0, 2 * number_of_variables_temp, 2):
+                            var_temp = int(line_array_temp[3 + i])
+                            var_map_temp = int(line_array_temp[3 + i + 1])
+
+                            # The (mapping) variable is negative
+                            if var_temp < 0:
+                                raise c_exception.InvalidDimacsNnfFormatException(f"the variable ({var_temp}) in the mapping mentioned at line {line_id} in the mapping node is negative")
+                            if var_map_temp < 0:
+                                raise c_exception.InvalidDimacsNnfFormatException(f"the mapped variable ({var_map_temp}) in the mapping mentioned at line {line_id} in the mapping node is negative")
+
+                            variable_id_mapping_id_dictionary_temp[var_temp] = var_map_temp
+                            mapping_id_variable_id_dictionary_temp[var_map_temp] = var_temp
+                    except ValueError:
+                        raise c_exception.InvalidDimacsNnfFormatException(f"some variable in the mapping ({line}) mentioned at line {line_id} in the mapping node is not an integer")
+
+                    root_id = self.create_mapping_node(child_id=child_id_temp,
+                                                       variable_id_mapping_id_dictionary_cache=variable_id_mapping_id_dictionary_temp,
+                                                       mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
+                                                       composition_needed=False)
                     continue
 
                 # 2-CNF or renamable Horn CNF leaf
@@ -274,7 +328,7 @@ class Circuit:
 
                     # The mapping does not contain all variables
                     if use_mapping_temp and (len(line_array_temp) != (3 + number_of_variables_temp)):
-                        raise c_exception.InvalidDimacsNnfFormatException(f"the number of variables ({line_array_temp[2]}) and the number of variables in the mapping ({len(line_array_temp) - 3}) are different at line {line_id} in the leaf node")
+                        raise c_exception.InvalidDimacsNnfFormatException(f"the number of variables ({number_of_variables_temp}) and the number of variables in the mapping ({len(line_array_temp) - 3}) are different at line {line_id} in the leaf node")
 
                     variable_mapping_temp: Dict[int, int] = dict()
 
@@ -286,7 +340,7 @@ class Circuit:
 
                                 # The variable is negative
                                 if var_temp < 0:
-                                    raise c_exception.InvalidDimacsNnfFormatException(f"the variable ({line_array_temp[3 + i]}) in the mapping mentioned at line {line_id} in the leaf node is negative")
+                                    raise c_exception.InvalidDimacsNnfFormatException(f"the variable ({var_temp}) in the mapping mentioned at line {line_id} in the leaf node is negative")
 
                                 variable_mapping_temp[i + 1] = var_temp
                         except ValueError:
@@ -750,12 +804,14 @@ class Circuit:
 
         return or_node_id
 
-    def create_mapping_node(self, child_id: int, variable_id_mapping_id_dictionary_cache: Dict[int, int], mapping_id_variable_id_dictionary: Dict[int, int]) -> int:
+    def create_mapping_node(self, child_id: int, variable_id_mapping_id_dictionary_cache: Dict[int, int],
+                            mapping_id_variable_id_dictionary: Dict[int, int], composition_needed: bool = True) -> int:
         """
         Create a new mapping node in the circuit
         :param child_id: the child
         :param variable_id_mapping_id_dictionary_cache: variable_id -> mapping_id (mapping from the node in the cache)
         :param mapping_id_variable_id_dictionary: mapping_id -> variable_id (from the generated key)
+        :param composition_needed: True if the composition is needed to be done (mainly for caching)
         :return: the identifier of the node
         :raises MappingIsIncompleteException: if one of the mappings is invalid
         :raises NodeWithIDDoesNotExistInCircuitException: if the child's id does not exist in the circuit
@@ -764,34 +820,39 @@ class Circuit:
         composed_mapping_variable_cache_variable_id_dictionary: Dict[int, int] = dict()
         composed_mapping_variable_id_variable_cache_dictionary: Dict[int, int] = dict()
 
-        for variable_cache in variable_id_mapping_id_dictionary_cache:
-            mapping_id = variable_id_mapping_id_dictionary_cache[variable_cache]
+        # Composition is needed
+        if composition_needed:
+            for variable_cache in variable_id_mapping_id_dictionary_cache:
+                mapping_id = variable_id_mapping_id_dictionary_cache[variable_cache]
 
-            if mapping_id not in mapping_id_variable_id_dictionary:
-                raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
-                                                               variable_or_literal_in_circuit=set(variable_id_mapping_id_dictionary_cache.values()))
+                if mapping_id not in mapping_id_variable_id_dictionary:
+                    raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
+                                                                   variable_or_literal_in_circuit=set(variable_id_mapping_id_dictionary_cache.values()))
 
-            variable_id = mapping_id_variable_id_dictionary[mapping_id]
+                variable_id = mapping_id_variable_id_dictionary[mapping_id]
 
-            composed_mapping_variable_cache_variable_id_dictionary[variable_cache] = variable_id
-            composed_mapping_variable_id_variable_cache_dictionary[variable_id] = variable_cache
+                composed_mapping_variable_cache_variable_id_dictionary[variable_cache] = variable_id
+                composed_mapping_variable_id_variable_cache_dictionary[variable_id] = variable_cache
 
-        mapping_is_needed = False
-        for variable_cache in composed_mapping_variable_cache_variable_id_dictionary:
-            variable_id = composed_mapping_variable_cache_variable_id_dictionary[variable_cache]
+            mapping_is_needed = False
+            for variable_cache in composed_mapping_variable_cache_variable_id_dictionary:
+                variable_id = composed_mapping_variable_cache_variable_id_dictionary[variable_cache]
 
-            if variable_cache != variable_id:
-                mapping_is_needed = True
-                break
+                if variable_cache != variable_id:
+                    mapping_is_needed = True
+                    break
+
+            # Mapping is not needed
+            if not mapping_is_needed:
+                return child_id
+        else:
+            composed_mapping_variable_id_variable_cache_dictionary = variable_id_mapping_id_dictionary_cache
+            composed_mapping_variable_cache_variable_id_dictionary = mapping_id_variable_id_dictionary
 
         child_temp = self.get_node(child_id)
         # The child's id does not exist in the circuit
         if child_temp is None:
             raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(child_id), "trying to create a mapping node with a nonexisting child")
-
-        # Mapping is not needed
-        if not mapping_is_needed:
-            return child_id
 
         node = MappingInnerNode(child=child_temp,
                                 variable_id_mapping_id_dictionary=composed_mapping_variable_id_variable_cache_dictionary,
