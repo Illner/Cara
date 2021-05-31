@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from other.sorted_list import SortedList
 from typing import Set, Dict, List, Union, TypeVar
 from circuit.node.node_abstract import NodeAbstract
-from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import exception
 import exception.circuit.circuit_exception as c_exception
@@ -21,7 +20,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
     """
     Protected Set<NodeAbstract> child_set
-    Protected Set<Leaf> leaf_set
     Protected Set<InnerNodeAbstract> parent_set
     Private Dict<int, int> mapping_id_variable_id_dictionary
     Private Dict<NodeTypeEnum.value, int> node_type_in_circuit_counter_dict
@@ -44,11 +42,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
 
-        self._leaf_set: Set[LeafAbstract] = set()
         node_in_circuit_set_temp = {self}
         for child in child_set:
             node_in_circuit_set_temp = node_in_circuit_set_temp.union(child._get_node_in_circuit_set(copy=False))
-            self._leaf_set.update(self.__get_leaf_set(child))
             child._add_parent(self)  # add me as a parent
 
         self.__decomposable = decomposable
@@ -70,24 +66,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._set_node_type_in_circuit_counter_dict()
 
     # region Static method
-    @staticmethod
-    def __get_leaf_set(node: NodeAbstract) -> Set[LeafAbstract]:
-        """
-        Return a set of leaves in the circuit where the node is the root
-        :param node: a node (the root of the circuit)
-        :return: the set that contains all leaves
-        """
-
-        # The node is an inner node
-        if isinstance(node, InnerNodeAbstract):
-            return node._leaf_set
-        # The node is a leaf
-        elif isinstance(node, LeafAbstract):
-            return {node}
-        # The instance of the child is not handled
-        else:
-            assert False
-
     @staticmethod
     def _union_variable_and_literal_in_circuit_set_over_set(child_set: Set[NodeAbstract]) -> (Set[int], Set[int]):
         """
@@ -131,11 +109,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         self._set_variable_in_circuit_set(variable_in_circuit_set_temp)
         self._set_literal_in_circuit_set(literal_in_circuit_set_temp)
 
-        self._leaf_set: Set[LeafAbstract] = set()
         node_in_circuit_set_temp = {self}
         for child in self._child_set:
             node_in_circuit_set_temp = node_in_circuit_set_temp.union(child._get_node_in_circuit_set(copy=False))
-            self._leaf_set.update(self.__get_leaf_set(child))
         self._set_node_in_circuit_set(node_in_circuit_set_temp)
 
         self._set_node_type_in_circuit_counter_dict()
@@ -367,17 +343,6 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             return self._parent_set.copy()
 
         return self._parent_set
-
-    def _get_leaf_set(self, copy: bool) -> Set[NodeAbstract]:
-        """
-        :param copy: True if a copy is returned
-        :return: the set of leaves
-        """
-
-        if copy:
-            return self._leaf_set.copy()
-
-        return self._leaf_set
     # endregion
 
     # region Public method
