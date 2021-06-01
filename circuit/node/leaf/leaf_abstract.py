@@ -3,6 +3,7 @@ from abc import ABC
 from typing import Set
 from other.sorted_list import SortedList
 from circuit.node.node_abstract import NodeAbstract
+from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
 # Import exception
 import exception.circuit.circuit_exception as c_exception
@@ -23,7 +24,7 @@ class LeafAbstract(NodeAbstract, ABC):
 
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
                  variable_in_circuit_set: Set[int], literal_in_circuit_set: Set[int], size: int = 0):
-        self.__parent_set: Set[NodeAbstract] = set()
+        self.__parent_set: Set[InnerNodeAbstract] = set()
         self.__size: int = size
         super().__init__(id=id,
                          node_type=node_type,
@@ -32,7 +33,7 @@ class LeafAbstract(NodeAbstract, ABC):
                          node_in_circuit_set={self})
 
     # region Protected method
-    def _add_parent(self, new_parent: NodeAbstract) -> None:
+    def _add_parent(self, new_parent: InnerNodeAbstract) -> None:
         """
         Add the parent (new_parent) to the set of parents (parent_set).
         If the parent already exists in the set, nothing happens.
@@ -42,10 +43,10 @@ class LeafAbstract(NodeAbstract, ABC):
 
         self.__parent_set.add(new_parent)
 
-    def _remove_parent(self, parent_to_delete: NodeAbstract) -> None:
+    def _remove_parent(self, parent_to_delete: InnerNodeAbstract) -> None:
         """
         Remove the parent (parent_to_delete) from the set of parents (parent_set)
-        :param parent_to_delete: the parent
+        :param parent_to_delete: a parent
         :return: None
         :raises ParentDoesNotExistException: if the parent does not exist in the set
         """
@@ -64,7 +65,7 @@ class LeafAbstract(NodeAbstract, ABC):
 
         self.__size = new_size
 
-    def _get_parent_set(self, copy: bool) -> Set[NodeAbstract]:
+    def _get_parent_set(self, copy: bool) -> Set[InnerNodeAbstract]:
         """
         :param copy: True if a copy is returned
         :return: the parent set

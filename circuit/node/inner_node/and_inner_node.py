@@ -16,14 +16,14 @@ class AndInnerNode(InnerNodeAbstract):
     """
 
     def __init__(self, child_set: Set[NodeAbstract], id: int = 0):
-        decomposable_temp = self.__is_decomposable_set(child_set)
+        decomposable_temp = AndInnerNode.__is_decomposable_set(child_set)
 
         super().__init__(id=id,
                          node_type=nt_enum.NodeTypeEnum.AND_NODE,
                          child_set=child_set,
                          decomposable=decomposable_temp)
 
-    # region Private method
+    # region Static method
     @staticmethod
     def __is_decomposable_set(child_set: Set[NodeAbstract]) -> bool:
         """
@@ -32,7 +32,7 @@ class AndInnerNode(InnerNodeAbstract):
         :return: True if the node is decomposable. Otherwise, False is returned.
         """
 
-        # The node has no children or only one child
+        # The node has at most one child
         if not len(child_set) or len(child_set) == 1:
             return True
 
@@ -89,7 +89,8 @@ class AndInnerNode(InnerNodeAbstract):
                                                use_cache=use_cache,
                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary,
                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
-            # The child is not satisfied => this node is not satisfied
+
+            # The child is not satisfiable => this node is not satisfiable
             if not result_temp:
                 result = False
                 break

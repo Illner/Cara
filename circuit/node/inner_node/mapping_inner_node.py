@@ -12,7 +12,7 @@ import circuit.node.node_type_enum as nt_enum
 
 class MappingInnerNode(InnerNodeAbstract):
     """
-    Mapping inner node
+    Mapping inner node representation
     """
 
     """
@@ -172,13 +172,14 @@ class MappingInnerNode(InnerNodeAbstract):
 
     def str_mapping(self) -> str:
         result = ""
+        child = self.__get_child()
         variable_sorted_list = sorted(self.__variable_id_mapping_id_dictionary.keys())
 
         for variable_id in variable_sorted_list:
             mapping_id = self.__variable_id_mapping_id_dictionary[variable_id]
 
             # mapping_id is an implied variable
-            if not self.__get_child()._exist_variable_in_circuit_set(mapping_id):
+            if not child._exist_variable_in_circuit_set(mapping_id):
                 continue
 
             result = " ".join((result, str(variable_id), str(mapping_id)))

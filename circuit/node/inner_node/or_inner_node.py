@@ -38,6 +38,7 @@ class OrInnerNode(InnerNodeAbstract):
         # Check if the decision variable exists in the circuit
         if (decision_variable is not None) and (not self._exist_variable_in_circuit_set(decision_variable)):
             raise c_exception.VariableDoesNotExistInCircuitException(decision_variable, str(self))
+
         self.__decision_variable: Union[int, None] = decision_variable
 
     # region Static method
@@ -45,11 +46,11 @@ class OrInnerNode(InnerNodeAbstract):
     def __is_deterministic_set(child_set: Set[NodeAbstract]) -> bool:
         """
         Check if the node is deterministic
-        :param child_set: the children set
+        :param child_set: children set
         :return: True if the node is deterministic. Otherwise, False is returned.
         """
 
-        # The node has no children or only one child
+        # The node has at most child
         if not len(child_set) or len(child_set) == 1:
             return True
 
@@ -60,11 +61,11 @@ class OrInnerNode(InnerNodeAbstract):
     def __is_smooth_set(child_set: Set[NodeAbstract]) -> bool:
         """
         Check if the node is smooth
-        :param child_set: the children set
+        :param child_set: children set
         :return: True if the node is smooth. Otherwise, False is returned.
         """
 
-        # The node has no children or only one child
+        # The node has at most one child
         if not len(child_set) or len(child_set) == 1:
             return True
 
@@ -129,6 +130,7 @@ class OrInnerNode(InnerNodeAbstract):
                                                use_cache=use_cache,
                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary,
                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
+
             # The child is satisfied => this node is satisfied
             if result_temp:
                 result = True

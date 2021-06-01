@@ -94,7 +94,7 @@ class RenamableHornCnfLeaf(LeafAbstract):
     def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True,
                                     mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                                     variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> float:
-        raise c_exception.OperationIsNotSupportedException("minimum default cardinality")
+        raise c_exception.OperationIsNotSupportedException("minimum default-cardinality")
 
     def str_with_mapping(self) -> Tuple[str, Dict[int, int]]:
         return self.__cnf.str_with_mapping(horn_renaming_function=self.__renaming_function)
@@ -103,7 +103,7 @@ class RenamableHornCnfLeaf(LeafAbstract):
     # region Private method
     def __rename_assignment(self, assignment_set: Set[int]) -> Set[int]:
         """
-        :param assignment_set: an assigment set
+        :param assignment_set: an assignment set
         :return: the renamed assignment based on the renaming function
         """
 
@@ -111,6 +111,7 @@ class RenamableHornCnfLeaf(LeafAbstract):
 
         for lit in assignment_set:
             var = abs(lit)
+
             # Positive
             if var in self.__renaming_function:
                 renamed_assignment_set.add(-lit)

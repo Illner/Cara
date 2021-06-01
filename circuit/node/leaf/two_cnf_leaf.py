@@ -90,7 +90,7 @@ class TwoCnfLeaf(LeafAbstract):
     def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True,
                                     mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                                     variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> float:
-        raise c_exception.OperationIsNotSupportedException("minimum default cardinality")
+        raise c_exception.OperationIsNotSupportedException("minimum default-cardinality")
 
     def str_with_mapping(self) -> Tuple[str, Dict[int, int]]:
         return self.__cnf.str_with_mapping()
