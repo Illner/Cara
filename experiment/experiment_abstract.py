@@ -68,7 +68,7 @@ class ExperimentAbstract(ABC):
         # Get all files in the directory
         if isinstance(directory_path, str):
             directory_path = Path(directory_path)
-        self._files: List[Tuple[str, str]] = self.__get_files(directory_path)
+        self._files: List[Tuple[str, str]] = ExperimentAbstract.__get_files(directory_path)
 
     # region Protected method
     def _experiment(self,
@@ -141,7 +141,7 @@ class ExperimentAbstract(ABC):
                             new_cut_set_threshold_reduction=new_cut_set_threshold_reduction)
 
         experiment_thread: TExperimentThread = self.__ExperimentThread(compiler)
-        thread = threading.Thread(target=self.__experiment, args=(experiment_thread,))
+        thread = threading.Thread(target=ExperimentAbstract.__experiment, args=(experiment_thread,))
         thread.start()
 
         if self.__timeout_experiment is not None:

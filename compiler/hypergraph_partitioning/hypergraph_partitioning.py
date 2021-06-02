@@ -333,12 +333,12 @@ class HypergraphPartitioning:
         # Nodes' weight
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.STATIC:
             for node_id in range(self.__total_number_of_nodes):
-                self.__node_weight_dictionary[node_id] = 1  # TODO STATIC
+                self.__node_weight_dictionary[node_id] = 1
 
         # Hyperedges' weight
         if self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.STATIC:
             for hyperedge_id in self.__hyperedge_set:
-                self.__hyperedge_weight_dictionary[hyperedge_id] = 1    # TODO STATIC
+                self.__hyperedge_weight_dictionary[hyperedge_id] = 1
 
         self.__statistics.set_static_weights.stop_stopwatch()   # timer (stop)
 
@@ -356,12 +356,12 @@ class HypergraphPartitioning:
         # Nodes' weight
         if self.__node_weight_enum == hpwt_enum.HypergraphPartitioningNodeWeightEnum.DYNAMIC:
             self.__node_weight_dictionary = dict()  # reset
-            pass    # TODO DYNAMIC
+            pass
 
         # Hyperedges' weight
         if self.__hyperedge_weight_enum == hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.DYNAMIC:
             self.__hyperedge_weight_dictionary = dict()     # reset
-            pass    # TODO DYNAMIC
+            pass
 
         self.__statistics.set_dynamic_weights.stop_stopwatch()      # timer (stop)
 
@@ -833,7 +833,7 @@ class HypergraphPartitioning:
         # Only one clause remains => all variables are in the cut set
         if incidence_graph.number_of_clauses() == 1:
             cut_set = incidence_graph.variable_set(copy=True)
-            self.remove_reduction_incidence_graph(incidence_graph)
+            HypergraphPartitioning.remove_reduction_incidence_graph(incidence_graph)
 
             self.__statistics.get_cut_set.stop_stopwatch()      # timer (stop)
             return cut_set
@@ -845,7 +845,7 @@ class HypergraphPartitioning:
         result_cache_cut_set, result_cache_key = self.check_cache(incidence_graph)
         # A cut set has been found
         if result_cache_cut_set is not None:
-            self.remove_reduction_incidence_graph(incidence_graph)
+            HypergraphPartitioning.remove_reduction_incidence_graph(incidence_graph)
 
             self.__statistics.cache_hit.add_count(1)  # counter
             self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
@@ -882,7 +882,7 @@ class HypergraphPartitioning:
 
             self.__add_cut_set_cache(key, cut_set_cache)
 
-        self.remove_reduction_incidence_graph(incidence_graph)
+        HypergraphPartitioning.remove_reduction_incidence_graph(incidence_graph)
 
         self.__statistics.cut_set_size.add_count(len(cut_set))  # counter
         self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)

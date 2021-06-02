@@ -230,7 +230,7 @@ class Solver:
         """
 
         # Cache
-        key = self.__generate_key_cache(assignment_list, variable_restriction_set)
+        key = Solver.__generate_key_cache(assignment_list, variable_restriction_set)
         exist, value = self.__get_implicit_bcp_dictionary_cache(key)
         if exist:
             return value

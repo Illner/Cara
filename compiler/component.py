@@ -364,7 +364,7 @@ class Component:
                 self.__statistics.component_statistics.cut_set_try_cache_hit.add_count(1)       # counter
                 self.__statistics.hypergraph_partitioning_statistics.cache_hit.add_count(1)     # counter
 
-                self.__hypergraph_partitioning.remove_reduction_incidence_graph(self.__incidence_graph)
+                HypergraphPartitioning.remove_reduction_incidence_graph(self.__incidence_graph)
                 cut_set_restriction = result_cache_cut_set
             else:
                 self.__statistics.component_statistics.cut_set_try_cache_hit.add_count(0)       # counter
@@ -382,7 +382,7 @@ class Component:
                 self.__statistics.component_statistics.recompute_cut_set.add_count(1)   # counter
             else:
                 if incidence_graph_is_reduced:
-                    self.__hypergraph_partitioning.remove_reduction_incidence_graph(self.__incidence_graph)     # because of cut set - try cache
+                    HypergraphPartitioning.remove_reduction_incidence_graph(self.__incidence_graph)     # because of cut set - try cache
                 self.__statistics.component_statistics.recompute_cut_set.add_count(0)   # counter
 
         decision_variable = self.__get_decision_variable_from_cut_set(cut_set=cut_set_restriction,

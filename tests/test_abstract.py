@@ -13,7 +13,7 @@ class TestAbstract(ABC):
 
     def __init__(self, *directories: str, test_name: str = "Test"):
         self.__test_name: str = test_name
-        self.__original_result_path: str = self._create_path(*directories, TestAbstract.__ORIGINAL_RESULT_FILE_NAME)
+        self.__original_result_path: str = TestAbstract._create_path(*directories, TestAbstract.__ORIGINAL_RESULT_FILE_NAME)
 
         # File's variables initialization
         self.__path_directory: Union[str, None] = None
@@ -34,14 +34,14 @@ class TestAbstract(ABC):
         """
 
         # Check if the file with the original result exists
-        if not self._exists_file(self.__original_result_path):
+        if not TestAbstract._exists_file(self.__original_result_path):
             raise t_exception.OriginalResultDoesNotExistException(self.__test_name, self.__original_result_path)
 
         actual_result = self._get_actual_result()
         with open(self.__original_result_path, "r", encoding="utf-8") as original_result_file:
             original_result = original_result_file.read()
 
-        return self._compare_results(actual_result, original_result)
+        return TestAbstract._compare_results(actual_result, original_result)
 
     def save(self) -> None:
         """
@@ -110,7 +110,7 @@ class TestAbstract(ABC):
         :return: None
         """
 
-        self.__path_directory = self._create_path(*directories)
+        self.__path_directory = TestAbstract._create_path(*directories)
         self._files = self.__get_files()
         self._files.sort()  # deterministic
     # endregion

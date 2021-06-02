@@ -57,7 +57,7 @@ class TwoCnfTest(TestAbstract):
                 cnf = Cnf(file_path)
                 two_cnf = cnf.get_incidence_graph().convert_to_2_cnf()
 
-                result = "\n".join((result, self.__two_cnf_str(two_cnf), ""))
+                result = "\n".join((result, TwoCnfTest.__two_cnf_str(two_cnf), ""))
 
                 assignment_list = [[], [1], [-2, -3]]
                 for assignment in assignment_list:
@@ -86,7 +86,7 @@ class TwoCnfTest(TestAbstract):
             try:
                 result = "\n".join((result, f"Appending the clause: {clause}"))
                 two_cnf.append(clause)
-                result = "\n".join((result, self.__two_cnf_str(two_cnf)))
+                result = "\n".join((result, TwoCnfTest.__two_cnf_str(two_cnf)))
 
                 model = two_cnf.get_model([-1])
                 is_sat = False if model is None else True

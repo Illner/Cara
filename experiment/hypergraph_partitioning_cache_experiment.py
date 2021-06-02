@@ -77,7 +77,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                             break
 
                         limit_temp = None if hp_cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE else (limit_clause, limit_variable)
-                        key = self.__generate_key_cache(cache_name, limit_temp)     # key, file_name_extension
+                        key = HypergraphPartitioningCacheExperiment.__generate_key_cache(cache_name, limit_temp)     # key, file_name_extension
 
                         timeout_exceeded, exception, _, statistics = self._experiment(file_name=file_name, file_path=file_path,
                                                                                       smooth=False,
@@ -199,9 +199,9 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
             file_dictionary_path.mkdir(parents=True, exist_ok=True)
 
         # None
-        key_none = self.__generate_key_cache(hp_cache_name=hpc_enum.HypergraphPartitioningCacheEnum.NONE.name, limit=None)
+        key_none = HypergraphPartitioningCacheExperiment.__generate_key_cache(hp_cache_name=hpc_enum.HypergraphPartitioningCacheEnum.NONE.name, limit=None)
         value_none = file_dictionary[key_none]
-        label_none = self.__key_to_label(key_none)
+        label_none = HypergraphPartitioningCacheExperiment.__key_to_label(key_none)
 
         count_temp = 0
         for key in file_dictionary.keys():
@@ -209,7 +209,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                 continue
 
             value = file_dictionary[key]
-            label = self.__key_to_label(key)
+            label = HypergraphPartitioningCacheExperiment.__key_to_label(key)
 
             valid_value_index_list = list(valid_index_dictionary[key].intersection(valid_index_dictionary[key_none]))
 
@@ -250,11 +250,11 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
             return var_func.replace(" ", "_")
 
         # None
-        key_none = self.__generate_key_cache(hpc_enum.HypergraphPartitioningCacheEnum.NONE.name, limit=None)
+        key_none = HypergraphPartitioningCacheExperiment.__generate_key_cache(hpc_enum.HypergraphPartitioningCacheEnum.NONE.name, limit=None)
         value_none, label_none = None, None
         if key_none in dictionary:
             value_none = convert_value_to_int(dictionary[key_none])
-            label_none = self.__key_to_label(key_none)
+            label_none = HypergraphPartitioningCacheExperiment.__key_to_label(key_none)
 
         count_temp = 0
 
@@ -284,7 +284,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                             if cache_name == hpc_enum.HypergraphPartitioningCacheEnum.NONE.name:
                                 continue
 
-                            key = self.__generate_key_cache(cache_name, (limit_clause, limit_variable))
+                            key = HypergraphPartitioningCacheExperiment.__generate_key_cache(cache_name, (limit_clause, limit_variable))
                             value = convert_value_to_int(dictionary[key])
 
                             data[-1].append(value)

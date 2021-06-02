@@ -1181,14 +1181,14 @@ class Circuit:
                 if difference_set:
                     and_node = self.__smooth_create_and_node(child.id, difference_set)
 
-                    self.__remove_edge(from_node=node,
-                                       to_node=child,
+                    Circuit.__remove_edge(from_node=node,
+                                          to_node=child,
+                                          smooth=True,
+                                          call_update=False)
+                    Circuit.__add_edge(from_node=node,
+                                       to_node=and_node,
                                        smooth=True,
                                        call_update=False)
-                    self.__add_edge(from_node=node,
-                                    to_node=and_node,
-                                    smooth=True,
-                                    call_update=False)
 
         # Update properties for all inner nodes in the circuit
         leaf_set = set()
@@ -1326,10 +1326,10 @@ class Circuit:
         if to_id_node in from_node.get_child_id_list():
             return
 
-        self.__add_edge(from_node=from_node,
-                        to_node=to_node,
-                        smooth=False,
-                        call_update=True)
+        Circuit.__add_edge(from_node=from_node,
+                           to_node=to_node,
+                           smooth=False,
+                           call_update=True)
 
         # Recheck the type of the circuit
         self.__check_circuit_type()

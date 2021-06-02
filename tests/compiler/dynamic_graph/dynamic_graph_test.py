@@ -58,32 +58,32 @@ class DynamicGraphTest(TestAbstract):
             actual_result = "\n".join((actual_result, "Add nodes (1 and 2)"))
             dynamic_graph.insert_node(1)
             dynamic_graph.insert_node(2)
-            actual_result = "\n".join((actual_result, self.dynamic_graph_str(dynamic_graph)))
+            actual_result = "\n".join((actual_result, DynamicGraphTest.dynamic_graph_str(dynamic_graph)))
 
             actual_result = "\n".join((actual_result, "Add a duplicated node (1)"))
             dynamic_graph.insert_node(1)
-            actual_result = "\n".join((actual_result, self.dynamic_graph_str(dynamic_graph)))
+            actual_result = "\n".join((actual_result, DynamicGraphTest.dynamic_graph_str(dynamic_graph)))
 
             # Insert edges
             edge_list = [(1, 2), (1, 3), (4, 5)]
             for node_1, node_2 in edge_list:
                 actual_result = "\n".join((actual_result, f"Add an edge ({node_1} - {node_2})"))
                 dynamic_graph.insert_edge(node_1, node_2)
-                actual_result = "\n".join((actual_result, self.dynamic_graph_str(dynamic_graph)))
+                actual_result = "\n".join((actual_result, DynamicGraphTest.dynamic_graph_str(dynamic_graph)))
 
             # Duplicated edges (insert)
             edge_list = [(1, 2), (1, 2), (3, 4), (1, 3), (1, 2)]
             for node_1, node_2 in edge_list:
                 actual_result = "\n".join((actual_result, f"Add an edge ({node_1} - {node_2})"))
                 dynamic_graph.insert_edge(node_1, node_2)
-                actual_result = "\n".join((actual_result, self.dynamic_graph_str(dynamic_graph)))
+                actual_result = "\n".join((actual_result, DynamicGraphTest.dynamic_graph_str(dynamic_graph)))
 
             # Duplicated edges (delete)
             edge_list = [(1, 3), (1, 2), (1, 3), (4, 5), (1, 2), (5, 1), (6, 7)]
             for node_1, node_2 in edge_list:
                 actual_result = "\n".join((actual_result, f"Remove an edge ({node_1} - {node_2})"))
                 dynamic_graph.delete_edge(node_1, node_2)
-                actual_result = "\n".join((actual_result, self.dynamic_graph_str(dynamic_graph)))
+                actual_result = "\n".join((actual_result, DynamicGraphTest.dynamic_graph_str(dynamic_graph)))
 
             # Isolated nodes
             actual_result = "\n".join((actual_result, "Isolated node (6)"))
@@ -91,20 +91,20 @@ class DynamicGraphTest(TestAbstract):
             dynamic_graph.insert_edge(5, 6)
             dynamic_graph.insert_edge(4, 6)
             dynamic_graph.insert_edge(2, 6)
-            actual_result = "\n".join((actual_result, self.dynamic_graph_str(dynamic_graph)))
+            actual_result = "\n".join((actual_result, DynamicGraphTest.dynamic_graph_str(dynamic_graph)))
 
             dynamic_graph.delete_all_neighbours(6)
-            actual_result = "\n".join((actual_result, self.dynamic_graph_str(dynamic_graph)))
+            actual_result = "\n".join((actual_result, DynamicGraphTest.dynamic_graph_str(dynamic_graph)))
 
             dynamic_graph.insert_edge(1, 6)
-            actual_result = "\n".join((actual_result, self.dynamic_graph_str(dynamic_graph)))
+            actual_result = "\n".join((actual_result, DynamicGraphTest.dynamic_graph_str(dynamic_graph)))
 
             # Insert more edges at once
             edge_list = [(1, 2, 3), (1, 2, 2), (4, 5, 2), (4, 5, 1)]
             for node_1, node_2, number in edge_list:
                 actual_result = "\n".join((actual_result, f"Add {number} edge(s) ({node_1} - {node_2})"))
                 dynamic_graph.insert_edge(node_1, node_2, number_of_edges=number)
-                actual_result = "\n".join((actual_result, self.dynamic_graph_str(dynamic_graph)))
+                actual_result = "\n".join((actual_result, DynamicGraphTest.dynamic_graph_str(dynamic_graph)))
         except (c_exception.CaraException, Exception) as err:
             actual_result = "\n".join((actual_result, str(err)))
 

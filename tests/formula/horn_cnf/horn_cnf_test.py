@@ -64,7 +64,7 @@ class HornCnfTest(TestAbstract):
                 result = "\n".join((result, f"Renaming function: {renaming_function}"))
 
                 horn_cnf = cnf.get_incidence_graph().convert_to_horn_cnf()
-                result = "\n".join((result, self.__horn_cnf_str(horn_cnf), ""))
+                result = "\n".join((result, HornCnfTest.__horn_cnf_str(horn_cnf), ""))
 
                 assignment_list = [[], [1], [-2, -3]]
                 for assignment in assignment_list:
@@ -91,7 +91,7 @@ class HornCnfTest(TestAbstract):
             try:
                 result = "\n".join((result, f"Appending the clause: {clause}"))
                 horn_cnf.append(clause)
-                result = "\n".join((result, self.__horn_cnf_str(horn_cnf)))
+                result = "\n".join((result, HornCnfTest.__horn_cnf_str(horn_cnf)))
 
                 model = horn_cnf.get_model([6])
                 is_sat = False if model is None else True

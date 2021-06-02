@@ -136,7 +136,7 @@ class IncidenceGraphTest(TestAbstract):
 
         try:
             incidence_graph = IncidenceGraphTest.__incidence_graph_1()
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
@@ -154,30 +154,30 @@ class IncidenceGraphTest(TestAbstract):
         try:
             incidence_graph = IncidenceGraphTest.__incidence_graph_1()
             result = "Before modification"
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
 
             # Add a variable
             result = "\n".join((result, "Add a variable (4)"))
             incidence_graph.add_variable(4)
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
 
             # Add a clause
             result = "\n".join((result, "Add a clause (4)"))
             incidence_graph.add_clause_id(4)
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
 
             # Add edges
             result = "\n".join((result, "Add an edge (|3| - 4)"))
             incidence_graph.add_edge(3, 4)
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
 
             result = "\n".join((result, "Add an edge (|-4| - 4)"))
             incidence_graph.add_edge(-4, 4)
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
 
             result = "\n".join((result, "Add an edge (5 - 4)"))
             incidence_graph.add_edge(5, 4)
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
@@ -199,7 +199,7 @@ class IncidenceGraphTest(TestAbstract):
                 component_sorted_list = list(incidence_graph_func.create_incidence_graphs_for_components())
                 component_sorted_list.sort(key=lambda ig: ig.number_of_nodes())
                 for component in component_sorted_list:
-                    result_func = "\n".join((result_func, self.__incidence_graph_str(component)))
+                    result_func = "\n".join((result_func, IncidenceGraphTest.__incidence_graph_str(component)))
 
                 return result_func
 
@@ -212,7 +212,7 @@ class IncidenceGraphTest(TestAbstract):
                 for remove_literal in remove_literal_list:
                     result = "\n".join((result, f"Remove literal ({remove_literal})"))
                     incidence_graph.remove_literal(remove_literal, erc_enum.EliminatingRedundantClausesEnum.NONE)
-                    result = "\n".join((result, self.__incidence_graph_str(incidence_graph), connected_components_str(incidence_graph)))
+                    result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph), connected_components_str(incidence_graph)))
 
                 # Restore
                 restore_literal_list = remove_literal_list.copy()
@@ -221,7 +221,7 @@ class IncidenceGraphTest(TestAbstract):
                 for restore_literal in restore_literal_list:
                     result = "\n".join((result, f"Restore literal ({restore_literal})"))
                     incidence_graph.restore_backup_literal(restore_literal)
-                    result = "\n".join((result, self.__incidence_graph_str(incidence_graph), connected_components_str(incidence_graph)))
+                    result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph), connected_components_str(incidence_graph)))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
@@ -244,11 +244,11 @@ class IncidenceGraphTest(TestAbstract):
             for variable_simplification_dictionary in variable_simplification_dictionary_list:
                 result = "\n".join((result, f"Variable simplification: ({variable_simplification_dictionary})"))
                 incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
-                result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+                result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
 
                 result = "\n".join((result, "Restore:"))
                 incidence_graph.restore_backup_variable_simplification()
-                result = "\n".join((result, self.__incidence_graph_str(incidence_graph), ""))
+                result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph), ""))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 
@@ -265,16 +265,16 @@ class IncidenceGraphTest(TestAbstract):
 
         try:
             incidence_graph = IncidenceGraphTest.__incidence_graph_2()
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
 
             subsumed_clause_set = {0, 1, 3}
             result = "\n".join((result, f"Subsumption: ({SortedList(subsumed_clause_set).str_delimiter(', ')})"))
             incidence_graph.remove_subsumed_clause_variable_set(subsumed_clause_set)
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
 
             result = "\n".join((result, "Restore:"))
             incidence_graph.restore_backup_subsumption_variable()
-            result = "\n".join((result, self.__incidence_graph_str(incidence_graph)))
+            result = "\n".join((result, IncidenceGraphTest.__incidence_graph_str(incidence_graph)))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 

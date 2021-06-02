@@ -1,6 +1,7 @@
 # Import
 from formula.pysat_2_cnf import PySat2Cnf
 from typing import Set, Tuple, Dict, Union
+from circuit.node.node_abstract import NodeAbstract
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import exception
@@ -48,8 +49,8 @@ class TwoCnfLeaf(LeafAbstract):
 
         # Mapping is used
         if variable_id_mapping_id_dictionary is not None:
-            restricted_assumption_set_temp = self.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
-                                                                             mapping_dictionary=variable_id_mapping_id_dictionary)
+            restricted_assumption_set_temp = NodeAbstract.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
+                                                                                     mapping_dictionary=variable_id_mapping_id_dictionary)
 
         model = self.__cnf.get_model(assignment_list=list(restricted_assumption_set_temp))
         is_satisfiable = False if model is None else True
@@ -76,8 +77,8 @@ class TwoCnfLeaf(LeafAbstract):
 
         # Mapping is used
         if variable_id_mapping_id_dictionary is not None:
-            restricted_assumption_set_temp = self.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
-                                                                             mapping_dictionary=variable_id_mapping_id_dictionary)
+            restricted_assumption_set_temp = NodeAbstract.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
+                                                                                     mapping_dictionary=variable_id_mapping_id_dictionary)
 
         number_of_models = self.__cnf.get_number_of_models(assignment_list=list(restricted_assumption_set_temp))
 

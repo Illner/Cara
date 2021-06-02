@@ -1,6 +1,7 @@
 # Import
 from typing import Set, Tuple, Dict, Union
 from formula.pysat_horn_cnf import PySatHornCnf
+from circuit.node.node_abstract import NodeAbstract
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import exception
@@ -50,8 +51,8 @@ class RenamableHornCnfLeaf(LeafAbstract):
 
         # Mapping is used
         if variable_id_mapping_id_dictionary is not None:
-            restricted_assumption_set_temp = self.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
-                                                                             mapping_dictionary=variable_id_mapping_id_dictionary)
+            restricted_assumption_set_temp = NodeAbstract.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
+                                                                                     mapping_dictionary=variable_id_mapping_id_dictionary)
 
         restricted_renamed_assumption_set_temp = self.__rename_assignment(restricted_assumption_set_temp)
         model = self.__cnf.get_model(assignment_list=list(restricted_renamed_assumption_set_temp))
@@ -79,8 +80,8 @@ class RenamableHornCnfLeaf(LeafAbstract):
 
         # Mapping is used
         if variable_id_mapping_id_dictionary is not None:
-            restricted_assumption_set_temp = self.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
-                                                                             mapping_dictionary=variable_id_mapping_id_dictionary)
+            restricted_assumption_set_temp = NodeAbstract.use_mapping_on_literal_set(literal_set=restricted_assumption_set_temp,
+                                                                                     mapping_dictionary=variable_id_mapping_id_dictionary)
 
         restricted_renamed_assumption_set_temp = self.__rename_assignment(restricted_assumption_set_temp)
         number_of_models = self.__cnf.get_number_of_models(assignment_list=list(restricted_renamed_assumption_set_temp))
