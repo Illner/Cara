@@ -55,7 +55,7 @@ class MappingInnerNode(InnerNodeAbstract):
                                                                                                     mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
             value = self._get_satisfiable_cache(key)
@@ -102,7 +102,7 @@ class MappingInnerNode(InnerNodeAbstract):
                                                                                 variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
-        key = ""  # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_assumption_set_temp, set())
             value = self._get_model_counting_cache(key)
@@ -142,7 +142,7 @@ class MappingInnerNode(InnerNodeAbstract):
                                                                                        mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_observation_set_temp, restricted_default_set_temp)
             value = self._get_minimal_default_cardinality_cache(key)
@@ -182,7 +182,10 @@ class MappingInnerNode(InnerNodeAbstract):
             if not child._exist_variable_in_circuit_set(mapping_id):
                 continue
 
-            result = " ".join((result, str(variable_id), str(mapping_id)))
+            if not result:
+                result = f"{variable_id} {mapping_id}"
+            else:
+                result = " ".join((result, str(variable_id), str(mapping_id)))
 
         return result
     # endregion
@@ -204,7 +207,7 @@ class MappingInnerNode(InnerNodeAbstract):
         return composed_mapping_id_variable_id_dictionary, composed_variable_id_mapping_id_dictionary
 
     def __get_child(self) -> NodeAbstract:
-        return list(self._child_set)[0]
+        return list(self._get_child_set(copy=False))[0]
     # endregion
 
     # endregion Magic method

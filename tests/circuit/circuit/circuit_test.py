@@ -302,13 +302,13 @@ class CircuitTest(TestAbstract):
             circuit.add_edge(29, or_node_id_temp)
 
             # Add an edge / is connected
-            result = "\n".join((result, "Add an edge / is connected", f"is connected: {circuit.is_circuit_connected()}"))
-            edge_list = [(18, 20), (16, 23), (7, 18), (1, 35), (40, 45), (25, 21), (26, 21)]
+            result = "\n".join((result, "Add an edge / is connected"))
+            edge_list = [(18, 20), (16, 23), (1, 35), (40, 45), (25, 21), (26, 21)]
             for (edge_from, edge_to) in edge_list:
                 try:
                     result = "\n".join((result, f"Add edge ({edge_from} -> {edge_to})"))
                     circuit.add_edge(edge_from, edge_to)
-                    result = "\n".join((result, f"is connected: {circuit.is_circuit_connected()}", f"{repr(circuit)}", ""))
+                    result = "\n".join((result, f"{repr(circuit)}", ""))
                 except c_exception.CaraException as err:
                     result = "\n".join((result, str(err), ""))
         except c_exception.CaraException as err:
@@ -463,7 +463,6 @@ class CircuitTest(TestAbstract):
 
             # Properties
             result = "\n".join((result, f"Decomposability: {circuit.is_decomposable()}, determinism: {circuit.is_deterministic()}, smoothness: {circuit.is_smooth()}, circuit type: {circuit.circuit_type.name}"))
-            result = "\n".join((result, f"is connected: {circuit.is_circuit_connected()}"))
 
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))

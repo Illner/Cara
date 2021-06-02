@@ -55,7 +55,7 @@ class AndInnerNode(InnerNodeAbstract):
         :return: True if the node is decomposable. Otherwise, False is returned.
         """
 
-        return self.__is_decomposable_set(self._child_set)
+        return AndInnerNode.__is_decomposable_set(self._get_child_set(copy=False))
     # endregion
 
     # region Override method
@@ -75,7 +75,7 @@ class AndInnerNode(InnerNodeAbstract):
                                                                                                     mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
             value = self._get_satisfiable_cache(key)
@@ -83,7 +83,7 @@ class AndInnerNode(InnerNodeAbstract):
                 return value
 
         result = True
-        for child in self._child_set:
+        for child in self._get_child_set(copy=False):
             result_temp = child.is_satisfiable(assumption_set=restricted_assumption_set_temp,
                                                exist_quantification_set=restricted_exist_quantification_set_temp,
                                                use_cache=use_cache,
@@ -120,7 +120,7 @@ class AndInnerNode(InnerNodeAbstract):
                                                                                 variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_assumption_set_temp, set())
             value = self._get_model_counting_cache(key)
@@ -128,7 +128,7 @@ class AndInnerNode(InnerNodeAbstract):
                 return value
 
         number_of_models = 1
-        for child in self._child_set:
+        for child in self._get_child_set(copy=False):
             number_of_models *= child.model_counting(assumption_set=restricted_assumption_set_temp,
                                                      use_cache=use_cache,
                                                      mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary,
@@ -153,7 +153,7 @@ class AndInnerNode(InnerNodeAbstract):
                                                                                        mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_observation_set_temp, restricted_default_set_temp)
             value = self._get_minimal_default_cardinality_cache(key)
@@ -161,7 +161,7 @@ class AndInnerNode(InnerNodeAbstract):
                 return value
 
         default_cardinality = 0
-        for child in self._child_set:
+        for child in self._get_child_set(copy=False):
             default_cardinality += child.minimum_default_cardinality(observation_set=restricted_observation_set_temp,
                                                                      default_set=restricted_default_set_temp,
                                                                      use_cache=use_cache,

@@ -23,17 +23,17 @@ class OrInnerNode(InnerNodeAbstract):
 
     def __init__(self, child_set: Set[NodeAbstract], id: int = 0, decision_variable: Union[int, None] = None):
         if decision_variable is None:
-            deterministic_temp = self.__is_deterministic_set(child_set)
+            deterministic_temp = OrInnerNode.__is_deterministic_set(child_set)
         else:
             deterministic_temp = True
 
-        smooth_temp = self.__is_smooth_set(child_set)
+        smoothness_temp = OrInnerNode.__is_smooth_set(child_set)
 
         super().__init__(id=id,
                          node_type=nt_enum.NodeTypeEnum.OR_NODE,
                          child_set=child_set,
                          deterministic=deterministic_temp,
-                         smoothness=smooth_temp)
+                         smoothness=smoothness_temp)
 
         # Check if the decision variable exists in the circuit
         if (decision_variable is not None) and (not self._exist_variable_in_circuit_set(decision_variable)):
@@ -50,7 +50,7 @@ class OrInnerNode(InnerNodeAbstract):
         :return: True if the node is deterministic. Otherwise, False is returned.
         """
 
-        # The node has at most child
+        # The node has at most one child
         if not len(child_set) or len(child_set) == 1:
             return True
 
@@ -81,21 +81,21 @@ class OrInnerNode(InnerNodeAbstract):
     # endregion
 
     # region Protected method
-    def _is_smooth(self) -> bool:
-        """
-        Check if the node is smooth
-        :return: True if the node is smooth. Otherwise, False is returned.
-        """
-
-        return self.__is_smooth_set(self._child_set)
-
     def _is_deterministic(self) -> bool:
         """
         Check if the node is deterministic
         :return: True if the node is deterministic. Otherwise, False is returned.
         """
 
-        return self.__is_deterministic_set(self._child_set)
+        return OrInnerNode.__is_deterministic_set(self._get_child_set(copy=False))
+
+    def _is_smooth(self) -> bool:
+        """
+        Check if the node is smooth
+        :return: True if the node is smooth. Otherwise, False is returned.
+        """
+
+        return OrInnerNode.__is_smooth_set(self._get_child_set(copy=False))
     # endregion
 
     # region Override method
@@ -116,7 +116,7 @@ class OrInnerNode(InnerNodeAbstract):
                                                                                                     mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
             value = self._get_satisfiable_cache(key)
@@ -124,7 +124,7 @@ class OrInnerNode(InnerNodeAbstract):
                 return value
 
         result = False
-        for child in self._child_set:
+        for child in self._get_child_set(copy=False):
             result_temp = child.is_satisfiable(assumption_set=restricted_assumption_set_temp,
                                                exist_quantification_set=restricted_exist_quantification_set_temp,
                                                use_cache=use_cache,
@@ -161,7 +161,7 @@ class OrInnerNode(InnerNodeAbstract):
                                                                                 variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_assumption_set_temp, set())
             value = self._get_model_counting_cache(key)
@@ -169,7 +169,7 @@ class OrInnerNode(InnerNodeAbstract):
                 return value
 
         number_of_models = 0
-        for child in self._child_set:
+        for child in self._get_child_set(copy=False):
             number_of_models += child.model_counting(assumption_set=restricted_assumption_set_temp,
                                                      use_cache=use_cache,
                                                      mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary,
@@ -194,7 +194,7 @@ class OrInnerNode(InnerNodeAbstract):
                                                                                        mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_observation_set_temp, restricted_default_set_temp)
             value = self._get_minimal_default_cardinality_cache(key)
@@ -202,7 +202,7 @@ class OrInnerNode(InnerNodeAbstract):
                 return value
 
         default_cardinality = math.inf
-        for child in self._child_set:
+        for child in self._get_child_set(copy=False):
             temp = child.minimum_default_cardinality(observation_set=restricted_observation_set_temp,
                                                      default_set=restricted_default_set_temp,
                                                      use_cache=use_cache,

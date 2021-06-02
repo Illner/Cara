@@ -39,7 +39,7 @@ class TwoCnfLeaf(LeafAbstract):
                                                                                                     mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
             value = self._get_satisfiable_cache(key)
@@ -67,7 +67,7 @@ class TwoCnfLeaf(LeafAbstract):
                                                                                 variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary)
 
         # Cache
-        key = ""    # initialization
+        key = None  # initialization
         if use_cache:
             key = self._generate_key_cache(restricted_assumption_set_temp, set())
             value = self._get_model_counting_cache(key)

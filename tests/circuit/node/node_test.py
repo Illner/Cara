@@ -27,7 +27,7 @@ class NodeTest(TestAbstract):
         actual_result = ""
         test_list = [("Creating and connecting nodes", self.__test_1),
                      ("Modification", self.__test_2),
-                     ("Detecting a cycle", self.__test_3),
+                     # ("Detecting a cycle", self.__test_3),
                      ("Satisfiability", self.__test_4),
                      ("Satisfiability (negative)", self.__test_5),
                      ("Satisfiability (mapping)", self.__test_11),

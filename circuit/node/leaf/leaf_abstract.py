@@ -1,6 +1,6 @@
 # Import
 from abc import ABC
-from typing import Set
+from typing import Set, List
 from other.sorted_list import SortedList
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
@@ -26,11 +26,11 @@ class LeafAbstract(NodeAbstract, ABC):
                  variable_in_circuit_set: Set[int], literal_in_circuit_set: Set[int], size: int = 0):
         self.__parent_set: Set[InnerNodeAbstract] = set()
         self.__size: int = size
+
         super().__init__(id=id,
                          node_type=node_type,
                          variable_in_circuit_set=variable_in_circuit_set,
-                         literal_in_circuit_set=literal_in_circuit_set,
-                         node_in_circuit_set={self})
+                         literal_in_circuit_set=literal_in_circuit_set)
 
     # region Protected method
     def _add_parent(self, new_parent: InnerNodeAbstract) -> None:
@@ -57,14 +57,6 @@ class LeafAbstract(NodeAbstract, ABC):
 
         self.__parent_set.remove(parent_to_delete)
 
-    def _set_size(self, new_size: int) -> None:
-        """
-        Setter - the size
-        :return: None
-        """
-
-        self.__size = new_size
-
     def _get_parent_set(self, copy: bool) -> Set[InnerNodeAbstract]:
         """
         :param copy: True if a copy is returned
@@ -75,6 +67,29 @@ class LeafAbstract(NodeAbstract, ABC):
             return self.__parent_set.copy()
 
         return self.__parent_set
+
+    def _set_size(self, new_size: int) -> None:
+        """
+        Setter - size
+        :return: None
+        """
+
+        self.__size = new_size
+    # endregion
+
+    # region Public method
+    def get_parent_id_list(self) -> List[int]:
+        """
+        Return a list that contains parent's ID
+        :return: a parent's ID list
+        """
+
+        parent_id_list = []
+
+        for parent in self._get_parent_set(copy=False):
+            parent_id_list.append(parent.id)
+
+        return parent_id_list
     # endregion
 
     # region Override method
@@ -90,12 +105,9 @@ class LeafAbstract(NodeAbstract, ABC):
     def __repr__(self):
         string_temp = super().__repr__()
 
-        # Parents
-        string_temp = " ".join((string_temp, "Parent list (IDs):"))
-        parent_id_sorted_list_temp = SortedList()
-        for parent in self.__parent_set:
-            parent_id_sorted_list_temp.add(parent.id)
-        string_temp = " ".join((string_temp, str(parent_id_sorted_list_temp)))
+        # The parent set
+        parent_id_sorted_list_temp = SortedList(self.get_parent_id_list())
+        string_temp = " ".join((string_temp, "Parent list (IDs):", str(parent_id_sorted_list_temp)))
 
         return string_temp
     # endregion

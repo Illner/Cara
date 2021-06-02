@@ -36,7 +36,7 @@ class LiteralLeaf(LeafAbstract):
         # Mapping is used
         if mapping_id_variable_id_dictionary is not None:
             variable = mapping_id_variable_id_dictionary[self.variable]
-            literal = variable if self.literal > 0 else -variable
+            literal = variable if self.is_positive else -variable
 
         # The assumption set
         if literal in assumption_set:
@@ -58,7 +58,7 @@ class LiteralLeaf(LeafAbstract):
         # Mapping is used
         if mapping_id_variable_id_dictionary is not None:
             variable = mapping_id_variable_id_dictionary[self.variable]
-            literal = variable if self.literal > 0 else -variable
+            literal = variable if self.is_positive else -variable
 
         # The assumption set
         if literal in assumption_set:
@@ -76,7 +76,7 @@ class LiteralLeaf(LeafAbstract):
         # Mapping is used
         if mapping_id_variable_id_dictionary is not None:
             variable = mapping_id_variable_id_dictionary[self.variable]
-            literal = variable if self.literal > 0 else -variable
+            literal = variable if self.is_positive else -variable
 
         # The default set
         if variable in default_set:
