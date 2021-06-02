@@ -129,7 +129,7 @@ def main(main_args):
         log_string = "\n".join((log_string, log_result, ""))
 
     # Save the log
-    with open(cara.LOG_PATH, "w") as log_file:
+    with open(cara.LOG_PATH, "w", encoding="utf-8") as log_file:
         log_file.write(log_string)
 
 
@@ -219,7 +219,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-ct",
                              "--compiler_test",
                              action="store",
-                             default=False,
+                             default=True,
                              type=cara.str_to_bool_parser,
                              help="test automation for compilers")
 

@@ -38,7 +38,7 @@ class TestAbstract(ABC):
             raise t_exception.OriginalResultDoesNotExistException(self.__test_name, self.__original_result_path)
 
         actual_result = self._get_actual_result()
-        with open(self.__original_result_path, "r") as original_result_file:
+        with open(self.__original_result_path, "r", encoding="utf-8") as original_result_file:
             original_result = original_result_file.read()
 
         return self._compare_results(actual_result, original_result)
@@ -51,7 +51,7 @@ class TestAbstract(ABC):
 
         original_result = self._get_actual_result()
 
-        with open(self.__original_result_path, "w") as original_result_file:
+        with open(self.__original_result_path, "w", encoding="utf-8") as original_result_file:
             original_result_file.write(original_result)
     # endregion
 

@@ -108,7 +108,7 @@ def main(main_args):
         stack_trace = traceback.format_exc()
 
         # Save the log
-        with open(LOG_PATH, "w") as log_file:
+        with open(LOG_PATH, "w", encoding="utf-8") as log_file:
             log_file.write(stack_trace)
 
 

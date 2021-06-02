@@ -186,13 +186,13 @@ class ExperimentAbstract(ABC):
         with open(statistics_path_temp, "wb") as file:
             pickle.dump(statistics, file, pickle.HIGHEST_PROTOCOL)
         statistics_path_temp: Path = Path(os.path.join(directory_path_temp, "statistics.stat"))
-        with open(statistics_path_temp, "w", encoding="utf8") as file:
+        with open(statistics_path_temp, "w", encoding="utf-8") as file:
             file.write(str(statistics))
 
         # Log - circuit
         if self.__save_circuit and (not timeout_exceeded) and (not exception):
             circuit_path_temp = Path(os.path.join(directory_path_temp, "circuit.nnf"))
-            with open(circuit_path_temp, "w", encoding="utf8") as file:
+            with open(circuit_path_temp, "w", encoding="utf-8") as file:
                 file.write(str(experiment_thread.compiler.circuit))
 
         del compiler
