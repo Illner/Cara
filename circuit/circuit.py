@@ -1354,6 +1354,13 @@ class Circuit:
                 result = "\n".join((result, f"{prefix}{node_type.name}: {str(value)}"))
 
         return result
+
+    def get_node_type_dictionary(self) -> Dict[nt_enum.NodeTypeEnum, int]:
+        """
+        :return: a copy of node type dictionary
+        """
+
+        return self.__node_type_in_circuit_counter_dictionary.copy()
     # endregion
 
     # region Magic method

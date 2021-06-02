@@ -1,5 +1,5 @@
 # Import
-from typing import List, Union
+from typing import List, Union, Dict
 from compiler_statistics.statistics_template_abstract import StatisticsTemplateAbstract
 
 from compiler_statistics.formula.cnf_statistics import CnfStatistics
@@ -9,6 +9,9 @@ from compiler_statistics.compiler.component_statistics import ComponentStatistic
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 from compiler_statistics.compiler.preselection_heuristic_statistics import PreselectionHeuristicStatistics
 from compiler_statistics.compiler.hypergraph_partitioning_statistics import HypergraphPartitioningStatistics
+
+# Import enum
+import circuit.node.node_type_enum as nt_enum
 
 
 class Statistics:
@@ -22,6 +25,9 @@ class Statistics:
     
     Private int size
     Private bool compiled
+    Private int number_of_nodes
+    Private int number_of_variables
+    Private Dict<NodeTypeEnum, int> node_type_dictionary
     
     Private CnfStatistics cnf_statistics
     Private SolverStatistics solver_statistics
@@ -41,6 +47,9 @@ class Statistics:
 
         self.__compiled: bool = False
         self.__size: Union[int, None] = None
+        self.__number_of_nodes: Union[int, None] = None
+        self.__number_of_variables: Union[int, None] = None
+        self.__node_type_dictionary: Dict[nt_enum.NodeTypeEnum, int] = dict()
 
         # Compiler
         self.__compiler_statistics: CompilerStatistics = CompilerStatistics(active=True)
@@ -82,7 +91,19 @@ class Statistics:
 
     # region Magic method
     def __str__(self):
-        string_temp = "\n".join((f"Compiled: {self.__compiled}", f"Size: {self.__size}", ""))
+        string_temp = "\n".join((f"Compiled: {self.__compiled}",
+                                 f"Number of nodes: {self.__number_of_nodes}",
+                                 f"Size: {self.__size}",
+                                 f"Number of variables: {self.__number_of_variables}"))
+
+        string_temp = "\n".join((string_temp, ""))
+
+        # node_type_dictionary
+        for node_type in self.__node_type_dictionary:
+            value = self.__node_type_dictionary[node_type]
+            string_temp = "\n".join((string_temp, f"{node_type.name}: {value}"))
+
+        string_temp = "\n".join((string_temp, ""))
 
         for template in self.__template_list:
             string_temp = "\n".join((string_temp, str(template), ""))
@@ -96,6 +117,15 @@ class Statistics:
 
     def set_size(self, size: int) -> None:
         self.__size = size
+
+    def set_number_of_nodes(self, number_of_nodes: int) -> None:
+        self.__number_of_nodes = number_of_nodes
+
+    def set_number_of_variables(self, number_of_variables: int) -> None:
+        self.__number_of_variables = number_of_variables
+
+    def set_node_type_dictionary(self, node_type_dictionary: Dict[nt_enum.NodeTypeEnum, int]) -> None:
+        self.__node_type_dictionary = node_type_dictionary
     # endregion
 
     # region Property

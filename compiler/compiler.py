@@ -466,6 +466,10 @@ class Compiler:
         # Statistics
         self.__statistics.compiled()
         self.__statistics.set_size(self.__circuit.size)
+        self.__statistics.set_number_of_nodes(self.__circuit.number_of_nodes)
+        self.__statistics.set_number_of_variables(self.__circuit.number_of_variables)
+        node_type_dictionary_temp = self.__circuit.get_node_type_dictionary()
+        self.__statistics.set_node_type_dictionary(node_type_dictionary_temp)
 
         self.__statistics.compiler_statistics.create_circuit.stop_stopwatch()   # timer (stop - create_circuit)
         return self.circuit
