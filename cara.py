@@ -1,6 +1,8 @@
 # Import
+import os
 import argparse
 import warnings
+import traceback
 from pathlib import Path
 from typing import Union
 import other.environment as env
@@ -23,6 +25,9 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_en
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_patoh_sugparam_enum as hpps_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
+
+# Static variable - Path
+LOG_PATH = os.path.join(os.getcwd(), "log")
 
 # Constant
 VERSION = "12.8"
@@ -98,7 +103,13 @@ def main(main_args):
 
         print("The files have been generated!")
     except (c_exception.CaraException, Exception) as err:
-        print(f"An error has occurred!\n{str(err)}")
+        print(f"An error has occurred! (see log for details)\n{str(err)}")
+
+        stack_trace = traceback.format_exc()
+
+        # Save the log
+        with open(LOG_PATH, "w") as log_file:
+            log_file.write(stack_trace)
 
 
 def input_file_path_parser(path: str) -> str:
