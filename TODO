@@ -1,6 +1,7 @@
 ) Minimum cardinality - DualHorn
 ) Minimizing
 ) UP redundancy
-) Hypergraph weights
+
 ) call functions
 ) Write circuit
+) Hypergraph partitioning - generate key
