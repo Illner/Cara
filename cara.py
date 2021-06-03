@@ -62,6 +62,7 @@ def main(main_args):
                             hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                             hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum[main_args.hp_variable_simplification],
                             hp_patoh_sugparam_enum=hpps_enum.PatohSugparamEnum[main_args.hp_patoh_sugparam],
+                            hp_multi_occurrence_cache=not main_args.hp_cache_remove_multi_occurrent_clauses,
                             hp_limit_number_of_clauses_cache=(None, main_args.hp_limit_number_of_clauses),
                             hp_limit_number_of_variables_cache=(None, main_args.hp_limit_number_of_variables),
                             cut_set_try_cache=main_args.cut_set_try_cache,
@@ -266,6 +267,13 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str_to_bool_parser,
                              metavar="[True, False]",
                              help="use component caching after BCP")
+    parser_temp.add_argument("-hp_c_rmoc",
+                             "--hp_cache_remove_multi_occurrent_clauses",
+                             action="store",
+                             default=False,
+                             type=str_to_bool_parser,
+                             metavar="[True, False]",
+                             help="multi-occurrent clauses will be removed during the hypergraph caching (ISOMORFISM, ISOMORFISM_VARIANCE)")
     parser_temp.add_argument("-cc_ccs_rmoc",
                              "--cc_cara_caching_scheme_remove_multi_occurrent_clauses",
                              action="store",

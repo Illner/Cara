@@ -55,6 +55,7 @@ class HypergraphPartitioningTest(TestAbstract):
                                                                              node_weight_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                                                              hyperedge_weight_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                                                                              variable_simplification_enum=variable_simplification_enum,
+                                                                             multi_occurrence_cache=True,
                                                                              limit_number_of_clauses_cache=(None, None),
                                                                              limit_number_of_variables_cache=(None, None))
 

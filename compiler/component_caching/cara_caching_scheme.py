@@ -33,6 +33,7 @@ class CaraCachingScheme(ComponentCachingAbstract):
         occurrence_dictionary: Dict[int, List[int, int]] = dict()       # key: a variable, value: (positive, negative)
         mean_dictionary: Dict[int, List[float, float]] = dict()         # key: a variable, value: (positive, negative)
 
+        # Compute occurrences and means
         for clause_id in incidence_graph.clause_id_set(copy=False, multi_occurrence=self.__multi_occurrence):
             used_clause_set.add(clause_id)
 
@@ -43,6 +44,7 @@ class CaraCachingScheme(ComponentCachingAbstract):
                 variable = abs(literal)
                 sign = 0 if literal > 0 else 1
 
+                # Initialize
                 if variable not in occurrence_dictionary:
                     occurrence_dictionary[variable] = [0, 0]
                     mean_dictionary[variable] = [0, 0]
@@ -68,10 +70,7 @@ class CaraCachingScheme(ComponentCachingAbstract):
             mapping_id_variable_id_dictionary[i + 1] = variable
 
         clause_mapping_list = []
-        for clause_id in incidence_graph.clause_id_set(copy=False):
-            if clause_id not in used_clause_set:
-                continue
-
+        for clause_id in used_clause_set:
             clause_set = incidence_graph.get_clause(clause_id, copy=False)
             sorted_clause_mapping = sorted(map(lambda l: variable_id_mapping_id_dictionary[abs(l)] if l > 0 else -variable_id_mapping_id_dictionary[abs(l)], clause_set))
             clause_mapping_list.append(self._delimiter.join([str(lit) for lit in sorted_clause_mapping]))

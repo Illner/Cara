@@ -743,24 +743,27 @@ class IncidenceGraph(Graph):
 
         return super().number_of_nodes()
 
-    def clause_id_set(self, copy: bool, multi_occurrence: bool = True) -> Set[int]:
+    def clause_id_set(self, copy: bool, multi_occurrence: bool = True, multi_occurrence_literal: bool = True) -> Set[int]:
         """
         :param copy: True if a copy is returned
         :param multi_occurrence: should be multi-occurrent clauses kept (a copy is returned)
+        :param multi_occurrence_literal: True if multi-occurrence is with respect to the literals. False for variables.
         :return: a set of clauses that are in the incidence graph
         """
 
-        clause_id_set = self.__clause_id_set.copy() if copy else self.__clause_id_set
-
         if multi_occurrence:
-            return clause_id_set
+            return self.__clause_id_set.copy() if copy else self.__clause_id_set
 
         # Multi-occurrent clauses are not kept
         cache: Dict[str, int] = dict()
         clause_id_set_without_multi_occurrence = set()
 
-        for clause_id in clause_id_set:
-            clause_sorted_list = self.get_sorted_clause(clause_id, copy=False)
+        for clause_id in self.__clause_id_set:
+            if multi_occurrence_literal:
+                clause_sorted_list = self.get_sorted_clause(clause_id, copy=False)
+            else:
+                clause_sorted_list = sorted(self.clause_id_neighbour_set(clause_id))
+
             clause_key_string = ",".join([str(lit) for lit in clause_sorted_list])
 
             if clause_key_string not in cache:

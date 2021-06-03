@@ -37,6 +37,7 @@ class HypergraphPartitioning:
     Private Set<int> hyperedge_set
     Private int subsumption_threshold
     Private int total_number_of_nodes
+    Private bool multi_occurrence_cache
     
     Private Tuple<int, int> limit_number_of_clauses_cache       # (lower_bound, upper_bound) - None = no limit
     Private Tuple<int, int> limit_number_of_variables_cache     # (lower_bound, upper_bound) - None = no limit
@@ -84,6 +85,7 @@ class HypergraphPartitioning:
                  node_weight_enum: hpwt_enum.HypergraphPartitioningNodeWeightEnum,
                  hyperedge_weight_enum: hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum,
                  variable_simplification_enum: hpvs_enum.HypergraphPartitioningVariableSimplificationEnum,
+                 multi_occurrence_cache: bool,
                  limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]],
                  limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]],
                  patoh_sugparam_enum: hpps_enum.PatohSugparamEnum = hpps_enum.PatohSugparamEnum.SPEED,
@@ -98,6 +100,7 @@ class HypergraphPartitioning:
         self.__subsumption_threshold: Union[int, None] = subsumption_threshold
         self.__hyperedge_set: Set[int] = cnf.get_variable_set(copy=False)
         self.__total_number_of_nodes: int = cnf.real_number_of_clauses
+        self.__multi_occurrence_cache: bool = multi_occurrence_cache
 
         self.__cache_enum: hpc_enum.HypergraphPartitioningCacheEnum = cache_enum
         self.__patoh_sugparam_enum: hpps_enum.PatohSugparamEnum = patoh_sugparam_enum
@@ -475,45 +478,54 @@ class HypergraphPartitioning:
             use_variance = True
 
         # Initialize
+        used_clause_set = set()
         occurrence_dictionary: Dict[int, int] = dict()
         mean_dictionary: Dict[int, float] = dict()
         variance_dictionary: Dict[int, float] = dict()
 
-        neighbour_cache: Dict[int, Set[int]] = dict()   # key: variable, value: a set of neighbours
+        neighbour_cache: Dict[int, Set[int]] = dict()   # key: clause's ID, value: a set of neighbours
 
         # Compute occurrences and means
-        for variable in incidence_graph.variable_set(copy=False):
-            clause_id_set = incidence_graph.variable_neighbour_set(variable)
+        for clause_id in incidence_graph.clause_id_set(copy=False,
+                                                       multi_occurrence=self.__multi_occurrence_cache,
+                                                       multi_occurrence_literal=False):
+            used_clause_set.add(clause_id)
 
-            neighbour_cache[variable] = clause_id_set
+            clause_variable_set = incidence_graph.clause_id_neighbour_set(clause_id)
+            clause_variable_len = len(clause_variable_set)
 
-            # Occurrence
-            occurrence_dictionary[variable] = len(clause_id_set)
+            neighbour_cache[clause_id] = clause_variable_set
 
-            # Mean
-            mean_temp = 0
-            for clause_id in clause_id_set:
-                mean_temp += incidence_graph.number_of_neighbours_clause_id(clause_id)
-            mean_temp = mean_temp / len(clause_id_set)
-            mean_dictionary[variable] = mean_temp
+            for variable in clause_variable_set:
+                # Initialize
+                if variable not in occurrence_dictionary:
+                    occurrence_dictionary[variable] = 0
+                    mean_dictionary[variable] = 0
+                    variance_dictionary[variable] = 0
+
+                occurrence_dictionary[variable] += 1
+                mean_dictionary[variable] += clause_variable_len
 
         # Compute variances
         if use_variance:
-            for variable in incidence_graph.variable_set(copy=False):
-                clause_id_set = neighbour_cache[variable]
-                mean_temp = mean_dictionary[variable]
+            # Normalization
+            for variable in occurrence_dictionary:
+                occurrence = occurrence_dictionary[variable]
+                mean_dictionary[variable] /= occurrence
 
-                variance_temp = 0
-                for clause_id in clause_id_set:
-                    variance_temp += (incidence_graph.number_of_neighbours_clause_id(clause_id) - mean_temp) ** 2
-                # variance_temp = variance_temp / (len(clause_id_set) - 1)
-                variance_dictionary[variable] = variance_temp
+            for clause_id in used_clause_set:
+                clause_variable_set = neighbour_cache[clause_id]
+                clause_variable_len = len(clause_variable_set)
+
+                for variable in clause_variable_set:
+                    mean = mean_dictionary[variable]
+                    variance_dictionary[variable] += (clause_variable_len - mean) ** 2
 
         variable_property_dictionary: Dict[int, Tuple[int, float, float, int]] = dict()
-        for variable in incidence_graph.variable_set(copy=False):
+        for variable in occurrence_dictionary:
             occurrence = occurrence_dictionary[variable]
             mean = mean_dictionary[variable]
-            variance = variance_dictionary.get(variable, 0)
+            variance = variance_dictionary[variable]
 
             variable_property_dictionary[variable] = occurrence, mean, variance, variable
 
@@ -528,9 +540,9 @@ class HypergraphPartitioning:
             order_id_variable_id_dictionary[i] = variable
 
         variable_clause_list = []
-        for clause_id in incidence_graph.clause_id_set(copy=False):
-            variable_set = incidence_graph.clause_id_neighbour_set(clause_id)
-            variable_sorted_list = sorted(map(lambda v: variable_id_order_id_dictionary[v], variable_set))
+        for clause_id in used_clause_set:
+            clause_variable_set = neighbour_cache[clause_id]
+            variable_sorted_list = sorted(map(lambda v: variable_id_order_id_dictionary[v], clause_variable_set))
             variable_clause_list.append(",".join([str(v) for v in variable_sorted_list]))
 
         variable_clause_sorted_list = sorted(variable_clause_list)
