@@ -1,6 +1,6 @@
 # Import
 from abc import ABC
-from typing import Set, List
+from typing import Set
 from other.sorted_list import SortedList
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
@@ -19,11 +19,13 @@ class LeafAbstract(NodeAbstract, ABC):
 
     """
     Private int size                            # the size of the leaf
+    Private Set<int> parent_id_set
     Private Set<InnerNodeAbstract> parent_set
     """
 
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
                  variable_in_circuit_set: Set[int], literal_in_circuit_set: Set[int], size: int = 0):
+        self.__parent_id_set: Set[int] = set()
         self.__parent_set: Set[InnerNodeAbstract] = set()
         self.__size: int = size
 
@@ -42,6 +44,7 @@ class LeafAbstract(NodeAbstract, ABC):
         """
 
         self.__parent_set.add(new_parent)
+        self.__parent_id_set.add(new_parent.id)
 
     def _remove_parent(self, parent_to_delete: InnerNodeAbstract) -> None:
         """
@@ -56,6 +59,7 @@ class LeafAbstract(NodeAbstract, ABC):
             raise c_exception.ParentDoesNotExistException(str(self), str(parent_to_delete))
 
         self.__parent_set.remove(parent_to_delete)
+        self.__parent_id_set.remove(parent_to_delete.id)
 
     def _get_parent_set(self, copy: bool) -> Set[InnerNodeAbstract]:
         """
@@ -68,6 +72,17 @@ class LeafAbstract(NodeAbstract, ABC):
 
         return self.__parent_set
 
+    def _get_parent_id_set(self, copy: bool) -> Set[int]:
+        """
+        :param copy: True if a copy is returned
+        :return: the set of parents' id
+        """
+
+        if copy:
+            return self.__parent_id_set.copy()
+
+        return self.__parent_id_set
+
     def _set_size(self, new_size: int) -> None:
         """
         Setter - size
@@ -75,21 +90,6 @@ class LeafAbstract(NodeAbstract, ABC):
         """
 
         self.__size = new_size
-    # endregion
-
-    # region Public method
-    def get_parent_id_list(self) -> List[int]:
-        """
-        Return a list that contains parent's ID
-        :return: a parent's ID list
-        """
-
-        parent_id_list = []
-
-        for parent in self._get_parent_set(copy=False):
-            parent_id_list.append(parent.id)
-
-        return parent_id_list
     # endregion
 
     # region Override method
@@ -106,7 +106,7 @@ class LeafAbstract(NodeAbstract, ABC):
         string_temp = super().__repr__()
 
         # The parent set
-        parent_id_sorted_list_temp = SortedList(self.get_parent_id_list())
+        parent_id_sorted_list_temp = SortedList(self.__parent_id_set)
         string_temp = " ".join((string_temp, "Parent list (IDs):", str(parent_id_sorted_list_temp)))
 
         return string_temp
