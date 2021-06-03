@@ -26,6 +26,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter component_caching_formula_length
     Private StatisticsComponentCounter component_caching_after_hit
     Private StatisticsComponentCounter component_caching_after_formula_length
+    Private StatisticsComponentCounter component_caching_cara_mapping_length
+    Private StatisticsComponentCounter component_caching_after_cara_mapping_length
     Private StatisticsComponentCounter split
     Private StatisticsComponentCounter decision_variable
     Private StatisticsComponentCounter recompute_cut_set
@@ -79,6 +81,12 @@ class ComponentStatistics(StatisticsTemplateAbstract):
 
         self.__component_caching_after_formula_length: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (after BCP) - formula length", active=active)
         self._component_list.append(self.__component_caching_after_formula_length)
+
+        self.__component_caching_cara_mapping_length: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (before BCP) - cara caching scheme - mapping length", active=active)
+        self._component_list.append(self.__component_caching_cara_mapping_length)
+
+        self.__component_caching_after_cara_mapping_length: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (after BCP) - cara caching scheme - mapping length", active=active)
+        self._component_list.append(self.__component_caching_after_cara_mapping_length)
 
         self.__split: StatisticsComponentCounter = StatisticsComponentCounter(name="split",
                                                                               active=active,
@@ -160,6 +168,14 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def component_caching_after_formula_length(self) -> StatisticsComponentCounter:
         return self.__component_caching_after_formula_length
+
+    @property
+    def component_caching_cara_mapping_length(self) -> StatisticsComponentCounter:
+        return self.__component_caching_cara_mapping_length
+
+    @property
+    def component_caching_after_cara_mapping_length(self) -> StatisticsComponentCounter:
+        return self.__component_caching_after_cara_mapping_length
 
     @property
     def split(self) -> StatisticsComponentCounter:

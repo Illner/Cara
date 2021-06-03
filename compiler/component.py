@@ -447,11 +447,14 @@ class Component:
                 if cache_mapping_before_unit_propagation is None:
                     return cache_id
 
-                node = self.__circuit.create_mapping_node(child_id=cache_id,
-                                                          variable_id_mapping_id_dictionary_cache=cache_mapping,
-                                                          mapping_id_variable_id_dictionary=cache_mapping_before_unit_propagation[1])
+                node_id = self.__circuit.create_mapping_node(child_id=cache_id,
+                                                             variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                             mapping_id_variable_id_dictionary=cache_mapping_before_unit_propagation[1])
 
-                return node
+                if node_id != cache_id:
+                    self.__statistics.component_statistics.component_caching_cara_mapping_length.add_count(len(cache_mapping))  # counter
+
+                return node_id
             else:
                 self.__statistics.component_statistics.component_caching_hit.add_count(0)  # counter
 
@@ -498,9 +501,14 @@ class Component:
 
                 # Mapping is used
                 if cache_mapping_after_unit_propagation is not None:
-                    cache_id = self.__circuit.create_mapping_node(child_id=cache_id,
-                                                                  variable_id_mapping_id_dictionary_cache=cache_mapping,
-                                                                  mapping_id_variable_id_dictionary=cache_mapping_after_unit_propagation[1])
+                    node_temp = self.__circuit.create_mapping_node(child_id=cache_id,
+                                                                   variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                                   mapping_id_variable_id_dictionary=cache_mapping_after_unit_propagation[1])
+
+                    if node_temp != cache_id:
+                        self.__statistics.component_statistics.component_caching_after_cara_mapping_length.add_count(len(cache_mapping))    # counter
+
+                    cache_id = node_temp
 
                 node_id = self.__circuit.create_and_node({cache_id}.union(implied_literal_id_set))
 

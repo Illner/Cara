@@ -506,6 +506,8 @@ class HypergraphPartitioning:
                 occurrence_dictionary[variable] += 1
                 mean_dictionary[variable] += clause_variable_len
 
+        self.__statistics.cache_multi_occurrent_clauses.add_count(incidence_graph.number_of_clauses() - len(used_clause_set))   # counter
+
         # Compute variances
         if use_variance:
             # Normalization

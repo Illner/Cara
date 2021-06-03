@@ -17,6 +17,7 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer get_cut_set
     
     Private StatisticsComponentCounter cache_hit
+    Private StatisticsComponentCounter cache_multi_occurrent_clauses
     Private StatisticsComponentCounter cut_set_size
     Private StatisticsComponentCounter empty_cut_set
     """
@@ -43,6 +44,9 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
 
         self.__cache_hit: StatisticsComponentCounter = StatisticsComponentCounter(name="cache - hit", active=active)
         self._component_list.append(self.__cache_hit)
+
+        self.__cache_multi_occurrent_clauses: StatisticsComponentCounter = StatisticsComponentCounter(name="cache - number of multi-occurrent clauses", active=active)
+        self._component_list.append(self.__cache_multi_occurrent_clauses)
 
         self.__cut_set_size: StatisticsComponentCounter = StatisticsComponentCounter(name="cut set - size", active=active)
         self._component_list.append(self.__cut_set_size)
@@ -76,6 +80,10 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     @property
     def cache_hit(self) -> StatisticsComponentCounter:
         return self.__cache_hit
+
+    @property
+    def cache_multi_occurrent_clauses(self) -> StatisticsComponentCounter:
+        return self.__cache_multi_occurrent_clauses
 
     @property
     def cut_set_size(self) -> StatisticsComponentCounter:
