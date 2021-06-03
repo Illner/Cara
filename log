@@ -1,10 +1,19 @@
-Traceback (most recent call last):
-  File "cara.py", line 40, in main
-    compiler = Compiler(cnf=main_args.input_file,
-  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 141, in __init__
-    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
-  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
-    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
-  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 156, in __create_cnf
-    raise f_exception.PLineIsNotMentionedException()
-exception.formula.formula_exception.PLineIsNotMentionedException: P line is not mentioned at all or is mentioned after the clauses!
+Test automation results
+
+CNF test: True
+
+2-CNF test: True
+
+Horn CNF test: True
+
+Incidence graph test: True
+
+Node test: True
+
+Circuit test: True
+
+Solver test: True
+
+Hypergraph partitioning test (HMETIS): True
+
+Backbones test: True

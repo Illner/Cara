@@ -1,7 +1,7 @@
 # Import
 from abc import ABC, abstractmethod
 from other.sorted_list import SortedList
-from typing import Set, Dict, List, Union, TypeVar
+from typing import Set, Dict, Union, TypeVar
 from circuit.node.node_abstract import NodeAbstract
 
 # Import exception
@@ -20,6 +20,8 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     """
 
     """
+    Private Set<int> child_id_set
+    Private Set<int> parent_id_set
     Private Set<NodeAbstract> child_set
     Private Set<InnerNodeAbstract> parent_set
     Private Dict<int, int> mapping_id_variable_id_dictionary
@@ -35,14 +37,13 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum, child_set: Set[NodeAbstract],
                  decomposable: bool = True, deterministic: bool = True, smoothness: bool = True,
                  mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None):
+        self.__child_id_set: Set[int] = set()
+        self.__parent_id_set: Set[int] = set()
         self.__child_set: Set[NodeAbstract] = child_set
         self.__parent_set: Set[TInnerNodeAbstract] = set()
         self.__mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = mapping_id_variable_id_dictionary
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
-
-        for child in child_set:
-            child._add_parent(self)     # add me as a parent
 
         self.__decomposable = decomposable
         self.__deterministic = deterministic
@@ -58,6 +59,10 @@ class InnerNodeAbstract(NodeAbstract, ABC):
                          node_type=node_type,
                          variable_in_circuit_set=variable_in_circuit_set_temp,
                          literal_in_circuit_set=literal_in_circuit_set_temp)
+
+        for child in child_set:
+            child._add_parent(self)     # add me as a parent
+            self.__child_id_set.add(child.id)
 
     # region Static method
     @staticmethod
@@ -218,6 +223,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         self.__parent_set.add(new_parent)
+        self.__parent_id_set.add(new_parent.id)
 
     def _remove_parent(self, parent_to_delete: TInnerNodeAbstract) -> None:
         """
@@ -232,6 +238,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             raise c_exception.ParentDoesNotExistException(str(self), str(parent_to_delete))
 
         self.__parent_set.remove(parent_to_delete)
+        self.__parent_id_set.remove(parent_to_delete.id)
 
     def _get_parent_set(self, copy: bool) -> Set[TInnerNodeAbstract]:
         """
@@ -243,6 +250,17 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             return self.__parent_set.copy()
 
         return self.__parent_set
+
+    def _get_parent_id_set(self, copy: bool) -> Set[int]:
+        """
+        :param copy: True if a copy is returned
+        :return: the set of parents' id
+        """
+
+        if copy:
+            return self.__parent_id_set.copy()
+
+        return self.__parent_id_set
 
     def _add_child(self, new_child: NodeAbstract, smooth: bool = False, call_update: bool = True) -> None:
         """
@@ -265,6 +283,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             return
 
         self.__child_set.add(new_child)
+        self.__child_id_set.add(new_child.id)
 
         if call_update:
             self._update(smooth=smooth)
@@ -290,6 +309,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             raise c_exception.TryingUpdateCircuitWithMappingNodesException()
 
         self.__child_set.remove(child_to_delete)
+        self.__child_id_set.remove(child_to_delete.id)
 
         if call_update:
             self._update(smooth=smooth)
@@ -304,34 +324,17 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             return self.__child_set.copy()
 
         return self.__child_set
-    # endregion
 
-    # region Public method
-    def get_child_id_list(self) -> List[int]:
+    def _get_child_id_set(self, copy: bool) -> Set[int]:
         """
-        Return a list that contains children's ID
-        :return: a children's ID list
+        :param copy: True if a copy is returned
+        :return: the set of children's id
         """
 
-        child_id_list = []
+        if copy:
+            return self.__child_id_set.copy()
 
-        for child in self._get_child_set(copy=False):
-            child_id_list.append(child.id)
-
-        return child_id_list
-
-    def get_parent_id_list(self) -> List[int]:
-        """
-        Return a list that contains parent's ID
-        :return: a parent's ID list
-        """
-
-        parent_id_list = []
-
-        for parent in self._get_parent_set(copy=False):
-            parent_id_list.append(parent.id)
-
-        return parent_id_list
+        return self.__child_id_set
     # endregion
 
     # region Override method
@@ -356,11 +359,11 @@ class InnerNodeAbstract(NodeAbstract, ABC):
                                 f"Smoothness_in_circuit: {self.smoothness_in_circuit}"))
 
         # The children set
-        child_id_sorted_list_temp = SortedList(self.get_child_id_list())
+        child_id_sorted_list_temp = SortedList(self.__child_id_set)
         string_temp = " ".join((string_temp, "Children list (IDs):", str(child_id_sorted_list_temp)))
 
         # The parent set
-        parent_id_sorted_list_temp = SortedList(self.get_parent_id_list())
+        parent_id_sorted_list_temp = SortedList(self.__parent_id_set)
         string_temp = " ".join((string_temp, "Parent list (IDs):", str(parent_id_sorted_list_temp)))
 
         return string_temp

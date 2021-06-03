@@ -482,8 +482,8 @@ class Circuit:
             return topological_ordering_list
 
         # Recursion - the node is an inner node
-        child_id_list = node.get_child_id_list()
-        for child_id in sorted(child_id_list):
+        child_id_set = node._get_child_id_set(copy=False)
+        for child_id in sorted(child_id_set):
             # The child has been already explored
             if child_id in topological_ordering_list:
                 continue
@@ -1323,7 +1323,7 @@ class Circuit:
             raise c_exception.SomethingWrongException(f"trying to add an edge from the node ({from_id_node}) that is not an inner node")
 
         # The edge already exists
-        if to_id_node in from_node.get_child_id_list():
+        if to_id_node in from_node._get_child_id_set(copy=False):
             return
 
         Circuit.__add_edge(from_node=from_node,
@@ -1414,19 +1414,19 @@ class Circuit:
 
                 # AND node
                 if isinstance(node, AndInnerNode):
-                    child_id_list = node.get_child_id_list()
-                    child_id_sorted_list = SortedList(child_id_list)
+                    child_id_set = node._get_child_id_set(copy=False)
+                    child_id_sorted_list = SortedList(child_id_set)
 
-                    file.write(f"A {len(child_id_list)} {str(child_id_sorted_list)}\n")
+                    file.write(f"A {len(child_id_set)} {str(child_id_sorted_list)}\n")
                     continue
 
                 # OR node
                 if isinstance(node, OrInnerNode):
-                    child_id_list = node.get_child_id_list()
-                    child_id_sorted_list = SortedList(child_id_list)
+                    child_id_set = node._get_child_id_set(copy=False)
+                    child_id_sorted_list = SortedList(child_id_set)
                     j = 0 if node.decision_variable is None else node.decision_variable
 
-                    file.write(f"O {j} {len(child_id_list)} {str(child_id_sorted_list)}\n")
+                    file.write(f"O {j} {len(child_id_set)} {str(child_id_sorted_list)}\n")
                     continue
 
                 # 2-CNF or renamable Horn CNF leaf
@@ -1442,7 +1442,7 @@ class Circuit:
 
                 # Mapping node
                 if isinstance(node, MappingInnerNode):
-                    child_id = node.get_child_id_list()[0]
+                    child_id = list(node._get_child_id_set(copy=False))[0]
 
                     file.write(f"M {child_id} {node.number_of_variables} {node.str_mapping()}\n")
                     continue
@@ -1486,10 +1486,9 @@ class Circuit:
 
                 # AND node
                 if isinstance(node, AndInnerNode):
-                    child_id_list = node.get_child_id_list()
                     child_to_list = []
 
-                    for child_id in child_id_list:
+                    for child_id in node._get_child_id_set(copy=False):
                         child_to_list.append(id_to_dictionary[child_id])
 
                     child_to_sorted_list = SortedList(child_to_list)
@@ -1499,10 +1498,9 @@ class Circuit:
 
                 # OR node
                 if isinstance(node, OrInnerNode):
-                    child_id_list = node.get_child_id_list()
                     child_to_list = []
 
-                    for child_id in child_id_list:
+                    for child_id in node._get_child_id_set(copy=False):
                         child_to_list.append(id_to_dictionary[child_id])
 
                     child_to_sorted_list = SortedList(child_to_list)
@@ -1523,7 +1521,7 @@ class Circuit:
 
                 # Mapping node
                 if isinstance(node, MappingInnerNode):
-                    child_id = node.get_child_id_list()[0]
+                    child_id = list(node._get_child_id_set(copy=False))[0]
                     child_id = id_to_dictionary[child_id]
 
                     string = "\n".join((string, f"M {child_id} {node.number_of_variables} {node.str_mapping()}"))
