@@ -1361,6 +1361,93 @@ class Circuit:
         """
 
         return self.__node_type_in_circuit_counter_dictionary.copy()
+
+    def get_header_str(self) -> str:
+        string = "\n".join((f"C CaraCompiler",
+                            f"C Name: {self.circuit_name}",
+                            f"C Type: {str(self.circuit_type.name)}",
+                            f"C Decomposability: {self.is_decomposable()}",
+                            f"C Determinism: {self.is_deterministic()}",
+                            f"C Smoothness: {self.is_smooth()}",
+                            self.str_node_type_dictionary(prefix="C ")))
+
+        if self.comments and not self.comments.startswith("CaraCompiler"):
+            comments_list_temp = self.comments.split("\n")
+            comments_temp = "\n".join(map(lambda comment: f"C {comment}", comments_list_temp))
+            string = "\n".join((string, "C", comments_temp))
+
+        return string
+
+    def save_to_file(self, file_path: str) -> None:
+        """
+        Save the circuit to the file.
+        No topological ordering is used!
+        :return: None
+        """
+
+        with open(file_path, "w", encoding="utf-8") as file:
+            # Header
+            file.write(f"{self.get_header_str()}\n")
+
+            # N line
+            file.write(f"nnf {str(self.number_of_nodes)} {str(self.size)} {str(self.number_of_variables)}\n")
+
+            # Node lines
+            for node_id in self.__id_node_dictionary:
+                node = self.__id_node_dictionary[node_id]
+
+                # Constant leaf
+                if isinstance(node, ConstantLeaf):
+                    # True
+                    if node.constant:
+                        file.write("A 0\n")
+                    # False
+                    else:
+                        file.write("O 0 0\n")
+
+                    continue
+
+                # Literal leaf
+                if isinstance(node, LiteralLeaf):
+                    file.write(f"L {node.literal}\n")
+                    continue
+
+                # AND node
+                if isinstance(node, AndInnerNode):
+                    child_id_list = node.get_child_id_list()
+                    child_id_sorted_list = SortedList(child_id_list)
+
+                    file.write(f"A {len(child_id_list)} {str(child_id_sorted_list)}\n")
+                    continue
+
+                # OR node
+                if isinstance(node, OrInnerNode):
+                    child_id_list = node.get_child_id_list()
+                    child_id_sorted_list = SortedList(child_id_list)
+                    j = 0 if node.decision_variable is None else node.decision_variable
+
+                    file.write(f"O {j} {len(child_id_list)} {str(child_id_sorted_list)}\n")
+                    continue
+
+                # 2-CNF or renamable Horn CNF leaf
+                if isinstance(node, TwoCnfLeaf) or isinstance(node, RenamableHornCnfLeaf):
+                    char_temp = "T" if isinstance(node, TwoCnfLeaf) else "R"
+
+                    string_temp, mapping_temp = node.str_with_mapping()
+                    mapping_temp = sorted(mapping_temp, key=mapping_temp.get, reverse=False)
+
+                    file.write(f"{char_temp} {node.number_of_clauses + 1} {node.number_of_variables} {' '.join(map(str, mapping_temp))}\n")
+                    file.write(f"{string_temp}\n")
+                    continue
+
+                # Mapping node
+                if isinstance(node, MappingInnerNode):
+                    child_id = node.get_child_id_list()[0]
+
+                    file.write(f"M {child_id} {node.number_of_variables} {node.str_mapping()}\n")
+                    continue
+
+                raise c_exception.SomethingWrongException(f"this type of node ({type(node)}) is not implemented in save_to_file")
     # endregion
 
     # region Magic method
@@ -1371,24 +1458,13 @@ class Circuit:
             for to, id in enumerate(topological_ordering):
                 id_to_dictionary[id] = to
 
-            # Comment line
-            string = "\n".join((f"C CaraCompiler",
-                                f"C Name: {self.circuit_name}",
-                                f"C Type: {str(self.circuit_type.name)}",
-                                f"C Decomposability: {self.is_decomposable()}",
-                                f"C Determinism: {self.is_deterministic()}",
-                                f"C Smoothness: {self.is_smooth()}",
-                                self.str_node_type_dictionary(prefix="C ")))
-
-            if self.comments and not self.comments.startswith("CaraCompiler"):
-                comments_list_temp = self.comments.split("\n")
-                comments_temp = "\n".join(map(lambda comment: f"C {comment}", comments_list_temp))
-                string = "\n".join((string, "C", comments_temp))
+            # Header
+            string = self.get_header_str()
 
             # N line
             string = "\n".join((string, f"nnf {str(self.number_of_nodes)} {str(self.size)} {str(self.number_of_variables)}"))
 
-            # Node line
+            # Node lines
             for node_id in topological_ordering:
                 node = self.get_node(node_id)
 
