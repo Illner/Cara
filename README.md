@@ -1,4 +1,6 @@
 # Cara
+**d-DNNF compiler**
+
 **Backdoor Decomposable Monotone Circuits (BDMC) compiler**
 
 ## Language

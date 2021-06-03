@@ -35,6 +35,8 @@ VERSION = "12.8"
 
 def main(main_args):
     try:
+        print("Processing...")
+
         base_class_list = [] if main_args.base_class is None else main_args.base_class
 
         compiler = Compiler(cnf=main_args.input_file,
@@ -91,7 +93,7 @@ def main(main_args):
         statistics = compiler.statistics
         print(f"Time: {statistics.compiler_statistics.get_time()}\n")
 
-        print("Generating files...")
+        print("Generating file(s)...")
         # Circuit
         circuit.save_to_file(main_args.output_file)
 
@@ -101,7 +103,10 @@ def main(main_args):
             with open(statistics_file, "w", encoding="utf-8") as file:
                 file.write(str(statistics))
 
-        print("The files have been generated!")
+        if main_args.statistics:
+            print("The files have been generated!")
+        else:
+            print("The file has been generated!")
     except (c_exception.CaraException, Exception) as err:
         print(f"An error has occurred! (see log for details)\n{str(err)}")
 
