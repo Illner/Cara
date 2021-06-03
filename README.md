@@ -27,6 +27,10 @@ You can install all required packages to central user packages repository using 
 ### Example
 *cara.py -s -bc TWO_CNF -bc RENAMABLE_HORN_CNF input_file output_file*
 
+## D4
+### Example
+*d4.py -s input_file output_file*
+
 ## Cara - query
 ### Example
 **Consistency** - *cara_query.py -co -a 1 -2 3 circuit_file*
