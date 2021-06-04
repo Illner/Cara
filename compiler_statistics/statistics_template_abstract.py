@@ -21,7 +21,7 @@ class StatisticsTemplateAbstract(ABC):
 
     # region Magic function
     def __str__(self):
-        string_temp = f"Name: {self.name}"
+        string_temp = f"Name: {self.__name}"
 
         for component in self._component_list:
             string_temp = "\n".join((string_temp, str(component)))

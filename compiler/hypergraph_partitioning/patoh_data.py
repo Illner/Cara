@@ -43,7 +43,7 @@ class PatohData:
         self.__targetweights: np.ndarray = np.array([0.5, 0.5], dtype=np.float32)
 
         # Output
-        self.__partvec: np.ndarray = np.array([-1] * self.c, dtype=np.int32)
+        self.__partvec: np.ndarray = np.array([-1] * self.__c, dtype=np.int32)
         self.__partweights: np.ndarray = np.array([0, 0], dtype=np.int32)
         self.__cut: int = 0
         self.__cut_ctypes = ctypes.c_int(self.__cut)
@@ -94,8 +94,8 @@ class PatohData:
 
     # region Magic method
     def __str__(self):
-        string_temp = "\n".join((f"Number of nodes: {self.c}",
-                                 f"Number of hyperedges: {self.n}",
+        string_temp = "\n".join((f"Number of nodes: {self.__c}",
+                                 f"Number of hyperedges: {self.__n}",
                                  f"Node weight list: {self.__cwghts}",
                                  f"Hyperedge weight list: {self.__nwghts}",
                                  f"Xpins: {self.__xpins}",

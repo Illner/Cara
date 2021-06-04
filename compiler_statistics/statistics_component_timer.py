@@ -79,7 +79,7 @@ class StatisticsComponentTimer:
 
         # The stopwatch is already running
         if self.__stopwatch_time is not None:
-            raise s_exception.StopwatchIsAlreadyRunningException(self.name)
+            raise s_exception.StopwatchIsAlreadyRunningException(self.__name)
 
         self.__stopwatch_time = sys_time.process_time_ns()
 
@@ -96,7 +96,7 @@ class StatisticsComponentTimer:
 
         # The stopwatch has not been started
         if self.__stopwatch_time is None:
-            raise s_exception.StopwatchHasNotBeenStartedException(self.name)
+            raise s_exception.StopwatchHasNotBeenStartedException(self.__name)
 
         time = sys_time.process_time_ns() - self.__stopwatch_time
         self.add_call(time)
@@ -121,16 +121,16 @@ class StatisticsComponentTimer:
     # region Magic function
     def __str__(self):
         if self.__show_only_sum_time:
-            string_temp = "\n".join((f"\tName: {self.name} (timer)",
-                                     f"\t\tTime: {StatisticsComponentTimer.convert_to_datetime(self.sum_time)}"))
+            string_temp = "\n".join((f"\tName: {self.__name} (timer)",
+                                     f"\t\tTime: {StatisticsComponentTimer.convert_to_datetime(self.__sum_time)}"))
 
         else:
-            string_temp = "\n".join((f"\tName: {self.name} (timer)",
-                                     f"\t\tNumber of calls: {self.number_of_calls}",
+            string_temp = "\n".join((f"\tName: {self.__name} (timer)",
+                                     f"\t\tNumber of calls: {self.__number_of_calls}",
                                      f"\t\tAverage time: {StatisticsComponentTimer.convert_to_datetime(self.average_time)}",
-                                     f"\t\tSum time: {StatisticsComponentTimer.convert_to_datetime(self.sum_time)}",
-                                     f"\t\tMin time: {StatisticsComponentTimer.convert_to_datetime(self.min_time)}",
-                                     f"\t\tMax time: {StatisticsComponentTimer.convert_to_datetime(self.max_time)}"))
+                                     f"\t\tSum time: {StatisticsComponentTimer.convert_to_datetime(self.__sum_time)}",
+                                     f"\t\tMin time: {StatisticsComponentTimer.convert_to_datetime(self.__min_time)}",
+                                     f"\t\tMax time: {StatisticsComponentTimer.convert_to_datetime(self.__max_time)}"))
 
         return string_temp
     # endregion

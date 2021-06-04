@@ -56,16 +56,16 @@ class StatisticsComponentCounter:
     # region Magic method
     def __str__(self):
         if self.__show_only_number_of_calls:
-            string_temp = "\n".join((f"\tName: {self.name} (counter)",
-                                     f"\t\tNumber: {self.number_of_calls}"))
+            string_temp = "\n".join((f"\tName: {self.__name} (counter)",
+                                     f"\t\tNumber: {self.__number_of_calls}"))
 
         else:
-            string_temp = "\n".join((f"\tName: {self.name} (counter)",
-                                     f"\t\tNumber of calls: {self.number_of_calls}",
+            string_temp = "\n".join((f"\tName: {self.__name} (counter)",
+                                     f"\t\tNumber of calls: {self.__number_of_calls}",
                                      f"\t\tAverage count: {self.average_count}",
-                                     f"\t\tSum count: {self.sum_count}",
-                                     f"\t\tMin count: {self.min_count}",
-                                     f"\t\tMax count: {self.max_count}"))
+                                     f"\t\tSum count: {self.__sum_count}",
+                                     f"\t\tMin count: {self.__min_count}",
+                                     f"\t\tMax count: {self.__max_count}"))
 
         return string_temp
     # endregion
