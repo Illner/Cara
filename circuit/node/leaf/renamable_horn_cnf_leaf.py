@@ -25,7 +25,7 @@ class RenamableHornCnfLeaf(LeafAbstract):
         self.__cnf: PySatHornCnf = cnf
         self.__renaming_function: Set[int] = renaming_function
 
-        size_temp = self.formula_length
+        size_temp = self.__cnf.formula_length
         super().__init__(id=id,
                          size=size_temp,
                          node_type=nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF,

@@ -1,10 +1,10 @@
 # Import
 import warnings
-from io import StringIO
 from formula.cnf import Cnf
+from io import StringIO, FileIO
 from sortedcontainers import SortedDict
 from other.sorted_list import SortedList
-from typing import Set, Dict, List, Union
+from typing import Set, Dict, List, Union, TextIO
 
 from formula.pysat_2_cnf import PySat2Cnf
 from formula.pysat_horn_cnf import PySatHornCnf
@@ -402,8 +402,8 @@ class Circuit:
         if v != self.number_of_nodes:
             warning_temp = f"The number of nodes in the circuit ({self.number_of_nodes}) differs from the v value ({v})!"
             warnings.warn(warning_temp)
-        if e != self.size:
-            warning_temp = f"The number of edges in the circuit ({self.size}) differs from the e value ({e})!"
+        if e != self.__size:
+            warning_temp = f"The number of edges in the circuit ({self.__size}) differs from the e value ({e})!"
             warnings.warn(warning_temp)
         if n != self.number_of_variables:
             warning_temp = f"The number of variables in the circuit ({self.number_of_variables}) differs from the n value ({n})!"
@@ -430,7 +430,7 @@ class Circuit:
         """
 
         # There already exists some node with the same ID
-        if self.node_exist(node):
+        if node.id in self.__id_node_dictionary:
             raise c_exception.NodeWithSameIDAlreadyExistsInCircuitException(str(node))
 
         self.__id_node_dictionary[node.id] = node
@@ -448,7 +448,7 @@ class Circuit:
         """
 
         # The node does not exist in the circuit
-        if not self.node_id_exist(node_id):
+        if node_id not in self.__id_node_dictionary:
             raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(node_id))
 
         child_id_set = {node_id}
@@ -465,7 +465,8 @@ class Circuit:
 
         and_node_id = self.create_and_node(child_id_set=child_id_set,
                                            use_unique_node_cache=use_unique_node_cache)
-        return self.get_node(and_node_id)
+
+        return self.__id_node_dictionary[and_node_id]
 
     def __topological_ordering_recursion(self, node_id: int, topological_ordering_list: List[int]) -> List[int]:
         node = self.get_node(node_id)
@@ -482,13 +483,15 @@ class Circuit:
             return topological_ordering_list
 
         # Recursion - the node is an inner node
-        child_id_set = node._get_child_id_set(copy=False)
-        for child_id in sorted(child_id_set):
-            # The child has been already explored
-            if child_id in topological_ordering_list:
-                continue
+        if isinstance(node, InnerNodeAbstract):
+            child_id_set = node._child_id_set
 
-            self.__topological_ordering_recursion(child_id, topological_ordering_list)
+            for child_id in sorted(child_id_set):
+                # The child has been already explored
+                if child_id in topological_ordering_list:
+                    continue
+
+                self.__topological_ordering_recursion(child_id, topological_ordering_list)
 
         topological_ordering_list.append(node_id)
         return topological_ordering_list
@@ -500,7 +503,7 @@ class Circuit:
         """
 
         # The root of the circuit is not set
-        if not self.is_root_set():
+        if self.__root is None:
             self.__size = None
             return
 
@@ -517,7 +520,7 @@ class Circuit:
         """
 
         # The root of the circuit is not set
-        if not self.is_root_set():
+        if self.__root is None:
             self.__circuit_type = None
             return
 
@@ -898,10 +901,10 @@ class Circuit:
         """
 
         # One of the nodes does not exist in the circuit
-        if not self.node_id_exist(true_node_id):
+        if true_node_id not in self.__id_node_dictionary:
             raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(true_node_id), message_extension="decision node (true_node)")
 
-        if not self.node_id_exist(false_node_id):
+        if false_node_id not in self.__id_node_dictionary:
             raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(false_node_id), message_extension="decision node (false_node)")
 
         true_literal_leaf_id = self.create_literal_leaf(literal=variable,
@@ -1017,16 +1020,6 @@ class Circuit:
         # Recompute the size of the circuit
         self.__compute_size_of_circuit()
 
-    def is_root_set(self) -> bool:
-        """
-        :return: True if the root of the circuit is set. Otherwise, False is returned.
-        """
-
-        if self.__root is None:
-            return False
-
-        return True
-
     def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True) -> bool:
         """
         Check if the circuit is satisfiable with the assumption set and existential quantification set
@@ -1041,7 +1034,7 @@ class Circuit:
         """
 
         # The root of the circuit is not set
-        if not self.is_root_set():
+        if self.__root is None:
             raise c_exception.RootOfCircuitIsNotSetException()
 
         Circuit.__check_assumption_set_and_exist_quantification_set(assumption_set, exist_quantification_set)
@@ -1080,7 +1073,7 @@ class Circuit:
         """
 
         # The root of the circuit is not set
-        if not self.is_root_set():
+        if self.__root is None:
             raise c_exception.RootOfCircuitIsNotSetException()
 
         # BDMC
@@ -1129,13 +1122,13 @@ class Circuit:
         """
 
         # The root of the circuit is not set
-        if not self.is_root_set():
+        if self.__root is None:
             raise c_exception.RootOfCircuitIsNotSetException()
 
         # The default set is empty
         if not default_set:
             default_set = set()
-            variable_set_temp = self.__root._get_variable_in_circuit_set(copy=False)
+            variable_set_temp = self.__root._variable_in_circuit_set
             for variable in variable_set_temp:
                 if (variable not in observation_set) and (-variable not in observation_set):
                     default_set.add(variable)
@@ -1153,7 +1146,7 @@ class Circuit:
         """
 
         # The root of the circuit is not set, or the root is a leaf
-        if not self.is_root_set() or isinstance(self.__root, LeafAbstract):
+        if (self.__root is None) or isinstance(self.__root, LeafAbstract):
             return
 
         # The circuit is already smooth
@@ -1172,10 +1165,10 @@ class Circuit:
             if node.smoothness:
                 continue
 
-            union_variable_set = node._get_variable_in_circuit_set(copy=False)
+            union_variable_set = node._variable_in_circuit_set
             child_set = node._get_child_set(copy=True)
             for child in child_set:
-                difference_set = union_variable_set.difference(child._get_variable_in_circuit_set(copy=False))
+                difference_set = union_variable_set.difference(child._variable_in_circuit_set)
 
                 # The difference set is not empty
                 if difference_set:
@@ -1200,13 +1193,13 @@ class Circuit:
 
             if isinstance(node, LeafAbstract):
                 leaf_set.add(node)
-                inner_node_set_temp.update(node._get_parent_set(copy=False))
+                inner_node_set_temp.update(node._parent_set)
 
         visited_inner_node_set = leaf_set
 
         # Get only those inner nodes whose children are only leaves
         for inner_node in inner_node_set_temp:
-            child_set = inner_node._get_child_set(copy=False)
+            child_set = inner_node._child_set
 
             if len(child_set.intersection(leaf_set)) == len(child_set):
                 inner_node_set.add(inner_node)
@@ -1220,9 +1213,9 @@ class Circuit:
                 visited_inner_node_set.add(inner_node)
 
                 # Add parents whose all children are visited nodes
-                parent_set = inner_node._get_parent_set(copy=False)
+                parent_set = inner_node._parent_set
                 for parent in parent_set:
-                    child_set = parent._get_child_set(copy=False)
+                    child_set = parent._child_set
                     if len(child_set.intersection(visited_inner_node_set)) == len(child_set):
                         inner_node_set_temp.add(parent)
 
@@ -1242,7 +1235,7 @@ class Circuit:
         """
 
         # The root of the circuit is not set
-        if not self.is_root_set():
+        if self.__root is None:
             raise c_exception.RootOfCircuitIsNotSetException()
 
         return self.__topological_ordering_recursion(self.__root.id, [])
@@ -1255,7 +1248,7 @@ class Circuit:
         """
 
         # The root of the circuit is not set
-        if not self.is_root_set():
+        if self.__root is None:
             return None
 
         # The root of the circuit is a leaf
@@ -1272,7 +1265,7 @@ class Circuit:
         """
 
         # The root of the circuit is not set
-        if not self.is_root_set():
+        if self.__root is None:
             return None
 
         # The root of the circuit is a leaf
@@ -1289,7 +1282,7 @@ class Circuit:
         """
 
         # The root of the circuit is not set
-        if not self.is_root_set():
+        if self.__root is None:
             return None
 
         # The root of the circuit is a leaf
@@ -1323,7 +1316,7 @@ class Circuit:
             raise c_exception.SomethingWrongException(f"trying to add an edge from the node ({from_id_node}) that is not an inner node")
 
         # The edge already exists
-        if to_id_node in from_node._get_child_id_set(copy=False):
+        if to_id_node in from_node._child_id_set:
             return
 
         Circuit.__add_edge(from_node=from_node,
@@ -1364,187 +1357,130 @@ class Circuit:
 
     def get_header_str(self) -> str:
         string = "\n".join((f"C CaraCompiler",
-                            f"C Name: {self.circuit_name}",
-                            f"C Type: {str(self.circuit_type.name)}",
+                            f"C Name: {self.__circuit_name}",
+                            f"C Type: {str(self.__circuit_type.name)}",
                             f"C Decomposability: {self.is_decomposable()}",
                             f"C Determinism: {self.is_deterministic()}",
                             f"C Smoothness: {self.is_smooth()}",
                             self.str_node_type_dictionary(prefix="C ")))
 
-        if self.comments and not self.comments.startswith("CaraCompiler"):
-            comments_list_temp = self.comments.split("\n")
+        if self.__comments and not self.__comments.startswith("CaraCompiler"):
+            comments_list_temp = self.__comments.split("\n")
             comments_temp = "\n".join(map(lambda comment: f"C {comment}", comments_list_temp))
             string = "\n".join((string, "C", comments_temp))
 
         return string
 
-    def save_to_file(self, file_path: str) -> None:
+    def save_to_io(self, source: Union[FileIO, StringIO, TextIO]) -> None:
         """
-        Save the circuit to the file.
-        No topological ordering is used!
+        Save the circuit to the IO
         :return: None
         """
 
-        with open(file_path, "w", encoding="utf-8") as file:
-            # Header
-            file.write(f"{self.get_header_str()}\n")
-
-            # N line
-            file.write(f"nnf {str(self.number_of_nodes)} {str(self.size)} {str(self.number_of_variables)}\n")
-
-            # Node lines
-            for node_id in self.__id_node_dictionary:
-                node = self.__id_node_dictionary[node_id]
-
-                # Constant leaf
-                if isinstance(node, ConstantLeaf):
-                    # True
-                    if node.constant:
-                        file.write("A 0\n")
-                    # False
-                    else:
-                        file.write("O 0 0\n")
-
-                    continue
-
-                # Literal leaf
-                if isinstance(node, LiteralLeaf):
-                    file.write(f"L {node.literal}\n")
-                    continue
-
-                # AND node
-                if isinstance(node, AndInnerNode):
-                    child_id_set = node._get_child_id_set(copy=False)
-                    child_id_sorted_list = SortedList(child_id_set)
-
-                    file.write(f"A {len(child_id_set)} {str(child_id_sorted_list)}\n")
-                    continue
-
-                # OR node
-                if isinstance(node, OrInnerNode):
-                    child_id_set = node._get_child_id_set(copy=False)
-                    child_id_sorted_list = SortedList(child_id_set)
-                    j = 0 if node.decision_variable is None else node.decision_variable
-
-                    file.write(f"O {j} {len(child_id_set)} {str(child_id_sorted_list)}\n")
-                    continue
-
-                # 2-CNF or renamable Horn CNF leaf
-                if isinstance(node, TwoCnfLeaf) or isinstance(node, RenamableHornCnfLeaf):
-                    char_temp = "T" if isinstance(node, TwoCnfLeaf) else "R"
-
-                    string_temp, mapping_temp = node.str_with_mapping()
-                    mapping_temp = sorted(mapping_temp, key=mapping_temp.get, reverse=False)
-
-                    file.write(f"{char_temp} {node.number_of_clauses + 1} {node.number_of_variables} {' '.join(map(str, mapping_temp))}\n")
-                    file.write(f"{string_temp}\n")
-                    continue
-
-                # Mapping node
-                if isinstance(node, MappingInnerNode):
-                    child_id = list(node._get_child_id_set(copy=False))[0]
-
-                    file.write(f"M {child_id} {node.number_of_variables} {node.str_mapping()}\n")
-                    continue
-
-                raise c_exception.SomethingWrongException(f"this type of node ({type(node)}) is not implemented in save_to_file")
-    # endregion
-
-    # region Magic method
-    def __str__(self):
+        # Topological ordering
         try:
             topological_ordering = self.topological_ordering()
             id_to_dictionary = dict()
             for to, id in enumerate(topological_ordering):
                 id_to_dictionary[id] = to
-
-            # Header
-            string = self.get_header_str()
-
-            # N line
-            string = "\n".join((string, f"nnf {str(self.number_of_nodes)} {str(self.size)} {str(self.number_of_variables)}"))
-
-            # Node lines
-            for node_id in topological_ordering:
-                node = self.get_node(node_id)
-
-                # Constant leaf
-                if isinstance(node, ConstantLeaf):
-                    # True
-                    if node.constant:
-                        string = "\n".join((string, "A 0"))
-                    # False
-                    else:
-                        string = "\n".join((string, "O 0 0"))
-
-                    continue
-
-                # Literal leaf
-                if isinstance(node, LiteralLeaf):
-                    string = "\n".join((string, f"L {node.literal}"))
-                    continue
-
-                # AND node
-                if isinstance(node, AndInnerNode):
-                    child_to_list = []
-
-                    for child_id in node._get_child_id_set(copy=False):
-                        child_to_list.append(id_to_dictionary[child_id])
-
-                    child_to_sorted_list = SortedList(child_to_list)
-
-                    string = "\n".join((string, f"A {len(child_to_list)} {str(child_to_sorted_list)}"))
-                    continue
-
-                # OR node
-                if isinstance(node, OrInnerNode):
-                    child_to_list = []
-
-                    for child_id in node._get_child_id_set(copy=False):
-                        child_to_list.append(id_to_dictionary[child_id])
-
-                    child_to_sorted_list = SortedList(child_to_list)
-                    j = 0 if node.decision_variable is None else node.decision_variable
-
-                    string = "\n".join((string, f"O {j} {len(child_to_list)} {str(child_to_sorted_list)}"))
-                    continue
-
-                # 2-CNF or renamable Horn CNF leaf
-                if isinstance(node, TwoCnfLeaf) or isinstance(node, RenamableHornCnfLeaf):
-                    char_temp = "T" if isinstance(node, TwoCnfLeaf) else "R"
-
-                    string_temp, mapping_temp = node.str_with_mapping()
-                    mapping_temp = sorted(mapping_temp, key=mapping_temp.get, reverse=False)
-
-                    string = "\n".join((string, f"{char_temp} {node.number_of_clauses + 1} {node.number_of_variables} {' '.join(map(str, mapping_temp))}", string_temp))
-                    continue
-
-                # Mapping node
-                if isinstance(node, MappingInnerNode):
-                    child_id = list(node._get_child_id_set(copy=False))[0]
-                    child_id = id_to_dictionary[child_id]
-
-                    string = "\n".join((string, f"M {child_id} {node.number_of_variables} {node.str_mapping()}"))
-                    continue
-
-                raise c_exception.SomethingWrongException(f"this type of node ({type(node)}) is not implemented in __str__ (circuit)")
-
-            return string
         except c_exception.RootOfCircuitIsNotSetException:
-            warnings.warn("__str__ (circuit) returned an empty string because the root of the circuit is not set!")
-            return ""
+            warnings.warn("save_to_io returned an empty string because the root of the circuit is not set!")
+            source.write("")
+            return
+
+        # Header
+        source.write(f"{self.get_header_str()}\n")
+
+        # N line
+        source.write(f"nnf {str(self.number_of_nodes)} {str(self.__size)} {str(self.number_of_variables)}\n")
+
+        # Node lines
+        for node_id in topological_ordering:
+            node = self.__id_node_dictionary[node_id]
+
+            # Constant leaf
+            if isinstance(node, ConstantLeaf):
+                # True
+                if node.constant:
+                    source.write("A 0\n")
+                # False
+                else:
+                    source.write("O 0 0\n")
+
+                continue
+
+            # Literal leaf
+            if isinstance(node, LiteralLeaf):
+                source.write(f"L {node.literal}\n")
+                continue
+
+            # AND node
+            if isinstance(node, AndInnerNode):
+                child_to_set = set()
+
+                for child_id in node._child_id_set:
+                    child_to_set.add(id_to_dictionary[child_id])
+                child_to_sorted_list = SortedList(child_to_set)
+
+                source.write(f"A {len(child_to_set)} {str(child_to_sorted_list)}\n")
+                continue
+
+            # OR node
+            if isinstance(node, OrInnerNode):
+                child_to_set = set()
+
+                for child_id in node._child_id_set:
+                    child_to_set.add(id_to_dictionary[child_id])
+                child_to_sorted_list = SortedList(child_to_set)
+
+                j = 0 if node.decision_variable is None else node.decision_variable
+
+                source.write(f"O {j} {len(child_to_set)} {str(child_to_sorted_list)}\n")
+                continue
+
+            # 2-CNF or renamable Horn CNF leaf
+            if isinstance(node, TwoCnfLeaf) or isinstance(node, RenamableHornCnfLeaf):
+                char_temp = "T" if isinstance(node, TwoCnfLeaf) else "R"
+
+                string_temp, mapping_temp = node.str_with_mapping()
+                mapping_temp = sorted(mapping_temp, key=mapping_temp.get, reverse=False)
+
+                source.write(f"{char_temp} {node.number_of_clauses + 1} {node.number_of_variables} {' '.join(map(str, mapping_temp))}\n")
+                source.write(f"{string_temp}\n")
+                continue
+
+            # Mapping node
+            if isinstance(node, MappingInnerNode):
+                child_id = list(node._child_id_set)[0]
+                child_id = id_to_dictionary[child_id]
+
+                source.write(f"M {child_id} {node.number_of_variables} {node.str_mapping()}\n")
+                continue
+
+            raise c_exception.SomethingWrongException(f"this type of node ({type(node)}) is not implemented in save_to_io")
+    # endregion
+
+    # region Magic method
+    def __str__(self):
+        temp = StringIO()
+        self.save_to_io(temp)
+
+        string_temp = temp.getvalue()
+        temp.close()
+
+        return string_temp
 
     def __repr__(self):
-        comments_temp = self.comments.replace("\n", ", ")
-        string_temp = " ".join((f"Name: {self.circuit_name}",
+        comments_temp = self.__comments.replace("\n", ", ")
+        string_temp = " ".join((f"Name: {self.__circuit_name}",
                                 f"Number of nodes: {str(self.number_of_nodes)}",
                                 f"Comments: {comments_temp}"))
 
-        if self.is_root_set():
+        if self.__root is not None:
             string_temp = " ".join((string_temp,
                                     f"Root: {self.root_id}",
                                     f"Number of variables: {str(self.number_of_variables)}",
-                                    f"Size: {str(self.size)}"))
+                                    f"Size: {str(self.__size)}"))
 
         # The nodes in the circuit
         id_node_sorted_dictionary_temp = SortedDict(self.__id_node_dictionary)
@@ -1565,7 +1501,7 @@ class Circuit:
 
     @property
     def number_of_variables(self) -> int:
-        if not self.is_root_set():
+        if self.__root is None:
             return 0
 
         return self.__root.number_of_variables
@@ -1584,7 +1520,7 @@ class Circuit:
 
     @property
     def root_id(self) -> Union[int, None]:
-        if not self.is_root_set():
+        if self.__root is None:
             return None
 
         return self.__root.id

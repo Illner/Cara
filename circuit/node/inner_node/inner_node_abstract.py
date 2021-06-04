@@ -20,10 +20,10 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     """
 
     """
-    Private Set<int> child_id_set
-    Private Set<int> parent_id_set
-    Private Set<NodeAbstract> child_set
-    Private Set<InnerNodeAbstract> parent_set
+    Protected Set<int> child_id_set
+    Protected Set<int> parent_id_set
+    Protected Set<NodeAbstract> child_set
+    Protected Set<InnerNodeAbstract> parent_set
     Private Dict<int, int> mapping_id_variable_id_dictionary
 
     Private bool decomposable                   # The node satisfies decomposability
@@ -37,10 +37,10 @@ class InnerNodeAbstract(NodeAbstract, ABC):
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum, child_set: Set[NodeAbstract],
                  decomposable: bool = True, deterministic: bool = True, smoothness: bool = True,
                  mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None):
-        self.__child_id_set: Set[int] = set()
-        self.__parent_id_set: Set[int] = set()
-        self.__child_set: Set[NodeAbstract] = child_set
-        self.__parent_set: Set[TInnerNodeAbstract] = set()
+        self._child_id_set: Set[int] = set()
+        self._parent_id_set: Set[int] = set()
+        self._child_set: Set[NodeAbstract] = child_set
+        self._parent_set: Set[TInnerNodeAbstract] = set()
         self.__mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = mapping_id_variable_id_dictionary
 
         variable_in_circuit_set_temp, literal_in_circuit_set_temp = self._union_variable_and_literal_in_circuit_set_over_all_children()
@@ -62,7 +62,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         for child in child_set:
             child._add_parent(self)     # add me as a parent
-            self.__child_id_set.add(child.id)
+            self._child_id_set.add(child.id)
 
     # region Static method
     @staticmethod
@@ -78,8 +78,8 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         union_literal_set = set()
 
         for child in child_set:
-            union_variable_set = union_variable_set.union(child._get_variable_in_circuit_set(copy=False))
-            union_literal_set = union_literal_set.union(child._get_literal_in_circuit_set(copy=False))
+            union_variable_set = union_variable_set.union(child._variable_in_circuit_set)
+            union_literal_set = union_literal_set.union(child._literal_in_circuit_set)
 
         return union_variable_set, union_literal_set
     # endregion
@@ -114,7 +114,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         # Notice my parents
         if call_parent_update:
-            for parent in self._get_parent_set(copy=False):
+            for parent in self._parent_set:
                 parent._update(call_parent_update=call_parent_update,   # always True
                                smooth=smooth)
 
@@ -129,7 +129,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         # Check decomposable_in_circuit
         self.__decomposable_in_circuit = self.__decomposable
-        for child in self._get_child_set(copy=False):
+        for child in self._child_set:
             if isinstance(child, InnerNodeAbstract) and not child.decomposable_in_circuit:
                 self.__decomposable_in_circuit = False
 
@@ -138,7 +138,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         # Check deterministic_in_circuit
         self.__deterministic_in_circuit = self.__deterministic
-        for child in self._get_child_set(copy=False):
+        for child in self._child_set:
             if isinstance(child, InnerNodeAbstract) and not child.deterministic_in_circuit:
                 self.__deterministic_in_circuit = False
 
@@ -147,7 +147,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
 
         # Check smoothness_in_circuit
         self.__smoothness_in_circuit = self.__smoothness
-        for child in self._get_child_set(copy=False):
+        for child in self._child_set:
             if isinstance(child, InnerNodeAbstract) and not child.smoothness_in_circuit:
                 self.__smoothness_in_circuit = False
 
@@ -203,7 +203,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         :return: (variable_set, literal_set)
         """
 
-        variable_in_circuit_set_temp, literal_in_circuit_set_temp = InnerNodeAbstract._union_variable_and_literal_in_circuit_set_over_set(self._get_child_set(copy=False))
+        variable_in_circuit_set_temp, literal_in_circuit_set_temp = InnerNodeAbstract._union_variable_and_literal_in_circuit_set_over_set(self._child_set)
 
         # Mapping is used
         if self.__mapping_id_variable_id_dictionary is not None:
@@ -222,8 +222,8 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         :return: None
         """
 
-        self.__parent_set.add(new_parent)
-        self.__parent_id_set.add(new_parent.id)
+        self._parent_set.add(new_parent)
+        self._parent_id_set.add(new_parent.id)
 
     def _remove_parent(self, parent_to_delete: TInnerNodeAbstract) -> None:
         """
@@ -234,11 +234,11 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         # The parent does not exist in the set
-        if parent_to_delete not in self.__parent_set:
+        if parent_to_delete not in self._parent_set:
             raise c_exception.ParentDoesNotExistException(str(self), str(parent_to_delete))
 
-        self.__parent_set.remove(parent_to_delete)
-        self.__parent_id_set.remove(parent_to_delete.id)
+        self._parent_set.remove(parent_to_delete)
+        self._parent_id_set.remove(parent_to_delete.id)
 
     def _get_parent_set(self, copy: bool) -> Set[TInnerNodeAbstract]:
         """
@@ -247,9 +247,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         if copy:
-            return self.__parent_set.copy()
+            return self._parent_set.copy()
 
-        return self.__parent_set
+        return self._parent_set
 
     def _get_parent_id_set(self, copy: bool) -> Set[int]:
         """
@@ -258,9 +258,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         if copy:
-            return self.__parent_id_set.copy()
+            return self._parent_id_set.copy()
 
-        return self.__parent_id_set
+        return self._parent_id_set
 
     def _add_child(self, new_child: NodeAbstract, smooth: bool = False, call_update: bool = True) -> None:
         """
@@ -279,11 +279,11 @@ class InnerNodeAbstract(NodeAbstract, ABC):
             raise c_exception.TryingUpdateCircuitWithMappingNodesException()
 
         # The child already exists
-        if new_child in self.__child_set:
+        if new_child in self._child_set:
             return
 
-        self.__child_set.add(new_child)
-        self.__child_id_set.add(new_child.id)
+        self._child_set.add(new_child)
+        self._child_id_set.add(new_child.id)
 
         if call_update:
             self._update(smooth=smooth)
@@ -301,15 +301,15 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         # The child does not exist
-        if child_to_delete not in self.__child_set:
+        if child_to_delete not in self._child_set:
             raise c_exception.ChildDoesNotExistException(str(self), str(child_to_delete))
 
         # Mapping node
         if self.node_type == nt_enum.NodeTypeEnum.MAPPING_NODE:
             raise c_exception.TryingUpdateCircuitWithMappingNodesException()
 
-        self.__child_set.remove(child_to_delete)
-        self.__child_id_set.remove(child_to_delete.id)
+        self._child_set.remove(child_to_delete)
+        self._child_id_set.remove(child_to_delete.id)
 
         if call_update:
             self._update(smooth=smooth)
@@ -321,9 +321,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         if copy:
-            return self.__child_set.copy()
+            return self._child_set.copy()
 
-        return self.__child_set
+        return self._child_set
 
     def _get_child_id_set(self, copy: bool) -> Set[int]:
         """
@@ -332,9 +332,9 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         if copy:
-            return self.__child_id_set.copy()
+            return self._child_id_set.copy()
 
-        return self.__child_id_set
+        return self._child_id_set
     # endregion
 
     # region Override method
@@ -343,7 +343,7 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         :return: the size of the inner node (= number of children)
         """
 
-        return len(self._get_child_set(copy=False))
+        return len(self._child_set)
     # endregion
 
     # region Magic method
@@ -351,19 +351,19 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         string_temp = super().__repr__()
 
         string_temp = " ".join((string_temp,
-                                f"Decomposable: {self.decomposable}",
-                                f"Decomposable_in_circuit: {self.decomposable_in_circuit}",
-                                f"Deterministic: {self.deterministic}",
-                                f"Deterministic_in_circuit: {self.deterministic_in_circuit}",
-                                f"Smoothness: {self.smoothness}",
-                                f"Smoothness_in_circuit: {self.smoothness_in_circuit}"))
+                                f"Decomposable: {self.__decomposable}",
+                                f"Decomposable_in_circuit: {self.__decomposable_in_circuit}",
+                                f"Deterministic: {self.__deterministic}",
+                                f"Deterministic_in_circuit: {self.__deterministic_in_circuit}",
+                                f"Smoothness: {self.__smoothness}",
+                                f"Smoothness_in_circuit: {self.__smoothness_in_circuit}"))
 
         # The children set
-        child_id_sorted_list_temp = SortedList(self.__child_id_set)
+        child_id_sorted_list_temp = SortedList(self._child_id_set)
         string_temp = " ".join((string_temp, "Children list (IDs):", str(child_id_sorted_list_temp)))
 
         # The parent set
-        parent_id_sorted_list_temp = SortedList(self.__parent_id_set)
+        parent_id_sorted_list_temp = SortedList(self._parent_id_set)
         string_temp = " ".join((string_temp, "Parent list (IDs):", str(parent_id_sorted_list_temp)))
 
         return string_temp

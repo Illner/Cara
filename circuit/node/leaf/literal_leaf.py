@@ -21,22 +21,22 @@ class LiteralLeaf(LeafAbstract):
     def __init__(self, literal: int, id: int = 0):
         self.__literal: int = literal
         self.__variable: int = abs(literal)
-        self.__is_positive = True if self.literal > 0 else False
+        self.__is_positive = True if literal > 0 else False
         super().__init__(id=id,
                          node_type=nt_enum.NodeTypeEnum.LITERAL,
-                         variable_in_circuit_set={self.variable},
-                         literal_in_circuit_set={self.literal})
+                         variable_in_circuit_set={self.__variable},
+                         literal_in_circuit_set={self.__literal})
 
     # region Override method
     def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True,
                        mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                        variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> bool:
-        variable, literal = self.variable, self.literal
+        variable, literal = self.__variable, self.__literal
 
         # Mapping is used
         if mapping_id_variable_id_dictionary is not None:
-            variable = mapping_id_variable_id_dictionary[self.variable]
-            literal = variable if self.is_positive else -variable
+            variable = mapping_id_variable_id_dictionary[self.__variable]
+            literal = variable if self.__is_positive else -variable
 
         # The assumption set
         if literal in assumption_set:
@@ -53,12 +53,12 @@ class LiteralLeaf(LeafAbstract):
     def model_counting(self, assumption_set: Set[int], use_cache: bool = True,
                        mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                        variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> int:
-        literal = self.literal
+        literal = self.__literal
 
         # Mapping is used
         if mapping_id_variable_id_dictionary is not None:
-            variable = mapping_id_variable_id_dictionary[self.variable]
-            literal = variable if self.is_positive else -variable
+            variable = mapping_id_variable_id_dictionary[self.__variable]
+            literal = variable if self.__is_positive else -variable
 
         # The assumption set
         if literal in assumption_set:
@@ -71,16 +71,16 @@ class LiteralLeaf(LeafAbstract):
     def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True,
                                     mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                                     variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> float:
-        variable, literal = self.variable, self.literal
+        variable, literal = self.__variable, self.__literal
 
         # Mapping is used
         if mapping_id_variable_id_dictionary is not None:
-            variable = mapping_id_variable_id_dictionary[self.variable]
-            literal = variable if self.is_positive else -variable
+            variable = mapping_id_variable_id_dictionary[self.__variable]
+            literal = variable if self.__is_positive else -variable
 
         # The default set
         if variable in default_set:
-            if self.is_positive:
+            if self.__is_positive:
                 return 0
 
             # Negative literal
@@ -100,7 +100,7 @@ class LiteralLeaf(LeafAbstract):
     def __repr__(self):
         string_temp = super().__repr__()
 
-        string_temp = " ".join((string_temp, f"Literal: {self.literal}"))
+        string_temp = " ".join((string_temp, f"Literal: {self.__literal}"))
 
         return string_temp
     # endregion

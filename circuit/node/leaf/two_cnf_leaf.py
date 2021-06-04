@@ -23,7 +23,7 @@ class TwoCnfLeaf(LeafAbstract):
     def __init__(self, cnf: PySat2Cnf, id: int = 0):
         self.__cnf: PySat2Cnf = cnf
 
-        size_temp = self.formula_length
+        size_temp = self.__cnf.formula_length
         super().__init__(id=id,
                          size=size_temp,
                          node_type=nt_enum.NodeTypeEnum.TWO_CNF,

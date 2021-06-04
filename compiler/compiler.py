@@ -441,7 +441,7 @@ class Compiler:
             self.__circuit.set_root(root_id)
 
         # Add unused variables
-        variable_in_circuit_set = self.__circuit.get_node(root_id)._get_variable_in_circuit_set(copy=False)
+        variable_in_circuit_set = self.__circuit.get_node(root_id)._variable_in_circuit_set
         variable_in_formula_set = self.__cnf.get_variable_set(copy=False)
         unused_variable_set = variable_in_formula_set.difference(variable_in_circuit_set)
 

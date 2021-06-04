@@ -21,8 +21,8 @@ class NodeAbstract(ABC):
     """
     Private int id
     Private NodeTypeEnum node_type
-    Private Set<int> literal_in_circuit_set
-    Private Set<int> variable_in_circuit_set
+    Protected Set<int> literal_in_circuit_set
+    Protected Set<int> variable_in_circuit_set
     Private SortedList<int> variable_in_circuit_sorted_list
 
     Private Dict<str, bool> satisfiable_cache                   
@@ -36,8 +36,8 @@ class NodeAbstract(ABC):
         self.__node_type: nt_enum.NodeTypeEnum = node_type
 
         # Initialization
-        self.__literal_in_circuit_set: Set[int] = set()
-        self.__variable_in_circuit_set: Set[int] = set()
+        self._literal_in_circuit_set: Set[int] = set()
+        self._variable_in_circuit_set: Set[int] = set()
         self.__variable_in_circuit_sorted_list: SortedList[int] = SortedList()
 
         self._set_variable_in_circuit_set(variable_in_circuit_set)
@@ -118,8 +118,8 @@ class NodeAbstract(ABC):
         """
 
         for v in variable_set:
-            if v not in self.__variable_in_circuit_set:
-                self.__variable_in_circuit_set.add(v)
+            if v not in self._variable_in_circuit_set:
+                self._variable_in_circuit_set.add(v)
                 self.__variable_in_circuit_sorted_list.add(v)
 
     def _remove_variable_in_circuit_set(self, variable_to_delete_set: Set[int]) -> None:
@@ -131,8 +131,8 @@ class NodeAbstract(ABC):
         """
 
         for v in variable_to_delete_set:
-            if v in self.__variable_in_circuit_set:
-                self.__variable_in_circuit_set.remove(v)
+            if v in self._variable_in_circuit_set:
+                self._variable_in_circuit_set.remove(v)
                 self.__variable_in_circuit_sorted_list.remove(v)
 
     def _set_variable_in_circuit_set(self, new_variable_in_circuit_set: Set[int]) -> None:
@@ -141,7 +141,7 @@ class NodeAbstract(ABC):
         :return: None
         """
 
-        self.__variable_in_circuit_set = new_variable_in_circuit_set
+        self._variable_in_circuit_set = new_variable_in_circuit_set
         self.__variable_in_circuit_sorted_list = SortedList(new_variable_in_circuit_set)
 
     def _get_variable_in_circuit_set(self, copy: bool) -> Set[int]:
@@ -151,9 +151,9 @@ class NodeAbstract(ABC):
         """
 
         if copy:
-            return self.__variable_in_circuit_set.copy()
+            return self._variable_in_circuit_set.copy()
 
-        return self.__variable_in_circuit_set
+        return self._variable_in_circuit_set
 
     def _exist_variable_in_circuit_set(self, variable: int) -> bool:
         """
@@ -162,7 +162,7 @@ class NodeAbstract(ABC):
         :return: True if the variable exists in the variable_in_circuit_set. Otherwise, False is returned.
         """
 
-        return variable in self.__variable_in_circuit_set
+        return variable in self._variable_in_circuit_set
 
     def _add_literal_in_circuit_set(self, literal_set: Set[int]) -> None:
         """
@@ -172,7 +172,7 @@ class NodeAbstract(ABC):
         :return: None
         """
 
-        self.__literal_in_circuit_set.update(literal_set)
+        self._literal_in_circuit_set.update(literal_set)
 
     def _remove_literal_in_circuit_set(self, literal_to_delete_set: Set[int]) -> None:
         """
@@ -182,7 +182,7 @@ class NodeAbstract(ABC):
         :return: None
         """
 
-        self.__literal_in_circuit_set.difference_update(literal_to_delete_set)
+        self._literal_in_circuit_set.difference_update(literal_to_delete_set)
 
     def _set_literal_in_circuit_set(self, new_literal_in_circuit_set: Set[int]) -> None:
         """
@@ -190,7 +190,7 @@ class NodeAbstract(ABC):
         :return: None
         """
 
-        self.__literal_in_circuit_set = new_literal_in_circuit_set
+        self._literal_in_circuit_set = new_literal_in_circuit_set
 
     def _get_literal_in_circuit_set(self, copy: bool) -> Set[int]:
         """
@@ -199,9 +199,9 @@ class NodeAbstract(ABC):
         """
 
         if copy:
-            return self.__literal_in_circuit_set.copy()
+            return self._literal_in_circuit_set.copy()
 
-        return self.__literal_in_circuit_set
+        return self._literal_in_circuit_set
 
     def _exist_literal_in_circuit_set(self, literal: int) -> bool:
         """
@@ -210,7 +210,7 @@ class NodeAbstract(ABC):
         :return: True if the literal exists in the literal_in_circuit_set. Otherwise, False is returned.
         """
 
-        return literal in self.__literal_in_circuit_set
+        return literal in self._literal_in_circuit_set
 
     # region Cache
     def _add_satisfiable_cache(self, key: Union[str, None], satisfiable: bool) -> None:
@@ -372,7 +372,7 @@ class NodeAbstract(ABC):
                 result = set(filter(lambda l: self._exist_variable_in_circuit_set(variable_id_mapping_id_dictionary[abs(l)]), assumption_set))
             except KeyError:
                 raise c_exception.MappingIsIncompleteException(mapping_dictionary=variable_id_mapping_id_dictionary,
-                                                               variable_or_literal_in_circuit=self._get_variable_in_circuit_set(copy=False))
+                                                               variable_or_literal_in_circuit=self._variable_in_circuit_set)
         else:
             result = set(filter(lambda l: self._exist_variable_in_circuit_set(abs(l)), assumption_set))
 
@@ -389,12 +389,12 @@ class NodeAbstract(ABC):
         # Mapping is used
         if mapping_id_variable_id_dictionary is not None:
             try:
-                result = exist_quantification_set.intersection(map(lambda v: mapping_id_variable_id_dictionary[v], self._get_variable_in_circuit_set(copy=False)))
+                result = exist_quantification_set.intersection(map(lambda v: mapping_id_variable_id_dictionary[v], self._variable_in_circuit_set))
             except KeyError:
                 raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
-                                                               variable_or_literal_in_circuit=self._get_variable_in_circuit_set(copy=False))
+                                                               variable_or_literal_in_circuit=self._variable_in_circuit_set)
         else:
-            result = exist_quantification_set.intersection(self._get_variable_in_circuit_set(copy=False))
+            result = exist_quantification_set.intersection(self._variable_in_circuit_set)
 
         return result
     # endregion
@@ -404,10 +404,10 @@ class NodeAbstract(ABC):
         return str(self.__id)
 
     def __repr__(self):
-        literal_in_circuit_sorted_list_temp = SortedList(self._get_literal_in_circuit_set(copy=False))
+        literal_in_circuit_sorted_list_temp = SortedList(self._literal_in_circuit_set)
 
-        string_temp = " ".join((f"ID: {str(self.id)}",
-                                f"Node type: {self.node_type.name}",
+        string_temp = " ".join((f"ID: {str(self.__id)}",
+                                f"Node type: {self.__node_type.name}",
                                 f"Variables in the circuit: {str(self.__variable_in_circuit_sorted_list)}",
                                 f"Literals in the circuit: {str(literal_in_circuit_sorted_list_temp)}"))
 
@@ -425,5 +425,5 @@ class NodeAbstract(ABC):
 
     @property
     def number_of_variables(self) -> int:
-        return len(self.__variable_in_circuit_set)
+        return len(self._variable_in_circuit_set)
     # endregion

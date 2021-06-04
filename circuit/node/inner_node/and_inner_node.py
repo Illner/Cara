@@ -40,7 +40,7 @@ class AndInnerNode(InnerNodeAbstract):
 
         for i in range(0, len(child_list) - 1):
             for j in range(i+1, len(child_list)):
-                intersection_temp = child_list[i]._get_variable_in_circuit_set(copy=False).intersection(child_list[j]._get_variable_in_circuit_set(copy=False))
+                intersection_temp = child_list[i]._variable_in_circuit_set.intersection(child_list[j]._variable_in_circuit_set)
 
                 if len(intersection_temp):
                     return False
@@ -55,7 +55,7 @@ class AndInnerNode(InnerNodeAbstract):
         :return: True if the node is decomposable. Otherwise, False is returned.
         """
 
-        return AndInnerNode.__is_decomposable_set(self._get_child_set(copy=False))
+        return AndInnerNode.__is_decomposable_set(self._child_set)
     # endregion
 
     # region Override method
@@ -83,7 +83,7 @@ class AndInnerNode(InnerNodeAbstract):
                 return value
 
         result = True
-        for child in self._get_child_set(copy=False):
+        for child in self._child_set:
             result_temp = child.is_satisfiable(assumption_set=restricted_assumption_set_temp,
                                                exist_quantification_set=restricted_exist_quantification_set_temp,
                                                use_cache=use_cache,
@@ -128,7 +128,7 @@ class AndInnerNode(InnerNodeAbstract):
                 return value
 
         number_of_models = 1
-        for child in self._get_child_set(copy=False):
+        for child in self._child_set:
             number_of_models *= child.model_counting(assumption_set=restricted_assumption_set_temp,
                                                      use_cache=use_cache,
                                                      mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary,
@@ -161,7 +161,7 @@ class AndInnerNode(InnerNodeAbstract):
                 return value
 
         default_cardinality = 0
-        for child in self._get_child_set(copy=False):
+        for child in self._child_set:
             default_cardinality += child.minimum_default_cardinality(observation_set=restricted_observation_set_temp,
                                                                      default_set=restricted_default_set_temp,
                                                                      use_cache=use_cache,

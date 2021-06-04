@@ -19,14 +19,14 @@ class LeafAbstract(NodeAbstract, ABC):
 
     """
     Private int size                            # the size of the leaf
-    Private Set<int> parent_id_set
-    Private Set<InnerNodeAbstract> parent_set
+    Protected Set<int> parent_id_set
+    Protected Set<InnerNodeAbstract> parent_set
     """
 
     def __init__(self, id: int, node_type: nt_enum.NodeTypeEnum,
                  variable_in_circuit_set: Set[int], literal_in_circuit_set: Set[int], size: int = 0):
-        self.__parent_id_set: Set[int] = set()
-        self.__parent_set: Set[InnerNodeAbstract] = set()
+        self._parent_id_set: Set[int] = set()
+        self._parent_set: Set[InnerNodeAbstract] = set()
         self.__size: int = size
 
         super().__init__(id=id,
@@ -43,8 +43,8 @@ class LeafAbstract(NodeAbstract, ABC):
         :return: None
         """
 
-        self.__parent_set.add(new_parent)
-        self.__parent_id_set.add(new_parent.id)
+        self._parent_set.add(new_parent)
+        self._parent_id_set.add(new_parent.id)
 
     def _remove_parent(self, parent_to_delete: InnerNodeAbstract) -> None:
         """
@@ -55,11 +55,11 @@ class LeafAbstract(NodeAbstract, ABC):
         """
 
         # The parent does not exist in the set
-        if parent_to_delete not in self.__parent_set:
+        if parent_to_delete not in self._parent_set:
             raise c_exception.ParentDoesNotExistException(str(self), str(parent_to_delete))
 
-        self.__parent_set.remove(parent_to_delete)
-        self.__parent_id_set.remove(parent_to_delete.id)
+        self._parent_set.remove(parent_to_delete)
+        self._parent_id_set.remove(parent_to_delete.id)
 
     def _get_parent_set(self, copy: bool) -> Set[InnerNodeAbstract]:
         """
@@ -68,9 +68,9 @@ class LeafAbstract(NodeAbstract, ABC):
         """
 
         if copy:
-            return self.__parent_set.copy()
+            return self._parent_set.copy()
 
-        return self.__parent_set
+        return self._parent_set
 
     def _get_parent_id_set(self, copy: bool) -> Set[int]:
         """
@@ -79,9 +79,9 @@ class LeafAbstract(NodeAbstract, ABC):
         """
 
         if copy:
-            return self.__parent_id_set.copy()
+            return self._parent_id_set.copy()
 
-        return self.__parent_id_set
+        return self._parent_id_set
 
     def _set_size(self, new_size: int) -> None:
         """
@@ -106,7 +106,7 @@ class LeafAbstract(NodeAbstract, ABC):
         string_temp = super().__repr__()
 
         # The parent set
-        parent_id_sorted_list_temp = SortedList(self.__parent_id_set)
+        parent_id_sorted_list_temp = SortedList(self._parent_id_set)
         string_temp = " ".join((string_temp, "Parent list (IDs):", str(parent_id_sorted_list_temp)))
 
         return string_temp

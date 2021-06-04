@@ -27,7 +27,7 @@ class ConstantLeaf(LeafAbstract):
     def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True,
                        mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                        variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> bool:
-        if self.constant:
+        if self.__constant:
             return True
         else:
             return False
@@ -35,7 +35,7 @@ class ConstantLeaf(LeafAbstract):
     def model_counting(self, assumption_set: Set[int], use_cache: bool = True,
                        mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                        variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> int:
-        if self.constant:
+        if self.__constant:
             return 1
         else:
             return 0
@@ -43,7 +43,7 @@ class ConstantLeaf(LeafAbstract):
     def minimum_default_cardinality(self, observation_set: Set[int], default_set: Set[int], use_cache: bool = True,
                                     mapping_id_variable_id_dictionary: Union[Dict[int, int], None] = None,
                                     variable_id_mapping_id_dictionary: Union[Dict[int, int], None] = None) -> float:
-        if self.constant:
+        if self.__constant:
             return 0
         else:
             return math.inf
@@ -53,7 +53,7 @@ class ConstantLeaf(LeafAbstract):
     def __repr__(self):
         string_temp = super().__repr__()
 
-        string_temp = " ".join((string_temp, f"Constant: {self.constant}"))
+        string_temp = " ".join((string_temp, f"Constant: {self.__constant}"))
 
         return string_temp
     # endregion

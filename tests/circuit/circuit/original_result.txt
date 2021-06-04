@@ -37,6 +37,7 @@ O 2 2 10 11
 A 2 9 12
 O 4 2 7 13
 
+
 different_real_number_edge_valid.nnf
 C CaraCompiler
 C Name: Circuit
@@ -69,6 +70,7 @@ L 2
 O 2 2 10 11
 A 2 9 12
 O 4 2 7 13
+
 
 different_real_number_node_valid.nnf
 C CaraCompiler
@@ -103,6 +105,7 @@ O 2 2 10 11
 A 2 9 12
 O 4 2 7 13
 
+
 different_real_number_variable_valid.nnf
 C CaraCompiler
 C Name: Circuit
@@ -135,6 +138,7 @@ L 2
 O 2 2 10 11
 A 2 9 12
 O 4 2 7 13
+
 
 empty_invalid.nnf
 DIMACS NNF format is invalid in the file! (the file does not contain any node)
@@ -171,6 +175,7 @@ L 2
 O 2 2 10 11
 A 2 9 12
 O 4 2 7 13
+
 
 horn_cnf_less_params_invalid.nnf
 DIMACS NNF format is invalid in the file! (the RENAMABLE_HORN_CNF leaf (R) defined at line 16 has an invalid number of parameters)
@@ -225,6 +230,7 @@ p cnf 4 2
 -4 1 0
 O 4 3 7 13 14
 
+
 horn_cnf_missing_p_line_invalid.nnf
 DIMACS NNF format is invalid in the file! (the formula mentioned at line 16 has an invalid DIMACS format (P line is not mentioned at all or is mentioned after the clauses!))
 
@@ -275,6 +281,7 @@ p cnf 4 2
 -4 2 0
 O 4 3 7 13 14
 
+
 mapping_less_params_invalid.nnf
 DIMACS NNF format is invalid in the file! (the number of variables (3) and the number of variables in the mapping (2) are different at line 9 in the mapping node)
 
@@ -315,6 +322,7 @@ O 0 2 2 5
 M 6 3 4 1 5 2 6 3
 A 2 6 7
 
+
 missing_n_line_invalid.nnf
 NNF line is not mentioned at all or is mentioned after the nodes!
 
@@ -352,6 +360,7 @@ L 2
 O 2 2 10 11
 A 2 9 12
 O 4 2 7 13
+
 
 n_line_less_params_invalid.nnf
 DIMACS NNF format is invalid in the file! (nnf line has an invalid format - the valid format is 'nnf number_of_nodes number_of_edges number_of_variables')
@@ -401,6 +410,7 @@ L 2
 O 2 2 10 11
 A 2 9 12
 O 4 2 7 13
+
 
 node_and_less_params_invalid.nnf
 DIMACS NNF format is invalid in the file! (the c value (2) and the number of children (1) mentioned at line 16 in the AND node don't correspond)
@@ -487,6 +497,7 @@ L 3
 A 2 0 1
 L 2
 O 2 2 2 3
+
 
 sat-grid-pbl-0010.nnf
 C CaraCompiler
@@ -1746,6 +1757,7 @@ L -1
 L -2
 A 2 1239 1240
 A 2 1238 1241
+
 
 sat-grid-pbl-0010_smooth.nnf
 C CaraCompiler
@@ -3718,6 +3730,7 @@ L -2
 A 2 1951 1952
 A 2 1950 1953
 
+
 sat-grid-pbl-0010_smooth_all.nnf
 C CaraCompiler
 C Name: Circuit
@@ -5478,6 +5491,7 @@ L -2
 A 2 1740 1741
 A 2 1739 1742
 
+
 two_cnf_horn_cnf_valid.nnf
 C CaraCompiler
 C Name: Circuit
@@ -5517,6 +5531,7 @@ p cnf 4 2
 -3 1 2 0
 -4 2 0
 O 4 4 7 13 14 15
+
 
 two_cnf_less_params_invalid.nnf
 DIMACS NNF format is invalid in the file! (the TWO_CNF leaf (T) defined at line 16 has an invalid number of parameters)
@@ -5572,6 +5587,7 @@ p cnf 2 3
 -1 -2 0
 O 4 3 7 13 14
 
+
 two_cnf_missing_p_line_invalid.nnf
 DIMACS NNF format is invalid in the file! (the formula mentioned at line 16 has an invalid DIMACS format (P line is not mentioned at all or is mentioned after the clauses!))
 
@@ -5623,6 +5639,7 @@ p cnf 2 3
 -1 -2 0
 O 4 3 7 13 14
 
+
 unsat_valid.nnf
 C CaraCompiler
 C Name: Circuit
@@ -5639,6 +5656,7 @@ C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
 nnf 1 0 0
 O 0 0
+
 
 
 Creating circuits
@@ -5665,6 +5683,7 @@ O 0 0
 L 2
 O 0 3 1 3 4
 A 2 2 5
+
 
 __create_circuit_3
 C CaraCompiler
@@ -5705,6 +5724,7 @@ O 3 2 18 19
 A 2 17 20
 O 0 2 14 21
 
+
 __create_circuit_4
 C CaraCompiler
 C Name: circuit_4
@@ -5741,6 +5761,7 @@ O 0 3 10 14 16
 A 2 1 17
 O 7 2 0 18
 
+
 __create_circuit_5
 C CaraCompiler
 C Name: circuit_5
@@ -5771,6 +5792,7 @@ L 3
 O 0 2 5 11
 A 3 8 10 12
 O 1 2 7 13
+
 
 
 Modification
@@ -5853,6 +5875,7 @@ O 0 3 10 14 16
 A 2 1 17
 O 7 2 0 18
 
+
 Clear comments
 C CaraCompiler
 C Name: circuit_4
@@ -5888,6 +5911,7 @@ A 4 5 7 12 15
 O 0 3 10 14 16
 A 2 1 17
 O 7 2 0 18
+
 
 Modification
 Add a leaf (1)
@@ -6244,6 +6268,7 @@ C TWO_CNF: 0
 C RENAMABLE_HORN_CNF: 0
 nnf 1 0 1
 L 1
+
 
 Satisfiable: True
 Clause entailment: False

@@ -71,7 +71,7 @@ class OrInnerNode(InnerNodeAbstract):
 
         union_variable_set_temp = set()
         for child in child_set:
-            union_variable_set_temp = union_variable_set_temp.union(child._get_variable_in_circuit_set(copy=False))
+            union_variable_set_temp = union_variable_set_temp.union(child._variable_in_circuit_set)
 
         for child in child_set:
             if len(union_variable_set_temp) != child.number_of_variables:
@@ -87,7 +87,7 @@ class OrInnerNode(InnerNodeAbstract):
         :return: True if the node is deterministic. Otherwise, False is returned.
         """
 
-        return OrInnerNode.__is_deterministic_set(self._get_child_set(copy=False))
+        return OrInnerNode.__is_deterministic_set(self._child_set)
 
     def _is_smooth(self) -> bool:
         """
@@ -95,7 +95,7 @@ class OrInnerNode(InnerNodeAbstract):
         :return: True if the node is smooth. Otherwise, False is returned.
         """
 
-        return OrInnerNode.__is_smooth_set(self._get_child_set(copy=False))
+        return OrInnerNode.__is_smooth_set(self._child_set)
     # endregion
 
     # region Override method
@@ -124,7 +124,7 @@ class OrInnerNode(InnerNodeAbstract):
                 return value
 
         result = False
-        for child in self._get_child_set(copy=False):
+        for child in self._child_set:
             result_temp = child.is_satisfiable(assumption_set=restricted_assumption_set_temp,
                                                exist_quantification_set=restricted_exist_quantification_set_temp,
                                                use_cache=use_cache,
@@ -169,7 +169,7 @@ class OrInnerNode(InnerNodeAbstract):
                 return value
 
         number_of_models = 0
-        for child in self._get_child_set(copy=False):
+        for child in self._child_set:
             number_of_models += child.model_counting(assumption_set=restricted_assumption_set_temp,
                                                      use_cache=use_cache,
                                                      mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary,
@@ -202,7 +202,7 @@ class OrInnerNode(InnerNodeAbstract):
                 return value
 
         default_cardinality = math.inf
-        for child in self._get_child_set(copy=False):
+        for child in self._child_set:
             temp = child.minimum_default_cardinality(observation_set=restricted_observation_set_temp,
                                                      default_set=restricted_default_set_temp,
                                                      use_cache=use_cache,
@@ -225,7 +225,7 @@ class OrInnerNode(InnerNodeAbstract):
     def __repr__(self):
         string_temp = super().__repr__()
 
-        string_temp = " ".join((string_temp, f"Decision variable: {self.decision_variable}"))
+        string_temp = " ".join((string_temp, f"Decision variable: {self.__decision_variable}"))
 
         return string_temp
     # endregion

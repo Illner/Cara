@@ -122,11 +122,11 @@ def main(main_args):
 
     # Compiler test
     if main_args.compiler_test:
-        compiler_test = c_test.CompilerTest()
+        compiler_test = c_test.CompilerTest(main_args.compiler_test_limit)
         print(compiler_test.test_name, end=": ", flush=True)
-        result, log_result = test(compiler_test)
+        _, _ = test(compiler_test)
         # print(result)
-        log_string = "\n".join((log_string, log_result, ""))
+        # log_string = "\n".join((log_string, log_result, ""))
 
     # Save the log
     with open(cara.LOG_PATH, "w", encoding="utf-8") as log_file:
@@ -222,6 +222,13 @@ def create_parser() -> argparse.ArgumentParser:
                              default=True,
                              type=cara.str_to_bool_parser,
                              help="test automation for compilers")
+    parser_temp.add_argument("-ct_l",
+                             "--compiler_test_limit",
+                             action="store",
+                             default=3840,
+                             type=cara.non_negative_int_parser,
+                             metavar="[non-negative number]",
+                             help="maximum tests per file")
 
     return parser_temp
 

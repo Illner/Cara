@@ -16,18 +16,20 @@ class MappingInnerNode(InnerNodeAbstract):
     """
 
     """
+    Private NodeAbstract child
     Private Dict<int, int> mapping_id_variable_id_dictionary
     Private Dict<int, int> variable_id_mapping_id_dictionary
     """
 
     def __init__(self, child: NodeAbstract, variable_id_mapping_id_dictionary: Dict[int, int],
                  mapping_id_variable_id_dictionary: Dict[int, int], id: int = 0):
+        self.__child: NodeAbstract = child
         self.__mapping_id_variable_id_dictionary: Dict[int, int] = mapping_id_variable_id_dictionary
         self.__variable_id_mapping_id_dictionary: Dict[int, int] = variable_id_mapping_id_dictionary
 
         # Check if the mapping is complete
         variable_in_mapping_set = set(mapping_id_variable_id_dictionary.keys())
-        variable_in_circuit_set = child._get_variable_in_circuit_set(copy=False)
+        variable_in_circuit_set = child._variable_in_circuit_set
 
         if not variable_in_circuit_set.issubset(variable_in_mapping_set):
             raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
@@ -70,12 +72,11 @@ class MappingInnerNode(InnerNodeAbstract):
             mapping_id_variable_id_dictionary_temp = self.__mapping_id_variable_id_dictionary
             variable_id_mapping_id_dictionary_temp = self.__variable_id_mapping_id_dictionary
 
-        child = self.__get_child()
-        result = child.is_satisfiable(assumption_set=restricted_assumption_set_temp,
-                                      exist_quantification_set=restricted_exist_quantification_set_temp,
-                                      use_cache=use_cache,
-                                      mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
-                                      variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary_temp)
+        result = self.__child.is_satisfiable(assumption_set=restricted_assumption_set_temp,
+                                             exist_quantification_set=restricted_exist_quantification_set_temp,
+                                             use_cache=use_cache,
+                                             mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
+                                             variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary_temp)
 
         # Cache
         if use_cache:
@@ -117,11 +118,10 @@ class MappingInnerNode(InnerNodeAbstract):
             mapping_id_variable_id_dictionary_temp = self.__mapping_id_variable_id_dictionary
             variable_id_mapping_id_dictionary_temp = self.__variable_id_mapping_id_dictionary
 
-        child = self.__get_child()
-        number_of_models = child.model_counting(assumption_set=restricted_assumption_set_temp,
-                                                use_cache=use_cache,
-                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
-                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary_temp)
+        number_of_models = self.__child.model_counting(assumption_set=restricted_assumption_set_temp,
+                                                       use_cache=use_cache,
+                                                       mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
+                                                       variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary_temp)
 
         # Cache
         if use_cache:
@@ -157,12 +157,11 @@ class MappingInnerNode(InnerNodeAbstract):
             mapping_id_variable_id_dictionary_temp = self.__mapping_id_variable_id_dictionary
             variable_id_mapping_id_dictionary_temp = self.__variable_id_mapping_id_dictionary
 
-        child = self.__get_child()
-        default_cardinality = child.minimum_default_cardinality(observation_set=restricted_observation_set_temp,
-                                                                default_set=restricted_default_set_temp,
-                                                                use_cache=use_cache,
-                                                                mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
-                                                                variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary_temp)
+        default_cardinality = self.__child.minimum_default_cardinality(observation_set=restricted_observation_set_temp,
+                                                                       default_set=restricted_default_set_temp,
+                                                                       use_cache=use_cache,
+                                                                       mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
+                                                                       variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary_temp)
 
         # Cache
         if use_cache:
@@ -172,14 +171,13 @@ class MappingInnerNode(InnerNodeAbstract):
 
     def str_mapping(self) -> str:
         result = ""
-        child = self.__get_child()
         variable_sorted_list = sorted(self.__variable_id_mapping_id_dictionary.keys())
 
         for variable_id in variable_sorted_list:
             mapping_id = self.__variable_id_mapping_id_dictionary[variable_id]
 
             # mapping_id is an implied variable
-            if not child._exist_variable_in_circuit_set(mapping_id):
+            if not self.__child._exist_variable_in_circuit_set(mapping_id):
                 continue
 
             if not result:
@@ -205,9 +203,6 @@ class MappingInnerNode(InnerNodeAbstract):
                 composed_variable_id_mapping_id_dictionary[variable_id] = mapping_id
 
         return composed_mapping_id_variable_id_dictionary, composed_variable_id_mapping_id_dictionary
-
-    def __get_child(self) -> NodeAbstract:
-        return list(self._get_child_set(copy=False))[0]
     # endregion
 
     # endregion Magic method
