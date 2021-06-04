@@ -63,7 +63,7 @@ class Solver:
         # Create the subformula
         # Incidence graph
         if incidence_graph is not None:
-            for clause_id in incidence_graph.clause_id_set(copy=False):
+            for clause_id in incidence_graph._clause_id_set:
                 clause = incidence_graph.get_clause(clause_id, copy=False)
                 self.__cnf.append(clause)
 

@@ -52,7 +52,7 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
         literal_weight_dictionary: Dict[int, int] = dict()  # key: a literal, value: weight of the literal
 
         # Compute weights
-        for variable in incidence_graph.variable_set(copy=False):
+        for variable in incidence_graph._variable_set:
             for sign in [+1, -1]:
                 literal = sign * variable
 
@@ -75,7 +75,7 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
             literal_score_dictionary[literal] = 0
 
         # Compute score for literals
-        for clause_id in incidence_graph.clause_id_set(copy=False):
+        for clause_id in incidence_graph._clause_id_set:
             clause = incidence_graph.get_clause(clause_id, copy=False)
 
             for literal in implied_literal_dictionary:

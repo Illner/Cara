@@ -576,7 +576,7 @@ class HypergraphPartitioning:
         hyperedge_weight_list: List[int] = []
 
         # Hyperedges
-        for variable in incidence_graph.variable_set(copy=False):
+        for variable in incidence_graph._variable_set:
             clause_id_set = incidence_graph.variable_neighbour_set(variable)
 
             pin_temp = []
@@ -719,7 +719,7 @@ class HypergraphPartitioning:
 
         # Hyperedges
         line_hyperedge = []
-        for variable in incidence_graph.variable_set(copy=False):
+        for variable in incidence_graph._variable_set:
             clause_id_set = incidence_graph.variable_neighbour_set(variable)
 
             line_temp = [self.__get_hyperedge_weight(variable)]

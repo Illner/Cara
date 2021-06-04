@@ -16,10 +16,10 @@ class BasicCachingScheme(ComponentCachingAbstract):
     def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[str, None], Union[Tuple[Dict[int, int], Dict[int, int]], None]]:
         self._clear_multi_occurrence_cache()    # cache
 
-        variable_sorted_list = sorted(incidence_graph.variable_set(copy=False))
+        variable_sorted_list = sorted(incidence_graph._variable_set)
         clause_list = []
 
-        for clause_id in incidence_graph.clause_id_set(copy=False):
+        for clause_id in incidence_graph._clause_id_set:
             clause_sorted_list = incidence_graph.get_sorted_clause(clause_id, copy=False)
 
             clause_key_string = self._generate_key_multi_occurrence_cache(clause_sorted_list)

@@ -199,7 +199,7 @@ class Component:
             return True
 
         implied_variable_set = set(map(lambda l: abs(l), implied_literal_set))
-        clause_id_set = self.__incidence_graph.clause_id_set(copy=False)
+        clause_id_set = self.__incidence_graph._clause_id_set
         variable_set = self.__cnf.get_variable_in_clauses(clause_id_set)
         variable_set.difference_update(filter(lambda v: v not in implied_variable_set, map(lambda l: abs(l), self.__assignment_list)))
         intersection_variable_set = variable_set.intersection(implied_variable_set)
@@ -290,7 +290,7 @@ class Component:
         incidence_graph_set = self.__incidence_graph.create_incidence_graphs_for_components()
 
         for incidence_graph in incidence_graph_set:
-            missing_variable_set = self.__incidence_graph.variable_set(copy=False).difference(incidence_graph.variable_set(copy=False))
+            missing_variable_set = self.__incidence_graph._variable_set.difference(incidence_graph._variable_set)
             extended_assignment_list = [var if var in model else -var for var in missing_variable_set]
             assignment_list = self.__assignment_list.copy()
             assignment_list.extend(extended_assignment_list)
@@ -330,7 +330,7 @@ class Component:
         component_list = self.__incidence_graph.get_connected_components()
 
         for component in component_list:
-            missing_variable_set = self.__incidence_graph.variable_set(copy=False).difference(component)
+            missing_variable_set = self.__incidence_graph._variable_set.difference(component)
             extended_assignment_list = [var if var in model else -var for var in missing_variable_set]
             extended_assignment_set, _ = self.__add_literals(extended_assignment_list)
 
@@ -373,7 +373,7 @@ class Component:
 
         # Cache did not work
         if result_cache_cut_set is None:
-            cut_set_restriction = cut_set.intersection(self.__incidence_graph.variable_set(copy=False))
+            cut_set_restriction = cut_set.intersection(self.__incidence_graph._variable_set)
 
             # A new cut set is needed
             if self.__is_suggested_new_cut_set(cut_set=cut_set_restriction,

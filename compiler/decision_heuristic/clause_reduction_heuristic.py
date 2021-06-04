@@ -86,7 +86,7 @@ class ClauseReductionHeuristic(DecisionHeuristicAbstract):
             literal_clause_size_dictionary[literal] = {0: 0}
 
         # Get newly created clauses
-        for clause_id in incidence_graph.clause_id_set(copy=False):
+        for clause_id in incidence_graph._clause_id_set:
             clause = incidence_graph.get_clause(clause_id, copy=False)
 
             for literal in implied_literal_dictionary:

@@ -90,14 +90,14 @@ class IncidenceGraphTest(TestAbstract):
 
         # Neighbours (variables)
         result = "\n".join((result, "Neighbours (variables)"))
-        for variable in sorted(incidence_graph.variable_set(copy=False)):
+        for variable in sorted(incidence_graph._variable_set):
             neighbour_sorted_list = SortedList(incidence_graph.variable_neighbour_set(variable))
             number_of_neighbours = incidence_graph.number_of_neighbours_variable(variable)
             result = "\n".join((result, f"{variable} ({number_of_neighbours}): {neighbour_sorted_list}"))
 
         # Neighbours (clauses)
         result = "\n".join((result, "Neighbours (clauses)"))
-        for clause_id in sorted(incidence_graph.clause_id_set(copy=False)):
+        for clause_id in sorted(incidence_graph._clause_id_set):
             neighbour_sorted_list = SortedList(incidence_graph.clause_id_neighbour_set(clause_id))
             number_of_neighbours = incidence_graph.number_of_neighbours_clause_id(clause_id)
             result = "\n".join((result, f"{clause_id} ({number_of_neighbours}): {neighbour_sorted_list}"))

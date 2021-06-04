@@ -17,7 +17,7 @@ class NoneHeuristic(PreselectionHeuristicAbstract):
     def preselect_variables(self, variable_restriction_set: Union[Set[int], None], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
         self._statistics.get_preselected_variables.start_stopwatch()    # timer (start)
 
-        variable_restriction_set = incidence_graph.variable_set(copy=False) if variable_restriction_set is None else variable_restriction_set
+        variable_restriction_set = incidence_graph._variable_set if variable_restriction_set is None else variable_restriction_set
 
         self._update_statistics(preselected_variable_set=variable_restriction_set,
                                 variable_restriction_set=variable_restriction_set)

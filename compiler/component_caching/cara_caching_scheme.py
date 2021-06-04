@@ -54,7 +54,7 @@ class CaraCachingScheme(ComponentCachingAbstract):
 
         variable_property_dictionary: Dict[int, Tuple[int, int, float, float, int]] = dict()
 
-        for variable in incidence_graph.variable_set(copy=False):
+        for variable in incidence_graph._variable_set:
             occurrence = occurrence_dictionary[variable]
             mean = mean_dictionary[variable]
             variable_property_dictionary[variable] = occurrence[0], occurrence[1], mean[0], mean[1], variable

@@ -37,7 +37,7 @@ class ClauseReductionApproximationHeuristic(PreselectionHeuristicAbstract):
     def preselect_variables(self, variable_restriction_set: Union[Set[int], None], incidence_graph: IncidenceGraph, depth: int) -> Set[int]:
         self._statistics.get_preselected_variables.start_stopwatch()    # timer (start)
 
-        variable_restriction_set = incidence_graph.variable_set(copy=False) if variable_restriction_set is None else variable_restriction_set
+        variable_restriction_set = incidence_graph._variable_set if variable_restriction_set is None else variable_restriction_set
 
         approximated_set_dictionary: Dict[int, Set[int]] = dict()           # key: literal, value: set of literals
         occurrences_in_binary_clauses_dictionary: Dict[int, int] = dict()   # key: literal, value: number of binary clauses where the literal occurs

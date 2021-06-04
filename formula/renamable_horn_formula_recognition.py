@@ -19,7 +19,7 @@ class RenamableHornFormulaRecognition:
     """
 
     def __init__(self, incidence_graph):
-        self.__variable_id_counter: int = max(incidence_graph.variable_set(copy=False), default=0)
+        self.__variable_id_counter: int = max(incidence_graph._variable_set, default=0)
 
         # Mappings
         self.__clause_variable_dictionary: Dict[int, int] = dict()

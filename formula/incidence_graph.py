@@ -28,8 +28,8 @@ class IncidenceGraph(Graph):
     """
 
     """
-    Private Set<int> variable_set
-    Private Set<int> clause_id_set
+    Protected Set<int> variable_set
+    Protected Set<int> clause_id_set
     Private Set<int> satisfied_clause_set
     Private Dict<int, Set<int>> clause_dictionary                           # key: a clause, value: a set of literals that appear in the clause
     Private Dict<int, List<int>> sorted_clause_cache                        # key: a clause, value: a sorted list of literals that appear in the clause
@@ -72,8 +72,8 @@ class IncidenceGraph(Graph):
                  ignored_literal_set_renamable_horn_formula_recognition: Union[Set[int], None] = None):
         super().__init__()
 
-        self.__variable_set: Set[int] = set()
-        self.__clause_id_set: Set[int] = set()
+        self._variable_set: Set[int] = set()
+        self._clause_id_set: Set[int] = set()
         self.__satisfied_clause_set: Set[int] = set()
         self.__clause_dictionary: Dict[int, Set[int]] = dict()
         self.__sorted_clause_cache: Dict[int, List[int]] = dict()
@@ -208,7 +208,7 @@ class IncidenceGraph(Graph):
         :return: True if the variable exists in the incidence graph. Otherwise, False is returned.
         """
 
-        if variable in self.__variable_set:
+        if variable in self._variable_set:
             return True
 
         return False
@@ -219,7 +219,7 @@ class IncidenceGraph(Graph):
         :return: True if the clause exists in the incidence graph. Otherwise, False is returned.
         """
 
-        if clause_id in self.__clause_id_set:
+        if clause_id in self._clause_id_set:
             return True
 
         return False
@@ -232,7 +232,7 @@ class IncidenceGraph(Graph):
         """
 
         # The node does not exist in the incidence graph
-        if not self.__node_exist(node_hash):
+        if node_hash not in self:
             return None
 
         return self.nodes[node_hash]["bipartite"] == 0
@@ -248,14 +248,14 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # Check if the variable exists in the incidence graph
-        if not self.__node_exist(variable_hash):
+        if variable_hash not in self:
             raise ig_exception.VariableDoesNotExistException(variable)
 
         # Remove edges
         for neighbour_hash in set(self.neighbors(variable_hash)):
             self.__temporarily_remove_edge(variable_hash, neighbour_hash)
 
-        self.__variable_set.remove(variable)
+        self._variable_set.remove(variable)
         self.remove_node(variable_hash)
 
     def __temporarily_remove_clause_id(self, clause_id: int) -> None:
@@ -269,7 +269,7 @@ class IncidenceGraph(Graph):
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # Check if the clause exists in the incidence graph
-        if not self.__node_exist(clause_id_hash):
+        if clause_id_hash not in self:
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
         # Remove edges
@@ -280,7 +280,7 @@ class IncidenceGraph(Graph):
         del self.__clause_length_dictionary[clause_id]
         self.__length_set_clauses_dictionary[0].remove(clause_id)
 
-        self.__clause_id_set.remove(clause_id)
+        self._clause_id_set.remove(clause_id)
         self.remove_node(clause_id_hash)
 
     def __temporarily_remove_edge(self, variable: Union[int, str], clause_id: Union[int, str]) -> None:
@@ -313,11 +313,11 @@ class IncidenceGraph(Graph):
             clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
+        if variable_hash not in self:
             raise ig_exception.VariableDoesNotExistException(variable)
 
         # The clause does not exist in the incidence graph
-        if not self.__node_exist(clause_id_hash):
+        if clause_id_hash not in self:
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
         # The edge does not exist in the incidence graph
@@ -386,13 +386,13 @@ class IncidenceGraph(Graph):
         for clause_id in self.clause_id_set(copy=False, multi_occurrence=False):
             # No renaming function
             if renaming_function is None:
-                cnf.append(self.get_clause(clause_id, copy=False))
+                cnf.append(self.__clause_dictionary[clause_id])
 
             # Renaming function exists
             else:
                 clause_temp = []
 
-                for lit in self.get_clause(clause_id, copy=False):
+                for lit in self.__clause_dictionary[clause_id]:
                     if abs(lit) in renaming_function:
                         clause_temp.append(-lit)
                     else:
@@ -425,16 +425,10 @@ class IncidenceGraph(Graph):
     # region Eliminating redundant clauses
     def __get_redundant_clauses_subsumption(self) -> Set[int]:
         subsumed_clause_set = set()
-        clause_dictionary: [int, Set[int]] = dict()     # key: clause, value: a set of literals that occur in the clause
         clause_id_list = self.clause_id_list()
 
         for i, clause_a_id in enumerate(clause_id_list):
-            # Get clause
-            if clause_a_id in clause_dictionary:
-                clause_a = clause_dictionary[clause_a_id]
-            else:
-                clause_a = self.get_clause(clause_a_id, copy=False)
-                clause_dictionary[clause_a_id] = clause_a
+            clause_a = self.__clause_dictionary[clause_a_id]
 
             for j in range(i + 1, len(clause_id_list)):
                 clause_b_id = clause_id_list[j]
@@ -442,12 +436,7 @@ class IncidenceGraph(Graph):
                 if clause_b_id in subsumed_clause_set:
                     continue
 
-                # Get clause
-                if clause_b_id in clause_dictionary:
-                    clause_b = clause_dictionary[clause_b_id]
-                else:
-                    clause_b = self.get_clause(clause_b_id, copy=False)
-                    clause_dictionary[clause_b_id] = clause_b
+                clause_b = self.__clause_dictionary[clause_b_id]
 
                 a_subset_b = clause_a.issubset(clause_b)
                 b_subset_a = clause_b.issubset(clause_a)
@@ -476,7 +465,7 @@ class IncidenceGraph(Graph):
         return subsumed_clause_set
 
     def __get_redundant_clauses_up_redundancy(self) -> Set[int]:
-        return set()
+        return set()    # TODO
         # raise NotImplementedError()
     # endregion
     # endregion
@@ -493,7 +482,7 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable already exists in the incidence graph
-        if self.__node_exist(variable_hash):
+        if variable_hash in self:
             raise ig_exception.VariableAlreadyExistsException(variable)
 
         # adjacency_literal_dictionary
@@ -503,7 +492,7 @@ class IncidenceGraph(Graph):
             self.__adjacency_literal_dynamic_dictionary[variable] = set()
             self.__adjacency_literal_dynamic_dictionary[-variable] = set()
 
-        self.__variable_set.add(variable)
+        self._variable_set.add(variable)
         self.add_node(variable_hash, value=variable, bipartite=0)
 
     def add_clause_id(self, clause_id: int) -> None:
@@ -517,7 +506,7 @@ class IncidenceGraph(Graph):
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The clause already exists in the incidence graph
-        if self.__node_exist(clause_id_hash):
+        if clause_id_hash in self:
             raise ig_exception.ClauseIdAlreadyExistsException(clause_id)
 
         # Clause length
@@ -527,7 +516,7 @@ class IncidenceGraph(Graph):
         if self.__update_adjacency_literal_dynamic_dictionary:
             self.__clause_dictionary[clause_id] = set()
 
-        self.__clause_id_set.add(clause_id)
+        self._clause_id_set.add(clause_id)
         self.add_node(clause_id_hash, value=clause_id, bipartite=1)
 
     def add_edge(self, literal: int, clause_id: int) -> None:
@@ -546,11 +535,11 @@ class IncidenceGraph(Graph):
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
+        if variable_hash not in self:
             self.add_variable(variable)
 
         # The clause does not exist in the incidence graph
-        if not self.__node_exist(clause_id_hash):
+        if clause_id_hash not in self:
             self.add_clause_id(clause_id)
 
         # The edge already exists in the incidence graph
@@ -574,7 +563,7 @@ class IncidenceGraph(Graph):
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The clause already exists in the incidence graph
-        if self.__node_exist(clause_id_hash):
+        if clause_id_hash in self:
             raise ig_exception.ClauseIdAlreadyExistsException(clause_id)
 
         self.add_clause_id(clause_id)
@@ -584,7 +573,7 @@ class IncidenceGraph(Graph):
             variable_hash = self.__variable_hash(variable)
 
             # The variable does not exist in the incidence graph
-            if not self.__node_exist(variable_hash):
+            if variable_hash not in self:
                 self.add_variable(variable)
 
             # adjacency_literal_static_dictionary
@@ -640,7 +629,7 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
+        if variable_hash not in self:
             raise ig_exception.VariableDoesNotExistException(variable)
 
         return set(self.nodes[n]["value"] for n in self.neighbors(variable_hash))
@@ -656,7 +645,7 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
+        if variable_hash not in self:
             raise ig_exception.VariableDoesNotExistException(variable)
 
         return len(self[variable_hash])
@@ -672,7 +661,7 @@ class IncidenceGraph(Graph):
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The clause does not exist in the incidence graph
-        if not self.__node_exist(clause_id_hash):
+        if clause_id_hash not in self:
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
         return set(self.nodes[n]["value"] for n in self.neighbors(clause_id_hash))
@@ -688,7 +677,7 @@ class IncidenceGraph(Graph):
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The clause does not exist in the incidence graph
-        if not self.__node_exist(clause_id_hash):
+        if clause_id_hash not in self:
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
         return len(self[clause_id_hash])
@@ -705,7 +694,7 @@ class IncidenceGraph(Graph):
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The clause does not exist in the incidence graph
-        if not self.__node_exist(clause_id_hash):
+        if clause_id_hash not in self:
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
         clause = self.__clause_dictionary[clause_id]
@@ -724,7 +713,7 @@ class IncidenceGraph(Graph):
         clause_id_hash = self.__clause_id_hash(clause_id)
 
         # The clause does not exist in the incidence graph
-        if not self.__node_exist(clause_id_hash):
+        if clause_id_hash not in self:
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
         # Cache
@@ -752,13 +741,13 @@ class IncidenceGraph(Graph):
         """
 
         if multi_occurrence:
-            return self.__clause_id_set.copy() if copy else self.__clause_id_set
+            return self._clause_id_set.copy() if copy else self._clause_id_set
 
         # Multi-occurrent clauses are not kept
         cache: Dict[str, int] = dict()
         clause_id_set_without_multi_occurrence = set()
 
-        for clause_id in self.__clause_id_set:
+        for clause_id in self._clause_id_set:
             if multi_occurrence_literal:
                 clause_sorted_list = self.get_sorted_clause(clause_id, copy=False)
             else:
@@ -795,7 +784,7 @@ class IncidenceGraph(Graph):
         :return: the number of clauses in the incidence graph
         """
 
-        return len(self.clause_id_set(copy=False))
+        return len(self._clause_id_set)
 
     def variable_set(self, copy: bool) -> Set[int]:
         """
@@ -803,7 +792,7 @@ class IncidenceGraph(Graph):
         :return: a set of variables that are in the incidence graph
         """
 
-        variable_set = self.__variable_set.copy() if copy else self.__variable_set
+        variable_set = self._variable_set.copy() if copy else self._variable_set
 
         return variable_set
 
@@ -812,14 +801,14 @@ class IncidenceGraph(Graph):
         :return: a list of variables that are in the incidence graph
         """
 
-        return list(self.variable_set(copy=False))
+        return list(self._variable_set)
 
     def number_of_variables(self) -> int:
         """
         :return: the number of variables in the incidence graph
         """
 
-        return len(self.variable_set(copy=False))
+        return len(self._variable_set)
 
     def get_redundant_clauses(self, eliminating_redundant_clauses_enum: erc_enum.EliminatingRedundantClausesEnum) -> Set[int]:
         """
@@ -874,7 +863,7 @@ class IncidenceGraph(Graph):
             raise ig_exception.VariableHasBeenRemovedException(variable)
 
         # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
+        if variable_hash not in self:
             raise ig_exception.VariableDoesNotExistException(variable)
 
         isolated_variable_set = set()
@@ -895,7 +884,7 @@ class IncidenceGraph(Graph):
             clause_id_hash = self.__clause_id_hash(clause_id)
 
             # The clause node has been already deleted
-            if not self.__node_exist(clause_id_hash):
+            if clause_id_hash not in self:
                 continue
 
             clause_node_neighbour_set = self.clause_id_neighbour_set(clause_id)
@@ -924,7 +913,7 @@ class IncidenceGraph(Graph):
             clause_id_hash = self.__clause_id_hash(clause_id)
 
             # The clause does not exist in the incidence graph
-            if not self.__node_exist(clause_id_hash):
+            if clause_id_hash not in self:
                 raise ig_exception.ClauseHasBeenRemovedException(clause_id)
 
             clause_node_neighbour_set = self.clause_id_neighbour_set(clause_id)
@@ -990,7 +979,7 @@ class IncidenceGraph(Graph):
                 neighbour_hash = self.__variable_hash(neighbour_id)
 
                 # The neighbour does not exist (isolated node)
-                if not self.__node_exist(neighbour_hash):
+                if neighbour_hash not in self:
                     self.add_variable(neighbour_id)
 
                 self.__add_edge(neighbour_hash, clause_id_hash)
@@ -1013,7 +1002,7 @@ class IncidenceGraph(Graph):
                 neighbour_hash = self.__variable_hash(neighbour_id)
 
                 # The neighbour does not exist (isolated node)
-                if not self.__node_exist(neighbour_hash):
+                if neighbour_hash not in self:
                     self.add_variable(neighbour_id)
 
                 self.__add_edge(neighbour_hash, clause_id_hash)
@@ -1190,7 +1179,7 @@ class IncidenceGraph(Graph):
             raise ig_exception.ClauseHasBeenRemovedException(clause_id)
 
         # The clause does not exist in the incidence graph
-        if not self.__node_exist(clause_id_hash):
+        if clause_id_hash not in self:
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
         clause_neighbour_set = set(self.neighbors(clause_id_hash))
@@ -1315,9 +1304,9 @@ class IncidenceGraph(Graph):
 
         neg_assigned_literal_set = self.__ignored_literal_set_renamable_horn_formula_recognition.union(self.__neg_assigned_literal_set)
         result = self.__renamable_horn_formula_recognition.is_renamable_horn_formula(satisfied_clause_set=self.__satisfied_clause_set,
-                                                                                     unresolved_clause_set=self.__clause_id_set,
+                                                                                     unresolved_clause_set=self._clause_id_set,
                                                                                      neg_assigned_literal_set=neg_assigned_literal_set,
-                                                                                     variable_restriction_set=self.__variable_set)
+                                                                                     variable_restriction_set=self._variable_set)
 
         if result is not None:
             self.__statistics.renamable_horn_formula_ratio.add_count(1)     # counter
@@ -1338,7 +1327,7 @@ class IncidenceGraph(Graph):
         literal_set = set()
 
         for binary_clause_id in binary_clause_set:
-            clause = self.get_clause(binary_clause_id, copy=False)
+            clause = self.__clause_dictionary[binary_clause_id]
             literal_set.update(clause)
 
         return literal_set
@@ -1356,7 +1345,7 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
+        if variable_hash not in self:
             raise ig_exception.VariableDoesNotExistException(variable)
 
         clause_set = self.__adjacency_literal_dynamic_dictionary[literal]
@@ -1385,7 +1374,7 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
+        if variable_hash not in self:
             raise ig_exception.VariableDoesNotExistException(variable)
 
         number_of_occurrences_dictionary: Dict[int, int] = dict()
@@ -1422,7 +1411,7 @@ class IncidenceGraph(Graph):
         max_variable = None
 
         if variable_restriction_set is None:
-            variable_set_temp = self.variable_set(copy=False)
+            variable_set_temp = self._variable_set
         else:
             variable_set_temp = variable_restriction_set
 
@@ -1449,7 +1438,7 @@ class IncidenceGraph(Graph):
         variable_hash = self.__variable_hash(variable)
 
         # The variable does not exist in the incidence graph
-        if not self.__node_exist(variable_hash):
+        if variable_hash not in self:
             raise ig_exception.VariableDoesNotExistException(variable)
 
         sum_temp = 0
@@ -1532,7 +1521,7 @@ class IncidenceGraph(Graph):
                     continue
 
                 clause_id = self.__unhash(node_hash)
-                clause_set = self.get_clause(clause_id, copy=False)
+                clause_set = self.__clause_dictionary[clause_id]
                 incidence_graph_temp.add_clause(clause_id, clause_set)
 
             incidence_graph_set.add(incidence_graph_temp)
@@ -1550,7 +1539,7 @@ class IncidenceGraph(Graph):
         # The incidence graph is connected => one component
         if self.is_connected():
             self.__statistics.get_connected_components.stop_stopwatch()     # timer (stop)
-            return [self.variable_set(copy=False)]
+            return [self._variable_set]
 
         connected_component_list = []
 
@@ -1576,7 +1565,7 @@ class IncidenceGraph(Graph):
                 continue
 
             clause_id = self.__unhash(node_hash)
-            clause_set = self.get_clause(clause_id, copy=False)
+            clause_set = self.__clause_dictionary[clause_id]
             copy.add_clause(clause_id, clause_set)
 
         # Renamable Horn formula recognition
@@ -1590,7 +1579,7 @@ class IncidenceGraph(Graph):
     # region Magic method
     def __str__(self):
         string_temp = ""
-        clause_id_sorted_list = sorted(self.clause_id_set(copy=False))
+        clause_id_sorted_list = sorted(self._clause_id_set)
 
         for clause_id in clause_id_sorted_list:
             clause = self.get_sorted_clause(clause_id, copy=False)

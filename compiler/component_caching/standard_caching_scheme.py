@@ -16,7 +16,7 @@ class StandardCachingScheme(ComponentCachingAbstract):
     def generate_key_cache(self, incidence_graph: IncidenceGraph) -> Tuple[Union[str, None], Union[Tuple[Dict[int, int], Dict[int, int]], None]]:
         clause_list = []
 
-        for clause_id in incidence_graph.clause_id_set(copy=False):
+        for clause_id in incidence_graph._clause_id_set:
             clause_sorted_list = incidence_graph.get_sorted_clause(clause_id, copy=False)
             clause_list.append(self._delimiter.join([str(lit) for lit in clause_sorted_list]))
 
