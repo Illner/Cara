@@ -387,7 +387,7 @@ class Compiler:
 
         self.__statistics.compiler_statistics.create_circuit.start_stopwatch()  # timer (start - create_circuit)
 
-        incidence_graph: IncidenceGraph = self.__cnf.get_incidence_graph(copy=False)
+        incidence_graph: IncidenceGraph = self.__cnf._incidence_graph
         incidence_graph_set: Set[IncidenceGraph] = {incidence_graph}
 
         # More components exist
@@ -442,7 +442,7 @@ class Compiler:
 
         # Add unused variables
         variable_in_circuit_set = self.__circuit.get_node(root_id)._variable_in_circuit_set
-        variable_in_formula_set = self.__cnf.get_variable_set(copy=False)
+        variable_in_formula_set = self.__cnf._variable_set
         unused_variable_set = variable_in_formula_set.difference(variable_in_circuit_set)
 
         number_of_unused_variables = self.__cnf.number_of_variables - self.__cnf.real_number_of_variables

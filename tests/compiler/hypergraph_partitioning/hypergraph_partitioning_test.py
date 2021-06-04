@@ -61,7 +61,7 @@ class HypergraphPartitioningTest(TestAbstract):
 
                             number_of_repetition = 1 if cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE else 2
                             for _ in range(number_of_repetition):
-                                cut_set = hypergraph_partitioning.get_cut_set(cnf.get_incidence_graph(), solver, [])
+                                cut_set = hypergraph_partitioning.get_cut_set(cnf._incidence_graph, solver, [])
                                 cut_set = SortedList(cut_set)
 
                                 # Deterministic

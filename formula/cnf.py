@@ -25,7 +25,7 @@ class Cnf:
     Private List<Set<int>> cnf                                  # key: 0, 1, .., number_of_clauses - 1, value: a set of literals which appear in the clause
     Private List<Set<int>> cnf_variable                         # key: 0, 1, .., number_of_clauses - 1, value: a set of variables which appear in the clause
     Private List<int> variable_list
-    Private Set<int> variable_set
+    Protected Set<int> variable_set
     Private List<int> literal_list
     Private Set<int> literal_set
     Private Dict<int, Set<int>> adjacency_literal_dictionary    # key: literal, value: a set of clauses where the literal appears
@@ -36,7 +36,7 @@ class Cnf:
     Private CnfStatistics cnf_statistics
     Private IncidenceGraphStatistics incidence_graph_statistics
     
-    Private IncidenceGraph incidence_graph
+    Protected IncidenceGraph incidence_graph
     """
 
     def __init__(self, dimacs_cnf_source: Union[str, StringIO],
@@ -53,7 +53,7 @@ class Cnf:
         self.__cnf: List[Set[int]] = []
         self.__cnf_variable: List[Set[int]] = []
         self.__variable_list: List[int] = []
-        self.__variable_set: Set[int] = set()
+        self._variable_set: Set[int] = set()
         self.__literal_list: List[int] = []
         self.__literal_set: Set[int] = set()
 
@@ -72,7 +72,7 @@ class Cnf:
         self.__incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = incidence_graph_statistics
 
         # Incidence graph
-        self.__incidence_graph: Union[IncidenceGraph, None] = None
+        self._incidence_graph: Union[IncidenceGraph, None] = None
 
         variable_mapping = dict() if variable_mapping is None else variable_mapping
         self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
@@ -147,7 +147,7 @@ class Cnf:
                     self.__number_of_literals = 2 * self.__number_of_variables
 
                     # Incidence graph
-                    self.__incidence_graph = IncidenceGraph(statistics=self.__incidence_graph_statistics)
+                    self._incidence_graph = IncidenceGraph(statistics=self.__incidence_graph_statistics)
 
                     continue
 
@@ -197,13 +197,13 @@ class Cnf:
                     clause_variable_set_temp.add(var)
 
                     # The variable does not exist
-                    if var not in self.__variable_set:
-                        if len(self.__variable_set) >= self.__number_of_variables:
-                            warning_temp = f"The number of variables in DIMACS CNF ({len(self.__variable_set) + 1}) differs from the v value ({self.__number_of_variables})!"
+                    if var not in self._variable_set:
+                        if len(self._variable_set) >= self.__number_of_variables:
+                            warning_temp = f"The number of variables in DIMACS CNF ({len(self._variable_set) + 1}) differs from the v value ({self.__number_of_variables})!"
                             warnings.warn(warning_temp)
 
                         self.__variable_list.append(var)
-                        self.__variable_set.add(var)
+                        self._variable_set.add(var)
                         self.__literal_list.extend([-var, var])
                         self.__literal_set.update([-var, var])
 
@@ -215,7 +215,7 @@ class Cnf:
                     self.__adjacency_variable_dictionary[var].add(clause_id)
 
                     # Incidence graph
-                    self.__incidence_graph.add_edge(lit, clause_id)
+                    self._incidence_graph.add_edge(lit, clause_id)
 
                 clause_set_temp_len = len(clause_set_temp)
                 if clause_set_temp_len not in self.__clause_size_dictionary:
@@ -236,7 +236,7 @@ class Cnf:
             raise f_exception.InvalidDimacsCnfFormatException("the file does not contain any clause")
 
         self.__unit_clause_set = self.__clause_size_dictionary[1].copy()  # get unit clauses
-        self.__real_number_of_variables = len(self.__variable_set)
+        self.__real_number_of_variables = len(self._variable_set)
 
         self.__cnf_statistics.create.stop_stopwatch()   # timer (stop)
 
@@ -277,9 +277,9 @@ class Cnf:
         """
 
         if copy:
-            return self.__variable_set.copy()
+            return self._variable_set.copy()
 
-        return self.__variable_set
+        return self._variable_set
 
     def get_size_clause(self, clause_id: int) -> int:
         """
@@ -351,9 +351,9 @@ class Cnf:
         """
 
         if copy:
-            return self.__incidence_graph.copy_incidence_graph()
+            return self._incidence_graph.copy_incidence_graph()
 
-        return self.__incidence_graph
+        return self._incidence_graph
 
     def get_unit_clause_set(self, copy: bool) -> Set[int]:
         """
@@ -370,12 +370,12 @@ class Cnf:
 
     # region Magic method
     def __str__(self):
-        string_temp = "\n".join((f"Number of clauses: {self.number_of_clauses}",
-                                 f"Real number of clauses: {self.real_number_of_clauses}",
-                                 f"Number of variables: {self.number_of_variables}",
-                                 f"Real number of variables: {self.real_number_of_variables}",
+        string_temp = "\n".join((f"Number of clauses: {self.__number_of_clauses}",
+                                 f"Real number of clauses: {self.__real_number_of_clauses}",
+                                 f"Number of variables: {self.__number_of_variables}",
+                                 f"Real number of variables: {self.__real_number_of_variables}",
                                  f"Unit clauses: {self.__unit_clause_set}",
-                                 "\nComments: ", self.comments))
+                                 "\nComments: ", self.__comments))
 
         return string_temp
     # endregion
@@ -407,5 +407,5 @@ class Cnf:
 
     @property
     def incidence_graph_statistics(self) -> IncidenceGraphStatistics:
-        return self.get_incidence_graph(copy=False).statistics
+        return self._incidence_graph.statistics
     # endregion

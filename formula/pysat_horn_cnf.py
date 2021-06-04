@@ -67,7 +67,7 @@ class PySatHornCnf(PySatCnf):
             return None
 
         result_model: Set[int] = set(assignment_list_temp)
-        for var in self.get_variable_set(copy=False):
+        for var in self._variable_set:
             if (var not in result_model) and (-var not in result_model):
                 # Negative literal
                 assignment_list_temp.append(-var)

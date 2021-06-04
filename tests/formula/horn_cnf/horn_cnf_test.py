@@ -56,14 +56,14 @@ class HornCnfTest(TestAbstract):
                 result = "\n".join((result, file_name))
 
                 cnf = Cnf(file_path)
-                cnf.get_incidence_graph().initialize_renamable_horn_formula_recognition()
+                cnf._incidence_graph.initialize_renamable_horn_formula_recognition()
 
-                renaming_function = cnf.get_incidence_graph().is_renamable_horn_formula()
+                renaming_function = cnf._incidence_graph.is_renamable_horn_formula()
                 if renaming_function is not None:
                     renaming_function = True if len(renaming_function) > 0 else False
                 result = "\n".join((result, f"Renaming function: {renaming_function}"))
 
-                horn_cnf = cnf.get_incidence_graph().convert_to_horn_cnf()
+                horn_cnf = cnf._incidence_graph.convert_to_horn_cnf()
                 result = "\n".join((result, HornCnfTest.__horn_cnf_str(horn_cnf), ""))
 
                 assignment_list = [[], [1], [-2, -3]]

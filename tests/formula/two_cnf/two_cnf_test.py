@@ -55,7 +55,7 @@ class TwoCnfTest(TestAbstract):
                 result = "\n".join((result, file_name))
 
                 cnf = Cnf(file_path)
-                two_cnf = cnf.get_incidence_graph().convert_to_2_cnf()
+                two_cnf = cnf._incidence_graph.convert_to_2_cnf()
 
                 result = "\n".join((result, TwoCnfTest.__two_cnf_str(two_cnf), ""))
 

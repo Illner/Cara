@@ -98,7 +98,7 @@ class HypergraphPartitioning:
 
         self.__cnf: Cnf = cnf
         self.__subsumption_threshold: Union[int, None] = subsumption_threshold
-        self.__hyperedge_set: Set[int] = cnf.get_variable_set(copy=False)
+        self.__hyperedge_set: Set[int] = cnf._variable_set
         self.__total_number_of_nodes: int = cnf.real_number_of_clauses
         self.__multi_occurrence_cache: bool = multi_occurrence_cache
 
@@ -136,7 +136,7 @@ class HypergraphPartitioning:
         self.__hyperedge_weight_dictionary: Dict[int, int] = dict()
 
         self.__check_files_and_directories()
-        self.__set_static_weights(initial_incidence_graph=cnf.get_incidence_graph())
+        self.__set_static_weights(initial_incidence_graph=cnf._incidence_graph)
 
         # hMETIS
         if self.__software_enum == hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS:

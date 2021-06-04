@@ -366,7 +366,7 @@ class Circuit:
                     # 2-CNF leaf
                     if node_type_temp == nt_enum.NodeTypeEnum.TWO_CNF:
                         try:
-                            two_cnf_temp = cnf_temp.get_incidence_graph().convert_to_2_cnf()
+                            two_cnf_temp = cnf_temp._incidence_graph.convert_to_2_cnf()
 
                             root_id = self.create_2_cnf_leaf(two_cnf=two_cnf_temp)
                         except f_exception.FormulaIsNot2CnfException:
@@ -375,9 +375,9 @@ class Circuit:
                     # Renamable Horn CNF leaf
                     else:
                         try:
-                            cnf_temp.get_incidence_graph().initialize_renamable_horn_formula_recognition()
-                            renaming_function_temp = cnf_temp.get_incidence_graph().is_renamable_horn_formula()
-                            horn_cnf_temp = cnf_temp.get_incidence_graph().convert_to_horn_cnf(renaming_function_temp)
+                            cnf_temp._incidence_graph.initialize_renamable_horn_formula_recognition()
+                            renaming_function_temp = cnf_temp._incidence_graph.is_renamable_horn_formula()
+                            horn_cnf_temp = cnf_temp._incidence_graph.convert_to_horn_cnf(renaming_function_temp)
 
                             root_id = self.create_renamable_horn_cnf_leaf(renamable_horn_cnf=horn_cnf_temp,
                                                                           renaming_function=renaming_function_temp)

@@ -83,7 +83,7 @@ class Solver:
                     clause = cnf.get_clause(clause_id, copy=False)
                     self.__cnf.append(clause)
 
-                self.__variable_set: Set[int] = cnf.get_variable_set(copy=False)
+                self.__variable_set: Set[int] = cnf._variable_set
 
         # Cache
         self.__implicit_bcp_dictionary_cache: \

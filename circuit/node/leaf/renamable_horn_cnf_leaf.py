@@ -29,8 +29,8 @@ class RenamableHornCnfLeaf(LeafAbstract):
         super().__init__(id=id,
                          size=size_temp,
                          node_type=nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF,
-                         variable_in_circuit_set=self.__cnf.get_variable_set(copy=False),
-                         literal_in_circuit_set=self.__cnf.get_literal_set(copy=False))
+                         variable_in_circuit_set=self.__cnf._variable_set,
+                         literal_in_circuit_set=self.__cnf._literal_set)
 
     # region Override method
     def is_satisfiable(self, assumption_set: Set[int], exist_quantification_set: Set[int], use_cache: bool = True,

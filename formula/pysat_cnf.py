@@ -13,8 +13,8 @@ class PySatCnf(CNF):
 
     """
     Private int formula_length
-    Private Set<int> literal_set
-    Private Set<int> variable_set
+    Protected Set<int> literal_set
+    Protected Set<int> variable_set
     
     Private bool is_2_cnf
     Private bool is_horn_formula
@@ -24,8 +24,8 @@ class PySatCnf(CNF):
         super().__init__()
 
         self.__formula_length: int = 0
-        self.__literal_set: Set[int] = set()
-        self.__variable_set: Set[int] = set()
+        self._literal_set: Set[int] = set()
+        self._variable_set: Set[int] = set()
 
         self.__is_2_cnf: bool = True
         self.__is_horn_formula: bool = True
@@ -36,8 +36,8 @@ class PySatCnf(CNF):
 
         number_of_positive_literals = 0
         for lit in clause:
-            self.__literal_set.add(lit)
-            self.__variable_set.add(abs(lit))
+            self._literal_set.add(lit)
+            self._variable_set.add(abs(lit))
 
             if lit > 0:
                 number_of_positive_literals += 1
@@ -60,7 +60,7 @@ class PySatCnf(CNF):
         :return: the number of models
         """
 
-        variable_set = self.get_variable_set(copy=True)
+        variable_set = self._variable_set.copy()
         for lit in assignment_list:
             var = abs(lit)
             if var in variable_set:
@@ -138,9 +138,9 @@ class PySatCnf(CNF):
         """
 
         if copy:
-            return self.__variable_set.copy()
+            return self._variable_set.copy()
 
-        return self.__variable_set
+        return self._variable_set
 
     def get_literal_set(self, copy: bool):
         """
@@ -149,9 +149,9 @@ class PySatCnf(CNF):
         """
 
         if copy:
-            return self.__literal_set.copy()
+            return self._literal_set.copy()
 
-        return self.__literal_set
+        return self._literal_set
     # endregion
 
     # region Magic method
@@ -169,7 +169,7 @@ class PySatCnf(CNF):
     # region Property
     @property
     def number_of_variables(self) -> int:
-        return len(self.__variable_set)
+        return len(self._variable_set)
 
     @property
     def number_of_clauses(self) -> int:
