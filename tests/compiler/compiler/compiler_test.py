@@ -54,10 +54,10 @@ class CompilerTest(TestAbstract):
             for implied_literals_enum in il_enum.implied_literals_enum_values:
                 for implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
                     for first_implied_literals_preselection_heuristic_enum in ph_enum.preselection_heuristic_enum_values:
-                        for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
-                            for eliminating_redundant_clauses_threshold in [100, None]:
-                                for new_cut_set_threshold in [0, 0.5, 1]:
-                                    for subsumed_threshold in [100, None]:
+                        for new_cut_set_threshold in [0, 0.5, 1]:
+                            for subsumed_threshold in [100, None]:
+                                for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
+                                    for eliminating_redundant_clauses_threshold in [100, None]:
                                         for hp_cache_enum in hpc_enum.hpc_enum_values:
                                             for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
                                                 for component_caching_enum in cc_enum.component_caching_enum_values:

@@ -6,7 +6,7 @@ from enum import IntEnum, unique
 class EliminatingRedundantClausesEnum(IntEnum):
     NONE = 1
     SUBSUMPTION = 2
-    UP_REDUNDANCY = 3
+    # UP_REDUNDANCY = 3
 
 
 eliminating_redundant_clauses_enum_names = [erc.name for erc in EliminatingRedundantClausesEnum]

@@ -237,10 +237,11 @@ class IncidenceGraph(Graph):
 
         return self.nodes[node_hash]["bipartite"] == 0
 
-    def __temporarily_remove_variable(self, variable: int) -> None:
+    def __temporarily_remove_variable(self, variable: int, neighbour_set: Union[Set[int], Set[str], None] = None) -> None:
         """
         Temporarily remove the variable
         :param variable: the variable
+        :param neighbour_set: the neighbour set of the variable (optional)
         :return: None
         :raises VariableDoesNotExistException: if the variable does not exist in the incidence graph
         """
@@ -251,17 +252,32 @@ class IncidenceGraph(Graph):
         if variable_hash not in self:
             raise ig_exception.VariableDoesNotExistException(variable)
 
+        neighbour_set = set(self.neighbors(variable_hash)) if neighbour_set is None else neighbour_set
+
         # Remove edges
-        for neighbour_hash in set(self.neighbors(variable_hash)):
-            self.__temporarily_remove_edge(variable_hash, neighbour_hash)
+        for neighbour in neighbour_set:
+            clause_id = neighbour if isinstance(neighbour, int) else self.__unhash(neighbour)
+
+            # adjacency_literal_dynamic_dictionary
+            if self.__update_adjacency_literal_dynamic_dictionary:
+                literal = self.__get_literal_from_clause(variable, clause_id)
+
+                self.__adjacency_literal_dynamic_dictionary[literal].remove(clause_id)
+                self.__clause_dictionary[clause_id].remove(literal)
+
+                if clause_id in self.__sorted_clause_cache:
+                    del self.__sorted_clause_cache[clause_id]
+
+            self.__update_clause_length(clause_id, increment_by_one=False)  # update the length
 
         self._variable_set.remove(variable)
         self.remove_node(variable_hash)
 
-    def __temporarily_remove_clause_id(self, clause_id: int) -> None:
+    def __temporarily_remove_clause_id(self, clause_id: int, neighbour_set: Union[Set[int], Set[str], None] = None) -> None:
         """
         Temporarily remove the clause
         :param clause_id: the identifier of the clause
+        :param neighbour_set: the neighbour set of the clause (optional)
         :return: None
         :raises ClauseIdDoesNotExistException: if the clause does not exist in the incidence graph
         """
@@ -272,13 +288,25 @@ class IncidenceGraph(Graph):
         if clause_id_hash not in self:
             raise ig_exception.ClauseIdDoesNotExistException(clause_id)
 
-        # Remove edges
-        for neighbour_hash in set(self.neighbors(clause_id_hash)):
-            self.__temporarily_remove_edge(neighbour_hash, clause_id_hash)
+        neighbour_set = set(self.neighbors(clause_id_hash)) if neighbour_set is None else neighbour_set
+
+        # adjacency_literal_dynamic_dictionary
+        if self.__update_adjacency_literal_dynamic_dictionary:
+            for neighbour in neighbour_set:
+                variable = neighbour if isinstance(neighbour, int) else self.__unhash(neighbour)
+
+                literal = self.__get_literal_from_clause(variable, clause_id)
+
+                self.__adjacency_literal_dynamic_dictionary[literal].remove(clause_id)
+                self.__clause_dictionary[clause_id].remove(literal)
+
+            if clause_id in self.__sorted_clause_cache:
+                del self.__sorted_clause_cache[clause_id]
 
         # Clause length
+        clause_len = self.__clause_length_dictionary[clause_id]
         del self.__clause_length_dictionary[clause_id]
-        self.__length_set_clauses_dictionary[0].remove(clause_id)
+        self.__length_set_clauses_dictionary[clause_len].remove(clause_id)
 
         self._clause_id_set.remove(clause_id)
         self.remove_node(clause_id_hash)
@@ -830,8 +858,8 @@ class IncidenceGraph(Graph):
             redundant_clause_set = self.__get_redundant_clauses_subsumption()
 
         # UP_REDUNDANCY
-        elif eliminating_redundant_clauses_enum == erc_enum.EliminatingRedundantClausesEnum.UP_REDUNDANCY:
-            redundant_clause_set = self.__get_redundant_clauses_up_redundancy()
+        # elif eliminating_redundant_clauses_enum == erc_enum.EliminatingRedundantClausesEnum.UP_REDUNDANCY:
+        #     redundant_clause_set = self.__get_redundant_clauses_up_redundancy()
 
         if redundant_clause_set is not None:
             self.__statistics.get_redundant_clauses_size.add_count(len(redundant_clause_set))   # counter
@@ -877,7 +905,8 @@ class IncidenceGraph(Graph):
         self.__variable_node_backup_dictionary[variable] = variable_node_neighbour_set
 
         # Delete the variable node
-        self.__temporarily_remove_variable(variable)
+        self.__temporarily_remove_variable(variable=variable,
+                                           neighbour_set=variable_node_neighbour_set)
 
         clause_node_dictionary = dict()
         for clause_id in self.__adjacency_literal_static_dictionary[literal]:
@@ -892,12 +921,14 @@ class IncidenceGraph(Graph):
 
             # Delete the (satisfied) clause
             self.__satisfied_clause_set.add(clause_id)
-            self.__temporarily_remove_clause_id(clause_id)
+            self.__temporarily_remove_clause_id(clause_id=clause_id,
+                                                neighbour_set=clause_node_neighbour_set)
 
             # Check if any neighbour is not an isolated node
             for clause_node_neighbour in clause_node_neighbour_set:
                 if not self.number_of_neighbours_variable(clause_node_neighbour):
-                    self.__temporarily_remove_variable(clause_node_neighbour)
+                    self.__temporarily_remove_variable(variable=clause_node_neighbour,
+                                                       neighbour_set=set())
                     isolated_variable_set.add(clause_node_neighbour)
 
         self.__clause_node_backup_dictionary[variable] = clause_node_dictionary
@@ -921,12 +952,14 @@ class IncidenceGraph(Graph):
 
             # Delete the redundant clause
             self.__satisfied_clause_set.add(clause_id)
-            self.__temporarily_remove_clause_id(clause_id)
+            self.__temporarily_remove_clause_id(clause_id=clause_id,
+                                                neighbour_set=clause_node_neighbour_set)
 
             # Check if any neighbour is not an isolated node
             for clause_node_neighbour in clause_node_neighbour_set:
                 if not self.number_of_neighbours_variable(clause_node_neighbour):
-                    self.__temporarily_remove_variable(clause_node_neighbour)
+                    self.__temporarily_remove_variable(variable=clause_node_neighbour,
+                                                       neighbour_set=set())
                     isolated_variable_set.add(clause_node_neighbour)
 
         self.__eliminated_redundant_clauses_backup_dictionary[variable] = eliminated_clause_node_dictionary
@@ -1069,7 +1102,8 @@ class IncidenceGraph(Graph):
 
         # Delete nodes
         for variable in variable_to_delete_set:
-            self.__temporarily_remove_variable(variable)
+            self.__temporarily_remove_variable(variable=variable,
+                                               neighbour_set=self.__removed_edge_backup_dictionary[variable])
 
     def restore_backup_variable_simplification(self) -> None:
         """
@@ -1186,7 +1220,8 @@ class IncidenceGraph(Graph):
         self.__subsumption_variable_backup_dictionary[clause_id] = clause_neighbour_set
 
         # Delete the clause node
-        self.__temporarily_remove_clause_id(clause_id)
+        self.__temporarily_remove_clause_id(clause_id=clause_id,
+                                            neighbour_set=clause_neighbour_set)
 
     def remove_subsumed_clause_variable_set(self, clause_id_set: Set[int]) -> None:
         for clause_id in clause_id_set:
