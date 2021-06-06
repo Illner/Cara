@@ -32,7 +32,7 @@ def main(main_args):
                             statistics=main_args.statistics,
                             preprocessing=False,
                             imbalance_factor=0.25,
-                            subsumption_threshold=None,
+                            subsumption_threshold=500,
                             new_cut_set_threshold=0.1,
                             decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.VSADS,
                             sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
