@@ -53,7 +53,7 @@ class PatohData:
         self.__parameters._k = 2
         self.__parameters.seed = -1  # random seed
 
-        self.__parameters.balance = 2
+        # self.__parameters.balance = 2
         self.__parameters.init_imbal = epsilon * 2
         self.__parameters.final_imbal = epsilon
 

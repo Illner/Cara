@@ -31,7 +31,7 @@ def main(main_args):
                             smooth=main_args.smooth,
                             statistics=main_args.statistics,
                             preprocessing=False,
-                            imbalance_factor=0.1,
+                            imbalance_factor=0.25,
                             subsumption_threshold=500,
                             new_cut_set_threshold=0.1,
                             decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.VSADS,
