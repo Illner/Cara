@@ -164,4 +164,8 @@ class Statistics:
     @property
     def active(self) -> bool:
         return self.__active
+
+    @property
+    def size(self) -> int:
+        return self.__size
     # endregion

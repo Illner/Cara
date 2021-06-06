@@ -92,6 +92,7 @@ def main(main_args):
         circuit = compiler.circuit
         statistics = compiler.statistics
         print(f"Time: {statistics.compiler_statistics.get_time()}\n")
+        print(f"Size: {statistics.size}")
 
         print("Generating file(s)...")
         # Circuit
