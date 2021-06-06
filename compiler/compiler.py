@@ -90,7 +90,7 @@ class Compiler:
                  smooth: bool,
                  statistics: bool,
                  preprocessing: bool,
-                 imbalance_factor: float,
+                 imbalance_factor: Union[float, None],
                  subsumption_threshold: Union[int, None],
                  new_cut_set_threshold: float,
                  decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,

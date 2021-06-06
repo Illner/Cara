@@ -1,7 +1,7 @@
 # Import
 import ctypes
 import numpy as np
-from typing import List
+from typing import List, Union
 from compiler.hypergraph_partitioning.patoh_initialize_parameters import PatohInitializeParameters
 
 
@@ -30,7 +30,7 @@ class PatohData:
 
     def __init__(self, number_of_nodes: int, number_of_hyperedges: int,
                  node_weight_list: List[int], hyperedge_weight_list: List[int],
-                 xpins: List[int], pins: List[int], epsilon: float):
+                 xpins: List[int], pins: List[int], epsilon: Union[float, None]):
         # Input
         self.__c: int = number_of_nodes
         self.__n: int = number_of_hyperedges
@@ -54,8 +54,9 @@ class PatohData:
         self.__parameters.seed = -1  # random seed
 
         # self.__parameters.balance = 2
-        self.__parameters.init_imbal = epsilon * 2
-        self.__parameters.final_imbal = epsilon
+        if epsilon is not None:
+            self.__parameters.init_imbal = epsilon * 2
+            self.__parameters.final_imbal = epsilon
 
     # region Public method
     def cwghts_ctypes(self) -> ctypes:

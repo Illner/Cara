@@ -78,7 +78,7 @@ class HypergraphPartitioning:
     __CONFIG_KAHYPAR_PATH = Path(os.path.join(os.getcwd(), "external", "hypergraph_partitioning", "KaHyPar", "config.ini"))
 
     def __init__(self, cnf: Cnf,
-                 imbalance_factor: float,
+                 imbalance_factor: Union[float, None],
                  subsumption_threshold: Union[int, None],
                  cache_enum: hpc_enum.HypergraphPartitioningCacheEnum,
                  software_enum: hps_enum.HypergraphPartitioningSoftwareEnum,
@@ -126,10 +126,11 @@ class HypergraphPartitioning:
         self.__limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = limit_number_of_variables_cache
 
         # Imbalance factor
-        imbalance_factor = round(imbalance_factor, 2)
-        if (imbalance_factor < 0.01) or (imbalance_factor > 0.49):    # 1% - 49%
-            raise hp_exception.InvalidImbalanceFactorException(imbalance_factor)
-        self.__imbalance_factor: float = imbalance_factor
+        if imbalance_factor is not None:
+            imbalance_factor = round(imbalance_factor, 2)
+            if (imbalance_factor < 0.01) or (imbalance_factor > 0.49):    # 1% - 49%
+                raise hp_exception.InvalidImbalanceFactorException(imbalance_factor)
+        self.__imbalance_factor: Union[float, None] = imbalance_factor
 
         # Weights
         self.__node_weight_dictionary: Dict[int, int] = dict()
