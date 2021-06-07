@@ -187,8 +187,8 @@ class ExperimentAbstract(ABC):
         else:
             statistics: Statistics = experiment_thread.compiler.statistics
 
-            self.__total_time += statistics.compiler_statistics.get_time()  # compiler
             self.__total_time += statistics.cnf_statistics.get_time()       # CNF
+            self.__total_time += statistics.compiler_statistics.get_time()  # compiler
 
         # Timeout exceeded
         while thread.is_alive():
@@ -206,7 +206,7 @@ class ExperimentAbstract(ABC):
             if timeout_exceeded:
                 print("Timeout exceeded")
             else:
-                print(f"Done ({str(statistics.compiler_statistics.get_time())})")
+                print(f"Done (time: {str(statistics.compiler_statistics.get_time())}, size: {str(statistics.size)})")
 
         # Log - directory
         file_name_temp = file_name if file_name_extension == "" else f"{file_name}_{file_name_extension}"
