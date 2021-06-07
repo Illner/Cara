@@ -96,8 +96,8 @@ def main(main_args):
 
         print("Generating file(s)...")
         # Circuit
-        # with open(main_args.output_file, "w", encoding="utf-8") as file:
-        #     circuit.save_to_io(file)
+        with open(main_args.output_file, "w", encoding="utf-8") as file:
+            circuit.save_to_io(file)
 
         # Statistics
         if main_args.statistics:
@@ -505,7 +505,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-hp_patoh_s",
                              "--hp_patoh_sugparam",
                              action="store",
-                             default=hpps_enum.PatohSugparamEnum.SPEED.name,
+                             default=hpps_enum.PatohSugparamEnum.QUALITY.name,
                              type=str,
                              choices=hpps_enum.patoh_sugparam_enum_names,
                              help="SBProbType parameter in PaToH")
