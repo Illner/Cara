@@ -54,7 +54,7 @@ class PatohData:
         self.__parameters.seed = -1  # random seed
 
         if epsilon is not None:
-            self.__parameters.balance = 1
+            self.__parameters.balance = 0
             self.__parameters.init_imbal = epsilon * 2
             self.__parameters.final_imbal = epsilon
 
