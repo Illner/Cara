@@ -106,6 +106,23 @@ class NodeAbstract(ABC):
                                                            variable_or_literal_in_circuit=variable_set)
 
         return result
+
+    @staticmethod
+    def _generate_key_cache(assumption_set: Set[int], exist_quantification_set: Set[int]) -> str:
+        """
+        Generate a key for caching
+        Cache: satisfiable_cache, model_counting_cache, minimal_default_cardinality_cache
+        :param assumption_set: an assumption set / observation set
+        :param exist_quantification_set: an exist quantification set / default set
+        :return: the generated key based on the assumption_set and exist_quantification_set
+        """
+
+        assumption_list_temp = sorted(map(str, assumption_set))
+        exist_quantification_list_temp = sorted(map(str, exist_quantification_set))
+
+        key_string = ',0,'.join((','.join(assumption_list_temp), ','.join(exist_quantification_list_temp)))
+
+        return key_string
     # endregion
 
     # region Protected method
@@ -340,22 +357,6 @@ class NodeAbstract(ABC):
         self._clear_satisfiable_cache()
         self._clear_model_counting_cache()
         self._clear_minimal_default_cardinality_cache()
-
-    def _generate_key_cache(self, assumption_set: Set[int], exist_quantification_set: Set[int]) -> str:
-        """
-        Generate a key for caching
-        Cache: satisfiable_cache, model_counting_cache, minimal_default_cardinality_cache
-        :param assumption_set: an assumption set / observation set
-        :param exist_quantification_set: an exist quantification set / default set
-        :return: the generated key based on the assumption_set and exist_quantification_set
-        """
-
-        assumption_list_temp = sorted(map(str, assumption_set))
-        exist_quantification_list_temp = sorted(map(str, exist_quantification_set))
-
-        key_string = ',0,'.join((','.join(assumption_list_temp), ','.join(exist_quantification_list_temp)))
-
-        return key_string
     # endregion
 
     def _create_restricted_assumption_set(self, assumption_set: Set[int], variable_id_mapping_id_dictionary: Union[Dict[int, int], None]) -> Set[int]:

@@ -61,8 +61,11 @@ class DecisionHeuristicAbstract(ABC):
             raise h_exception.PreselectedVariableSetIsEmptyException()
 
         return preselected_variable_set
+    # endregion
 
-    def _process_implicit_bcp_dictionary(self, implicit_bcp_dictionary: Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]]) -> \
+    # region Static method
+    @staticmethod
+    def _process_implicit_bcp_dictionary(implicit_bcp_dictionary: Dict[int, Tuple[Union[Set[int], None], Union[Set[int], None]]]) -> \
             Tuple[Union[int, None], Dict[int, Tuple[Set[int], Set[int]]]]:
 
         implied_literal_dictionary: Dict[int, Tuple[Set[int], Set[int]]] = dict()   # key: a literal, value: (implied literals, complementary implied literals)
@@ -88,7 +91,8 @@ class DecisionHeuristicAbstract(ABC):
 
         return None, implied_literal_dictionary
 
-    def _compute_score_mixed_difference_heuristic(self, literal_score_dictionary: Dict[int, int], preselected_variable_set: Set[int],
+    @staticmethod
+    def _compute_score_mixed_difference_heuristic(literal_score_dictionary: Dict[int, int], preselected_variable_set: Set[int],
                                                   mixed_difference_heuristic_enum: mdf_enum.MixedDifferenceHeuristicEnum) -> Dict[int, int]:
         score_dictionary: Dict[int, int] = dict()   # key: a variable, value: score of the variable
 

@@ -59,7 +59,7 @@ class MappingInnerNode(InnerNodeAbstract):
         # Cache
         key = None  # initialization
         if use_cache:
-            key = self._generate_key_cache(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
+            key = NodeAbstract._generate_key_cache(restricted_assumption_set_temp, restricted_exist_quantification_set_temp)
             value = self._get_satisfiable_cache(key)
             if value is not None:
                 return value
@@ -105,7 +105,7 @@ class MappingInnerNode(InnerNodeAbstract):
         # Cache
         key = None  # initialization
         if use_cache:
-            key = self._generate_key_cache(restricted_assumption_set_temp, set())
+            key = NodeAbstract._generate_key_cache(restricted_assumption_set_temp, set())
             value = self._get_model_counting_cache(key)
             if value is not None:
                 return value
@@ -144,7 +144,7 @@ class MappingInnerNode(InnerNodeAbstract):
         # Cache
         key = None  # initialization
         if use_cache:
-            key = self._generate_key_cache(restricted_observation_set_temp, restricted_default_set_temp)
+            key = NodeAbstract._generate_key_cache(restricted_observation_set_temp, restricted_default_set_temp)
             value = self._get_minimal_default_cardinality_cache(key)
             if value is not None:
                 return value

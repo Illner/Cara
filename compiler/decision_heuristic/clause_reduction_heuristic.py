@@ -77,7 +77,7 @@ class ClauseReductionHeuristic(DecisionHeuristicAbstract):
 
         implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list=assignment_list,
                                                                    variable_restriction_set=preselected_variable_set)
-        implied_variable, implied_literal_dictionary = self._process_implicit_bcp_dictionary(implicit_bcp_dictionary)
+        implied_variable, implied_literal_dictionary = DecisionHeuristicAbstract._process_implicit_bcp_dictionary(implicit_bcp_dictionary)
         if implied_variable is not None:
             return implied_variable
 
@@ -123,9 +123,9 @@ class ClauseReductionHeuristic(DecisionHeuristicAbstract):
 
             literal_score_dictionary[literal] = score
 
-        score_dictionary = self._compute_score_mixed_difference_heuristic(literal_score_dictionary=literal_score_dictionary,
-                                                                          preselected_variable_set=preselected_variable_set,
-                                                                          mixed_difference_heuristic_enum=self.__mixed_difference_heuristic_enum)
+        score_dictionary = DecisionHeuristicAbstract._compute_score_mixed_difference_heuristic(literal_score_dictionary=literal_score_dictionary,
+                                                                                               preselected_variable_set=preselected_variable_set,
+                                                                                               mixed_difference_heuristic_enum=self.__mixed_difference_heuristic_enum)
 
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)

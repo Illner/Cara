@@ -36,8 +36,9 @@ class PreselectionHeuristicAbstract(ABC):
         pass
     # endregion
 
-    # region Protected method
-    def _fill_variable_set(self, current_variable_set: Set[int], all_variable_set: Set[int], required_number_of_variables: int):
+    # region Static method
+    @staticmethod
+    def _fill_variable_set(current_variable_set: Set[int], all_variable_set: Set[int], required_number_of_variables: int):
         """
         Randomly select variables from the all_variable_set to fill the current_variable_set
         :return: None
@@ -54,7 +55,9 @@ class PreselectionHeuristicAbstract(ABC):
         else:
             randomly_picked_variable_set = set(random.sample(complement_variable_set, number_of_missing_variables))
             current_variable_set.update(randomly_picked_variable_set)
+    # endregion
 
+    # region Protected method
     def _update_statistics(self, preselected_variable_set: Set[int], variable_restriction_set: Set[int]) -> None:
         preselected_variable_set_len = len(preselected_variable_set)
         variable_restriction_set_len = len(variable_restriction_set)

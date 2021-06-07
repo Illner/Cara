@@ -45,16 +45,16 @@ class PropZHeuristic(PreselectionHeuristicAbstract):
         # The lower bound is not set
         if self.__number_of_variables_lower_bound is None:
             if not len(variable_set):
-                self._fill_variable_set(current_variable_set=variable_set,
-                                        all_variable_set=variable_restriction_set,
-                                        required_number_of_variables=1)
+                PreselectionHeuristicAbstract._fill_variable_set(current_variable_set=variable_set,
+                                                                 all_variable_set=variable_restriction_set,
+                                                                 required_number_of_variables=1)
 
         # The lower bound is set
         else:
             if len(variable_set) < self.__number_of_variables_lower_bound:
-                self._fill_variable_set(current_variable_set=variable_set,
-                                        all_variable_set=variable_restriction_set,
-                                        required_number_of_variables=self.__number_of_variables_lower_bound)
+                PreselectionHeuristicAbstract._fill_variable_set(current_variable_set=variable_set,
+                                                                 all_variable_set=variable_restriction_set,
+                                                                 required_number_of_variables=self.__number_of_variables_lower_bound)
 
         self._update_statistics(preselected_variable_set=variable_set,
                                 variable_restriction_set=variable_restriction_set)

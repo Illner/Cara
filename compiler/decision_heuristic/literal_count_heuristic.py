@@ -31,11 +31,11 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
         self.__ignore_binary_clauses: bool = ignore_binary_clauses
 
         # (tie-breaker) function
-        self.__function = self.__get_function(function_enum)
+        self.__function = LiteralCountHeuristic.__get_function(function_enum)
         if tie_breaker_function_enum is None:
             self.__tie_breaker_function = self.__function
         else:
-            self.__tie_breaker_function = self.__get_function(tie_breaker_function_enum)
+            self.__tie_breaker_function = LiteralCountHeuristic.__get_function(tie_breaker_function_enum)
 
     # region Static method
     @staticmethod
@@ -43,8 +43,9 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
         return sum(v) / len(v)
     # endregion
 
-    # region Private method
-    def __get_function(self, function_enum: lchf_enum.LiteralCountHeuristicFunctionEnum):
+    # region Static method
+    @staticmethod
+    def __get_function(function_enum: lchf_enum.LiteralCountHeuristicFunctionEnum):
         # SUM
         if function_enum == lchf_enum.LiteralCountHeuristicFunctionEnum.SUM:
             return sum
