@@ -644,7 +644,7 @@ class HypergraphPartitioning:
         # PaToH library
         try:
             # PATOH_InitializeParameters
-            result_code = self.__PATOH_InitializeParameters(patoh_data.parameters_ref(), 1, self.__patoh_sugparam_enum.value)
+            result_code = self.__PATOH_InitializeParameters(patoh_data.parameters_ref(), 0, self.__patoh_sugparam_enum.value)
             if result_code:
                 raise hp_exception.SomethingWrongWithPatohLibraryException("PATOH_InitializeParameters", str(result_code))
 
