@@ -96,8 +96,8 @@ def main(main_args):
 
         print("Generating file(s)...")
         # Circuit
-        with open(main_args.output_file, "w", encoding="utf-8") as file:
-            circuit.save_to_io(file)
+        # with open(main_args.output_file, "w", encoding="utf-8") as file:
+        #     circuit.save_to_io(file)
 
         # Statistics
         if main_args.statistics:
