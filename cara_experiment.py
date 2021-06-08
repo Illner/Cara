@@ -29,7 +29,7 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 
 def main(main_args):
     if main_args.experiment_timeout is None:
-        timeout_experiment = timedelta(days=7)
+        timeout_experiment = None
     else:
         timeout_experiment = timedelta(seconds=main_args.experiment_timeout)
 
