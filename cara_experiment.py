@@ -95,7 +95,7 @@ def main(main_args):
                                   decision_heuristic_vsads_q_constant_factor=0.5,
                                   decision_heuristic_weight_for_satisfied_clauses=True,
                                   component_caching_cara_caching_scheme_multi_occurrence=False,
-                                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=50)
+                                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=30)
 
         except (c_exception.CaraException, Exception) as err:
             print(f"An error has occurred! (see log for details)\n{str(err)}")
