@@ -122,7 +122,6 @@ class Experiment:
         :return: (timeout exceeded, exception, size of the circuit, statistics)
         """
 
-        print("----------------------------------------------------------")
         if file_name_extension == "":
             print(f"File name: {file_name}")
         else:
