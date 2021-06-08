@@ -129,7 +129,8 @@ class Compiler:
                  decision_heuristic_weight_for_satisfied_clauses: bool = True,
                  decision_heuristic_ignore_binary_clauses: bool = False,
                  component_caching_cara_caching_scheme_multi_occurrence: bool = False,
-                 component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int = 0):
+                 component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int = 0,
+                 name: str = ""):
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -142,6 +143,8 @@ class Compiler:
             self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
                                   cnf_statistics=self.__statistics.cnf_statistics,
                                   incidence_graph_statistics=self.__statistics.incidence_graph_statistics)
+
+        self.__statistics.set_name(name)
 
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()

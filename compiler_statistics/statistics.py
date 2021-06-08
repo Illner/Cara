@@ -23,6 +23,7 @@ class Statistics:
     Private bool active
     Private List<StatisticsTemplateAbstract> template_list
     
+    Private str name
     Private int size
     Private bool compiled
     Private int number_of_nodes
@@ -45,6 +46,7 @@ class Statistics:
         self.__active: bool = active
         self.__template_list: List[StatisticsTemplateAbstract] = []
 
+        self.__name: str = ""
         self.__compiled: bool = False
         self.__size: Union[int, None] = None
         self.__number_of_nodes: Union[int, None] = None
@@ -92,6 +94,7 @@ class Statistics:
     # region Magic method
     def __str__(self):
         string_temp = "\n".join((f"Compiled: {self.__compiled}",
+                                 f"Name: {self.__name}",
                                  f"Number of nodes: {self.__number_of_nodes}",
                                  f"Size: {self.__size}",
                                  f"Number of variables: {self.__number_of_variables}"))
@@ -114,6 +117,9 @@ class Statistics:
     # region Public method
     def compiled(self) -> None:
         self.__compiled = True
+
+    def set_name(self, name: str) -> None:
+        self.__name = name
 
     def set_size(self, size: int) -> None:
         self.__size = size

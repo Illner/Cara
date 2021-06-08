@@ -5,8 +5,8 @@ from pathlib import Path
 from datetime import timedelta
 import other.environment as env
 import visualization.plot as plot
+from experiment.experiment import Experiment
 from typing import Set, Dict, List, Union, Tuple
-from experiment.experiment_abstract import ExperimentAbstract
 from compiler_statistics.statistics_component_timer import StatisticsComponentTimer
 
 # Import enum
@@ -22,7 +22,7 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
 
 
-class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
+class HypergraphPartitioningCacheExperiment:
     """
     Hypergraph partitioning cache - experiment
     """
@@ -41,17 +41,17 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
     def __init__(self, directory_path: [str, Path], timeout_experiment: Union[timedelta, None],
                  log_directory_path: Union[str, Path, None] = None, total_timeout_experiments: Union[timedelta, None] = None,
                  save_plot: bool = True, show_plot: bool = False):
-        super().__init__(experiment_name="Hypergraph partitioning cache",
-                         directory_path=directory_path,
-                         timeout_experiment=timeout_experiment,
-                         log_directory_path=log_directory_path,
-                         save_circuit=False)
+        self.__experiment = Experiment(experiment_name="Hypergraph partitioning cache",
+                                       directory_path=directory_path,
+                                       timeout_experiment=timeout_experiment,
+                                       log_directory_path=log_directory_path,
+                                       save_circuit=False)
         self.__total_timeout_experiments: Union[timedelta, None] = total_timeout_experiments
 
         # Plot
         self.__save_plot: bool = save_plot
         self.__show_plot: bool = show_plot
-        self.__plot_directory_path: Path = Path(os.path.join(self.log_directory_path, "plot"))
+        self.__plot_directory_path: Path = Path(os.path.join(self.__experiment.log_directory_path, "plot"))
 
     # region Public method
     def experiment(self, limit_clause_list: List[int], limit_variable_list: List[int],
@@ -69,44 +69,44 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
         if env.is_windows():
             hp_software_enum = hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS
 
-        for file_name, file_path in self._files:
+        for file_name, file_path in self.__experiment._files:
             for i_c, (hp_cache_enum, cache_name) in enumerate(hp_cache_enum_list):
                 for i_lc, limit_clause in enumerate(limit_clause_list):
                     for i_lv, limit_variable in enumerate(limit_variable_list):
-                        if (hp_cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE) and not(i_lc == 0 and i_lv == 0):
+                        if (hp_cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE) and not (i_lc == 0 and i_lv == 0):
                             break
 
                         limit_temp = None if hp_cache_enum == hpc_enum.HypergraphPartitioningCacheEnum.NONE else (limit_clause, limit_variable)
-                        key = HypergraphPartitioningCacheExperiment.__generate_key_cache(cache_name, limit_temp)     # key, file_name_extension
+                        key = HypergraphPartitioningCacheExperiment.__generate_key_cache(cache_name, limit_temp)  # key, file_name_extension
 
-                        timeout_exceeded, exception, _, statistics = self._experiment(file_name=file_name, file_path=file_path,
-                                                                                      smooth=False,
-                                                                                      preprocessing=False,
-                                                                                      imbalance_factor=0.1,
-                                                                                      subsumed_threshold=500,
-                                                                                      new_cut_set_threshold=new_cut_set_threshold,
-                                                                                      decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
-                                                                                      sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                                                                                      base_class_enum_set=set(),
-                                                                                      implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
-                                                                                      implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.CRA,
-                                                                                      first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
-                                                                                      first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.CRA,
-                                                                                      component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
-                                                                                      component_caching_before_unit_propagation=True,
-                                                                                      component_caching_after_unit_propagation=False,
-                                                                                      eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.SUBSUMPTION,
-                                                                                      eliminating_redundant_clauses_threshold=500,
-                                                                                      hp_cache_enum=hp_cache_enum,
-                                                                                      hp_software_enum=hp_software_enum,
-                                                                                      hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
-                                                                                      hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
-                                                                                      hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
-                                                                                      hp_limit_number_of_clauses_cache=(None, limit_clause),
-                                                                                      hp_limit_number_of_variables_cache=(None, limit_variable),
-                                                                                      cut_set_try_cache=cut_set_try_cache,
-                                                                                      new_cut_set_threshold_reduction=new_cut_set_threshold_reduction,
-                                                                                      file_name_extension=key)
+                        timeout_exceeded, exception, _, statistics = self.__experiment.experiment(file_name=file_name, file_path=file_path,
+                                                                                                  smooth=False,
+                                                                                                  preprocessing=False,
+                                                                                                  imbalance_factor=0.1,
+                                                                                                  subsumed_threshold=500,
+                                                                                                  new_cut_set_threshold=new_cut_set_threshold,
+                                                                                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
+                                                                                                  sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
+                                                                                                  base_class_enum_set=set(),
+                                                                                                  implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
+                                                                                                  implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.CRA,
+                                                                                                  first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
+                                                                                                  first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.CRA,
+                                                                                                  component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                                                                                                  component_caching_before_unit_propagation=True,
+                                                                                                  component_caching_after_unit_propagation=False,
+                                                                                                  eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.SUBSUMPTION,
+                                                                                                  eliminating_redundant_clauses_threshold=500,
+                                                                                                  hp_cache_enum=hp_cache_enum,
+                                                                                                  hp_software_enum=hp_software_enum,
+                                                                                                  hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
+                                                                                                  hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
+                                                                                                  hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
+                                                                                                  hp_limit_number_of_clauses_cache=(None, limit_clause),
+                                                                                                  hp_limit_number_of_variables_cache=(None, limit_variable),
+                                                                                                  cut_set_try_cache=cut_set_try_cache,
+                                                                                                  new_cut_set_threshold_reduction=new_cut_set_threshold_reduction,
+                                                                                                  file_name_extension=key)
 
                         # File - file_dictionary
                         if timeout_exceeded or exception:
@@ -143,15 +143,15 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
 
             # Total timeout
             if self.__total_timeout_experiments is not None:
-                if self.total_time >= self.__total_timeout_experiments:
+                if self.__experiment.total_time >= self.__total_timeout_experiments:
                     print("Total timeout exceeded!")
                     break
 
         # Pickle
-        self._pickle_object("file_dictionary", file_dictionary)
-        self._pickle_object("hypergraph_partitioning_dictionary", hypergraph_partitioning_dictionary)
-        self._pickle_object("generate_key_cache_dictionary", generate_key_cache_dictionary)
-        self._pickle_object("cache_performance_dictionary", cache_performance_dictionary)
+        self.__experiment.pickle_object("file_dictionary", file_dictionary)
+        self.__experiment.pickle_object("hypergraph_partitioning_dictionary", hypergraph_partitioning_dictionary)
+        self.__experiment.pickle_object("generate_key_cache_dictionary", generate_key_cache_dictionary)
+        self.__experiment.pickle_object("cache_performance_dictionary", cache_performance_dictionary)
 
         # Plot
         if self.__save_plot or self.__show_plot:
@@ -174,6 +174,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
             self.__boxplot(dictionary=cache_performance_dictionary, hp_cache_name_list=hp_cache_name_list,
                            limit_clause_list=limit_clause_list, limit_variable_list=limit_variable_list, y_label="Performance [%]",
                            title="Cache performance (%)", directory_name="cache_performance_dictionary", percentage_value=True)
+
     # endregion
 
     # region Private method
@@ -311,6 +312,7 @@ class HypergraphPartitioningCacheExperiment(ExperimentAbstract):
                         print("|", end="" if count_temp % 10 != 0 else " ", flush=True)
 
         print()
+
     # endregion
 
     # region Static method

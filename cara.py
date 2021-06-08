@@ -119,6 +119,36 @@ def main(main_args):
             log_file.write(stack_trace)
 
 
+def directory_path_parser(path: str) -> str:
+    """
+    Check if the directory exists
+    :param path: the path of the directory
+    :return: the path
+    :raises ArgumentTypeError: if the directory does not exist
+    """
+
+    path_temp = Path(path)
+
+    if not path_temp.is_dir():
+        raise argparse.ArgumentTypeError(f"The directory ({path}) doesn't exist!")
+
+    return path
+
+
+def create_directory(path: str) -> str:
+    """
+    Create the directory
+    :param path: the path of the directory
+    :return: the path
+    """
+
+    path_temp = Path(path)
+
+    path_temp.mkdir(parents=True, exist_ok=True)
+
+    return path
+
+
 def input_file_path_parser(path: str) -> str:
     """
     Check if the input file exists and try to open it
