@@ -195,7 +195,7 @@ class Experiment:
 
         # Timeout exceeded
         while thread.is_alive():
-            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread.native_id, 1)
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread.native_id, ctypes.py_object(TimeoutError))
             thread.join(1)
 
         timeout_exceeded: bool = experiment_thread.timeout_exceeded

@@ -28,7 +28,10 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 
 
 def main(main_args):
-    timeout_experiment = timedelta(seconds=main_args.experiment_timeout)
+    if main_args.experiment_timeout is None:
+        timeout_experiment = timedelta(days=7)
+    else:
+        timeout_experiment = timedelta(seconds=main_args.experiment_timeout)
 
     experiment = Experiment(experiment_name="experiment",
                             directory_path=main_args.directory_path,
@@ -132,10 +135,10 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-et",
                              "--experiment_timeout",
                              action="store",
-                             default=60,
-                             type=cara.non_negative_int_parser,
-                             metavar="[non-negative number]",
-                             help="experiment timeout [s]")
+                             default=None,
+                             type=cara.non_negative_int_or_none_parser,
+                             metavar="[non-negative number or None]",
+                             help="experiment timeout [s] (None for no limit)")
     parser_temp.add_argument("-tt",
                              "--total_timeout",
                              action="store",
