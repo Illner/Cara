@@ -57,7 +57,9 @@ def main(main_args):
     if env.is_windows():
         hp_software_enum = hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS
 
-    for file_name, file_path in experiment._files:
+    for i, (file_name, file_path) in enumerate(experiment._files):
+        print(f"{i + 1}/{len(experiment._files)}")
+
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
