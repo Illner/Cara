@@ -17,3 +17,283 @@ Solver test: True
 Hypergraph partitioning test (HMETIS): True
 
 Backbones test: True
+File: par16-1-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par16-1.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (1) defined at line 3 doesn't end with 0)
+
+File: par16-2-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par16-2.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-1) defined at line 3 doesn't end with 0)
+
+File: par16-3-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par16-3.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (1) defined at line 3 doesn't end with 0)
+
+File: par16-4-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par16-4.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-1) defined at line 3 doesn't end with 0)
+
+File: par16-5-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par16-5.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (1) defined at line 3 doesn't end with 0)
+
+File: par8-1-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par8-1.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-1) defined at line 3 doesn't end with 0)
+
+File: par8-2-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par8-2.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (1) defined at line 3 doesn't end with 0)
+
+File: par8-3-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par8-3.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-1) defined at line 3 doesn't end with 0)
+
+File: par8-4-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par8-4.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-1) defined at line 3 doesn't end with 0)
+
+File: par8-5-c.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (-2 1) defined at line 2 doesn't end with 0)
+
+File: par8-5.cnf
+Traceback (most recent call last):
+  File "cara_experiment.py", line 62, in main
+    experiment.experiment(file_name=file_name, file_path=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\experiment\experiment.py", line 132, in experiment
+    compiler = Compiler(cnf=file_path,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\compiler\compiler.py", line 143, in __init__
+    self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 78, in __init__
+    self.__create_cnf(dimacs_cnf_source=dimacs_cnf_source,
+  File "D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\Cara\formula\cnf.py", line 163, in __create_cnf
+    raise f_exception.InvalidDimacsCnfFormatException(f"the clause ({line}) defined at line {line_id} doesn't end with 0")
+exception.formula.formula_exception.InvalidDimacsCnfFormatException: DIMACS CNF format is invalid in the file! (the clause (1) defined at line 3 doesn't end with 0)
+

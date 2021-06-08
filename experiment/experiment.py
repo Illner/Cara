@@ -2,10 +2,9 @@
 import os
 import gc
 import pickle
-import ctypes
+import kthread
 import datetime
 import warnings
-import threading
 from pathlib import Path
 from datetime import timedelta
 from compiler.compiler import Compiler
@@ -176,7 +175,7 @@ class Experiment:
                             component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold)
 
         experiment_thread: TExperimentThread = self.__ExperimentThread(compiler)
-        thread = threading.Thread(target=Experiment.__experiment, args=(experiment_thread,))
+        thread = kthread.KThread(target=Experiment.__experiment, args=(experiment_thread,))
         thread.start()
 
         if self.__timeout_experiment is not None:
@@ -195,7 +194,8 @@ class Experiment:
 
         # Timeout exceeded
         while thread.is_alive():
-            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread.native_id, ctypes.py_object(TimeoutError))
+            # ctypes.pythonapi.PyThreadState_SetAsyncExc(thread.native_id, ctypes.py_object(TimeoutError))
+            thread.terminate()
             thread.join(1)
 
         timeout_exceeded: bool = experiment_thread.timeout_exceeded
@@ -265,7 +265,7 @@ class Experiment:
         try:
             experiment_thread.compiler.create_circuit()
         # Timeout exceeded
-        except TimeoutError:
+        except (TimeoutError, SystemExit):
             experiment_thread.timeout_exceeded = True
         except c_exception.CaraException as err:
             experiment_thread.exception = err
