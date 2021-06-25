@@ -76,7 +76,7 @@ class Experiment:
                    file_name: str, file_path: str,
                    smooth: bool,
                    preprocessing: bool,
-                   imbalance_factor: float,
+                   imbalance_factor: Union[float, None],
                    subsumed_threshold: Union[int, None],
                    new_cut_set_threshold: float,
                    decision_heuristic_enum: dh_enum.DecisionHeuristicEnum,
