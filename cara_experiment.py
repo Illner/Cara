@@ -70,10 +70,10 @@ def main(main_args):
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
+                                  imbalance_factor=0.25,
 
                                   smooth=False,
                                   preprocessing=False,
-                                  imbalance_factor=0.1,
                                   subsumed_threshold=500,
                                   new_cut_set_threshold=0.1,
                                   sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
