@@ -67,7 +67,7 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
 
 def scatter(data_x: List[float], data_y: List[float], title: str,
             x_label: Union[str, None] = None, y_label: Union[str, None] = None,
-            save_path: [str, Path, None] = None, show: bool = True) -> None:
+            save_path: [str, Path, None] = None, show: bool = True, log_scale: bool = False) -> None:
     fig, ax = plt.subplots()
 
     try:
@@ -85,6 +85,10 @@ def scatter(data_x: List[float], data_y: List[float], title: str,
             ax.set_xlabel(x_label)
         if y_label is not None:
             ax.set_ylabel(y_label)
+
+        if log_scale:
+            ax.set_xscale('log')
+            ax.set_yscale('log')
 
         plt.tight_layout()
 

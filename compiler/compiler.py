@@ -473,7 +473,7 @@ class Compiler:
             self.__statistics.compiler_statistics.smooth.stop_stopwatch()   # timer (stop - smooth)
 
         # Statistics
-        self.__statistics.compiled()
+        self.__statistics.set_compiled()
         self.__statistics.set_size(self.__circuit.size)
         self.__statistics.set_number_of_nodes(self.__circuit.number_of_nodes)
         self.__statistics.set_number_of_variables(self.__circuit.number_of_variables)

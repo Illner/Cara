@@ -115,7 +115,7 @@ class Statistics:
     # endregion
 
     # region Public method
-    def compiled(self) -> None:
+    def set_compiled(self) -> None:
         self.__compiled = True
 
     def set_name(self, name: str) -> None:
@@ -132,6 +132,9 @@ class Statistics:
 
     def set_node_type_dictionary(self, node_type_dictionary: Dict[nt_enum.NodeTypeEnum, int]) -> None:
         self.__node_type_dictionary = node_type_dictionary
+
+    def get_node_type_counter(self, node_type: nt_enum.NodeTypeEnum) -> int:
+        return self.__node_type_dictionary[node_type]
     # endregion
 
     # region Property
@@ -174,4 +177,8 @@ class Statistics:
     @property
     def size(self) -> int:
         return self.__size
+
+    @property
+    def compiled(self) -> bool:
+        return self.__compiled
     # endregion
