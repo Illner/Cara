@@ -49,6 +49,7 @@ def main(main_args):
                             decision_heuristic_enum=dh_enum.DecisionHeuristicEnum[main_args.decision_heuristic],
                             sat_solver_enum=ss_enum.SatSolverEnum[main_args.sat_solver],
                             base_class_enum_set=set([bc_enum.BaseClassEnum[base_class] for base_class in base_class_list]),
+                            base_class_threshold=main_args.bc_threshold,
                             implied_literals_enum=il_enum.ImpliedLiteralsEnum[main_args.implied_literals],
                             implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum[main_args.il_preselection_heuristic],
                             first_implied_literals_enum=il_enum.ImpliedLiteralsEnum[main_args.first_implied_literals],
@@ -331,6 +332,13 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str,
                              choices=bc_enum.base_class_enum_names,
                              help="types of base classes in the circuit's leaves (literal leaves are mandatory)")
+    parser_temp.add_argument("-bc_t",
+                             "--bc_threshold",
+                             action="store",
+                             default=None,
+                             type=non_negative_int_or_none_parser,
+                             metavar="[non-negative number or None]",
+                             help="threshold (formula length) for applying base classes (None for no limit)")
     parser_temp.add_argument("-dh",
                              "--decision_heuristic",
                              action="store",

@@ -38,6 +38,7 @@ class Component:
     Private PreselectionHeuristicAbstract first_implied_literals_preselection_heuristic
     
     Private bool cut_set_try_cache
+    Private int base_class_threshold
     Private List<int> assignment_list
     Private float new_cut_set_threshold
     Private float new_cut_set_threshold_reduction
@@ -69,6 +70,7 @@ class Component:
                  eliminating_redundant_clauses_threshold: Union[int, None],
                  hypergraph_partitioning: HypergraphPartitioning,
                  base_class_enum_set: Set[bc_enum.BaseClassEnum],
+                 base_class_threshold: Union[int, None],
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  implied_literals_preselection_heuristic: PreselectionHeuristicAbstract,
                  first_implied_literals_enum: il_enum.ImpliedLiteralsEnum,
@@ -88,6 +90,7 @@ class Component:
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__assignment_list: List[int] = assignment_list
         self.__new_cut_set_threshold: float = new_cut_set_threshold
+        self.__base_class_threshold: Union[int, None] = base_class_threshold
         self.__base_class_enum_set: Set[bc_enum.BaseClassEnum] = base_class_enum_set
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__component_caching_after_unit_propagation: bool = component_caching_after_unit_propagation
@@ -311,6 +314,7 @@ class Component:
                                        eliminating_redundant_clauses_threshold=self.__eliminating_redundant_clauses_threshold,
                                        hypergraph_partitioning=self.__hypergraph_partitioning,
                                        base_class_enum_set=self.__base_class_enum_set,
+                                       base_class_threshold=self.__base_class_threshold,
                                        implied_literals_enum=self.__implied_literals_enum,
                                        implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                        first_implied_literals_enum=self.__first_implied_literals_enum,
@@ -517,31 +521,15 @@ class Component:
             else:
                 self.__statistics.component_statistics.component_caching_after_hit.add_count(0)  # counter
 
-        # 2-CNF
-        if (bc_enum.BaseClassEnum.TWO_CNF in self.__base_class_enum_set) and (self.__incidence_graph.number_of_variables() > 1) and self.__incidence_graph.is_2_cnf():
-            two_cnf = self.__incidence_graph.convert_to_2_cnf()
+        # 2-CNF and Renamable Horn CNF
+        if (self.__base_class_threshold is None) or (self.__base_class_threshold <= self.__incidence_graph.number_of_edges()):
+            # 2-CNF
+            if (bc_enum.BaseClassEnum.TWO_CNF in self.__base_class_enum_set) and (self.__incidence_graph.number_of_variables() > 1) and self.__incidence_graph.is_2_cnf():
+                two_cnf = self.__incidence_graph.convert_to_2_cnf()
 
-            self.__statistics.component_statistics.two_cnf_formula_length.add_count(two_cnf.formula_length)     # counter
+                self.__statistics.component_statistics.two_cnf_formula_length.add_count(two_cnf.formula_length)     # counter
 
-            node_id_temp = self.__circuit.create_2_cnf_leaf(two_cnf)
-            node_id = self.__circuit.create_and_node({node_id_temp}.union(implied_literal_id_set))
-
-            # Component caching
-            self.__component_caching.add(cache_key_after_unit_propagation, node_id_temp, cache_variable_id_mapping_id_after_unit_propagation)
-            self.__component_caching.add(cache_key_before_unit_propagation, node_id, cache_variable_id_mapping_id_before_unit_propagation)
-
-            self.__remove_literals(implied_literal_set)     # restore the implied literals
-            return node_id
-
-        # Renamable Horn CNF
-        if (bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF in self.__base_class_enum_set) and (self.__incidence_graph.number_of_variables() > 1):
-            renaming_function_temp = self.__incidence_graph.is_renamable_horn_formula()
-            if renaming_function_temp is not None:
-                horn_cnf = self.__incidence_graph.convert_to_horn_cnf(renaming_function_temp)
-
-                self.__statistics.component_statistics.renamable_horn_cnf_formula_length.add_count(horn_cnf.formula_length)     # counter
-
-                node_id_temp = self.__circuit.create_renamable_horn_cnf_leaf(horn_cnf, renaming_function_temp)
+                node_id_temp = self.__circuit.create_2_cnf_leaf(two_cnf)
                 node_id = self.__circuit.create_and_node({node_id_temp}.union(implied_literal_id_set))
 
                 # Component caching
@@ -550,6 +538,24 @@ class Component:
 
                 self.__remove_literals(implied_literal_set)     # restore the implied literals
                 return node_id
+
+            # Renamable Horn CNF
+            if (bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF in self.__base_class_enum_set) and (self.__incidence_graph.number_of_variables() > 1):
+                renaming_function_temp = self.__incidence_graph.is_renamable_horn_formula()
+                if renaming_function_temp is not None:
+                    horn_cnf = self.__incidence_graph.convert_to_horn_cnf(renaming_function_temp)
+
+                    self.__statistics.component_statistics.renamable_horn_cnf_formula_length.add_count(horn_cnf.formula_length)     # counter
+
+                    node_id_temp = self.__circuit.create_renamable_horn_cnf_leaf(horn_cnf, renaming_function_temp)
+                    node_id = self.__circuit.create_and_node({node_id_temp}.union(implied_literal_id_set))
+
+                    # Component caching
+                    self.__component_caching.add(cache_key_after_unit_propagation, node_id_temp, cache_variable_id_mapping_id_after_unit_propagation)
+                    self.__component_caching.add(cache_key_before_unit_propagation, node_id, cache_variable_id_mapping_id_before_unit_propagation)
+
+                    self.__remove_literals(implied_literal_set)     # restore the implied literals
+                    return node_id
 
         # More components exist
         if not new_component and self.__exist_more_components():
