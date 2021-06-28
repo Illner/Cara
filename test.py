@@ -29,7 +29,8 @@ none_value: float = 0
 uncompiled_value: float = 0     # 10**10
 
 log_scale: bool = True
-show_scatter: bool = True
+showfliers: bool = False
+show_scatter: bool = False
 use_uncompiled: bool = False
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
@@ -37,9 +38,17 @@ directory_set: DirectorySetEnum = DirectorySetEnum.all
 # DLCS-DLIS, extended, 0.1
 # VSADS, d4, extended, 0.1
 
-directory_name_1: str = "DLCS-DLIS, extended, 0.1"
-directory_name_2: str = "DLCS-DLIS, extended, 0.25"
-root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC"
+# directory_name_1: str = "DLCS-DLIS, extended, 0.1"
+# directory_name_2: str = "DLCS-DLIS, extended, 0.25"
+# root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC"
+
+# NONE
+# ISOMORFISM 250
+# ISOMORFISM 500
+
+directory_name_1: str = "ISOMORFISM 250"
+directory_name_2: str = "ISOMORFISM 500"
+root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\HP cache"
 
 
 def get_statistics(directory_name: str) -> Tuple[Dict[str, Statistics], Set[str]]:
@@ -90,7 +99,7 @@ def generate_data(dictionary_1: Dict[str, Statistics], dictionary_2: Dict[str, S
             return uncompiled_value
 
         # Function
-        value = statistics_temp.size
+        value = statistics_temp.hypergraph_partitioning_statistics.get_cut_set.average_time
 
         if value is None:
             return none_value
@@ -140,4 +149,5 @@ else:
             labels=[[directory_name_1], [directory_name_2]],
             title=f"{directory_name_1} vs {directory_name_2}",
             x_label=directory_name_1,
-            y_label=directory_name_2)
+            y_label=directory_name_2,
+            showfliers=showfliers)

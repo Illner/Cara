@@ -11,7 +11,7 @@ COLOUR_LIST: List[str] = ["cornflowerblue", "green", "orange", "magenta", "gold"
 
 def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
             x_label: Union[str, None] = None, y_label: Union[str, None] = None, legend: Union[List[str], None] = None,
-            save_path: [str, Path, None] = None, show: bool = True) -> None:
+            save_path: [str, Path, None] = None, show: bool = True, showfliers: bool = True) -> None:
     fig, ax = plt.subplots()
 
     try:
@@ -20,6 +20,7 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
         for i, group in enumerate(data):
             end_position_end = position_temp + len(group)
             ax.boxplot(x=group,
+                       showfliers=showfliers,
                        positions=list(range(position_temp, end_position_end)),
                        labels=labels[i],
                        widths=0.5,
