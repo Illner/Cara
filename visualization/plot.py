@@ -102,3 +102,32 @@ def scatter(data_x: List[float], data_y: List[float], title: str,
         warnings.warn("scatter - something wrong!", category=Warning)
     finally:
         plt.close(fig)
+
+
+def histogram(data: Union[List[float], List[List[float]]], labels: List[str], title: str,
+              x_label: Union[str, None] = None, y_label: Union[str, None] = None,
+              save_path: [str, Path, None] = None, show: bool = True) -> None:
+    fig, ax = plt.subplots()
+
+    try:
+        ax.hist(data)
+        plt.legend(labels)
+
+        # Title and labels
+        ax.set_title(title)
+        if x_label is not None:
+            ax.set_xlabel(x_label)
+        if y_label is not None:
+            ax.set_ylabel(y_label)
+
+        plt.tight_layout()
+
+        if save_path is not None:
+            plt.savefig(save_path, dpi=1000)
+
+        if show:
+            plt.show()
+    except Exception:
+        warnings.warn("histogram - something wrong!", category=Warning)
+    finally:
+        plt.close(fig)

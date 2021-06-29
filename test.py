@@ -2,11 +2,10 @@
 import os
 import pickle
 from pathlib import Path
-from enum import Enum, unique
-from visualization.plot import scatter
-from visualization.plot import boxplot
+from enum import Enum, unique, IntEnum
 from typing import Dict, Tuple, List, Set
 from compiler_statistics.statistics import Statistics
+from visualization.plot import scatter, boxplot, histogram
 
 # Import enum
 import circuit.node.node_type_enum as nt_enum
@@ -25,13 +24,20 @@ class DirectorySetEnum(str, Enum):
     random = "random"
 
 
+@unique
+class PlotEnum(IntEnum):
+    BOXPLOT = 1
+    SCATTER = 2
+    HISTOGRAM = 3
+
+
 none_value: float = 0
 uncompiled_value: float = 0     # 10**10
 
 log_scale: bool = True
 showfliers: bool = False
-show_scatter: bool = False
 use_uncompiled: bool = False
+plot: PlotEnum = PlotEnum.BOXPLOT
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 # JW-TS, extended, 0.1
@@ -46,8 +52,8 @@ directory_set: DirectorySetEnum = DirectorySetEnum.all
 # ISOMORFISM 250
 # ISOMORFISM 500
 
-directory_name_1: str = "NONE"
-directory_name_2: str = "ISOMORFISM 250"
+directory_name_1: str = "ISOMORFISM 250"
+directory_name_2: str = "ISOMORFISM 500"
 root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\HP cache"
 
 
@@ -99,7 +105,7 @@ def generate_data(dictionary_1: Dict[str, Statistics], dictionary_2: Dict[str, S
             return uncompiled_value
 
         # Function
-        value = statistics_temp.hypergraph_partitioning_statistics.get_cut_set.average_time
+        value = statistics_temp.hypergraph_partitioning_statistics.generate_key_cache.average_time
 
         if value is None:
             return none_value
@@ -137,17 +143,21 @@ print()
 print(f"Count: {len(data_x)}")
 print(f"Count (uncompiled intersection): {len(uncompiled_x.intersection(uncompiled_y))}")
 
-if show_scatter:
+if plot == PlotEnum.SCATTER:
     scatter(data_x=data_x,
             data_y=data_y,
             title=f"{directory_name_1} vs {directory_name_2}",
             x_label=directory_name_1,
             y_label=directory_name_2,
             log_scale=log_scale)
-else:
+
+elif plot == PlotEnum.BOXPLOT:
     boxplot(data=[[data_x], [data_y]],
             labels=[[directory_name_1], [directory_name_2]],
             title=f"{directory_name_1} vs {directory_name_2}",
-            x_label=directory_name_1,
-            y_label=directory_name_2,
             showfliers=showfliers)
+
+elif plot == PlotEnum.HISTOGRAM:
+    histogram(data=[data_x, data_y],
+              title=f"{directory_name_1} vs {directory_name_2}",
+              labels=[directory_name_1, directory_name_2])
