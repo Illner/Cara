@@ -46,8 +46,8 @@ directory_set: DirectorySetEnum = DirectorySetEnum.all
 # ISOMORFISM 250
 # ISOMORFISM 500
 
-directory_name_1: str = "ISOMORFISM 250"
-directory_name_2: str = "ISOMORFISM 500"
+directory_name_1: str = "NONE"
+directory_name_2: str = "ISOMORFISM 250"
 root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\HP cache"
 
 
