@@ -51,14 +51,14 @@ class PlotEnum(IntEnum):
     HISTOGRAM = 3
 
 
-none_value: float = 10**10
+none_value: float = 0   # 10**10
 uncompiled_value: float = 0     # 10**10
 
 log_scale: bool = False
 showfliers: bool = False
 use_uncompiled: bool = False
 plot: PlotEnum = PlotEnum.SCATTER
-directory_set: DirectorySetEnum = DirectorySetEnum.all
+directory_set: DirectorySetEnum = DirectorySetEnum.Configuration
 
 root_path = bdmc_root_path
 directory_name_1: ExperimentEnum = ExperimentEnum.D4
@@ -68,6 +68,9 @@ directory_name_2: ExperimentEnum = ExperimentEnum.VSADS_1
 def function(statistics: Statistics) -> Union[float, None]:
     # return statistics.compiler_statistics.create_circuit.average_time
     return statistics.size
+    # return statistics.hypergraph_partitioning_statistics.get_cut_set.average_time
+    # return statistics.hypergraph_partitioning_statistics.cache_hit.average_count
+    # return statistics.component_statistics.component_caching_after_hit.average_count
 
 
 def get_statistics(directory_name: str) -> Tuple[Dict[str, Statistics], Set[str]]:
