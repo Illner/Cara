@@ -10,6 +10,9 @@ from visualization.plot import scatter, boxplot, histogram
 # Import enum
 import circuit.node.node_type_enum as nt_enum
 
+bdmc_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC"
+hp_cache_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\HP cache"
+
 
 @unique
 class DirectorySetEnum(str, Enum):
@@ -22,6 +25,23 @@ class DirectorySetEnum(str, Enum):
     Planning = "Planning"
     qif = "qif"
     random = "random"
+
+
+@unique
+class ExperimentEnum(str, Enum):
+    D4 = "D4"
+    JW_TS_1 = "JW-TS, extended, 0.1"
+    JW_TS_25 = "JW-TS, extended, 0.25"
+    DLCS_DLIS_1 = "DLCS-DLIS, extended, 0.1"
+    DLCS_DLIS_25 = "DLCS-DLIS, extended, 0.25"
+    VSADS_1 = "VSADS, d4, extended, 0.1"
+    VSADS_25 = "VSADS, d4, extended, 0.25"
+    CLAUSE_REDUCTION_1 = "Clause reduction, 0.1"
+
+    NONE = "NONE"
+    ISOMORFISM_250 = "ISOMORFISM 250"
+    ISOMORFISM_500 = "ISOMORFISM 500"
+    ISOMORFISM_1000 = "ISOMORFISM 1000"
 
 
 @unique
@@ -40,23 +60,9 @@ use_uncompiled: bool = False
 plot: PlotEnum = PlotEnum.SCATTER
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
-# D4
-# JW-TS, extended, 0.1
-# DLCS-DLIS, extended, 0.1
-# VSADS, d4, extended, 0.1
-# Clause reduction, 0.1
-
-directory_name_1: str = "D4"
-directory_name_2: str = "VSADS, d4, extended, 0.1"
-root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC"
-
-# NONE
-# ISOMORFISM 250
-# ISOMORFISM 500
-
-# directory_name_1: str = "ISOMORFISM 250"
-# directory_name_2: str = "ISOMORFISM 500"
-# root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\HP cache"
+root_path = bdmc_root_path
+directory_name_1: ExperimentEnum = ExperimentEnum.D4
+directory_name_2: ExperimentEnum = ExperimentEnum.VSADS_1
 
 
 def function(statistics: Statistics) -> Union[float, None]:
@@ -129,6 +135,7 @@ def generate_data(dictionary_1: Dict[str, Statistics], dictionary_2: Dict[str, S
     return list_1, list_2
 
 
+directory_name_1, directory_name_2 = directory_name_1.value, directory_name_2.value
 x, uncompiled_x = get_statistics(directory_name_1)
 y, uncompiled_y = get_statistics(directory_name_2)
 data_x, data_y = generate_data(x, y)
