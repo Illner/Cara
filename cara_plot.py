@@ -37,6 +37,9 @@ class ExperimentEnum(str, Enum):
     VSADS_1 = "VSADS, d4, extended, 0.1"
     VSADS_25 = "VSADS, d4, extended, 0.25"
     CLAUSE_REDUCTION_1 = "Clause reduction, 0.1"
+    CLAUSE_REDUCTION_25 = "Clause reduction, 0.25"
+    WEIGHTED_BINARIES_1 = "Weighted binaries, 0.1"
+    WEIGHTED_BINARIES_25 = "Weighted binaries, 0.25"
 
     NONE = "NONE"
     ISOMORFISM_250 = "ISOMORFISM 250"
@@ -61,8 +64,8 @@ plot: PlotEnum = PlotEnum.SCATTER
 directory_set: DirectorySetEnum = DirectorySetEnum.Configuration
 
 root_path = bdmc_root_path
-directory_name_1: ExperimentEnum = ExperimentEnum.D4
-directory_name_2: ExperimentEnum = ExperimentEnum.VSADS_1
+directory_name_1: ExperimentEnum = ExperimentEnum.VSADS_1
+directory_name_2: ExperimentEnum = ExperimentEnum.VSADS_25
 
 
 def function(statistics: Statistics) -> Union[float, None]:

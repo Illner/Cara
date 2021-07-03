@@ -64,8 +64,8 @@ def main(main_args):
             experiment.experiment(file_name=file_name, file_path=file_path,
 
                                   hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM_VARIANCE,
-                                  hp_limit_number_of_clauses_cache=(None, 1000),
-                                  hp_limit_number_of_variables_cache=(None, 1000),
+                                  hp_limit_number_of_clauses_cache=(None, 1500),
+                                  hp_limit_number_of_variables_cache=(None, 1500),
                                   hp_multi_occurrence_cache=True,
 
                                   smooth=False,
