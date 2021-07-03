@@ -17,8 +17,8 @@ class StandardCachingScheme(ComponentCachingAbstract):
         clause_list = []
 
         for clause_id in incidence_graph._clause_id_set:
-            clause_sorted_list = incidence_graph.get_sorted_clause(clause_id, copy=False)
-            clause_list.append(self._delimiter.join([str(lit) for lit in clause_sorted_list]))
+            clause_set = incidence_graph.get_clause(clause_id, copy=False)
+            clause_list.append(self._delimiter.join([str(lit) for lit in clause_set]))
 
         key_string = self._end_delimiter.join(clause_list)
 
