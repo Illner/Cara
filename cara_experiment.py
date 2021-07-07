@@ -71,7 +71,7 @@ def main(main_args):
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
                                   imbalance_factor=0.25,
-                                  base_class_threshold=250,
+                                  base_class_threshold=500,
 
                                   smooth=False,
                                   preprocessing=False,
