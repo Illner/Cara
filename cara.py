@@ -352,7 +352,7 @@ def create_parser() -> argparse.ArgumentParser:
                              default=mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER.name,
                              type=str,
                              choices=mdh_enum.mixed_difference_heuristic_enum_names,
-                             help="type of mixed difference heuristic for the decision heuristic (clause reduction heuristic, exact unit propagation count heuristic)")
+                             help="type of mixed difference heuristic for the decision heuristic (clause reduction heuristic, weighted binaries heuristic, backbone search heuristic and exact unit propagation count heuristic)")
     parser_temp.add_argument("-dh_vsids_d4",
                              "--dh_vsids_d4_version",
                              action="store",
@@ -536,7 +536,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-hp_vs",
                              "--hp_variable_simplification",
                              action="store",
-                             default=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.NONE.name,
+                             default=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL.name,
                              type=str,
                              choices=hpvs_enum.hpvs_enum_names,
                              help="type of hypergraph partitioning variable simplification")
