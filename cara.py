@@ -363,7 +363,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-dh_vsads_p_f",
                              "--dh_vsads_p_factor",
                              action="store",
-                             default=1,
+                             default=0.5,
                              type=float,
                              metavar="[non-negative number]",
                              help="constant factor p (VSADS)")
