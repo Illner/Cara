@@ -29,22 +29,44 @@ class DirectorySetEnum(str, Enum):
 
 @unique
 class ExperimentEnum(str, Enum):
+    LIMIT_250 = "250"
+    LIMIT_500 = "500"
+    LIMIT_1000 = "1000"
+    LIMIT_1500 = "1500"
     D4 = "D4"
-    JW_TS_1 = "JW-TS, extended, 0.1"
-    JW_TS_25 = "JW-TS, extended, 0.25"
-    DLCS_DLIS_1 = "DLCS-DLIS, extended, 0.1"
-    DLCS_DLIS_25 = "DLCS-DLIS, extended, 0.25"
-    VSADS_1 = "VSADS, d4, extended, 0.1"
-    VSADS_25 = "VSADS, d4, extended, 0.25"
+    JW_TS_1_EXTENDED = "JW-TS, extended, 0.1"
+    JW_TS_25_EXTENDED = "JW-TS, extended, 0.25"
+    JW_TS_25 = "JW-TS, 0.25"
+    DLCS_DLIS_1_EXTENDED = "DLCS-DLIS, extended, 0.1"
+    DLCS_DLIS_25_EXTENDED = "DLCS-DLIS, extended, 0.25"
+    DLCS_DLIS_25 = "DLCS-DLIS, 0.25"
+    VSADS_1_EXTENDED = "VSADS, d4, extended, 0.1"
+    VSADS_25_EXTENDED = "VSADS, d4, extended, 0.25"
+    VSADS_25 = "VSADS, d4, 0.25"
     CLAUSE_REDUCTION_1 = "Clause reduction, 0.1"
     CLAUSE_REDUCTION_25 = "Clause reduction, 0.25"
+    CLAUSE_REDUCTION_25_WITHOUT_GAMMA_0 = "Clause reduction, 0.25, without gamma_0"
     WEIGHTED_BINARIES_1 = "Weighted binaries, 0.1"
     WEIGHTED_BINARIES_25 = "Weighted binaries, 0.25"
+    WEIGHTED_BINARIES_25_WITHOUT_GAMMA_0 = "Weighted binaries, 0.25, without gamma_0"
 
     NONE = "NONE"
     ISOMORFISM_250 = "ISOMORFISM 250"
+    ISOMORFISM_250_no_moc = "ISOMORFISM 250 (no moc)"
     ISOMORFISM_500 = "ISOMORFISM 500"
+    ISOMORFISM_500_no_moc = "ISOMORFISM 500 (no moc)"
     ISOMORFISM_1000 = "ISOMORFISM 1000"
+    ISOMORFISM_1000_no_moc = "ISOMORFISM 1000 (no moc)"
+    ISOMORFISM_1500 = "ISOMORFISM 1500"
+    ISOMORFISM_1500_no_moc = "ISOMORFISM 1500 (no moc)"
+    ISOMORFISM_VARIANCE_250 = "ISOMORFISM_VARIANCE 250"
+    ISOMORFISM_VARIANCE_250_no_moc = "ISOMORFISM_VARIANCE 250 (no moc)"
+    ISOMORFISM_VARIANCE_500 = "ISOMORFISM_VARIANCE 500"
+    ISOMORFISM_VARIANCE_500_no_moc = "ISOMORFISM_VARIANCE 500 (no moc)"
+    ISOMORFISM_VARIANCE_1000 = "ISOMORFISM_VARIANCE 1000"
+    ISOMORFISM_VARIANCE_1000_no_moc = "ISOMORFISM_VARIANCE 1000 (no moc)"
+    ISOMORFISM_VARIANCE_1500 = "ISOMORFISM_VARIANCE 1500"
+    ISOMORFISM_VARIANCE_1500_no_moc = "ISOMORFISM_VARIANCE 1500 (no moc)"
 
 
 @unique
@@ -55,14 +77,14 @@ class PlotEnum(IntEnum):
 
 
 root_path = bdmc_root_path
-directory_name_1: ExperimentEnum = ExperimentEnum.VSADS_1
-directory_name_2: ExperimentEnum = ExperimentEnum.VSADS_25
+directory_name_1: ExperimentEnum = ExperimentEnum.D4
+directory_name_2: ExperimentEnum = ExperimentEnum.LIMIT_1000
 
 none_value: float = 10**10
 uncompiled_value: float = 10**10
 
 log_scale: bool = True
-showfliers: bool = False
+showfliers: bool = True
 use_uncompiled: bool = True
 plot: PlotEnum = PlotEnum.SCATTER
 directory_set: DirectorySetEnum = DirectorySetEnum.all
@@ -71,6 +93,7 @@ directory_set: DirectorySetEnum = DirectorySetEnum.all
 def function(statistics: Statistics) -> Union[float, None]:
     # return statistics.compiler_statistics.create_circuit.average_time
     return statistics.size
+    # return statistics.component_statistics.two_cnf_formula_length.average_count
     # return statistics.hypergraph_partitioning_statistics.get_cut_set.average_time
     # return statistics.hypergraph_partitioning_statistics.cache_hit.average_count
     # return statistics.component_statistics.component_caching_after_hit.average_count
