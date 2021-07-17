@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 # Static variable
-COLOUR_LIST: List[str] = ["cornflowerblue", "green", "orange", "magenta", "gold", "lime"]
+COLOUR_LIST: List[str] = ["deepskyblue", "blue", "lightgreen", "g", "gold", "orange", "magenta", "white"]
 
 
 def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
@@ -18,7 +18,7 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
         # Boxplot
         position_temp = 1
         for i, group in enumerate(data):
-            end_position_end = position_temp + len(group)
+            end_position_end = position_temp + 1
             ax.boxplot(x=group,
                        showfliers=showfliers,
                        positions=list(range(position_temp, end_position_end)),
@@ -66,16 +66,23 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
         plt.close(fig)
 
 
-def scatter(data_x: List[float], data_y: List[float], title: str,
-            x_label: Union[str, None] = None, y_label: Union[str, None] = None,
+def scatter(data_x: Union[List[float], List[List[float]]], data_y: Union[List[float], List[List[float]]], title: str,
+            x_label: Union[str, None] = None, y_label: Union[str, None] = None, labels: Union[List[List[str]], None] = None,
             save_path: [str, Path, None] = None, show: bool = True, log_scale: bool = False) -> None:
     fig, ax = plt.subplots()
 
     try:
-        ax.scatter(x=data_x, y=data_y,
-                   s=50,
-                   color=COLOUR_LIST[0],
-                   edgecolors="black")
+        data_x_temp, data_y_temp = [data_x], [data_y]
+
+        if len(data_x) and isinstance(data_x[0], list):
+            data_x_temp, data_y_temp = data_x, data_y
+
+        for i in range(len(data_x_temp)):
+            ax.scatter(x=data_x_temp[i], y=data_y_temp[i],
+                       s=50,
+                       label="" if labels is None else labels[i],
+                       color=COLOUR_LIST[i],
+                       edgecolors="black")
 
         # Diagonal line
         ax.axline((1, 1), slope=1, color="red", ls='--')
@@ -86,6 +93,9 @@ def scatter(data_x: List[float], data_y: List[float], title: str,
             ax.set_xlabel(x_label)
         if y_label is not None:
             ax.set_ylabel(y_label)
+
+        if labels is not None:
+            ax.legend()
 
         if log_scale:
             ax.set_xscale('log')
