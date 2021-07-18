@@ -14,6 +14,8 @@ plot_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Exp
 
 bdmc_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC"
 hp_cache_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\HP cache"
+cara_circuit_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\CaraCircuit"
+imbalance_factor_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\Imbalance factor"
 
 
 @unique
@@ -31,45 +33,57 @@ class DirectorySetEnum(str, Enum):
 
 @unique
 class ExperimentEnum(str, Enum):
-    LIMIT_250 = "250"
-    LIMIT_500 = "500"
-    LIMIT_1000 = "1000"
-    LIMIT_1500 = "1500"
-    D4 = "D4"
-    JW_TS_1_EXTENDED = "JW-TS, extended, 0.1"
-    JW_TS_25_EXTENDED = "JW-TS, extended, 0.25"
-    JW_TS_25 = "JW-TS, 0.25"
-    DLCS_DLIS_1_EXTENDED = "DLCS-DLIS, extended, 0.1"
-    DLCS_DLIS_25_EXTENDED = "DLCS-DLIS, extended, 0.25"
-    DLCS_DLIS_25 = "DLCS-DLIS, 0.25"
-    VSADS_1_EXTENDED = "VSADS, d4, extended, 0.1"
-    VSADS_25_EXTENDED = "VSADS, d4, extended, 0.25"
-    VSADS_25 = "VSADS, d4, 0.25"
-    CLAUSE_REDUCTION_1 = "Clause reduction, 0.1"
-    CLAUSE_REDUCTION_25 = "Clause reduction, 0.25"
-    CLAUSE_REDUCTION_25_WITHOUT_GAMMA_0 = "Clause reduction, 0.25, without gamma_0"
-    WEIGHTED_BINARIES_1 = "Weighted binaries, 0.1"
-    WEIGHTED_BINARIES_25 = "Weighted binaries, 0.25"
-    WEIGHTED_BINARIES_25_WITHOUT_GAMMA_0 = "Weighted binaries, 0.25, without gamma_0"
+    BDMC_LIMIT_250 = "250"
+    BDMC_LIMIT_500 = "500"
+    BDMC_LIMIT_1000 = "1000"
+    BDMC_LIMIT_1500 = "1500"
+    BDMC_D4 = "D4"
+    BDMC_JW_TS_1_EXTENDED = "JW-TS, extended, 0.1"
+    BDMC_JW_TS_25_EXTENDED = "JW-TS, extended, 0.25"
+    BDMC_JW_TS_25 = "JW-TS, 0.25"
+    BDMC_DLCS_DLIS_1_EXTENDED = "DLCS-DLIS, extended, 0.1"
+    BDMC_DLCS_DLIS_25_EXTENDED = "DLCS-DLIS, extended, 0.25"
+    BDMC_DLCS_DLIS_25 = "DLCS-DLIS, 0.25"
+    BDMC_VSADS_1_EXTENDED = "VSADS, d4, extended, 0.1"
+    BDMC_VSADS_25_EXTENDED = "VSADS, d4, extended, 0.25"
+    BDMC_VSADS_25 = "VSADS, d4, 0.25"
+    BDMC_CLAUSE_REDUCTION_1 = "Clause reduction, 0.1"
+    BDMC_CLAUSE_REDUCTION_25 = "Clause reduction, 0.25"
+    BDMC_CLAUSE_REDUCTION_25_WITHOUT_GAMMA_0 = "Clause reduction, 0.25, without gamma_0"
+    BDMC_WEIGHTED_BINARIES_1 = "Weighted binaries, 0.1"
+    BDMC_WEIGHTED_BINARIES_25 = "Weighted binaries, 0.25"
+    BDMC_WEIGHTED_BINARIES_25_WITHOUT_GAMMA_0 = "Weighted binaries, 0.25, without gamma_0"
 
-    NONE = "NONE"
-    ISOMORFISM_250 = "ISOMORFISM 250"
-    ISOMORFISM_250_no_moc = "ISOMORFISM 250 (no moc)"
-    ISOMORFISM_500 = "ISOMORFISM 500"
-    ISOMORFISM_500_no_moc = "ISOMORFISM 500 (no moc)"
-    ISOMORFISM_1000 = "ISOMORFISM 1000"
-    ISOMORFISM_1000_no_moc = "ISOMORFISM 1000 (no moc)"
-    ISOMORFISM_1500 = "ISOMORFISM 1500"
-    ISOMORFISM_1500_no_moc = "ISOMORFISM 1500 (no moc)"
-    ISOMORFISM_VARIANCE_250 = "ISOMORFISM_VARIANCE 250"
-    ISOMORFISM_VARIANCE_250_no_moc = "ISOMORFISM_VARIANCE 250 (no moc)"
-    ISOMORFISM_VARIANCE_500 = "ISOMORFISM_VARIANCE 500"
-    ISOMORFISM_VARIANCE_500_no_moc = "ISOMORFISM_VARIANCE 500 (no moc)"
-    ISOMORFISM_VARIANCE_1000 = "ISOMORFISM_VARIANCE 1000"
-    ISOMORFISM_VARIANCE_1000_no_moc = "ISOMORFISM_VARIANCE 1000 (no moc)"
-    ISOMORFISM_VARIANCE_1500 = "ISOMORFISM_VARIANCE 1500"
-    ISOMORFISM_VARIANCE_1500_no_moc = "ISOMORFISM_VARIANCE 1500 (no moc)"
+    HP_CACHE_NONE = "NONE"
+    HP_CACHE_ISOMORFISM_250 = "ISOMORFISM 250"
+    HP_CACHE_ISOMORFISM_250_NO_MOC = "ISOMORFISM 250 (no moc)"
+    HP_CACHE_ISOMORFISM_500 = "ISOMORFISM 500"
+    HP_CACHE_ISOMORFISM_500_NO_MOC = "ISOMORFISM 500 (no moc)"
+    HP_CACHE_ISOMORFISM_1000 = "ISOMORFISM 1000"
+    HP_CACHE_ISOMORFISM_1000_NO_MOC = "ISOMORFISM 1000 (no moc)"
+    HP_CACHE_ISOMORFISM_1500 = "ISOMORFISM 1500"
+    HP_CACHE_ISOMORFISM_1500_NO_MOC = "ISOMORFISM 1500 (no moc)"
+    HP_CACHE_ISOMORFISM_VARIANCE_250 = "ISOMORFISM_VARIANCE 250"
+    HP_CACHE_ISOMORFISM_VARIANCE_250_NO_MOC = "ISOMORFISM_VARIANCE 250 (no moc)"
+    HP_CACHE_ISOMORFISM_VARIANCE_500 = "ISOMORFISM_VARIANCE 500"
+    HP_CACHE_ISOMORFISM_VARIANCE_500_NO_MOC = "ISOMORFISM_VARIANCE 500 (no moc)"
+    HP_CACHE_ISOMORFISM_VARIANCE_1000 = "ISOMORFISM_VARIANCE 1000"
+    HP_CACHE_ISOMORFISM_VARIANCE_1000_NO_MOC = "ISOMORFISM_VARIANCE 1000 (no moc)"
+    HP_CACHE_ISOMORFISM_VARIANCE_1500 = "ISOMORFISM_VARIANCE 1500"
+    HP_CACHE_ISOMORFISM_VARIANCE_1500_NO_MOC = "ISOMORFISM_VARIANCE 1500 (no moc)"
 
+    CARA_CIRCUIT_D4 = "D4 (CaraCircuit)"
+    CARA_CIRCUIT_LIMIT_0 = "Limit 0"
+    CARA_CIRCUIT_LIMIT_0_MOC = "Limit 0 (moc)"
+    CARA_CIRCUIT_LIMIT_25 = "Limit 25"
+    CARA_CIRCUIT_LIMIT_50 = "Limit 50"
+    CARA_CIRCUIT_LIMIT_100 = "Limit 100"
+    CARA_CIRCUIT_LIMIT_250 = "Limit 250"
+    CARA_CIRCUIT_LIMIT_500 = "Limit 500"
+
+    IMBALANCE_FACTOR_1 = "0.1"
+    IMBALANCE_FACTOR_25 = "0.25"
+    IMBALANCE_FACTOR_4 = "0.4"
 
 @unique
 class PlotEnum(IntEnum):
@@ -81,23 +95,20 @@ class PlotEnum(IntEnum):
 root_path = bdmc_root_path
 
 # SCATTER
-directory_name_1: ExperimentEnum = ExperimentEnum.D4
-directory_name_2: ExperimentEnum = ExperimentEnum.LIMIT_250
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_D4
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_VSADS_25_EXTENDED
 
 # BOXPLOT, HISTOGRAM
-directory_name_list: List[ExperimentEnum] = [ExperimentEnum.VSADS_25_EXTENDED,
-                                             ExperimentEnum.LIMIT_250,
-                                             ExperimentEnum.LIMIT_500,
-                                             ExperimentEnum.LIMIT_1000,
-                                             ExperimentEnum.LIMIT_1500,
-                                             ExperimentEnum.D4]
+directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_D4,
+                                             ExperimentEnum.BDMC_LIMIT_250,
+                                             ExperimentEnum.BDMC_LIMIT_500,
+                                             ExperimentEnum.BDMC_LIMIT_1000,
+                                             ExperimentEnum.BDMC_LIMIT_1500]
 
-none_value: float = 0   #10**10
+none_value: float = 0   # 10**10
 uncompiled_value: Union[float, None] = None     # 10**10
 
 title: str = ""
-x_label: str = ""
-y_label: str = ""
 
 use_uncompiled: bool = True
 plot: PlotEnum = PlotEnum.SCATTER
@@ -105,16 +116,27 @@ plot_name: Union[str, None] = None
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 # SCATTER
+x_label: str = ""
+y_label: str = ""
 log_scale: bool = True
 set_together: bool = False
 
 # BOXPLOT
 showfliers: bool = False
 
+# BOXPLOT, HISTOGRAM
+label_prefix: str = ""
+
 
 def function(statistics: Statistics) -> Union[float, None]:
     return statistics.size
     # return statistics.compiler_statistics.create_circuit.average_time
+
+    # try:
+    #     return statistics.get_node_type_counter(nt_enum.NodeTypeEnum.MAPPING_NODE)
+    # except KeyError:
+    #     return 0
+    # return statistics.component_statistics.component_caching_after_cara_mapping_length.number_of_calls
     # return statistics.component_statistics.two_cnf_formula_length.average_count
     # return statistics.hypergraph_partitioning_statistics.get_cut_set.average_time
     # return statistics.hypergraph_partitioning_statistics.cache_hit.average_count
@@ -172,9 +194,9 @@ def generate_data(dictionary_1: Dict[str, Dict[str, Statistics]], dictionary_2: 
     list_1: List[Union[float, List[float]]] = []
     list_2: List[Union[float, List[float]]] = []
 
-    key_set = set(dictionary_1.keys()).intersection(set(dictionary_2.keys()))
+    set_key = set(dictionary_1.keys()).intersection(set(dictionary_2.keys()))
 
-    for set_name in sorted(key_set):
+    for set_name in sorted(set_key):
         if (directory_set != DirectorySetEnum.all) and (directory_set.value != set_name):
             continue
 
@@ -186,18 +208,18 @@ def generate_data(dictionary_1: Dict[str, Dict[str, Statistics]], dictionary_2: 
             list_1.append([])
             list_2.append([])
 
-        key_experiment = set(dictionary_1_experiment.keys()).intersection(set(dictionary_2_experiment.keys()))
+        experiment_key = set(dictionary_1_experiment.keys()).intersection(set(dictionary_2_experiment.keys()))
 
         if not use_uncompiled:
-            key_experiment_temp = set()
+            experiment_key_temp = set()
 
-            for experiment_name in key_experiment:
+            for experiment_name in experiment_key:
                 if dictionary_1_experiment[experiment_name].compiled and dictionary_2_experiment[experiment_name].compiled:
-                    key_experiment_temp.add(experiment_name)
+                    experiment_key_temp.add(experiment_name)
 
-            key_experiment = key_experiment_temp
+            experiment_key = experiment_key_temp
 
-        for experiment_name in key_experiment:
+        for experiment_name in experiment_key:
             value_1 = get_value(dictionary_1_experiment[experiment_name])
             value_2 = get_value(dictionary_2_experiment[experiment_name])
 
@@ -211,7 +233,7 @@ def generate_data(dictionary_1: Dict[str, Dict[str, Statistics]], dictionary_2: 
     return list_1, list_2, label_list
 
 
-def generate_data_more(data_list: List[Dict[str, Dict[str, Statistics]]]) -> List[List[float]]:
+def generate_more_data(data_list: List[Dict[str, Dict[str, Statistics]]]) -> List[List[float]]:
     result_list = []
     for _ in data_list:
         result_list.append([])
@@ -229,27 +251,27 @@ def generate_data_more(data_list: List[Dict[str, Dict[str, Statistics]]]) -> Lis
 
         data_list_temp.append(dictionary_temp)
 
-    key_experiment = set() if not len(data_list_temp) else set(data_list_temp[0].keys())
-    for temp in data_list_temp:
-        key_experiment.intersection_update(temp.keys())
+    experiment_key = set() if not len(data_list_temp) else set(data_list_temp[0].keys())
+    for data in data_list_temp:
+        experiment_key.intersection_update(data.keys())
 
     if not use_uncompiled:
-        key_experiment_temp = set()
+        experiment_key_temp = set()
 
-        for experiment_name in key_experiment:
+        for experiment_name in experiment_key:
             compiled = True
 
-            for temp in data_list_temp:
-                if not temp[experiment_name].compiled:
+            for data in data_list_temp:
+                if not data[experiment_name].compiled:
                     compiled = False
                     break
 
             if compiled:
-                key_experiment_temp.add(experiment_name)
+                experiment_key_temp.add(experiment_name)
 
-        key_experiment = key_experiment_temp
+        experiment_key = experiment_key_temp
 
-    for experiment_name in key_experiment:
+    for experiment_name in experiment_key:
         for i, temp in enumerate(data_list_temp):
             value = get_value(temp[experiment_name])
             result_list[i].append(value)
@@ -262,18 +284,18 @@ def my_print(directory_name: str, z: Dict[str, Dict[str, Statistics]], uncompile
     print(f"-- {directory_name} --")
     print(f"---{'-' * len(directory_name)}---")
 
-    count = sum(len(z[i]) for i in z)
+    total_number = sum(len(z[i]) for i in z)
     uncompiled = sum(len(uncompiled_z[i]) for i in uncompiled_z)
-    print(f"Count: {count}")
-    print(f"Compiled: {count - uncompiled}")
+    print(f"Total number: {total_number}")
+    print(f"Compiled: {total_number - uncompiled}")
     print(f"Uncompiled: {uncompiled}")
     print()
 
     for set_name in z:
-        count = len(z[set_name])
+        total_number = len(z[set_name])
         uncompiled = len(uncompiled_z[set_name])
-        print(f"\t{set_name}: {count}")
-        print(f"\t{set_name} (compiled): {count - uncompiled}")
+        print(f"\t{set_name} (total number): {total_number}")
+        print(f"\t{set_name} (compiled): {total_number - uncompiled}")
         print(f"\t{set_name} (uncompiled): {uncompiled}")
 
         print()
@@ -286,8 +308,8 @@ else:
     save_path = Path(os.path.join(plot_path, plot_name))
 
 data = []
-data_x, data_y = [], []
 labels = None
+data_x, data_y = [], []
 
 use_more_directory = plot != PlotEnum.SCATTER
 
@@ -302,15 +324,16 @@ if not use_more_directory:
     my_print(directory_name_2, y, uncompiled_y)
 
     if set_together:
-        print(f"Count: {len(data_x)}")
+        print(f"Total number: {len(data_x)}")
     else:
-        print(f"Count: {sum(len(i) for i in data_x)}")
+        print(f"Total number: {sum(len(i) for i in data_x)}")
 
-    print(f"Count (uncompiled intersection): {len(uncompiled_x_set.intersection(uncompiled_y_set))}")
+    print(f"Total number (uncompiled intersection): {len(uncompiled_x_set.intersection(uncompiled_y_set))}")
 
 else:
     directory_name_list = [directory_name.value for directory_name in directory_name_list]
-    directory_name_labels_list = [[directory_name] for directory_name in directory_name_list]
+    directory_name_labels_boxplot_list = [[f"{label_prefix}{directory_name}"] for directory_name in directory_name_list]
+    directory_name_labels_histogram_list = [f"{label_prefix}{directory_name}" for directory_name in directory_name_list]
 
     temp_list = []
     for directory_name in directory_name_list:
@@ -319,27 +342,36 @@ else:
 
         my_print(directory_name, x, uncompiled_x)
 
-    data = generate_data_more(temp_list)
+    data = generate_more_data(temp_list)
 
 if plot == PlotEnum.SCATTER:
+    if x_label == "":
+        x_label = directory_name_1
+
+    if y_label == "":
+        y_label = directory_name_2
+
+    x_label = f"{x_label} (log)" if log_scale else x_label
+    y_label = f"{y_label} (log)" if log_scale else y_label
+
     scatter(data_x=data_x,
             data_y=data_y,
             title=f"{directory_name_1} vs {directory_name_2}" if title == "" else title,
-            x_label=directory_name_1 if x_label == "" else x_label,
-            y_label=directory_name_2 if y_label == "" else y_label,
+            x_label=x_label,
+            y_label=y_label,
             labels=labels,
             log_scale=log_scale,
             save_path=save_path)
 
 elif plot == PlotEnum.BOXPLOT:
     boxplot(data=data,
-            labels=directory_name_labels_list,
-            title=f"{directory_name_1} vs {directory_name_2}" if title == "" else title,
+            labels=directory_name_labels_boxplot_list,
+            title=title,
             showfliers=showfliers,
             save_path=save_path)
 
 elif plot == PlotEnum.HISTOGRAM:
     histogram(data=data,
-              labels=directory_name_labels_list,
-              title=f"{directory_name_1} vs {directory_name_2}" if title == "" else title,
+              labels=directory_name_labels_histogram_list,
+              title=title,
               save_path=save_path)
