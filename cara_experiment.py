@@ -64,7 +64,7 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  imbalance_factor=0.4,
+                                  imbalance_factor=0.1,
 
                                   smooth=False,
                                   preprocessing=False,
@@ -85,11 +85,11 @@ def main(main_args):
                                   hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM,
                                   hp_limit_number_of_clauses_cache=(None, 500),
                                   hp_limit_number_of_variables_cache=(None, 500),
-                                  hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
+                                  hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.PATOH,
                                   hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                   hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                                   hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
-                                  hp_patoh_sugparam_enum=hpps_enum.PatohSugparamEnum.QUALITY,
+                                  hp_patoh_sugparam_enum=hpps_enum.PatohSugparamEnum.SPEED,
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=1)
