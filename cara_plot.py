@@ -100,19 +100,20 @@ directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_VSADS_25_EXTENDED
 
 # BOXPLOT, HISTOGRAM
 directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_D4,
+                                             ExperimentEnum.BDMC_VSADS_25_EXTENDED,
                                              ExperimentEnum.BDMC_LIMIT_250,
                                              ExperimentEnum.BDMC_LIMIT_500,
                                              ExperimentEnum.BDMC_LIMIT_1000,
                                              ExperimentEnum.BDMC_LIMIT_1500]
 
-none_value: float = 0   # 10**10
-uncompiled_value: Union[float, None] = None     # 10**10
+none_value: float = 10**10
+uncompiled_value: Union[float, None] = 10**10
 
 title: str = ""
 
 use_uncompiled: bool = True
 plot: PlotEnum = PlotEnum.SCATTER
-plot_name: Union[str, None] = None
+plot_name: Union[str, None] = None  # "bdmc_dnnf"
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 # SCATTER
@@ -126,11 +127,36 @@ showfliers: bool = False
 
 # BOXPLOT, HISTOGRAM
 label_prefix: str = ""
+label_list: Union[List[List[str]], None] = [["d-DNNF"],
+                                            ["d-BDMC \nlimit 0"],
+                                            ["d-BDMC \nlimit 250"],
+                                            ["d-BDMC \nlimit 500"],
+                                            ["d-BDMC \nlimit 1000"],
+                                            ["d-BDMC \nlimit 1500"]]
 
 
 def function(statistics: Statistics) -> Union[float, None]:
     return statistics.size
     # return statistics.compiler_statistics.create_circuit.average_time
+
+    # return statistics.get_node_type_counter(nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF) + statistics.get_node_type_counter(nt_enum.NodeTypeEnum.TWO_CNF)
+
+    # two_cnf_number = statistics.component_statistics.two_cnf_formula_length.number_of_calls
+    # two_cnf_length = statistics.component_statistics.two_cnf_formula_length.sum_count
+    # two_cnf_length = 0 if two_cnf_length is None else two_cnf_length
+    #
+    # horn_cnf_number = statistics.component_statistics.renamable_horn_cnf_formula_length.number_of_calls
+    # horn_cnf_length = statistics.component_statistics.renamable_horn_cnf_formula_length.sum_count
+    # horn_cnf_length = 0 if horn_cnf_length is None else horn_cnf_length
+    #
+    # # return two_cnf_number + horn_cnf_number
+    #
+    # if two_cnf_number + horn_cnf_number == 0:
+    #     return 0
+    #
+    # x = (two_cnf_length + horn_cnf_length) / (two_cnf_number + horn_cnf_number)
+    #
+    # return x
 
     # try:
     #     return statistics.get_node_type_counter(nt_enum.NodeTypeEnum.MAPPING_NODE)
@@ -365,13 +391,13 @@ if plot == PlotEnum.SCATTER:
 
 elif plot == PlotEnum.BOXPLOT:
     boxplot(data=data,
-            labels=directory_name_labels_boxplot_list,
+            labels=directory_name_labels_boxplot_list if label_list is None else label_list,
             title=title,
             showfliers=showfliers,
             save_path=save_path)
 
 elif plot == PlotEnum.HISTOGRAM:
     histogram(data=data,
-              labels=directory_name_labels_histogram_list,
+              labels=directory_name_labels_histogram_list if label_list is None else label_list,
               title=title,
               save_path=save_path)

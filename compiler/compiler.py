@@ -130,6 +130,10 @@ class Compiler:
                  decision_heuristic_vsads_q_constant_factor: float = 0.5,
                  decision_heuristic_weight_for_satisfied_clauses: bool = True,
                  decision_heuristic_ignore_binary_clauses: bool = False,
+                 decision_heuristic_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum = ph_enum.PreselectionHeuristicEnum.NONE,
+                 decision_heuristic_preselection_heuristic_prop_z_depth_threshold: int = 5,
+                 decision_heuristic_preselection_heuristic_prop_z_number_of_variables_lower_bound: Union[int, None] = 10,
+                 decision_heuristic_preselection_heuristic_cra_rank: float = 0.1,
                  component_caching_cara_caching_scheme_multi_occurrence: bool = False,
                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int = 0,
                  name: str = ""):
@@ -177,7 +181,11 @@ class Compiler:
                                       vsads_p_constant_factor=decision_heuristic_vsads_p_constant_factor,
                                       vsads_q_constant_factor=decision_heuristic_vsads_q_constant_factor,
                                       weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses,
-                                      ignore_binary_clauses=decision_heuristic_ignore_binary_clauses)
+                                      ignore_binary_clauses=decision_heuristic_ignore_binary_clauses,
+                                      decision_heuristic_preselection_heuristic_enum=decision_heuristic_preselection_heuristic_enum,
+                                      prop_z_depth_threshold=decision_heuristic_preselection_heuristic_prop_z_depth_threshold,
+                                      prop_z_number_of_variables_lower_bound=decision_heuristic_preselection_heuristic_prop_z_number_of_variables_lower_bound,
+                                      cra_rank=decision_heuristic_preselection_heuristic_cra_rank)
 
         # Implied literals - preselection heuristic
         self.__set_implied_literals_preselection_heuristic(implied_literals_preselection_heuristic_enum=implied_literals_preselection_heuristic_enum,
@@ -245,9 +253,35 @@ class Compiler:
                                  vsads_p_constant_factor: float,
                                  vsads_q_constant_factor: float,
                                  weight_for_satisfied_clauses: bool,
-                                 ignore_binary_clauses: bool) -> None:
-        preselection_heuristic = NoneHeuristic()
+                                 ignore_binary_clauses: bool,
+                                 decision_heuristic_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum,
+                                 prop_z_depth_threshold: int,
+                                 prop_z_number_of_variables_lower_bound: Union[int, None],
+                                 cra_rank: float) -> None:
 
+        # Preselection heuristic
+        # NONE
+        if decision_heuristic_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.NONE:
+            preselection_heuristic = NoneHeuristic(statistics=self.__statistics.preselection_heuristic_decision_heuristic_statistics)
+
+        # PROP_Z
+        elif decision_heuristic_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.PROP_Z:
+            preselection_heuristic = PropZHeuristic(depth_threshold=prop_z_depth_threshold,
+                                                    number_of_variables_lower_bound=prop_z_number_of_variables_lower_bound,
+                                                    statistics=self.__statistics.preselection_heuristic_decision_heuristic_statistics)
+
+        # CRA
+        elif decision_heuristic_preselection_heuristic_enum == ph_enum.PreselectionHeuristicEnum.CRA:
+            preselection_heuristic = ClauseReductionApproximationHeuristic(rank=cra_rank,
+                                                                           total_number_of_variables=self.__cnf.real_number_of_variables,
+                                                                           statistics=self.__statistics.preselection_heuristic_decision_heuristic_statistics)
+
+        # Undefined
+        else:
+            raise c_exception.FunctionNotImplementedException("set_decision_heuristic",
+                                                              f"this type of preselection heuristic ({decision_heuristic_preselection_heuristic_enum.name}) is not implemented")
+
+        # Decision heuristic
         # RANDOM
         if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RANDOM:
             self.__decision_heuristic = RandomHeuristic(preselection_heuristic=preselection_heuristic)

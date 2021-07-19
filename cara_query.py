@@ -11,6 +11,8 @@ import exception.cara_exception as c_exception
 
 def main(main_args):
     try:
+        cara.print_logo()
+
         result = ""
         circuit = Circuit(main_args.circuit_file)
         print("The circuit has been processed!\n")

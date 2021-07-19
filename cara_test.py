@@ -31,6 +31,8 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_en
 
 
 def main(main_args):
+    cara.print_logo()
+
     log_string = "Test automation results\n"
     print(log_string)
 
@@ -225,7 +227,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-ct_l",
                              "--compiler_test_limit",
                              action="store",
-                             default=92160,     # 3840
+                             default=10,     # 3840
                              type=cara.non_negative_int_parser,
                              metavar="[non-negative number]",
                              help="maximum tests per file")

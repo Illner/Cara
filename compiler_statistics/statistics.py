@@ -37,6 +37,7 @@ class Statistics:
     Private IncidenceGraphStatistics incidence_graph_statistics
     Private HypergraphPartitioningStatistics hypergraph_partitioning_statistics
     Private PreselectionHeuristicStatistics preselection_heuristic_implied_literals_statistics
+    Private PreselectionHeuristicStatistics preselection_heuristic_decision_heuristic_statistics
     Private PreselectionHeuristicStatistics preselection_heuristic_first_implied_literals_statistics
     """
 
@@ -90,6 +91,10 @@ class Statistics:
         # Preselection heuristic - first implied literals
         self.__preselection_heuristic_first_implied_literals_statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics(name="first implied literals", active=active)
         self.__template_list.append(self.__preselection_heuristic_first_implied_literals_statistics)
+
+        # Preselection heuristic - decision heuristic
+        self.__preselection_heuristic_decision_heuristic_statistics: PreselectionHeuristicStatistics = PreselectionHeuristicStatistics(name="decision heuristic", active=active)
+        self.__template_list.append(self.__preselection_heuristic_decision_heuristic_statistics)
 
     # region Magic method
     def __str__(self):
@@ -169,6 +174,10 @@ class Statistics:
     @property
     def preselection_heuristic_first_implied_literals_statistics(self) -> PreselectionHeuristicStatistics:
         return self.__preselection_heuristic_first_implied_literals_statistics
+
+    @property
+    def preselection_heuristic_decision_heuristic_statistics(self) -> PreselectionHeuristicStatistics:
+        return self.__preselection_heuristic_decision_heuristic_statistics
 
     @property
     def active(self) -> bool:

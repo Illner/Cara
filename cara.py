@@ -35,6 +35,8 @@ VERSION = "12.8"
 
 def main(main_args):
     try:
+        print_logo()
+
         print("Processing...")
 
         base_class_list = [] if main_args.base_class is None else main_args.base_class
@@ -82,6 +84,10 @@ def main(main_args):
                             decision_heuristic_vsads_q_constant_factor=main_args.dh_vsads_q_factor,
                             decision_heuristic_weight_for_satisfied_clauses=main_args.dh_weight_for_satisfied_clauses,
                             decision_heuristic_ignore_binary_clauses=main_args.dh_ignore_binary_clauses,
+                            decision_heuristic_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum[main_args.dh_preselection_heuristic],
+                            decision_heuristic_preselection_heuristic_prop_z_depth_threshold=main_args.dh_ph_prop_z_depth_threshold,
+                            decision_heuristic_preselection_heuristic_prop_z_number_of_variables_lower_bound=main_args.dh_ph_prop_z_number_of_variables_lower_bound,
+                            decision_heuristic_preselection_heuristic_cra_rank=main_args.dh_ph_cra_rank,
                             component_caching_cara_caching_scheme_multi_occurrence=not main_args.cc_cara_caching_scheme_remove_multi_occurrent_clauses,
                             component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=main_args.cc_cara_caching_scheme_number_of_variables_threshold)
         print("The formula has been processed!\n")
@@ -118,6 +124,16 @@ def main(main_args):
         # Save the log
         with open(LOG_PATH, "w", encoding="utf-8") as log_file:
             log_file.write(stack_trace)
+
+
+def print_logo() -> None:
+    text = "CaraCompiler"
+
+    print(f"-----{'-' * len(text)}-----")
+    print(f"---- {text} ----")
+    print(f"-----{'-' * len(text)}-----")
+
+    print()
 
 
 def directory_path_parser(path: str) -> str:
@@ -363,14 +379,14 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-dh_vsads_p_f",
                              "--dh_vsads_p_factor",
                              action="store",
-                             default=0.5,
+                             default=1,
                              type=float,
                              metavar="[non-negative number]",
                              help="constant factor p (VSADS)")
     parser_temp.add_argument("-dh_vsads_q_f",
                              "--dh_vsads_q_factor",
                              action="store",
-                             default=1,
+                             default=0.5,
                              type=float,
                              metavar="[non-negative number]",
                              help="constant factor q (VSADS)")
@@ -381,6 +397,34 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str_to_bool_parser,
                              metavar="[True, False]",
                              help="use a weight for satisfied clauses (clause reduction heuristic, weighted binaries heuristic, backbone search heuristic)")
+    parser_temp.add_argument("-dh_ph",
+                             "--dh_preselection_heuristic",
+                             action="store",
+                             default=ph_enum.PreselectionHeuristicEnum.NONE.name,
+                             type=str,
+                             choices=ph_enum.preselection_heuristic_enum_names,
+                             help="type of preselection heuristic for the decision heuristic")
+    parser_temp.add_argument("-dh_ph_cra_r",
+                             "--dh_ph_cra_rank",
+                             action="store",
+                             default=0.1,
+                             type=float,
+                             metavar="[0.01-1.00]",
+                             help="how many variables should be preselected (clause reduction approximation - rank)")
+    parser_temp.add_argument("-dh_ph_prop_z_novlb",
+                             "--dh_ph_prop_z_number_of_variables_lower_bound",
+                             action="store",
+                             default=10,
+                             type=non_negative_int_or_none_parser,
+                             metavar="[non-negative number or None]",
+                             help="how many variables should be preselected (prop_z - lower bound) (None for no limit)")
+    parser_temp.add_argument("-dh_ph_prop_z_dt",
+                             "--dh_ph_prop_z_depth_threshold",
+                             action="store",
+                             default=5,
+                             type=non_negative_int_parser,
+                             metavar="[non-negative number]",
+                             help="depth threshold (prop_z)")
     parser_temp.add_argument("-hp_if",
                              "--hp_imbalance_factor",
                              action="store",
@@ -496,7 +540,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-erc_t",
                              "--erc_threshold",
                              action="store",
-                             default=500,
+                             default=None,
                              type=non_negative_int_or_none_parser,
                              metavar="[non-negative number or None]",
                              help="threshold (number of clauses) for applying a procedure that eliminates redundant clauses (None for no limit)")
