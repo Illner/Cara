@@ -1,5 +1,5 @@
-# Cara
-**d-DNNF compiler**
+# CaraCompiler
+**(c)d-DNNF compiler**
 
 **Backdoor Decomposable Monotone Circuits (BDMC) compiler**
 
