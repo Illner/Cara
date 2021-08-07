@@ -102,7 +102,7 @@ def main(main_args):
             # Save the log
             with open(cara.LOG_PATH, "a", encoding="utf-8") as log_file:
                 log_file.write(f"File: {file_name}\n")
-                log_file.write(stack_trace)-
+                log_file.write(stack_trace)
                 log_file.write("\n")
 
         # Total timeout
