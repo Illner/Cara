@@ -64,7 +64,7 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  imbalance_factor=0.1,
+                                  imbalance_factor=0.25,
 
                                   smooth=False,
                                   preprocessing=False,
@@ -102,7 +102,7 @@ def main(main_args):
             # Save the log
             with open(cara.LOG_PATH, "a", encoding="utf-8") as log_file:
                 log_file.write(f"File: {file_name}\n")
-                log_file.write(stack_trace)
+                log_file.write(stack_trace)-
                 log_file.write("\n")
 
         # Total timeout
