@@ -85,7 +85,7 @@ def main(main_args):
                                   hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM,
                                   hp_limit_number_of_clauses_cache=(None, 500),
                                   hp_limit_number_of_variables_cache=(None, 500),
-                                  hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.PATOH,
+                                  hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS,
                                   hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                   hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
                                   hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
