@@ -64,7 +64,7 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  imbalance_factor=0.25,
+                                  imbalance_factor=0.1,
 
                                   smooth=False,
                                   preprocessing=False,
