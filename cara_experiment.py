@@ -67,7 +67,7 @@ def main(main_args):
                                   hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM_VARIANCE,
                                   hp_limit_number_of_clauses_cache=(None, 1000),
                                   hp_limit_number_of_variables_cache=(None, 1000),
-                                  hp_multi_occurrence_cache=True,
+                                  hp_multi_occurrence_cache=False,
 
                                   smooth=False,
                                   preprocessing=False,
