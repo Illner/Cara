@@ -66,7 +66,7 @@ def main(main_args):
 
                                   imbalance_factor=0.1,
 
-                                  component_caching_cara_caching_scheme_multi_occurrence=False,
+                                  component_caching_cara_caching_scheme_multi_occurrence=True,
                                   component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=0,
 
                                   component_caching_enum=cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME,
