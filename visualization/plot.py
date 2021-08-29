@@ -54,7 +54,7 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
         plt.tight_layout()
 
         if save_path is not None:
-            plt.savefig(save_path, dpi=250)
+            plt.savefig(save_path, dpi=500)
 
         if show:
             plt.show()
@@ -104,7 +104,7 @@ def scatter(data_x: Union[List[float], List[List[float]]], data_y: Union[List[fl
         plt.tight_layout()
 
         if save_path is not None:
-            plt.savefig(save_path, dpi=250)
+            plt.savefig(save_path, dpi=500)
 
         if show:
             plt.show()
@@ -133,7 +133,7 @@ def histogram(data: Union[List[float], List[List[float]]], labels: List[str], ti
         plt.tight_layout()
 
         if save_path is not None:
-            plt.savefig(save_path, dpi=250)
+            plt.savefig(save_path, dpi=500)
 
         if show:
             plt.show()
