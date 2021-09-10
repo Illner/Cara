@@ -10,12 +10,13 @@ from visualization.plot import scatter, boxplot, histogram
 # Import enum
 import circuit.node.node_type_enum as nt_enum
 
-plot_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\Plots\BDMC"
+plot_path = r"C:\Users\illner\Desktop"
 
 bdmc_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC"
 hp_cache_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\HP cache"
 cara_circuit_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\CaraCircuit"
 imbalance_factor_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\Imbalance factor"
+dnnf_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\DNNF"
 
 
 @unique
@@ -80,10 +81,21 @@ class ExperimentEnum(str, Enum):
     CARA_CIRCUIT_LIMIT_100 = "Limit 100"
     CARA_CIRCUIT_LIMIT_250 = "Limit 250"
     CARA_CIRCUIT_LIMIT_500 = "Limit 500"
+    CARA_CIRCUIT_LIMIT_0_1 = "Limit 0 (0.1)"
+    CARA_CIRCUIT_LIMIT_0_MOC_1 = "Limit 0 (moc) (0.1)"
 
     IMBALANCE_FACTOR_1 = "0.1"
+    IMBALANCE_FACTOR_1_QUALITY = "0.1 PaToH quality"
+    IMBALANCE_FACTOR_1_SPEED = "0.1 PaToH speed"
     IMBALANCE_FACTOR_25 = "0.25"
+    IMBALANCE_FACTOR_25_QUALITY = "0.25 PaToH quality"
+    IMBALANCE_FACTOR_25_SPEED = "0.25 PaToH speed"
     IMBALANCE_FACTOR_4 = "0.4"
+    IMBALANCE_FACTOR_4_QUALITY = "0.4 PaToH quality"
+    IMBALANCE_FACTOR_4_SPEED = "0.4 PaToH speed"
+
+    DNNF_CLAUSE_REDUCTION = "Clause reduction"
+    DNNF_CLAUSE_REDUCTION_EXT = "Clause reduction (ext)"
 
 @unique
 class PlotEnum(IntEnum):
@@ -92,34 +104,31 @@ class PlotEnum(IntEnum):
     HISTOGRAM = 3
 
 
-root_path = bdmc_root_path
+root_path = dnnf_path
 
 # SCATTER
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_VSADS_25_EXTENDED
+directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_CLAUSE_REDUCTION
+directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_CLAUSE_REDUCTION_EXT
 
 # BOXPLOT, HISTOGRAM
-directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_D4,
-                                             ExperimentEnum.BDMC_VSADS_25_EXTENDED,
-                                             ExperimentEnum.BDMC_LIMIT_250,
-                                             ExperimentEnum.BDMC_LIMIT_500,
-                                             ExperimentEnum.BDMC_LIMIT_1000,
-                                             ExperimentEnum.BDMC_LIMIT_1500]
+directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_VSADS_25,
+                                             ExperimentEnum.BDMC_VSADS_25_EXTENDED]
 
-none_value: float = 10**10
-uncompiled_value: Union[float, None] = 10**10
+none_value: float = 0   # 10**10
+uncompiled_value: Union[float, None] = None     # 10**10
 
-title: str = ""
+title: str = "Number of decisions"
 
-use_uncompiled: bool = True
+percent: bool = False
+use_uncompiled: bool = False
 plot: PlotEnum = PlotEnum.SCATTER
-plot_name: Union[str, None] = None  # "bdmc_dnnf"
+plot_name: Union[str, None] = None
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 # SCATTER
-x_label: str = ""
-y_label: str = ""
-log_scale: bool = True
+x_label: str = "size (clause reduction)"
+y_label: str = "size (clause reduction ext)"
+log_scale: bool = False
 set_together: bool = False
 
 # BOXPLOT
@@ -127,17 +136,19 @@ showfliers: bool = False
 
 # BOXPLOT, HISTOGRAM
 label_prefix: str = ""
-label_list: Union[List[List[str]], None] = [["d-DNNF"],
-                                            ["d-BDMC \nlimit 0"],
-                                            ["d-BDMC \nlimit 250"],
+label_list: Union[List[List[str]], None] = [["VSADS"],
+                                            ["VSADS ext"],
+                                            ["ib 40 %"],
                                             ["d-BDMC \nlimit 500"],
                                             ["d-BDMC \nlimit 1000"],
                                             ["d-BDMC \nlimit 1500"]]
 
 
 def function(statistics: Statistics) -> Union[float, None]:
-    return statistics.size
+    return statistics.size  # + statistics.component_statistics.component_caching_after_cara_mapping_length.sum_count
     # return statistics.compiler_statistics.create_circuit.average_time
+
+    # return statistics.hypergraph_partitioning_statistics.cut_set_size.average_count
 
     # return statistics.get_node_type_counter(nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF) + statistics.get_node_type_counter(nt_enum.NodeTypeEnum.TWO_CNF)
 
@@ -167,6 +178,8 @@ def function(statistics: Statistics) -> Union[float, None]:
     # return statistics.hypergraph_partitioning_statistics.get_cut_set.average_time
     # return statistics.hypergraph_partitioning_statistics.cache_hit.average_count
     # return statistics.component_statistics.component_caching_after_hit.average_count
+    # return statistics.component_statistics.component_caching_after_formula_length.average_count
+    # return statistics.component_statistics.decision_variable.sum_count
 
 
 def get_statistics(directory_name: str) -> Tuple[Dict[str, Dict[str, Statistics]], Dict[str, Set[str]], Set[str]]:
@@ -206,6 +219,9 @@ def get_value(statistics: Statistics):
 
     if value is None:
         return none_value
+
+    if percent:
+        return 100 * value
 
     return value
 
