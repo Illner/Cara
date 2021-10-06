@@ -58,6 +58,7 @@ class Compiler:
     """    
     Private Cnf cnf
     Private Circuit circuit
+    Private str node_statistics
     Private Statistics statistics
     Private str mapping_node_statistics
     Private ComponentCachingAbstract component_caching
@@ -138,7 +139,8 @@ class Compiler:
                  component_caching_cara_caching_scheme_multi_occurrence: bool = False,
                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int = 0,
                  name: str = "",
-                 mapping_node_statistics: Union[str, None] = None):
+                 mapping_node_statistics: Union[str, None] = None,
+                 node_statistics: Union[str, None] = None):
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -158,6 +160,7 @@ class Compiler:
         self.__circuit: Circuit = Circuit()
         self.__preprocessing: bool = preprocessing
         self.__cut_set_try_cache: bool = cut_set_try_cache
+        self.__node_statistics: Union[str, None] = node_statistics
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__base_class_threshold: Union[int, None] = base_class_threshold
         self.__mapping_node_statistics: Union[str, None] = mapping_node_statistics
@@ -472,7 +475,8 @@ class Compiler:
                                   first_implied_literals_enum=self.__first_implied_literals_enum,
                                   first_implied_literals_preselection_heuristic=self.__first_implied_literals_preselection_heuristic,
                                   statistics=self.__statistics,
-                                  mapping_node_statistics=self.__mapping_node_statistics)
+                                  mapping_node_statistics=self.__mapping_node_statistics,
+                                  node_statistics=self.__node_statistics)
             node_id = component.create_circuit()
             node_id_set.add(node_id)
 

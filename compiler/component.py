@@ -29,6 +29,7 @@ class Component:
     Private Cnf cnf
     Private Solver solver
     Private Circuit circuit
+    Private str node_statistics
     Private Statistics statistics
     Private str mapping_node_statistics
     Private IncidenceGraph incidence_graph
@@ -77,12 +78,14 @@ class Component:
                  first_implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  first_implied_literals_preselection_heuristic: PreselectionHeuristicAbstract,
                  statistics: Statistics,
-                 mapping_node_statistics: Union[str, None]):
+                 mapping_node_statistics: Union[str, None],
+                 node_statistics: Union[str, None]):
         self.__cnf: Cnf = cnf
         self.__solver: Solver = solver
         self.__circuit: Circuit = circuit
         self.__statistics: Statistics = statistics
         self.__incidence_graph: IncidenceGraph = incidence_graph
+        self.__node_statistics: Union[str, None] = node_statistics
         self.__component_caching: ComponentCachingAbstract = component_caching
         self.__decision_heuristic: DecisionHeuristicAbstract = decision_heuristic
         self.__mapping_node_statistics: Union[str, None] = mapping_node_statistics
@@ -122,10 +125,10 @@ class Component:
     # endregion
 
     # region Private
-    def __create_mapping_node_statistics(self, file_id: int, mapping_function_dictionary: Dict[int, int]) -> None:
+    def __create_mapping_node_statistics(self, node_id: int, mapping_function_dictionary: Dict[int, int]) -> None:
         """
         Create an actual mapping node statistic
-        :param file_id: the identifier of the file
+        :param node_id: the identifier of the mapping node
         :param mapping_function_dictionary: the mapping function
         :return: None
         """
@@ -133,7 +136,7 @@ class Component:
         if self.__mapping_node_statistics is None:
             return
 
-        mapping_node_statistics_file = self.__mapping_node_statistics + f".{file_id}.mn.stat"
+        mapping_node_statistics_file = self.__mapping_node_statistics + f".{node_id}.temp.mn.stat"
         with open(mapping_node_statistics_file, "w", encoding="utf-8") as file:
             # Mapping function
             mapping_function_sorted_list = sorted(mapping_function_dictionary.keys())
@@ -349,7 +352,8 @@ class Component:
                                        first_implied_literals_enum=self.__first_implied_literals_enum,
                                        first_implied_literals_preselection_heuristic=self.__first_implied_literals_preselection_heuristic,
                                        statistics=self.__statistics,
-                                       mapping_node_statistics=self.__mapping_node_statistics)
+                                       mapping_node_statistics=self.__mapping_node_statistics,
+                                       node_statistics=self.__node_statistics)
 
             # cut_set_restriction = cut_set.intersection(incidence_graph.variable_set(copy=False))
             node_id = component_temp.create_circuit(depth=(depth + 1),
@@ -437,6 +441,13 @@ class Component:
             self.__remove_literals({literal})
 
         decision_node_id = self.__circuit.create_decision_node(decision_variable, node_id_list[0], node_id_list[1])
+
+        # Node statistics
+        if self.__node_statistics is not None:
+            node_statistics_file = self.__node_statistics + f".{decision_node_id}.temp.n.stat"
+            with open(node_statistics_file, "w", encoding="utf-8") as file:
+                file.write(self.__incidence_graph.convert_to_cnf().str_with_mapping(horn_renaming_function=set(),
+                                                                                    normalize_variables=False)[0])
 
         return decision_node_id
 

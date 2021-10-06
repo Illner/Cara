@@ -27,6 +27,9 @@ def main(main_args):
     try:
         print("Processing...")
 
+        mapping_node_statistics = None if not main_args.mapping_node_statistics else main_args.output_file
+        node_statistics = None if not main_args.node_statistics else main_args.output_file
+
         compiler = Compiler(cnf=main_args.input_file,
                             smooth=main_args.smooth,
                             statistics=main_args.statistics,
@@ -54,7 +57,10 @@ def main(main_args):
                             hp_patoh_sugparam_enum=hpps_enum.PatohSugparamEnum.QUALITY,
                             decision_heuristic_vsids_d4_version=True,
                             decision_heuristic_vsads_p_constant_factor=1,
-                            decision_heuristic_vsads_q_constant_factor=1)
+                            decision_heuristic_vsads_q_constant_factor=1,
+                            mapping_node_statistics=mapping_node_statistics,
+                            node_statistics=node_statistics)
+
         print("The formula has been processed!\n")
 
         print("Compiling...")
@@ -69,7 +75,9 @@ def main(main_args):
         print("Generating file(s)...")
         # Circuit
         with open(main_args.output_file, "w", encoding="utf-8") as file:
-            circuit.save_to_io(file)
+            circuit.save_to_io(source=file,
+                               mapping_node_statistics=mapping_node_statistics,
+                               node_statistics=node_statistics)
 
         # Statistics
         if main_args.statistics:
@@ -117,6 +125,16 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="generate statistics")
+    parser_temp.add_argument("-mn_stat",
+                             "--mapping_node_statistics",
+                             action="store_true",
+                             default=False,
+                             help="generate mapping node statistics")
+    parser_temp.add_argument("-n_stat",
+                             "--node_statistics",
+                             action="store_true",
+                             default=False,
+                             help="generate node statistics")
 
     parser_temp.add_argument("-v",
                              "--version",

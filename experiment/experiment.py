@@ -40,20 +40,26 @@ class Experiment:
 
     """
     Private bool save_circuit
+    Private str node_statistics
     Private str experiment_name
     Private timedelta total_time
     Private Path log_directory_path
+    Private str mapping_node_statistics
     Private timedelta timeout_experiment
     
     Protected List<Tuple<str, str>> files
     """
 
     def __init__(self, experiment_name: str, directory_path: [str, Path], timeout_experiment: Union[timedelta, None] = None,
-                 log_directory_path: Union[str, Path, None] = None, save_circuit: bool = False):
+                 log_directory_path: Union[str, Path, None] = None, save_circuit: bool = False,
+                 mapping_node_statistics: Union[str, None] = None, node_statistics: Union[str, None] = None):
         self.__save_circuit: bool = save_circuit
-        self.__experiment_name: str = experiment_name
         self.__total_time: timedelta = timedelta()
+        self.__experiment_name: str = experiment_name
         self.__timeout_experiment: Union[timedelta, None] = timeout_experiment
+
+        self.__node_statistics: Union[str, None] = node_statistics
+        self.__mapping_node_statistics: Union[str, None] = mapping_node_statistics
 
         # Log
         if log_directory_path is not None:
@@ -173,7 +179,9 @@ class Experiment:
                             decision_heuristic_weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses,
                             decision_heuristic_ignore_binary_clauses=decision_heuristic_ignore_binary_clauses,
                             component_caching_cara_caching_scheme_multi_occurrence=component_caching_cara_caching_scheme_multi_occurrence,
-                            component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold)
+                            component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold,
+                            mapping_node_statistics=self.__mapping_node_statistics,
+                            node_statistics=self.__node_statistics)
 
         experiment_thread: TExperimentThread = self.__ExperimentThread(compiler)
         thread = kthread.KThread(target=Experiment.__experiment, args=(experiment_thread,))
@@ -232,7 +240,9 @@ class Experiment:
         if self.__save_circuit and (not timeout_exceeded) and (not exception):
             circuit_path_temp = Path(os.path.join(directory_path_temp, "circuit.nnf"))
             with open(circuit_path_temp, "w", encoding="utf-8") as file:
-                experiment_thread.compiler.circuit.save_to_io(file)
+                experiment_thread.compiler.circuit.save_to_io(source=file,
+                                                              mapping_node_statistics=self.__mapping_node_statistics,
+                                                              node_statistics=self.__node_statistics)
 
         del compiler
         gc.collect()

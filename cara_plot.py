@@ -104,24 +104,24 @@ class PlotEnum(IntEnum):
     HISTOGRAM = 3
 
 
-root_path = dnnf_path
+root_path = cara_circuit_root_path
 
 # SCATTER
-directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_CLAUSE_REDUCTION
-directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_CLAUSE_REDUCTION_EXT
+directory_name_1: ExperimentEnum = ExperimentEnum.CARA_CIRCUIT_LIMIT_0_1
+directory_name_2: ExperimentEnum = ExperimentEnum.CARA_CIRCUIT_LIMIT_0
 
 # BOXPLOT, HISTOGRAM
-directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_VSADS_25,
-                                             ExperimentEnum.BDMC_VSADS_25_EXTENDED]
+directory_name_list: List[ExperimentEnum] = [ExperimentEnum.CARA_CIRCUIT_LIMIT_0_1,
+                                             ExperimentEnum.CARA_CIRCUIT_LIMIT_0_MOC_1]
 
 none_value: float = 0   # 10**10
 uncompiled_value: Union[float, None] = None     # 10**10
 
 title: str = "Number of decisions"
 
-percent: bool = False
-use_uncompiled: bool = False
-plot: PlotEnum = PlotEnum.SCATTER
+percent: bool = True
+use_uncompiled: bool = True
+plot: PlotEnum = PlotEnum.BOXPLOT
 plot_name: Union[str, None] = None
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
@@ -145,7 +145,8 @@ label_list: Union[List[List[str]], None] = [["VSADS"],
 
 
 def function(statistics: Statistics) -> Union[float, None]:
-    return statistics.size  # + statistics.component_statistics.component_caching_after_cara_mapping_length.sum_count
+    return statistics.component_statistics.component_caching_after_hit.average_count
+    # return statistics.size  # + statistics.component_statistics.component_caching_after_cara_mapping_length.sum_count
     # return statistics.compiler_statistics.create_circuit.average_time
 
     # return statistics.hypergraph_partitioning_statistics.cut_set_size.average_count

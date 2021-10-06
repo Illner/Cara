@@ -1,5 +1,6 @@
 # Import
 import warnings
+from pathlib import Path
 from formula.cnf import Cnf
 from io import StringIO, FileIO
 from sortedcontainers import SortedDict
@@ -1371,9 +1372,11 @@ class Circuit:
 
         return string
 
-    def save_to_io(self, source: Union[FileIO, StringIO, TextIO]) -> None:
+    def save_to_io(self, source: Union[FileIO, StringIO, TextIO],
+                   mapping_node_statistics: Union[str, None] = None, node_statistics: Union[str, None] = None) -> None:
         """
         Save the circuit to the IO
+        mapping_node_statistics and node_statistics are necessary because of renaming files!
         :return: None
         """
 
@@ -1436,6 +1439,18 @@ class Circuit:
                 j = 0 if node.decision_variable is None else node.decision_variable
 
                 source.write(f"O {j} {len(child_to_set)} {str(child_to_sorted_list)}\n")
+
+                # Node statistics
+                if node_statistics is not None:
+                    node_statistics_path_temp = Path(node_statistics + f".{node_id}.temp.n.stat")
+
+                    # The file exists
+                    if node_statistics_path_temp.exists():
+                        node_statistics_path_temp.rename(node_statistics + f".{id_to_dictionary[node_id]}.n.stat")
+                    # else:
+                    #     warning_temp = f"The file ({str(node_statistics_path_temp)}) does not exist!"
+                    #     warnings.warn(warning_temp)
+
                 continue
 
             # 2-CNF or renamable Horn CNF leaf
@@ -1455,6 +1470,18 @@ class Circuit:
                 child_id = id_to_dictionary[child_id]
 
                 source.write(f"M {child_id} {node.number_of_variables} {node.str_mapping()}\n")
+
+                # Mapping node statistics
+                if mapping_node_statistics is not None:
+                    mapping_node_statistics_path_temp = Path(mapping_node_statistics + f".{node_id}.temp.mn.stat")
+
+                    # The file exists
+                    if mapping_node_statistics_path_temp.exists():
+                        mapping_node_statistics_path_temp.rename(mapping_node_statistics + f".{id_to_dictionary[node_id]}.mn.stat")
+                    else:
+                        warning_temp = f"The file ({str(mapping_node_statistics_path_temp)}) does not exist!"
+                        warnings.warn(warning_temp)
+
                 continue
 
             raise c_exception.SomethingWrongException(f"this type of node ({type(node)}) is not implemented in save_to_io")
@@ -1463,7 +1490,7 @@ class Circuit:
     # region Magic method
     def __str__(self):
         temp = StringIO()
-        self.save_to_io(temp)
+        self.save_to_io(source=temp)
 
         string_temp = temp.getvalue()
         temp.close()

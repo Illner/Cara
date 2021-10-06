@@ -40,6 +40,8 @@ def main(main_args):
         print("Processing...")
 
         base_class_list = [] if main_args.base_class is None else main_args.base_class
+        mapping_node_statistics = None if not main_args.mapping_node_statistics else main_args.output_file
+        node_statistics = None if not main_args.node_statistics else main_args.output_file
 
         compiler = Compiler(cnf=main_args.input_file,
                             smooth=main_args.smooth,
@@ -90,7 +92,9 @@ def main(main_args):
                             decision_heuristic_preselection_heuristic_cra_rank=main_args.dh_ph_cra_rank,
                             component_caching_cara_caching_scheme_multi_occurrence=not main_args.cc_cara_caching_scheme_remove_multi_occurrent_clauses,
                             component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=main_args.cc_cara_caching_scheme_number_of_variables_threshold,
-                            mapping_node_statistics=None if not args.mapping_node_statistics else main_args.output_file)
+                            mapping_node_statistics=mapping_node_statistics,
+                            node_statistics=node_statistics)
+
         print("The formula has been processed!\n")
 
         print("Compiling...")
@@ -105,7 +109,9 @@ def main(main_args):
         print("Generating file(s)...")
         # Circuit
         with open(main_args.output_file, "w", encoding="utf-8") as file:
-            circuit.save_to_io(file)
+            circuit.save_to_io(source=file,
+                               mapping_node_statistics=mapping_node_statistics,
+                               node_statistics=node_statistics)
 
         # Statistics
         if main_args.statistics:
@@ -303,6 +309,11 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="generate mapping node statistics")
+    parser_temp.add_argument("-n_stat",
+                             "--node_statistics",
+                             action="store_true",
+                             default=False,
+                             help="generate node statistics")
     parser_temp.add_argument("-p",
                              "--preprocessing",
                              action="store_true",
