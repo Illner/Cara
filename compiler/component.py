@@ -2,7 +2,7 @@
 from formula.cnf import Cnf
 from compiler.solver import Solver
 from circuit.circuit import Circuit
-from typing import Set, List, Union, Tuple
+from typing import Set, List, Union, Tuple, Dict
 from formula.incidence_graph import IncidenceGraph
 from compiler_statistics.statistics import Statistics
 from compiler.component_caching.component_caching_abstract import ComponentCachingAbstract
@@ -30,6 +30,7 @@ class Component:
     Private Solver solver
     Private Circuit circuit
     Private Statistics statistics
+    Private str mapping_node_statistics
     Private IncidenceGraph incidence_graph
     Private ComponentCachingAbstract component_caching
     Private DecisionHeuristicAbstract decision_heuristic
@@ -75,7 +76,8 @@ class Component:
                  implied_literals_preselection_heuristic: PreselectionHeuristicAbstract,
                  first_implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  first_implied_literals_preselection_heuristic: PreselectionHeuristicAbstract,
-                 statistics: Statistics):
+                 statistics: Statistics,
+                 mapping_node_statistics: Union[str, None]):
         self.__cnf: Cnf = cnf
         self.__solver: Solver = solver
         self.__circuit: Circuit = circuit
@@ -83,6 +85,7 @@ class Component:
         self.__incidence_graph: IncidenceGraph = incidence_graph
         self.__component_caching: ComponentCachingAbstract = component_caching
         self.__decision_heuristic: DecisionHeuristicAbstract = decision_heuristic
+        self.__mapping_node_statistics: Union[str, None] = mapping_node_statistics
         self.__hypergraph_partitioning: HypergraphPartitioning = hypergraph_partitioning
         self.__implied_literals_preselection_heuristic: PreselectionHeuristicAbstract = implied_literals_preselection_heuristic
         self.__first_implied_literals_preselection_heuristic: PreselectionHeuristicAbstract = first_implied_literals_preselection_heuristic
@@ -119,6 +122,32 @@ class Component:
     # endregion
 
     # region Private
+    def __create_mapping_node_statistics(self, file_id: int, mapping_function_dictionary: Dict[int, int]) -> None:
+        """
+        Create an actual mapping node statistic
+        :param file_id: the identifier of the file
+        :param mapping_function_dictionary: the mapping function
+        :return: None
+        """
+
+        if self.__mapping_node_statistics is None:
+            return
+
+        mapping_node_statistics_file = self.__mapping_node_statistics + f".{file_id}.mn.stat"
+        with open(mapping_node_statistics_file, "w", encoding="utf-8") as file:
+            # Mapping function
+            mapping_function_sorted_list = sorted(mapping_function_dictionary.keys())
+
+            for variable_id in mapping_function_sorted_list:
+                mapping_id = mapping_function_dictionary[variable_id]
+                file.write(f"{variable_id} {mapping_id} ")
+
+            file.write("\n\n")
+
+            # Formula
+            file.write(self.__incidence_graph.convert_to_cnf().str_with_mapping(horn_renaming_function=set(),
+                                                                                normalize_variables=False)[0])
+
     def __get_implied_literals(self, depth: int, first_implied_literals: bool) -> Union[Set[int], None]:
         """
         Return a set of implied literals based on the assignment and implied_literals_enum (or first_implied_literals_enum).
@@ -319,7 +348,8 @@ class Component:
                                        implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                        first_implied_literals_enum=self.__first_implied_literals_enum,
                                        first_implied_literals_preselection_heuristic=self.__first_implied_literals_preselection_heuristic,
-                                       statistics=self.__statistics)
+                                       statistics=self.__statistics,
+                                       mapping_node_statistics=self.__mapping_node_statistics)
 
             # cut_set_restriction = cut_set.intersection(incidence_graph.variable_set(copy=False))
             node_id = component_temp.create_circuit(depth=(depth + 1),
@@ -451,12 +481,16 @@ class Component:
                 if cache_mapping_before_unit_propagation is None:
                     return cache_id
 
-                node_id = self.__circuit.create_mapping_node(child_id=cache_id,
-                                                             variable_id_mapping_id_dictionary_cache=cache_mapping,
-                                                             mapping_id_variable_id_dictionary=cache_mapping_before_unit_propagation[1])
+                node_id, mapping_variable_id_variable_cache_dictionary = self.__circuit.create_mapping_node(child_id=cache_id,
+                                                                                                            variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                                                                            mapping_id_variable_id_dictionary=cache_mapping_before_unit_propagation[1])
 
+                # Mapping is used
                 if node_id != cache_id:
                     self.__statistics.component_statistics.component_caching_cara_mapping_length.add_count(len(cache_mapping))  # counter
+
+                    # Mapping node statistics
+                    self.__create_mapping_node_statistics(node_id, mapping_variable_id_variable_cache_dictionary)
 
                 return node_id
             else:
@@ -505,12 +539,15 @@ class Component:
 
                 # Mapping is used
                 if cache_mapping_after_unit_propagation is not None:
-                    node_temp = self.__circuit.create_mapping_node(child_id=cache_id,
-                                                                   variable_id_mapping_id_dictionary_cache=cache_mapping,
-                                                                   mapping_id_variable_id_dictionary=cache_mapping_after_unit_propagation[1])
+                    node_temp, mapping_variable_id_variable_cache_dictionary = self.__circuit.create_mapping_node(child_id=cache_id,
+                                                                                                                  variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                                                                                  mapping_id_variable_id_dictionary=cache_mapping_after_unit_propagation[1])
 
                     if node_temp != cache_id:
                         self.__statistics.component_statistics.component_caching_after_cara_mapping_length.add_count(len(cache_mapping))    # counter
+
+                        # Mapping node statistics
+                        self.__create_mapping_node_statistics(node_temp, mapping_variable_id_variable_cache_dictionary)
 
                     cache_id = node_temp
 

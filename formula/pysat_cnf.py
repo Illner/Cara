@@ -102,7 +102,7 @@ class PySatCnf(CNF):
 
         return result
 
-    def str_with_mapping(self, horn_renaming_function: Set[int]) -> Tuple[str, Dict[int, int]]:
+    def str_with_mapping(self, horn_renaming_function: Set[int], normalize_variables: bool = True) -> Tuple[str, Dict[int, int]]:
         result = " ".join(('p cnf', str(self.number_of_variables), str(self.number_of_clauses)))
 
         variable_index_temp: int = 1
@@ -116,8 +116,11 @@ class PySatCnf(CNF):
 
                 # Mapping
                 if var not in variable_dictionary:
-                    variable_dictionary[var] = variable_index_temp
-                    variable_index_temp += 1
+                    if normalize_variables:
+                        variable_dictionary[var] = variable_index_temp
+                        variable_index_temp += 1
+                    else:
+                        variable_dictionary[var] = var
 
                 var_map = variable_dictionary[var]
                 lit_map = -var_map if lit < 0 else var_map

@@ -59,6 +59,7 @@ class Compiler:
     Private Cnf cnf
     Private Circuit circuit
     Private Statistics statistics
+    Private str mapping_node_statistics
     Private ComponentCachingAbstract component_caching
     Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
@@ -136,7 +137,8 @@ class Compiler:
                  decision_heuristic_preselection_heuristic_cra_rank: float = 0.1,
                  component_caching_cara_caching_scheme_multi_occurrence: bool = False,
                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int = 0,
-                 name: str = ""):
+                 name: str = "",
+                 mapping_node_statistics: Union[str, None] = None):
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -158,6 +160,7 @@ class Compiler:
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__base_class_threshold: Union[int, None] = base_class_threshold
+        self.__mapping_node_statistics: Union[str, None] = mapping_node_statistics
         self.__base_class_enum_set: Set[bc_enum.BaseClassEnum] = base_class_enum_set
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__component_caching_after_unit_propagation: bool = component_caching_after_unit_propagation
@@ -468,7 +471,8 @@ class Compiler:
                                   implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                   first_implied_literals_enum=self.__first_implied_literals_enum,
                                   first_implied_literals_preselection_heuristic=self.__first_implied_literals_preselection_heuristic,
-                                  statistics=self.__statistics)
+                                  statistics=self.__statistics,
+                                  mapping_node_statistics=self.__mapping_node_statistics)
             node_id = component.create_circuit()
             node_id_set.add(node_id)
 

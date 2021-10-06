@@ -89,7 +89,8 @@ def main(main_args):
                             decision_heuristic_preselection_heuristic_prop_z_number_of_variables_lower_bound=main_args.dh_ph_prop_z_number_of_variables_lower_bound,
                             decision_heuristic_preselection_heuristic_cra_rank=main_args.dh_ph_cra_rank,
                             component_caching_cara_caching_scheme_multi_occurrence=not main_args.cc_cara_caching_scheme_remove_multi_occurrent_clauses,
-                            component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=main_args.cc_cara_caching_scheme_number_of_variables_threshold)
+                            component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=main_args.cc_cara_caching_scheme_number_of_variables_threshold,
+                            mapping_node_statistics=None if not args.mapping_node_statistics else main_args.output_file)
         print("The formula has been processed!\n")
 
         print("Compiling...")
@@ -297,6 +298,11 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="generate statistics")
+    parser_temp.add_argument("-mn_stat",
+                             "--mapping_node_statistics",
+                             action="store_true",
+                             default=False,
+                             help="generate mapping node statistics")
     parser_temp.add_argument("-p",
                              "--preprocessing",
                              action="store_true",
@@ -338,7 +344,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-cc_ccs_novt",
                              "--cc_cara_caching_scheme_number_of_variables_threshold",
                              action="store",
-                             default=30,
+                             default=0,
                              type=non_negative_int_parser,
                              metavar="[non-negative number]",
                              help="if a subformula has at most x variables, the basic caching scheme will be used (cara caching scheme)")

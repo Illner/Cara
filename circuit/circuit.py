@@ -4,7 +4,7 @@ from formula.cnf import Cnf
 from io import StringIO, FileIO
 from sortedcontainers import SortedDict
 from other.sorted_list import SortedList
-from typing import Set, Dict, List, Union, TextIO
+from typing import Set, Dict, List, Union, TextIO, Tuple
 
 from formula.pysat_2_cnf import PySat2Cnf
 from formula.pysat_horn_cnf import PySatHornCnf
@@ -290,10 +290,10 @@ class Circuit:
                     except ValueError:
                         raise c_exception.InvalidDimacsNnfFormatException(f"some variable in the mapping ({line}) mentioned at line {line_id} in the mapping node is not an integer")
 
-                    root_id = self.create_mapping_node(child_id=child_id_temp,
-                                                       variable_id_mapping_id_dictionary_cache=variable_id_mapping_id_dictionary_temp,
-                                                       mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
-                                                       composition_needed=False)
+                    root_id, _ = self.create_mapping_node(child_id=child_id_temp,
+                                                          variable_id_mapping_id_dictionary_cache=variable_id_mapping_id_dictionary_temp,
+                                                          mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
+                                                          composition_needed=False)
                     continue
 
                 # 2-CNF or renamable Horn CNF leaf
@@ -923,14 +923,14 @@ class Circuit:
         return or_node_id
 
     def create_mapping_node(self, child_id: int, variable_id_mapping_id_dictionary_cache: Dict[int, int],
-                            mapping_id_variable_id_dictionary: Dict[int, int], composition_needed: bool = True) -> int:
+                            mapping_id_variable_id_dictionary: Dict[int, int], composition_needed: bool = True) -> Tuple[int, Dict[int, int]]:
         """
         Create a new mapping node in the circuit
         :param child_id: an identifier of the child
         :param variable_id_mapping_id_dictionary_cache: variable_id -> mapping_id (mapping from the node in the cache)
         :param mapping_id_variable_id_dictionary: mapping_id -> variable_id (mapping from the generated key)
         :param composition_needed: True if the composition is needed to be done (mainly for caching) (variable_id_mapping_id_dictionary_cache o mapping_id_variable_id_dictionary)
-        :return: the identifier of the node
+        :return: the identifier of the node and the mapping function
         :raises MappingIsIncompleteException: if one of the mappings is invalid
         :raises NodeWithIDDoesNotExistInCircuitException: if the child's id does not exist in the circuit
         """
@@ -962,7 +962,7 @@ class Circuit:
 
             # Mapping is not needed
             if not mapping_is_needed:
-                return child_id
+                return child_id, dict()
         else:
             composed_mapping_variable_id_variable_cache_dictionary = variable_id_mapping_id_dictionary_cache
             composed_mapping_variable_cache_variable_id_dictionary = mapping_id_variable_id_dictionary
@@ -979,7 +979,7 @@ class Circuit:
                                 id=self.__get_new_id())
         self.__add_new_node(node)
 
-        return node.id
+        return node.id, composed_mapping_variable_id_variable_cache_dictionary
 
     def clear_comments(self) -> None:
         """
