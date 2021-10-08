@@ -96,6 +96,8 @@ class ExperimentEnum(str, Enum):
 
     DNNF_CLAUSE_REDUCTION = "Clause reduction"
     DNNF_CLAUSE_REDUCTION_EXT = "Clause reduction (ext)"
+    DNNF_WEIGHTED_BINARIES = "Weighted binaries"
+    DNNF_WEIGHTED_BINARIES_EXT = "Weighted binaries (ext)"
 
 @unique
 class PlotEnum(IntEnum):
