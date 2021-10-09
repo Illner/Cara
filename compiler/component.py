@@ -39,6 +39,7 @@ class Component:
     Private PreselectionHeuristicAbstract implied_literals_preselection_heuristic
     Private PreselectionHeuristicAbstract first_implied_literals_preselection_heuristic
     
+    Private bool disable_sat
     Private bool cut_set_try_cache
     Private int base_class_threshold
     Private List<int> assignment_list
@@ -79,7 +80,8 @@ class Component:
                  first_implied_literals_preselection_heuristic: PreselectionHeuristicAbstract,
                  statistics: Statistics,
                  mapping_node_statistics: Union[str, None],
-                 node_statistics: Union[str, None]):
+                 node_statistics: Union[str, None],
+                 disable_sat: bool):
         self.__cnf: Cnf = cnf
         self.__solver: Solver = solver
         self.__circuit: Circuit = circuit
@@ -93,6 +95,7 @@ class Component:
         self.__implied_literals_preselection_heuristic: PreselectionHeuristicAbstract = implied_literals_preselection_heuristic
         self.__first_implied_literals_preselection_heuristic: PreselectionHeuristicAbstract = first_implied_literals_preselection_heuristic
 
+        self.__disable_sat: bool = disable_sat
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__assignment_list: List[int] = assignment_list
         self.__new_cut_set_threshold: float = new_cut_set_threshold
@@ -216,7 +219,11 @@ class Component:
 
         self.__statistics.component_statistics.get_cut_set.start_stopwatch()    # timer (start)
 
-        result = self.__hypergraph_partitioning.get_cut_set(self.__incidence_graph, self.__solver, self.__assignment_list, incidence_graph_is_reduced)
+        result = self.__hypergraph_partitioning.get_cut_set(incidence_graph=self.__incidence_graph,
+                                                            solver=self.__solver,
+                                                            assignment=self.__assignment_list,
+                                                            incidence_graph_is_reduced=incidence_graph_is_reduced,
+                                                            use_restriction=self.__disable_sat)
 
         self.__statistics.component_statistics.get_cut_set.stop_stopwatch()     # timer (stop)
         return result
@@ -353,7 +360,8 @@ class Component:
                                        first_implied_literals_preselection_heuristic=self.__first_implied_literals_preselection_heuristic,
                                        statistics=self.__statistics,
                                        mapping_node_statistics=self.__mapping_node_statistics,
-                                       node_statistics=self.__node_statistics)
+                                       node_statistics=self.__node_statistics,
+                                       disable_sat=self.__disable_sat)
 
             # cut_set_restriction = cut_set.intersection(incidence_graph.variable_set(copy=False))
             node_id = component_temp.create_circuit(depth=(depth + 1),
@@ -394,7 +402,8 @@ class Component:
             incidence_graph_is_reduced = True
             self.__hypergraph_partitioning.reduce_incidence_graph(incidence_graph=self.__incidence_graph,
                                                                   solver=self.__solver,
-                                                                  assignment=self.__assignment_list)
+                                                                  assignment=self.__assignment_list,
+                                                                  use_restriction=self.__disable_sat)
             result_cache_cut_set, _ = self.__hypergraph_partitioning.check_cache(self.__incidence_graph)
 
             # A cut set has been found using the cache
@@ -465,8 +474,9 @@ class Component:
 
         if not new_component:
             model = self.__solver.get_model(self.__assignment_list)
+
             # The formula is unsatisfiable
-            if model is None:
+            if (model is None) and (not self.__disable_sat):
                 self.__statistics.component_statistics.unsatisfiable.add_count(1)   # counter
                 return self.__circuit.create_constant_leaf(False)
 
@@ -511,6 +521,11 @@ class Component:
         if not new_component:
             implied_literal_set = self.__get_implied_literals(depth=depth,
                                                               first_implied_literals=first_implied_literals)
+
+            if self.__disable_sat and (implied_literal_set is None):
+                self.__statistics.component_statistics.unsatisfiable.add_count(1)  # counter
+                return self.__circuit.create_constant_leaf(False)
+
             self.__statistics.component_statistics.implied_literal.add_count(len(implied_literal_set))  # counter
             implied_literal_set, _ = self.__add_literals(list(implied_literal_set))
             implied_literal_id_set = self.__circuit.create_literal_leaf_set(implied_literal_set)
@@ -610,7 +625,7 @@ class Component:
             self.__statistics.component_statistics.split.add_count(1)   # counter
 
             # DON'T create new incidence graphs
-            if self.__incidence_graph.number_of_variables() <= Component.__CREATE_COMPONENTS_THRESHOLD:
+            if (model is not None) and (self.__incidence_graph.number_of_variables() <= Component.__CREATE_COMPONENTS_THRESHOLD):
                 node_id_set = self.__create_circuit_more_components(depth=depth,
                                                                     cut_set=cut_set,
                                                                     model=model,
@@ -619,7 +634,7 @@ class Component:
             else:
                 node_id_set = self.__create_circuit_more_components_create_incidence_graphs_for_components(depth=depth,
                                                                                                            cut_set=cut_set,
-                                                                                                           model=model,
+                                                                                                           model=[] if model is None else model,
                                                                                                            implied_literal_set=implied_literal_set)
             # Component caching
             if self.__component_caching_after_unit_propagation and (cache_key_after_unit_propagation is not None):

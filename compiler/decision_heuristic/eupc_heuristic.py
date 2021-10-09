@@ -1,4 +1,5 @@
 # Import
+import random
 from typing import List, Set, Dict
 from compiler.solver import Solver
 from formula.incidence_graph import IncidenceGraph
@@ -36,6 +37,11 @@ class ExactUnitPropagationCountHeuristic(DecisionHeuristicAbstract):
 
         implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list=assignment_list,
                                                                    variable_restriction_set=preselected_variable_set)
+
+        # disable_sat => the formula can be unsatisfiable
+        if implicit_bcp_dictionary is None:
+            return random.sample(preselected_variable_set, 1)[0]
+
         score_dictionary: Dict[int, int] = dict()   # key: variable, value: score of the variable
 
         # Compute score

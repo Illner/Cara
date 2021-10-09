@@ -1,4 +1,5 @@
 # Import
+import random
 from typing import Set, List, Dict
 from compiler.solver import Solver
 from formula.incidence_graph import IncidenceGraph
@@ -66,6 +67,11 @@ class WeightedBinariesHeuristic(DecisionHeuristicAbstract):
 
         implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list=assignment_list,
                                                                    variable_restriction_set=preselected_variable_set)
+
+        # disable_sat => the formula can be unsatisfiable
+        if implicit_bcp_dictionary is None:
+            return random.sample(preselected_variable_set, 1)[0]
+
         implied_variable, implied_literal_dictionary = DecisionHeuristicAbstract._process_implicit_bcp_dictionary(implicit_bcp_dictionary)
         if implied_variable is not None:
             return implied_variable

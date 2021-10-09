@@ -93,7 +93,8 @@ def main(main_args):
                             component_caching_cara_caching_scheme_multi_occurrence=not main_args.cc_cara_caching_scheme_remove_multi_occurrent_clauses,
                             component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=main_args.cc_cara_caching_scheme_number_of_variables_threshold,
                             mapping_node_statistics=mapping_node_statistics,
-                            node_statistics=node_statistics)
+                            node_statistics=node_statistics,
+                            disable_sat=main_args.disable_sat)
 
         print("The formula has been processed!\n")
 
@@ -319,6 +320,11 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="find all backbone literals before the compilation")
+    parser_temp.add_argument("-d_sat",
+                             "--disable_sat",
+                             action="store_true",
+                             default=False,
+                             help="disable the SAT solver (only for BCP)")
     parser_temp.add_argument("-dh_ibc",
                              "--dh_ignore_binary_clauses",
                              action="store_true",

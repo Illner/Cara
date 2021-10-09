@@ -258,11 +258,13 @@ class HypergraphPartitioning:
 
         warnings.warn("No software for hypergraph partitioning is being used!")
 
-    def __variable_simplification(self, solver: Solver, assignment_list: List[int]) -> Dict[int, Set[int]]:
+    def __variable_simplification(self, solver: Solver, assignment_list: List[int],
+                                  variable_restriction_set: Union[Set[int], None] = None) -> Dict[int, Set[int]]:
         """
         Compute variable simplification using implicit unit propagation
-        :param solver: a solver
+        :param solver: the solver
         :param assignment_list: a partial assignment (for the solver)
+        :param variable_restriction_set: a set of variables that will be taken into account
         :return: a dictionary where a key is a variable (representant),
         and the value is a set of variables that can be merged with the variable to reduce the hypergraph size
         """
@@ -276,7 +278,8 @@ class HypergraphPartitioning:
 
         # EQUIV_SIMPL
         if self.__variable_simplification_enum == hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL:
-            implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list, variable_restriction_set=None)
+            implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list=assignment_list,
+                                                                       variable_restriction_set=variable_restriction_set)
 
             # The formula is unsatisfiable (it should not happen at all)
             if implicit_bcp_dictionary is None:
@@ -828,12 +831,14 @@ class HypergraphPartitioning:
     # endregion
 
     # region Public method
-    def get_cut_set(self, incidence_graph: IncidenceGraph, solver: Solver, assignment: List[int], incidence_graph_is_reduced: bool = False) -> Set[int]:
+    def get_cut_set(self, incidence_graph: IncidenceGraph, solver: Solver, assignment: List[int],
+                    incidence_graph_is_reduced: bool = False, use_restriction: bool = False) -> Set[int]:
         """
         Create a hypergraph based on the incidence graph
         :param incidence_graph: an incidence graph
-        :param solver: a solver (in case equivSimpl is used)
+        :param solver: the solver (in case equivSimpl is used)
         :param assignment: a partial assignment (for the solver)
+        :param use_restriction: use restriction in the implicit unit propagation
         :param incidence_graph_is_reduced: True if the incidence graph has been already reduced
         :return: a cut set of the hypergraph
         """
@@ -843,7 +848,10 @@ class HypergraphPartitioning:
         self.__set_dynamic_weights(incidence_graph)
 
         if not incidence_graph_is_reduced:
-            self.reduce_incidence_graph(incidence_graph, solver, assignment)
+            self.reduce_incidence_graph(incidence_graph=incidence_graph,
+                                        solver=solver,
+                                        assignment=assignment,
+                                        use_restriction=use_restriction)
 
         # Only one clause remains => all variables are in the cut set
         if incidence_graph.number_of_clauses() == 1:
@@ -927,14 +935,20 @@ class HypergraphPartitioning:
 
             return cut_set_cache, result_cache
 
-    def reduce_incidence_graph(self, incidence_graph: IncidenceGraph, solver: Solver, assignment: List[int]) -> None:
+    def reduce_incidence_graph(self, incidence_graph: IncidenceGraph, solver: Solver, assignment: List[int], use_restriction: bool) -> None:
         """
         Do a variable simplification and subsumption (if the limit is satisfied)
+        :param incidence_graph: an incidence graph
+        :param solver: the solver
+        :param assignment: a partial assignment (for the solver)
+        :param use_restriction: use restriction in the implicit unit propagation
         :return: None
         """
 
         # Variable simplification
-        variable_simplification_dictionary = self.__variable_simplification(solver, assignment)
+        variable_simplification_dictionary = self.__variable_simplification(solver=solver,
+                                                                            assignment_list=assignment,
+                                                                            variable_restriction_set=None if not use_restriction else incidence_graph._variable_set)
         incidence_graph.merge_variable_simplification(variable_simplification_dictionary)
 
         # Subsumption

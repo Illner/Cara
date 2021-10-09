@@ -68,6 +68,7 @@ class Compiler:
     Private PreselectionHeuristicAbstract first_implied_literals_preselection_heuristic
     
     Private bool smooth
+    Private bool disable_sat
     Private bool preprocessing
     Private bool cut_set_try_cache
     Private int base_class_threshold
@@ -140,7 +141,11 @@ class Compiler:
                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int = 0,
                  name: str = "",
                  mapping_node_statistics: Union[str, None] = None,
-                 node_statistics: Union[str, None] = None):
+                 node_statistics: Union[str, None] = None,
+                 disable_sat: bool = False):
+        # Invalid configuration
+        if disable_sat and ((implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP) or (first_implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP)):
+            raise c_exception.InvalidConfigurationException("BCP is needed for disable_sat")
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -158,6 +163,7 @@ class Compiler:
 
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
+        self.__disable_sat: bool = disable_sat
         self.__preprocessing: bool = preprocessing
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__node_statistics: Union[str, None] = node_statistics
@@ -451,6 +457,7 @@ class Compiler:
                             sat_solver_enum=self.__sat_solver_enum,
                             first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BACKBONE if self.__preprocessing else il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP,
                             incidence_graph=incidence_graph,
+                            propagate_sat_solver_enum=None if not self.__disable_sat else ss_enum.PropagateSatSolverEnum.MiniSAT,
                             statistics=self.__statistics.solver_statistics)
 
             component = Component(cnf=self.__cnf,
@@ -476,7 +483,8 @@ class Compiler:
                                   first_implied_literals_preselection_heuristic=self.__first_implied_literals_preselection_heuristic,
                                   statistics=self.__statistics,
                                   mapping_node_statistics=self.__mapping_node_statistics,
-                                  node_statistics=self.__node_statistics)
+                                  node_statistics=self.__node_statistics,
+                                  disable_sat=self.__disable_sat)
             node_id = component.create_circuit()
             node_id_set.add(node_id)
 

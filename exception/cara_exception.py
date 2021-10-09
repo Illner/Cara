@@ -25,3 +25,13 @@ class FunctionNotImplementedException(CaraException):
         if message_extension:
             self.message += f" ({message_extension})"
         super().__init__(self.message)
+
+
+class InvalidConfigurationException(CaraException):
+    """
+    Invalid configuration
+    """
+
+    def __init__(self, message_extension: str):
+        self.message = f"Invalid configuration ({message_extension})"
+        super().__init__(self.message)
