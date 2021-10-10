@@ -57,10 +57,10 @@ class CompilerTest(TestAbstract):
                         for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
                             for eliminating_redundant_clauses_threshold in [100, None]:
                                 for hp_cache_enum in hpc_enum.hpc_enum_values:
-                                    for component_caching_enum in cc_enum.component_caching_enum_values:
-                                        for decision_heuristic_vsids_d4_version in [True, False]:
-                                            for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
-                                                for decision_heuristic_ignore_binary_clauses in [True, False]:
+                                    for decision_heuristic_vsids_d4_version in [True, False]:
+                                        for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
+                                            for decision_heuristic_ignore_binary_clauses in [True, False]:
+                                                for component_caching_enum in cc_enum.component_caching_enum_values:
                                                     for component_caching_before_unit_propagation in [True, False]:
                                                         for component_caching_after_unit_propagation in [True, False]:
                                                             for smooth in [True, False]:
