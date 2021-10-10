@@ -65,7 +65,7 @@ def main(main_args):
             experiment.experiment(file_name=file_name, file_path=file_path,
 
                                   decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
-                                  decision_heuristic_weight_for_satisfied_clauses=False,
+                                  decision_heuristic_weight_for_satisfied_clauses=True,
 
                                   smooth=False,
                                   preprocessing=False,
