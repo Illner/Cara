@@ -66,6 +66,7 @@ def main(main_args):
 
                                   decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
                                   decision_heuristic_weight_for_satisfied_clauses=True,
+                                  disable_sat=True,
 
                                   smooth=False,
                                   preprocessing=False,
