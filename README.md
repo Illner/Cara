@@ -9,6 +9,7 @@ Python 3.8+ (64 bit)
 ## Packages
 * <a href="https://pypi.org/project/sortedcontainers/" target="_blank">sortedcontainers</a> 2.3.0 (Windows / Linux / macOS)
 * <a href="https://pypi.org/project/hypernetx/" target="_blank">hypernetx</a> 0.3.7 (Windows / Linux / macOS)
+* <a href="https://pypi.org/project/networkx/" target="_blank">networkx</a> 2.6.2 (Windows / Linux / macOS)
 * <a href="https://pypi.org/project/matplotlib/" target="_blank">matplotlib</a> 3.3.4 (Windows / Linux / macOS)
 * <a href="https://pypi.org/project/numpy/" target="_blank">numpy</a> 1.20.2 (Windows / Linux / macOS)
 * <a href="https://pypi.org/project/kahypar/" target="_blank">kahypar</a> 1.1.6 (Linux / macOS)
