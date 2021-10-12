@@ -484,6 +484,15 @@ class Component:
         cache_key_before_unit_propagation = None
         cache_variable_id_mapping_id_before_unit_propagation = None
         if self.__component_caching_before_unit_propagation:
+            # Hack
+            if self.__disable_sat:
+                implied_literal_set = self.__get_implied_literals(depth=depth,
+                                                                  first_implied_literals=first_implied_literals)
+
+                if implied_literal_set is None:
+                    self.__statistics.component_statistics.unsatisfiable.add_count(1)  # counter
+                    return self.__circuit.create_constant_leaf(False)
+
             self.__statistics.component_statistics.component_caching_generate_key.start_stopwatch()     # timer (start)
             cache_key_before_unit_propagation, cache_mapping_before_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
             self.__statistics.component_statistics.component_caching_generate_key.stop_stopwatch()      # timer (stop)
