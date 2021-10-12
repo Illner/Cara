@@ -36,7 +36,8 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            self.__test(file_path)
+            if file_name == "5step.cnf":
+                self.__test(file_path)
 
         print()
         return ""
@@ -111,6 +112,15 @@ class CompilerTest(TestAbstract):
                                                                                             result_temp = "|"
                                                                                         else:
                                                                                             result_temp = "X"
+
+                                                                                            print(f"hp_variable_simplification_enum: {hp_variable_simplification_enum}, "
+                                                                                                  f"implied_literals_enum: {implied_literals_enum}, "
+                                                                                                  f"first_implied_literals_enum: {first_implied_literals_enum}, "
+                                                                                                  f"decision_heuristic_enum: {decision_heuristic_enum}, "
+                                                                                                  f"disable_sat: {disable_sat}, "
+                                                                                                  f"smooth: {smooth}, "
+                                                                                                  f"component_caching_after_unit_propagation: {component_caching_after_unit_propagation}, "
+                                                                                                  f"component_caching_before_unit_propagation: {component_caching_before_unit_propagation}")
 
                                                                                         print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "), flush=True)
 
