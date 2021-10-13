@@ -36,7 +36,7 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            if file_name == "mixdup.cnf":
+            if file_name == "s400.bench.cnf":
                 self.__test(file_path)
 
         print()
