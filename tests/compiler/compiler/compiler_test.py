@@ -36,7 +36,7 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            if file_name == "5step.cnf":
+            if file_name == "ais6.cnf":
                 self.__test(file_path)
 
         print()
