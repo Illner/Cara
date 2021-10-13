@@ -36,7 +36,8 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            self.__test(file_path)
+            if file_name == "4step.cnf":
+                self.__test(file_path)
 
         print()
         return ""
