@@ -36,7 +36,7 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            if file_name == "s400.bench.cnf":
+            if file_name == "wff.3.75.315.cnf":
                 self.__test(file_path)
 
         print()
