@@ -81,7 +81,7 @@ def main(main_args):
                                   implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
                                   first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                   first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
-                                  component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                                  component_caching_enum=cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME,
                                   component_caching_before_unit_propagation=False,
                                   component_caching_after_unit_propagation=True,
                                   eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.NONE,
@@ -98,7 +98,7 @@ def main(main_args):
                                   decision_heuristic_mixed_difference_enum=mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER,
                                   decision_heuristic_weight_for_satisfied_clauses=True,
                                   component_caching_cara_caching_scheme_multi_occurrence=False,
-                                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=30)
+                                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=0)
 
         except (c_exception.CaraException, Exception) as err:
             print(f"An error has occurred! (see log for details)\n{str(err)}")
