@@ -3,6 +3,7 @@ Satisfiability
 
 2_cnf.cnf
 Renaming function: True
+Renaming function (implication graph): True
 Number of variables: 5, number of clauses: 4, formula length: 8
 
 Assignment: []
@@ -16,10 +17,12 @@ Model: -5 -4 -3 -2 -1
 
 dual_horn.cnf
 Renaming function: True
+Renaming function (implication graph): True
 The formula is not Horn! ([4, 5, 6, 7])
 
 horn.cnf
 Renaming function: True
+Renaming function (implication graph): True
 Number of variables: 7, number of clauses: 6, formula length: 13
 
 Assignment: []
@@ -33,14 +36,17 @@ Model: UNSAT
 
 no_horn.cnf
 Renaming function: True
+Renaming function (implication graph): True
 The formula is not Horn! ([1, 2])
 
 no_horn_2.cnf
 Renaming function: None
+Renaming function (implication graph): False
 The formula is not Horn! ([1, 2])
 
 no_positive.cnf
 Renaming function: True
+Renaming function (implication graph): True
 Number of variables: 7, number of clauses: 5, formula length: 13
 
 Assignment: []
@@ -54,10 +60,12 @@ Model: -7 -6 -5 -4 -3 -2 -1
 
 renamable_horn.cnf
 Renaming function: True
+Renaming function (implication graph): True
 The formula is not Horn! ([-1, 3, 4, 5, 6])
 
 unsatisfiable.cnf
 Renaming function: None
+Renaming function (implication graph): False
 Number of variables: 3, number of clauses: 4, formula length: 7
 
 Assignment: []

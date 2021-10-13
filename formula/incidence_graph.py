@@ -2,6 +2,7 @@
 import random
 import networkx as nx
 from networkx.classes.graph import Graph
+from networkx.classes.digraph import DiGraph
 from typing import Set, Dict, List, Union, TypeVar, Tuple
 from formula.renamable_horn_formula_recognition import RenamableHornFormulaRecognition
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
@@ -449,6 +450,69 @@ class IncidenceGraph(Graph):
 
         # The variable does not exist in the clause
         raise ig_exception.VariableDoesNotExistInClauseException(variable, clause_id)
+
+    def __create_implication_graph_for_recognizing_renamable_horn_formula(self) -> DiGraph:
+        """
+        Create an implication graph for recognizing a renamable Horn formula
+        :return: an implication graph
+        """
+
+        implication_graph: DiGraph = DiGraph()
+        implication_graph.add_nodes_from(self._variable_set)
+        implication_graph.add_nodes_from([-v for v in self._variable_set])
+
+        variable_id_counter: int = max(self._variable_set, default=0)
+
+        for clause_id in self._clause_id_set:
+            clause = self.__clause_dictionary[clause_id]
+            clause_len = len(clause)
+            previous_y: Union[int, None] = None
+
+            for i, lit in enumerate(clause):
+                is_last = True if i == (clause_len - 1) else False
+
+                # Unit clause
+                if (previous_y is None) and is_last:
+                    # (lit)
+                    implication_graph.add_edge(-lit, lit)
+                    continue
+
+                # Last literal
+                if is_last:
+                    # (-previous_y v lit)
+                    implication_graph.add_edge(previous_y, lit)
+                    implication_graph.add_edge(-lit, -previous_y)
+                    continue
+
+                # Get a new variable id
+                variable_id_counter += 1
+                new_y = variable_id_counter
+                implication_graph.add_node(new_y)
+
+                # First literal
+                if previous_y is None:
+                    # (lit v new_y)
+                    implication_graph.add_edge(-lit, new_y)
+                    implication_graph.add_edge(-new_y, lit)
+
+                    previous_y = new_y
+                    continue
+
+                # (lit v -previous_y)
+                implication_graph.add_edge(-lit, -previous_y)
+                implication_graph.add_edge(previous_y, lit)
+
+                # (-previous_y, new_y)
+                implication_graph.add_edge(previous_y, new_y)
+                implication_graph.add_edge(-new_y, -previous_y)
+
+                # (new_y v lit)
+                implication_graph.add_edge(-new_y, lit)
+                implication_graph.add_edge(-lit, new_y)
+
+                previous_y = new_y
+
+        return implication_graph
 
     # region Eliminating redundant clauses
     def __get_redundant_clauses_subsumption(self) -> Set[int]:
@@ -1327,7 +1391,7 @@ class IncidenceGraph(Graph):
 
     def is_renamable_horn_formula(self) -> Union[Set[int], None]:
         """
-        :return: If the incidence graph represents (renamable) Horn formula, a renaming function (a set of variables) is returned. Otherwise, None is returned.
+        :return: If the incidence graph represents a (renamable) Horn formula, a renaming function (a set of variables) is returned. Otherwise, None is returned.
         :raises RenamableHornFormulaRecognitionHasNotBeenInitializedException: if the renamable Horn formula recognition has not been initialized
         """
 
@@ -1350,6 +1414,47 @@ class IncidenceGraph(Graph):
 
         self.__statistics.renamable_horn_formula_recognition_check.stop_stopwatch()     # timer (stop)
         return result
+
+    def is_renamable_horn_formula_using_implication_graph(self) -> Tuple[bool, Union[Set[int], List[Set[int]]]]:
+        """
+        :return: If the incidence graph represents a (renamable) Horn formula, (True, renaming function) is returned.
+        Otherwise, (False, a set of variables whose positive and negative literal appears in the same strongly connected component) is returned.
+        """
+
+        implication_graph = self.__create_implication_graph_for_recognizing_renamable_horn_formula()
+        strongly_connected_components_list = list(nx.kosaraju_strongly_connected_components(implication_graph))
+
+        conflict: bool = False
+        conflict_variable_list: List[Set[int]] = []
+        literal_component_dictionary: Dict[int, int] = dict()       # key: literal, value: component where the literal appears
+
+        for i, connected_component in enumerate(strongly_connected_components_list):
+            component_conflict_variable_set: Set[int] = set()
+
+            for lit in connected_component:
+                literal_component_dictionary[lit] = i
+
+                if -lit in connected_component:
+                    conflict = True
+                    var = abs(lit)
+
+                    if var in self._variable_set:
+                        component_conflict_variable_set.add(var)
+
+            if component_conflict_variable_set:
+                conflict_variable_list.append(component_conflict_variable_set)
+
+        # UNSAT
+        if conflict:
+            return False, conflict_variable_list
+
+        # SAT
+        renaming_function: Set[int] = set()
+        for variable in self._variable_set:
+            if literal_component_dictionary[variable] < literal_component_dictionary[-variable]:
+                renaming_function.add(variable)
+
+        return True, renaming_function
     # endregion
 
     # region Decision heuristics
