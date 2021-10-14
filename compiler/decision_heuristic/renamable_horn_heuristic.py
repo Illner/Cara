@@ -43,29 +43,32 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
             intersection_set = conflict_variable_set
 
         # key: variable, value: (number of conflicts in the strongly connected component, DLCS, DLIS)
-        score_dictionary: Dict[int, Union[Tuple[int, int, int], Tuple[int, int, int, int, int]]] = dict()
+        score_dictionary: Dict[int, Union[Tuple[int, int], Tuple[int, int, int, int, int]]] = dict()
+
+        vsids_score_list = solver.get_vsids_score(d4_version=True)
 
         # Compute score
         for variable in intersection_set:
             component = conflict_variable_component_dictionary[variable]
-            number_of_conflict_variables = component_number_of_conflict_variables_dictionary[component]
+            number_of_conflict_variables = 0    # component_number_of_conflict_variables_dictionary[component]
 
-            positive_score = incidence_graph.literal_number_of_occurrences(literal=variable, ignore_binary_clauses=self.__ignore_binary_clauses)
-            negative_score = incidence_graph.literal_number_of_occurrences(literal=(-variable), ignore_binary_clauses=self.__ignore_binary_clauses)
+            # DLCS
+            positive_score = incidence_graph.literal_number_of_occurrences(literal=variable,
+                                                                           ignore_binary_clauses=self.__ignore_binary_clauses)
+            negative_score = incidence_graph.literal_number_of_occurrences(literal=(-variable),
+                                                                           ignore_binary_clauses=self.__ignore_binary_clauses)
 
             # Binary clauses are ignored
             if self.__ignore_binary_clauses:
-                dlcs_1 = sum([positive_score[0], negative_score[0]])
-                dlcs_2 = sum([positive_score[1], negative_score[1]])
-                dlis_1 = max([positive_score[0], negative_score[0]])
-                dlis_2 = max([positive_score[1], negative_score[1]])
+                positive_score, _ = positive_score
+                negative_score, _ = negative_score
 
-                score_dictionary[variable] = number_of_conflict_variables, dlcs_1, dlcs_2, dlis_1, dlis_2
-            else:
-                dlcs = sum([positive_score, negative_score])
-                dlis = max([positive_score, negative_score])
+            score_dlcs = positive_score + negative_score
 
-                score_dictionary[variable] = number_of_conflict_variables, dlcs, dlis
+            # VSIDS
+            score_vsids = vsids_score_list[variable - 1]
+
+            score_dictionary[variable] = number_of_conflict_variables, 1 * score_vsids + 0.5 * score_dlcs
 
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)

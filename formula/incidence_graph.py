@@ -1447,8 +1447,8 @@ class IncidenceGraph(Graph):
                         conflict_variable_set.add(variable)
                         conflict_variable_component_dictionary[variable] = i
 
-            if total_number_of_conflict_variables > 0:
-                component_number_of_conflict_variables_dictionary[i] = total_number_of_conflict_variables
+            if number_of_conflict_variables > 0:
+                component_number_of_conflict_variables_dictionary[i] = number_of_conflict_variables
 
         # UNSAT
         if conflict:
