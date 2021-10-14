@@ -21,6 +21,7 @@ from compiler.decision_heuristic.vsads_heuristic import VsadsHeuristic
 from compiler.decision_heuristic.random_heuristic import RandomHeuristic
 from compiler.decision_heuristic.jeroslow_wang_heuristic import JeroslowWangHeuristic
 from compiler.decision_heuristic.literal_count_heuristic import LiteralCountHeuristic
+from compiler.decision_heuristic.renamable_horn_heuristic import RenamableHornHeuristic
 from compiler.decision_heuristic.eupc_heuristic import ExactUnitPropagationCountHeuristic
 from compiler.decision_heuristic.clause_reduction_heuristic import ClauseReductionHeuristic
 from compiler.decision_heuristic.weighted_binaries_heuristic import WeightedBinariesHeuristic
@@ -374,6 +375,12 @@ class Compiler:
                                                        p_constant_factor=vsads_p_constant_factor,
                                                        q_constant_factor=vsads_q_constant_factor,
                                                        vsids_d4_version=vsids_d4_version)
+            return
+
+        # RENAMABLE_HORN
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN:
+            self.__decision_heuristic = RenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
+                                                               ignore_binary_clauses=ignore_binary_clauses)
             return
 
         raise c_exception.FunctionNotImplementedException("set_decision_heuristic",
