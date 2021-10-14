@@ -1421,6 +1421,8 @@ class IncidenceGraph(Graph):
         Otherwise, (False, (conflict_variable_set, conflict_variable_component_dictionary, component_number_of_conflict_variables_dictionary)) is returned.
         """
 
+        self.__statistics.renamable_horn_formula_recognition_implication_graph_check.start_stopwatch()  # timer (start)
+
         implication_graph = self.__create_implication_graph_for_recognizing_renamable_horn_formula()
         strongly_connected_components_list = list(nx.kosaraju_strongly_connected_components(implication_graph))
 
@@ -1452,6 +1454,9 @@ class IncidenceGraph(Graph):
 
         # UNSAT
         if conflict:
+            self.__statistics.renamable_horn_formula_ratio.add_count(0)     # counter
+            self.__statistics.renamable_horn_formula_recognition_implication_graph_check.stop_stopwatch()   # timer (stop)
+
             return False, (conflict_variable_set, conflict_variable_component_dictionary, component_number_of_conflict_variables_dictionary)
 
         # SAT
@@ -1459,6 +1464,9 @@ class IncidenceGraph(Graph):
         for variable in self._variable_set:
             if literal_component_dictionary[variable] < literal_component_dictionary[-variable]:
                 renaming_function.add(variable)
+
+        self.__statistics.renamable_horn_formula_ratio.add_count(1)     # counter
+        self.__statistics.renamable_horn_formula_recognition_implication_graph_check.stop_stopwatch()  # timer (stop)
 
         return True, renaming_function
     # endregion

@@ -18,6 +18,7 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer subsumption_variable
     Private StatisticsComponentTimer renamable_horn_formula_recognition_initialization
     Private StatisticsComponentTimer renamable_horn_formula_recognition_check
+    Private StatisticsComponentTimer renamable_horn_formula_recognition_implication_graph_check
     Private StatisticsComponentTimer convert_to_cnf
     Private StatisticsComponentTimer convert_to_2_cnf
     Private StatisticsComponentTimer convert_to_horn_cnf
@@ -54,6 +55,9 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
         self.__renamable_horn_formula_recognition_check: StatisticsComponentTimer = StatisticsComponentTimer(name="renamable Horn formula recognition - check", active=active)
         self._component_list.append(self.__renamable_horn_formula_recognition_check)
+
+        self.__renamable_horn_formula_recognition_implication_graph_check: StatisticsComponentTimer = StatisticsComponentTimer(name="renamable Horn formula recognition (implication graph) - check", active=active)
+        self._component_list.append(self.__renamable_horn_formula_recognition_implication_graph_check)
 
         self.__renamable_horn_formula_ratio: StatisticsComponentCounter = StatisticsComponentCounter(name="renamable Horn formula - ratio", active=active)
         self._component_list.append(self.__renamable_horn_formula_ratio)
@@ -108,6 +112,10 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     @property
     def renamable_horn_formula_recognition_check(self) -> StatisticsComponentTimer:
         return self.__renamable_horn_formula_recognition_check
+
+    @property
+    def renamable_horn_formula_recognition_implication_graph_check(self) -> StatisticsComponentTimer:
+        return self.__renamable_horn_formula_recognition_implication_graph_check
 
     @property
     def renamable_horn_formula_ratio(self) -> StatisticsComponentCounter:
