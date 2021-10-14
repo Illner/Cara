@@ -275,6 +275,18 @@ def non_negative_int_parser(value: Union[int, str]) -> int:
     return non_negative_int_or_none_parser(value)
 
 
+def str_or_none_parser(value: str) -> Union[str, None]:
+    """
+    Check if the value is a string or None
+    """
+
+    # None
+    if value.lower() == "none":
+        return None
+
+    return value
+
+
 def create_parser() -> argparse.ArgumentParser:
     # Create the parser
     parser_temp = argparse.ArgumentParser(prog="cara.py",

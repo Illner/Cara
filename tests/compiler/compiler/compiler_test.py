@@ -1,5 +1,6 @@
 # Import
 import os
+from typing import Union
 from formula.cnf import Cnf
 import other.environment as env
 from compiler.compiler import Compiler
@@ -24,11 +25,12 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 class CompilerTest(TestAbstract):
     __DIRECTORY: str = os.path.join("compiler", "compiler")
 
-    def __init__(self, limit: int):
+    def __init__(self, limit: int, file_name: Union[str, None] = None):
         super().__init__(CompilerTest.__DIRECTORY, test_name="Compiler test")
         self._set_files(CompilerTest.__DIRECTORY, "CNF_formulae")
 
         self.__limit: int = limit
+        self.__file_name: Union[str, None] = file_name
 
     # region Override method
     def _get_actual_result(self) -> str:
@@ -36,7 +38,8 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            self.__test(file_path)
+            if (self.__file_name is None) or (self.__file_name == file_name):
+                self.__test(file_path)
 
         print()
         return ""

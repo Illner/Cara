@@ -124,7 +124,8 @@ def main(main_args):
 
     # Compiler test
     if main_args.compiler_test:
-        compiler_test = c_test.CompilerTest(main_args.compiler_test_limit)
+        compiler_test = c_test.CompilerTest(limit=main_args.compiler_test_limit,
+                                            file_name=main_args.compiler_test_file_name)
         print(compiler_test.test_name, end=": ", flush=True)
         _, _ = test(compiler_test)
         # print(result)
@@ -224,6 +225,12 @@ def create_parser() -> argparse.ArgumentParser:
                              default=True,
                              type=cara.str_to_bool_parser,
                              help="test automation for compilers")
+    parser_temp.add_argument("-ct_fn",
+                             "--compiler_test_file_name",
+                             action="store",
+                             default="None",
+                             type=cara.str_or_none_parser,
+                             help="file name for the test (None for all files)")
     parser_temp.add_argument("-ct_l",
                              "--compiler_test_limit",
                              action="store",
