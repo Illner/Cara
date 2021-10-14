@@ -48,7 +48,7 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
         # Compute score
         for variable in intersection_set:
             component = conflict_variable_component_dictionary[variable]
-            number_of_conflict_variables = component_number_of_conflict_variables_dictionary[component]
+            number_of_conflict_variables = 0    # component_number_of_conflict_variables_dictionary[component]
 
             positive_score = incidence_graph.literal_number_of_occurrences(literal=variable, ignore_binary_clauses=self.__ignore_binary_clauses)
             negative_score = incidence_graph.literal_number_of_occurrences(literal=(-variable), ignore_binary_clauses=self.__ignore_binary_clauses)
