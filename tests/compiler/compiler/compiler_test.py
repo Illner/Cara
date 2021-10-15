@@ -64,8 +64,8 @@ class CompilerTest(TestAbstract):
                                         for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
                                             for decision_heuristic_ignore_binary_clauses in [True, False]:
                                                 for component_caching_enum in [cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME, cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME]:
-                                                    for component_caching_before_unit_propagation in [True, False]:
-                                                        for component_caching_after_unit_propagation in [True, False]:
+                                                    for component_caching_before_unit_propagation in [False]:
+                                                        for component_caching_after_unit_propagation in [True]:
                                                             for smooth in [True, False]:
                                                                 for disable_sat in [True, False]:
                                                                     for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
@@ -73,6 +73,9 @@ class CompilerTest(TestAbstract):
                                                                             for implied_literals_enum in il_enum.implied_literals_enum_values:
                                                                                 for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
                                                                                     try:
+                                                                                        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN:
+                                                                                            continue
+
                                                                                         count += 1
 
                                                                                         cnf = Cnf(file_path)
