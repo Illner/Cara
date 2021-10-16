@@ -38,7 +38,7 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            if file_name == "ais6.cnf":
+            if (self.__file_name is None) or (self.__file_name == file_name):
                 self.__test(file_path)
 
         print()
@@ -73,9 +73,9 @@ class CompilerTest(TestAbstract):
                                                                             for implied_literals_enum in il_enum.implied_literals_enum_values:
                                                                                 for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
                                                                                     try:
-                                                                                        if (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN): # or \
-                                                                                           # (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS) or \
-                                                                                           # (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED):
+                                                                                        if (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_VSADS) or \
+                                                                                           (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS) or \
+                                                                                           (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED):
                                                                                             continue
 
                                                                                         # if (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.VSADS) or \
@@ -123,6 +123,7 @@ class CompilerTest(TestAbstract):
                                                                                             result_temp = "|"
                                                                                         else:
                                                                                             result_temp = "X"
+                                                                                            print(f"{number_of_models}, {real_number_of_models}")
                                                                                             print(f"hp_variable_simplification_enum: {hp_variable_simplification_enum}, "
                                                                                                   f"implied_literals_enum: {implied_literals_enum}, "
                                                                                                   f"first_implied_literals_enum: {first_implied_literals_enum}, "
@@ -132,6 +133,7 @@ class CompilerTest(TestAbstract):
                                                                                                   f"component_caching_after_unit_propagation: {component_caching_after_unit_propagation}, "
                                                                                                   f"component_caching_before_unit_propagation: {component_caching_before_unit_propagation}, "
                                                                                                   f"component_caching_enum: {component_caching_enum}")
+                                                                                            print()
 
                                                                                         print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "), flush=True)
 

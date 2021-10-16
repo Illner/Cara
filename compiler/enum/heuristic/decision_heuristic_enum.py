@@ -16,7 +16,9 @@ class DecisionHeuristicEnum(IntEnum):
     EUPC = 10                       # Exact Unit Propagation Count
     VSIDS = 11
     VSADS = 12
-    RENAMABLE_HORN = 13
+    RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED = 13     # Renamable Horn + JW-TS
+    RENAMABLE_HORN_DLCS_DLIS = 14                   # Renamable Horn + DLCS-DLIS
+    RENAMABLE_HORN_VSADS = 15                       # Renamable Horn + VSADS
 
 
 decision_heuristic_enum_names = [dh.name for dh in DecisionHeuristicEnum]

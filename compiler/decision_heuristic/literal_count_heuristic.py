@@ -7,6 +7,7 @@ from compiler.preselection_heuristic.preselection_heuristic_abstract import Pres
 
 # Import exception
 import exception.cara_exception as c_exception
+import exception.compiler.heuristic_exception as h_exception
 
 # Import enum
 import compiler.enum.heuristic.literal_count_heuristic_function_enum as lchf_enum
@@ -68,13 +69,15 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
     # endregion
 
     # region Override method
-    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
+    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
+                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None) -> int:
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
         if len(preselected_variable_set) == 1:
             return list(preselected_variable_set)[0]
 
-        score_dictionary: Dict[int, Union[Tuple[int, int], Tuple[int, int, int, int]]] = dict()   # key: variable, value: (score_1, score_2, [score_3, score_4])
+        # key: variable, value: ([additional_score], score_1, score_2, [score_3, score_4])
+        score_dictionary: Dict[int, Union[Tuple[int, int], Tuple[int, int, int], Tuple[int, int, int, int], Tuple[int, int, int, int, int]]] = dict()
 
         # Compute score
         for variable in preselected_variable_set:
@@ -83,6 +86,15 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
             negative_score = incidence_graph.literal_number_of_occurrences(literal=(-variable),
                                                                            ignore_binary_clauses=self.__ignore_binary_clauses)
 
+            additional_score: Union[int, None] = None
+            # Additional score is used
+            if additional_score_dictionary is not None:
+                if variable in additional_score_dictionary:
+                    additional_score = additional_score_dictionary[variable]
+                else:
+                    raise h_exception.InvalidAdditionalScoreDictionaryException(variable=variable,
+                                                                                additional_score_dictionary=additional_score_dictionary)
+
             # Binary clauses are ignored
             if self.__ignore_binary_clauses:
                 score_1 = self.__function([positive_score[0], negative_score[0]])
@@ -90,12 +102,18 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
                 score_3 = self.__tie_breaker_function([positive_score[0], negative_score[0]])
                 score_4 = self.__tie_breaker_function([positive_score[1], negative_score[1]])
 
-                score_dictionary[variable] = score_1, score_2, score_3, score_4
+                if additional_score is None:
+                    score_dictionary[variable] = score_1, score_2, score_3, score_4
+                else:
+                    score_dictionary[variable] = additional_score, score_1, score_2, score_3, score_4
             else:
                 score_1 = self.__function([positive_score, negative_score])
                 score_2 = self.__tie_breaker_function([positive_score, negative_score])
 
-                score_dictionary[variable] = score_1, score_2
+                if additional_score is None:
+                    score_dictionary[variable] = score_1, score_2
+                else:
+                    score_dictionary[variable] = additional_score, score_1, score_2
 
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)

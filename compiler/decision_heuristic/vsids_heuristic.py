@@ -1,9 +1,12 @@
 # Import
-from typing import List, Set, Dict
 from compiler.solver import Solver
+from typing import List, Set, Dict, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
+
+# Import exception
+import exception.compiler.heuristic_exception as h_exception
 
 
 class VsidsHeuristic(DecisionHeuristicAbstract):
@@ -21,7 +24,12 @@ class VsidsHeuristic(DecisionHeuristicAbstract):
         self.__d4_version: bool = d4_version
 
     # region Override method
-    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
+    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
+                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None) -> int:
+        # Additional score is used
+        if additional_score_dictionary is not None:
+            raise h_exception.AdditionalScoreIsNotSupportedException()
+
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
         vsids_score_list = solver.get_vsids_score(d4_version=self.__d4_version)

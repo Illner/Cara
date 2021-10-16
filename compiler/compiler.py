@@ -377,10 +377,37 @@ class Compiler:
                                                        vsids_d4_version=vsids_d4_version)
             return
 
-        # RENAMABLE_HORN
-        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN:
+        # RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED:
+            decision_heuristic = JeroslowWangHeuristic(preselection_heuristic=NoneHeuristic(),
+                                                       one_sided=False,
+                                                       ignore_binary_clauses=ignore_binary_clauses)
+
             self.__decision_heuristic = RenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
-                                                               ignore_binary_clauses=ignore_binary_clauses)
+                                                               decision_heuristic=decision_heuristic)
+            return
+
+        # RENAMABLE_HORN_DLCS_DLIS
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS:
+            decision_heuristic = LiteralCountHeuristic(preselection_heuristic=NoneHeuristic(),
+                                                       ignore_binary_clauses=ignore_binary_clauses,
+                                                       function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM,
+                                                       tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX)
+
+            self.__decision_heuristic = RenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
+                                                               decision_heuristic=decision_heuristic)
+            return
+
+        # RENAMABLE_HORN_VSADS
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_VSADS:
+            decision_heuristic = VsadsHeuristic(preselection_heuristic=NoneHeuristic(),
+                                                ignore_binary_clauses=ignore_binary_clauses,
+                                                p_constant_factor=vsads_p_constant_factor,
+                                                q_constant_factor=vsads_q_constant_factor,
+                                                vsids_d4_version=vsids_d4_version)
+
+            self.__decision_heuristic = RenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
+                                                               decision_heuristic=decision_heuristic)
             return
 
         raise c_exception.FunctionNotImplementedException("set_decision_heuristic",

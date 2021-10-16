@@ -27,7 +27,8 @@ class DecisionHeuristicAbstract(ABC):
 
     # region Abstract method
     @abstractmethod
-    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
+    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
+                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None) -> int:
         """
         Compute a decision variable
         :param cut_set: a cut set
@@ -35,6 +36,7 @@ class DecisionHeuristicAbstract(ABC):
         :param solver: a solver
         :param assignment_list: a partial assignment for the solver
         :param depth: depth of the node
+        :param additional_score_dictionary: a dictionary that contains additional scores
         :return: a decision variable
         """
 

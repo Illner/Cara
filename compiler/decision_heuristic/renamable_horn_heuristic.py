@@ -1,6 +1,6 @@
 # Import
 from compiler.solver import Solver
-from typing import List, Set, Dict, Tuple, Union
+from typing import List, Set, Dict, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
@@ -15,17 +15,20 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
     """
 
     """
-    Private bool ignore_binary_clauses
+    Private bool use_total_number_of_conflict_variables
+    Private DecisionHeuristicAbstract decision_heuristic
     """
 
-    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract, ignore_binary_clauses: bool):
-        self.__preselection_heuristic = preselection_heuristic
+    def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract, decision_heuristic: DecisionHeuristicAbstract,
+                 use_total_number_of_conflict_variables: bool = False):
         super().__init__(preselection_heuristic)
 
-        self.__ignore_binary_clauses: bool = ignore_binary_clauses
+        self.__decision_heuristic: DecisionHeuristicAbstract = decision_heuristic
+        self.__use_total_number_of_conflict_variables: bool = use_total_number_of_conflict_variables
 
     # region Override method
-    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
+    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
+                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None) -> int:
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
         if len(preselected_variable_set) == 1:
@@ -33,45 +36,34 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
 
         is_renamable_horn, conflict_structure = incidence_graph.is_renamable_horn_formula_using_implication_graph()
 
+        # The formula is renamable Horn
         if is_renamable_horn:
-            raise c_exception.SomethingWrongException("RenamableHornHeuristic - the formula is renamable Horn")
+            raise c_exception.SomethingWrongException(f"RenamableHornHeuristic - the formula is renamable Horn ({incidence_graph})")
 
-        conflict_variable_set, conflict_variable_component_dictionary, component_number_of_conflict_variables_dictionary = conflict_structure
+        conflict_variable_set, conflict_variable_component_dictionary, component_number_of_conflict_variables_dictionary, component_total_number_of_conflict_variables_dictionary = conflict_structure
 
         intersection_set = conflict_variable_set.intersection(preselected_variable_set)
         if not intersection_set:
             intersection_set = conflict_variable_set
 
-        # key: variable, value: (number of conflicts in the strongly connected component, DLCS, DLIS)
-        score_dictionary: Dict[int, Union[Tuple[int, int], Tuple[int, int, int, int, int]]] = dict()
-
-        vsids_score_list = solver.get_vsids_score(d4_version=True)
-
-        # Compute score
+        # Additional score
+        additional_score_dictionary: Dict[int, int] = dict()
         for variable in intersection_set:
             component = conflict_variable_component_dictionary[variable]
-            number_of_conflict_variables = 0    # component_number_of_conflict_variables_dictionary[component]
 
-            # DLCS
-            positive_score = incidence_graph.literal_number_of_occurrences(literal=variable,
-                                                                           ignore_binary_clauses=self.__ignore_binary_clauses)
-            negative_score = incidence_graph.literal_number_of_occurrences(literal=(-variable),
-                                                                           ignore_binary_clauses=self.__ignore_binary_clauses)
+            if self.__use_total_number_of_conflict_variables:
+                number_of_conflict_variables = component_total_number_of_conflict_variables_dictionary[component]
+            else:
+                number_of_conflict_variables = component_number_of_conflict_variables_dictionary[component]
 
-            # Binary clauses are ignored
-            if self.__ignore_binary_clauses:
-                positive_score, _ = positive_score
-                negative_score, _ = negative_score
+            additional_score_dictionary[variable] = number_of_conflict_variables
 
-            score_dlcs = positive_score + negative_score
-
-            # VSIDS
-            score_vsids = vsids_score_list[variable - 1]
-
-            score_dictionary[variable] = number_of_conflict_variables, 1 * score_vsids + 0.5 * score_dlcs
-
-        # Pick the best one
-        decision_variable = max(score_dictionary, key=score_dictionary.get)
+        decision_variable = self.__decision_heuristic.get_decision_variable(cut_set=intersection_set,
+                                                                            incidence_graph=incidence_graph,
+                                                                            solver=solver,
+                                                                            assignment_list=assignment_list,
+                                                                            depth=depth,
+                                                                            additional_score_dictionary=additional_score_dictionary)
 
         return decision_variable
     # endregion

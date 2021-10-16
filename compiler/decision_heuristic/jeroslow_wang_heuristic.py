@@ -5,6 +5,9 @@ from formula.incidence_graph import IncidenceGraph
 from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
 
+# Import exception
+import exception.compiler.heuristic_exception as h_exception
+
 
 class JeroslowWangHeuristic(DecisionHeuristicAbstract):
     """
@@ -23,13 +26,15 @@ class JeroslowWangHeuristic(DecisionHeuristicAbstract):
         self.__ignore_binary_clauses: bool = ignore_binary_clauses
 
     # region Override method
-    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int) -> int:
+    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
+                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None) -> int:
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
         if len(preselected_variable_set) == 1:
             return list(preselected_variable_set)[0]
 
-        score_dictionary: Dict[int, Union[int, Tuple[int, int]]] = dict()   # key: variable, value: score of the variable
+        # key: variable, value: ([additional_score], score_1, [score_2])
+        score_dictionary: Dict[int, Union[int, Tuple[int, int], Tuple[int, int, int]]] = dict()
 
         # Compute score
         for variable in preselected_variable_set:
@@ -56,6 +61,19 @@ class JeroslowWangHeuristic(DecisionHeuristicAbstract):
                     score = positive_score + negative_score
 
             score_dictionary[variable] = score
+
+            # Additional score is used
+            if additional_score_dictionary is not None:
+                if variable in additional_score_dictionary:
+                    additional_score = additional_score_dictionary[variable]
+
+                    if self.__ignore_binary_clauses:
+                        score_dictionary[variable] = additional_score, score[0], score[1]
+                    else:
+                        score_dictionary[variable] = additional_score, score
+                else:
+                    raise h_exception.InvalidAdditionalScoreDictionaryException(variable=variable,
+                                                                                additional_score_dictionary=additional_score_dictionary)
 
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)

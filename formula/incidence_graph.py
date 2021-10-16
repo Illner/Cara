@@ -1415,10 +1415,11 @@ class IncidenceGraph(Graph):
         self.__statistics.renamable_horn_formula_recognition_check.stop_stopwatch()     # timer (stop)
         return result
 
-    def is_renamable_horn_formula_using_implication_graph(self) -> Tuple[bool, Union[Set[int], Tuple[Set[int], Dict[int, int], Dict[int, int]]]]:
+    def is_renamable_horn_formula_using_implication_graph(self) -> Tuple[bool, Union[Set[int], Tuple[Set[int], Dict[int, int], Dict[int, int], Dict[int, int]]]]:
         """
         :return: If the incidence graph represents a (renamable) Horn formula, (True, renaming function) is returned.
-        Otherwise, (False, (conflict_variable_set, conflict_variable_component_dictionary, component_number_of_conflict_variables_dictionary)) is returned.
+        Otherwise, (False, (conflict_variable_set, conflict_variable_component_dictionary,
+        component_number_of_conflict_variables_dictionary, component_total_number_of_conflict_variables_dictionary)) is returned.
         """
 
         self.__statistics.renamable_horn_formula_recognition_implication_graph_check.start_stopwatch()  # timer (start)
@@ -1431,6 +1432,7 @@ class IncidenceGraph(Graph):
         literal_component_dictionary: Dict[int, int] = dict()                       # key: literal, value: component where the literal appears
         conflict_variable_component_dictionary: Dict[int, int] = dict()
         component_number_of_conflict_variables_dictionary: Dict[int, int] = dict()
+        component_total_number_of_conflict_variables_dictionary: Dict[int, int] = dict()
 
         for i, connected_component in enumerate(strongly_connected_components_list):
             number_of_conflict_variables = 0
@@ -1451,13 +1453,16 @@ class IncidenceGraph(Graph):
 
             if number_of_conflict_variables > 0:
                 component_number_of_conflict_variables_dictionary[i] = number_of_conflict_variables
+            if total_number_of_conflict_variables > 0:
+                component_total_number_of_conflict_variables_dictionary[i] = total_number_of_conflict_variables
 
         # UNSAT
         if conflict:
             self.__statistics.renamable_horn_formula_ratio.add_count(0)     # counter
             self.__statistics.renamable_horn_formula_recognition_implication_graph_check.stop_stopwatch()   # timer (stop)
 
-            return False, (conflict_variable_set, conflict_variable_component_dictionary, component_number_of_conflict_variables_dictionary)
+            return False, (conflict_variable_set, conflict_variable_component_dictionary,
+                           component_number_of_conflict_variables_dictionary, component_total_number_of_conflict_variables_dictionary)
 
         # SAT
         renaming_function: Set[int] = set()

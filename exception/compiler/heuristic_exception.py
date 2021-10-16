@@ -1,5 +1,5 @@
 # Import
-from typing import List
+from typing import List, Dict
 
 # Import exception
 from exception.cara_exception import CaraException
@@ -37,4 +37,24 @@ class WeightDoesNotExistForSizeOfClauseException(HeuristicException):
 
     def __init__(self, clause_size: int):
         self.message = f"Weight does not exist for this size of a clause ({str(clause_size)})!"
+        super().__init__(self.message)
+
+
+class InvalidAdditionalScoreDictionaryException(HeuristicException):
+    """
+    The additional score dictionary is invalid
+    """
+
+    def __init__(self, variable: int, additional_score_dictionary: Dict[int, int]):
+        self.message = f"The variable {variable} is not mentioned in the additional score dictionary ({additional_score_dictionary})!"
+        super().__init__(self.message)
+
+
+class AdditionalScoreIsNotSupportedException(HeuristicException):
+    """
+    Additional score is not supported
+    """
+
+    def __init__(self):
+        self.message = f"Additional score is not supported by this decision heuristic!"
         super().__init__(self.message)
