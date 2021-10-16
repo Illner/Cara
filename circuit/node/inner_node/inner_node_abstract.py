@@ -344,6 +344,13 @@ class InnerNodeAbstract(NodeAbstract, ABC):
         """
 
         return len(self._child_set)
+
+    def get_number_of_children(self) -> int:
+        """
+        :return: the number of children
+        """
+
+        return len(self._child_set)
     # endregion
 
     # region Magic method

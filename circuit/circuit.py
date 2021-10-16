@@ -41,6 +41,7 @@ class Circuit:
     Private int id_counter
     Private str circuit_name
     Private NodeAbstract root
+    Private int number_of_edges
     Private CircuitTypeEnum circuit_type
     
     Private Dict<int, NodeAbstract> id_node_dictionary                      # key: an identifier, value: a node
@@ -58,6 +59,7 @@ class Circuit:
         self.__size: Union[int, None] = None
         self.__circuit_name: str = circuit_name
         self.__root: Union[NodeAbstract, None] = None
+        self.__number_of_edges: Union[int, None] = None
         self.__circuit_type: Union[ct_enum.CircuitTypeEnum, None] = None
 
         self.__id_node_dictionary: Dict[int, NodeAbstract] = dict()
@@ -499,19 +501,22 @@ class Circuit:
 
     def __compute_size_of_circuit(self) -> None:
         """
-        Compute the size of the circuit
+        Compute the size and the number of edges of the circuit
         :return: None
         """
 
         # The root of the circuit is not set
         if self.__root is None:
             self.__size = None
+            self.__number_of_edges = None
             return
 
         self.__size = 0
+        self.__number_of_edges = 0
         for node_id in self.__id_node_dictionary:
             node = self.__id_node_dictionary[node_id]
             self.__size += node.get_node_size()
+            self.__number_of_edges += node.get_number_of_children()
 
     def __check_circuit_type(self) -> None:
         """
@@ -1507,7 +1512,8 @@ class Circuit:
             string_temp = " ".join((string_temp,
                                     f"Root: {self.root_id}",
                                     f"Number of variables: {str(self.number_of_variables)}",
-                                    f"Size: {str(self.__size)}"))
+                                    f"Size: {str(self.__size)}",
+                                    f"Number of edges: {str(self.__number_of_edges)}"))
 
         # The nodes in the circuit
         id_node_sorted_dictionary_temp = SortedDict(self.__id_node_dictionary)
@@ -1536,6 +1542,10 @@ class Circuit:
     @property
     def size(self) -> Union[int, None]:
         return self.__size
+
+    @property
+    def number_of_edges(self) -> Union[int, None]:
+        return self.__number_of_edges
 
     @property
     def comments(self) -> str:

@@ -27,6 +27,7 @@ class Statistics:
     Private int size
     Private bool compiled
     Private int number_of_nodes
+    Private int number_of_edges
     Private int number_of_variables
     Private Dict<NodeTypeEnum, int> node_type_dictionary
     
@@ -51,6 +52,7 @@ class Statistics:
         self.__compiled: bool = False
         self.__size: Union[int, None] = None
         self.__number_of_nodes: Union[int, None] = None
+        self.__number_of_edges: Union[int, None] = None
         self.__number_of_variables: Union[int, None] = None
         self.__node_type_dictionary: Dict[nt_enum.NodeTypeEnum, int] = dict()
 
@@ -101,6 +103,7 @@ class Statistics:
         string_temp = "\n".join((f"Compiled: {self.__compiled}",
                                  f"Name: {self.__name}",
                                  f"Number of nodes: {self.__number_of_nodes}",
+                                 f"Number of edges: {self.__number_of_edges}",
                                  f"Size: {self.__size}",
                                  f"Number of variables: {self.__number_of_variables}"))
 
@@ -131,6 +134,9 @@ class Statistics:
 
     def set_number_of_nodes(self, number_of_nodes: int) -> None:
         self.__number_of_nodes = number_of_nodes
+
+    def set_number_of_edges(self, number_of_edges: int) -> None:
+        self.__number_of_edges = number_of_edges
 
     def set_number_of_variables(self, number_of_variables: int) -> None:
         self.__number_of_variables = number_of_variables
@@ -184,10 +190,22 @@ class Statistics:
         return self.__active
 
     @property
-    def size(self) -> int:
+    def size(self) -> Union[int, None]:
         return self.__size
 
     @property
     def compiled(self) -> bool:
         return self.__compiled
+
+    @property
+    def number_of_nodes(self) -> Union[int, None]:
+        return self.__number_of_nodes
+
+    @property
+    def number_of_edges(self) -> Union[int, None]:
+        return self.__number_of_edges
+
+    @property
+    def number_of_variables(self) -> Union[int, None]:
+        return self.__number_of_variables
     # endregion

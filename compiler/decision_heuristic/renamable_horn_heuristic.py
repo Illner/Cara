@@ -20,7 +20,7 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
     """
 
     def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract, decision_heuristic: DecisionHeuristicAbstract,
-                 use_total_number_of_conflict_variables: bool = False):
+                 use_total_number_of_conflict_variables: bool):
         super().__init__(preselection_heuristic)
 
         self.__decision_heuristic: DecisionHeuristicAbstract = decision_heuristic

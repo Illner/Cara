@@ -99,6 +99,13 @@ class LeafAbstract(NodeAbstract, ABC):
         """
 
         return self.__size
+
+    def get_number_of_children(self) -> int:
+        """
+        :return: the number of children
+        """
+
+        return 0
     # endregion
 
     # region Magic method

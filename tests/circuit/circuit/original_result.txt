@@ -5937,7 +5937,7 @@ ID: 26 Node type: OR_NODE Variables in the circuit: 8 Literals in the circuit: -
 Literal: 8
 ID: 26 Node type: OR_NODE Variables in the circuit: 8 Literals in the circuit: -8 8 Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 24 25 Parent list (IDs):  Decision variable: 8
 Add a decision node
-Name: circuit_4 Number of nodes: 30 Comments:  Root: 29 Number of variables: 8 Size: 37
+Name: circuit_4 Number of nodes: 30 Comments:  Root: 29 Number of variables: 8 Size: 37 Number of edges: 37
 ID: 0 Node type: LITERAL Variables in the circuit: 4 Literals in the circuit: -4 Parent list (IDs): 6 12 Literal: -4
 ID: 1 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Parent list (IDs): 6 21 27 Literal: 1
 ID: 2 Node type: LITERAL Variables in the circuit: 5 Literals in the circuit: -5 Parent list (IDs): 7 13 Literal: -5
@@ -5978,7 +5978,7 @@ Add a constant leaf (False)
 Node id: 31
 Add an edge / is connected
 Add edge (18 -> 20)
-Name: circuit_4 Number of nodes: 33 Comments:  Root: 29 Number of variables: 8 Size: 41
+Name: circuit_4 Number of nodes: 33 Comments:  Root: 29 Number of variables: 8 Size: 41 Number of edges: 41
 ID: 0 Node type: LITERAL Variables in the circuit: 4 Literals in the circuit: -4 Parent list (IDs): 6 12 Literal: -4
 ID: 1 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Parent list (IDs): 6 21 27 Literal: 1
 ID: 2 Node type: LITERAL Variables in the circuit: 5 Literals in the circuit: -5 Parent list (IDs): 7 13 Literal: -5
@@ -6014,7 +6014,7 @@ ID: 31 Node type: CONSTANT Variables in the circuit:  Literals in the circuit:  
 ID: 32 Node type: OR_NODE Variables in the circuit:  Literals in the circuit:  Decomposable: True Decomposable_in_circuit: True Deterministic: True Deterministic_in_circuit: True Smoothness: True Smoothness_in_circuit: True Children list (IDs): 30 31 Parent list (IDs): 29 Decision variable: None
 
 Add edge (16 -> 23)
-Name: circuit_4 Number of nodes: 33 Comments:  Root: 29 Number of variables: 8 Size: 42
+Name: circuit_4 Number of nodes: 33 Comments:  Root: 29 Number of variables: 8 Size: 42 Number of edges: 42
 ID: 0 Node type: LITERAL Variables in the circuit: 4 Literals in the circuit: -4 Parent list (IDs): 6 12 Literal: -4
 ID: 1 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Parent list (IDs): 6 21 27 Literal: 1
 ID: 2 Node type: LITERAL Variables in the circuit: 5 Literals in the circuit: -5 Parent list (IDs): 7 13 Literal: -5
@@ -6059,7 +6059,7 @@ Add edge (25 -> 21)
 Something wrong (trying to add an edge from the node (25) that is not an inner node)
 
 Add edge (26 -> 21)
-Name: circuit_4 Number of nodes: 33 Comments:  Root: 29 Number of variables: 8 Size: 43
+Name: circuit_4 Number of nodes: 33 Comments:  Root: 29 Number of variables: 8 Size: 43 Number of edges: 43
 ID: 0 Node type: LITERAL Variables in the circuit: 4 Literals in the circuit: -4 Parent list (IDs): 6 12 Literal: -4
 ID: 1 Node type: LITERAL Variables in the circuit: 1 Literals in the circuit: 1 Parent list (IDs): 6 21 27 Literal: 1
 ID: 2 Node type: LITERAL Variables in the circuit: 5 Literals in the circuit: -5 Parent list (IDs): 7 13 Literal: -5

@@ -70,6 +70,10 @@ class NodeAbstract(ABC):
     @abstractmethod
     def get_node_size(self) -> int:
         pass
+
+    @abstractmethod
+    def get_number_of_children(self) -> int:
+        pass
     # endregion
 
     # region Static method
