@@ -234,7 +234,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser_temp.add_argument("-ct_l",
                              "--compiler_test_limit",
                              action="store",
-                             default=24000,
+                             default=9600,
                              type=cara.non_negative_int_parser,
                              metavar="[non-negative number]",
                              help="maximum number of tests per file")

@@ -38,7 +38,7 @@ class CompilerTest(TestAbstract):
             print()
             print(f"File ({file_name}): ")
 
-            if (self.__file_name is None) or (self.__file_name == file_name):
+            if file_name == "ais6.cnf":
                 self.__test(file_path)
 
         print()
@@ -64,17 +64,23 @@ class CompilerTest(TestAbstract):
                                         for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
                                             for decision_heuristic_ignore_binary_clauses in [True, False]:
                                                 for component_caching_enum in [cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME, cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME]:
-                                                    for component_caching_before_unit_propagation in [False]:
-                                                        for component_caching_after_unit_propagation in [True]:
+                                                    for component_caching_before_unit_propagation in [True, False]:
+                                                        for component_caching_after_unit_propagation in [True, False]:
                                                             for smooth in [True, False]:
-                                                                for disable_sat in [True, False]:
+                                                                for disable_sat in [False]:
                                                                     for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
                                                                         for first_implied_literals_enum in il_enum.implied_literals_enum_values:
                                                                             for implied_literals_enum in il_enum.implied_literals_enum_values:
                                                                                 for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
                                                                                     try:
-                                                                                        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN:
+                                                                                        if (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN): # or \
+                                                                                           # (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS) or \
+                                                                                           # (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED):
                                                                                             continue
+
+                                                                                        # if (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.VSADS) or \
+                                                                                        #    (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.VSIDS):
+                                                                                        #     continue
 
                                                                                         count += 1
 
@@ -117,6 +123,15 @@ class CompilerTest(TestAbstract):
                                                                                             result_temp = "|"
                                                                                         else:
                                                                                             result_temp = "X"
+                                                                                            print(f"hp_variable_simplification_enum: {hp_variable_simplification_enum}, "
+                                                                                                  f"implied_literals_enum: {implied_literals_enum}, "
+                                                                                                  f"first_implied_literals_enum: {first_implied_literals_enum}, "
+                                                                                                  f"decision_heuristic_enum: {decision_heuristic_enum}, "
+                                                                                                  f"disable_sat: {disable_sat}, "
+                                                                                                  f"smooth: {smooth}, "
+                                                                                                  f"component_caching_after_unit_propagation: {component_caching_after_unit_propagation}, "
+                                                                                                  f"component_caching_before_unit_propagation: {component_caching_before_unit_propagation}, "
+                                                                                                  f"component_caching_enum: {component_caching_enum}")
 
                                                                                         print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "), flush=True)
 
