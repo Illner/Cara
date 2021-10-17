@@ -538,10 +538,6 @@ class Component:
             implied_literal_set = self.__get_implied_literals(depth=depth,
                                                               first_implied_literals=first_implied_literals)
 
-            # if self.__disable_sat and (implied_literal_set is None):
-            #     self.__statistics.component_statistics.unsatisfiable.add_count(1)  # counter
-            #     return self.__circuit.create_constant_leaf(False)
-
             self.__statistics.component_statistics.implied_literal.add_count(len(implied_literal_set))  # counter
             implied_literal_set, _ = self.__add_literals(list(implied_literal_set))
             implied_literal_id_set = self.__circuit.create_literal_leaf_set(implied_literal_set)

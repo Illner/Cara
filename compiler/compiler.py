@@ -135,6 +135,8 @@ class Compiler:
                  decision_heuristic_weight_for_satisfied_clauses: bool = True,
                  decision_heuristic_ignore_binary_clauses: bool = False,
                  decision_heuristic_renamable_horn_use_total_number_of_conflict_variables: bool = False,
+                 decision_heuristic_renamable_horn_use_conflicts: bool = True,
+                 decision_heuristic_renamable_horn_prefer_conflict_variables: bool = True,
                  decision_heuristic_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum = ph_enum.PreselectionHeuristicEnum.NONE,
                  decision_heuristic_preselection_heuristic_prop_z_depth_threshold: int = 5,
                  decision_heuristic_preselection_heuristic_prop_z_number_of_variables_lower_bound: Union[int, None] = 10,
@@ -145,9 +147,12 @@ class Compiler:
                  mapping_node_statistics: Union[str, None] = None,
                  node_statistics: Union[str, None] = None,
                  disable_sat: bool = False):
-        # Invalid configuration
+        # Invalid configurations
         if disable_sat and ((implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP) or (first_implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP)):
             raise c_exception.InvalidConfigurationException("BCP is needed for disable_sat")
+
+        if decision_heuristic_renamable_horn_use_conflicts and not decision_heuristic_renamable_horn_prefer_conflict_variables:
+            raise c_exception.InvalidConfigurationException("decision_heuristic_renamable_horn_use_conflicts and decision_heuristic_renamable_horn_prefer_conflict_variables")
 
         # CNF
         if isinstance(cnf, Cnf):
@@ -200,7 +205,9 @@ class Compiler:
                                       prop_z_depth_threshold=decision_heuristic_preselection_heuristic_prop_z_depth_threshold,
                                       prop_z_number_of_variables_lower_bound=decision_heuristic_preselection_heuristic_prop_z_number_of_variables_lower_bound,
                                       cra_rank=decision_heuristic_preselection_heuristic_cra_rank,
-                                      renamable_horn_use_total_number_of_conflict_variables=decision_heuristic_renamable_horn_use_total_number_of_conflict_variables)
+                                      renamable_horn_use_total_number_of_conflict_variables=decision_heuristic_renamable_horn_use_total_number_of_conflict_variables,
+                                      renamable_horn_use_conflicts=decision_heuristic_renamable_horn_use_conflicts,
+                                      renamable_horn_prefer_conflict_variables=decision_heuristic_renamable_horn_prefer_conflict_variables)
 
         # Implied literals - preselection heuristic
         self.__set_implied_literals_preselection_heuristic(implied_literals_preselection_heuristic_enum=implied_literals_preselection_heuristic_enum,
@@ -273,7 +280,9 @@ class Compiler:
                                  prop_z_depth_threshold: int,
                                  prop_z_number_of_variables_lower_bound: Union[int, None],
                                  cra_rank: float,
-                                 renamable_horn_use_total_number_of_conflict_variables: bool) -> None:
+                                 renamable_horn_use_total_number_of_conflict_variables: bool,
+                                 renamable_horn_use_conflicts: bool,
+                                 renamable_horn_prefer_conflict_variables: bool) -> None:
 
         # Preselection heuristic
         # NONE
@@ -388,7 +397,9 @@ class Compiler:
 
             self.__decision_heuristic = RenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
                                                                decision_heuristic=decision_heuristic,
-                                                               use_total_number_of_conflict_variables=renamable_horn_use_total_number_of_conflict_variables)
+                                                               use_total_number_of_conflict_variables=renamable_horn_use_total_number_of_conflict_variables,
+                                                               use_conflicts=renamable_horn_use_conflicts,
+                                                               prefer_conflict_variables=renamable_horn_prefer_conflict_variables)
             return
 
         # RENAMABLE_HORN_DLCS_DLIS
@@ -400,7 +411,9 @@ class Compiler:
 
             self.__decision_heuristic = RenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
                                                                decision_heuristic=decision_heuristic,
-                                                               use_total_number_of_conflict_variables=renamable_horn_use_total_number_of_conflict_variables)
+                                                               use_total_number_of_conflict_variables=renamable_horn_use_total_number_of_conflict_variables,
+                                                               use_conflicts=renamable_horn_use_conflicts,
+                                                               prefer_conflict_variables=renamable_horn_prefer_conflict_variables)
             return
 
         # RENAMABLE_HORN_VSADS
@@ -413,7 +426,9 @@ class Compiler:
 
             self.__decision_heuristic = RenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
                                                                decision_heuristic=decision_heuristic,
-                                                               use_total_number_of_conflict_variables=renamable_horn_use_total_number_of_conflict_variables)
+                                                               use_total_number_of_conflict_variables=renamable_horn_use_total_number_of_conflict_variables,
+                                                               use_conflicts=renamable_horn_use_conflicts,
+                                                               prefer_conflict_variables=renamable_horn_prefer_conflict_variables)
             return
 
         raise c_exception.FunctionNotImplementedException("set_decision_heuristic",

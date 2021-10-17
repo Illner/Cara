@@ -67,7 +67,7 @@ class CompilerTest(TestAbstract):
                                                     for component_caching_before_unit_propagation in [True, False]:
                                                         for component_caching_after_unit_propagation in [True, False]:
                                                             for smooth in [True, False]:
-                                                                for disable_sat in [True]:
+                                                                for disable_sat in [False]:
                                                                     for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
                                                                         for first_implied_literals_enum in il_enum.implied_literals_enum_values:
                                                                             for implied_literals_enum in il_enum.implied_literals_enum_values:
