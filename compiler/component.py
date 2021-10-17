@@ -327,13 +327,19 @@ class Component:
         return literal_set_temp, isolated_variable_set
 
     def __create_circuit_more_components_create_incidence_graphs_for_components(self, depth: int, cut_set: Set[int],
-                                                                                model: List[int], implied_literal_set: Set[int]) -> Set[int]:
+                                                                                model: Union[List[int], None], implied_literal_set: Set[int]) -> Set[int]:
         node_id_set = set()
         incidence_graph_set = self.__incidence_graph.create_incidence_graphs_for_components()
 
         for incidence_graph in incidence_graph_set:
             missing_variable_set = self.__incidence_graph._variable_set.difference(incidence_graph._variable_set)
-            extended_assignment_list = [var if var in model else -var for var in missing_variable_set]
+
+            # Unsatisfied formula (disabled SAT solver)
+            if model is None:
+                extended_assignment_list = []
+            else:
+                extended_assignment_list = [var if var in model else -var for var in missing_variable_set]
+
             assignment_list = self.__assignment_list.copy()
             assignment_list.extend(extended_assignment_list)
 
@@ -476,23 +482,24 @@ class Component:
             model = self.__solver.get_model(self.__assignment_list)
 
             # The formula is unsatisfiable
-            if (model is None) and (not self.__disable_sat):
-                self.__statistics.component_statistics.unsatisfiable.add_count(1)   # counter
-                return self.__circuit.create_constant_leaf(False)
+            if model is None:
+                if not self.__disable_sat:
+                    self.__statistics.component_statistics.unsatisfiable.add_count(1)   # counter
+                    return self.__circuit.create_constant_leaf(False)
+
+                # Disabled SAT solver
+                else:
+                    implied_literal_set = self.__get_implied_literals(depth=depth,
+                                                                      first_implied_literals=False)
+
+                    if implied_literal_set is None:
+                        self.__statistics.component_statistics.unsatisfiable.add_count(1)  # counter
+                        return self.__circuit.create_constant_leaf(False)
 
         # Component caching (before unit propagation)
         cache_key_before_unit_propagation = None
         cache_variable_id_mapping_id_before_unit_propagation = None
         if self.__component_caching_before_unit_propagation:
-            # Hack
-            if self.__disable_sat:
-                implied_literal_set = self.__get_implied_literals(depth=depth,
-                                                                  first_implied_literals=first_implied_literals)
-
-                if implied_literal_set is None:
-                    self.__statistics.component_statistics.unsatisfiable.add_count(1)  # counter
-                    return self.__circuit.create_constant_leaf(False)
-
             self.__statistics.component_statistics.component_caching_generate_key.start_stopwatch()     # timer (start)
             cache_key_before_unit_propagation, cache_mapping_before_unit_propagation = self.__component_caching.generate_key_cache(self.__incidence_graph)
             self.__statistics.component_statistics.component_caching_generate_key.stop_stopwatch()      # timer (stop)
@@ -531,9 +538,9 @@ class Component:
             implied_literal_set = self.__get_implied_literals(depth=depth,
                                                               first_implied_literals=first_implied_literals)
 
-            if self.__disable_sat and (implied_literal_set is None):
-                self.__statistics.component_statistics.unsatisfiable.add_count(1)  # counter
-                return self.__circuit.create_constant_leaf(False)
+            # if self.__disable_sat and (implied_literal_set is None):
+            #     self.__statistics.component_statistics.unsatisfiable.add_count(1)  # counter
+            #     return self.__circuit.create_constant_leaf(False)
 
             self.__statistics.component_statistics.implied_literal.add_count(len(implied_literal_set))  # counter
             implied_literal_set, _ = self.__add_literals(list(implied_literal_set))
@@ -643,7 +650,7 @@ class Component:
             else:
                 node_id_set = self.__create_circuit_more_components_create_incidence_graphs_for_components(depth=depth,
                                                                                                            cut_set=cut_set,
-                                                                                                           model=[] if model is None else model,
+                                                                                                           model=model,
                                                                                                            implied_literal_set=implied_literal_set)
             # Component caching
             if self.__component_caching_after_unit_propagation and (cache_key_after_unit_propagation is not None):
