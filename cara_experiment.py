@@ -37,7 +37,7 @@ def main(main_args):
                             directory_path=main_args.directory_path,
                             timeout_experiment=timeout_experiment,
                             log_directory_path=main_args.log_directory_path,
-                            save_circuit=False)
+                            save_circuit=True)
 
     # Total timeout
     start = datetime.datetime.now()
@@ -64,9 +64,9 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  decision_heuristic_ignore_binary_clauses=False,
+                                  decision_heuristic_ignore_binary_clauses=True,
                                   decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.VSADS,
-                                  base_class_enum_set=set(),     # {bc_enum.BaseClassEnum.TWO_CNF, bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF},
+                                  base_class_enum_set={bc_enum.BaseClassEnum.TWO_CNF, bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF},
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
