@@ -59,9 +59,7 @@ class Compiler:
     """    
     Private Cnf cnf
     Private Circuit circuit
-    Private str node_statistics
     Private Statistics statistics
-    Private str mapping_node_statistics
     Private ComponentCachingAbstract component_caching
     Private DecisionHeuristicAbstract decision_heuristic
     Private HypergraphPartitioning hypergraph_partitioning
@@ -71,8 +69,10 @@ class Compiler:
     Private bool smooth
     Private bool disable_sat
     Private bool preprocessing
+    Private str node_statistics
     Private bool cut_set_try_cache
     Private int base_class_threshold
+    Private str mapping_node_statistics
     Private float new_cut_set_threshold
     Private float new_cut_set_threshold_reduction           # when the cache for cut sets can be used
     Private Set<BaseClassEnum> base_class_enum_set
@@ -134,7 +134,7 @@ class Compiler:
                  decision_heuristic_vsads_q_constant_factor: float = 0.5,
                  decision_heuristic_weight_for_satisfied_clauses: bool = True,
                  decision_heuristic_ignore_binary_clauses: bool = False,
-                 decision_heuristic_renamable_horn_use_total_number_of_conflict_variables: bool = False,
+                 decision_heuristic_renamable_horn_use_total_number_of_conflict_variables: bool = True,
                  decision_heuristic_renamable_horn_use_conflicts: bool = True,
                  decision_heuristic_renamable_horn_prefer_conflict_variables: bool = True,
                  decision_heuristic_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum = ph_enum.PreselectionHeuristicEnum.NONE,
