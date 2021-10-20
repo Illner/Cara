@@ -27,6 +27,9 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter renamable_horn_formula_ratio
     Private StatisticsComponentCounter two_cnf_ratio
     Private StatisticsComponentCounter get_redundant_clauses_size
+    Private StatisticsComponentCounter implication_graph_conflict_variables
+    Private StatisticsComponentCounter implication_graph_strongly_connected_components
+    Private StatisticsComponentCounter implication_graph_strongly_connected_components_size
     """
 
     def __init__(self, active: bool):
@@ -79,6 +82,15 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
 
         self.__get_redundant_clauses_size: StatisticsComponentCounter = StatisticsComponentCounter(name="get redundant clauses - size", active=active)
         self._component_list.append(self.__get_redundant_clauses_size)
+
+        self.__implication_graph_conflict_variables: StatisticsComponentCounter = StatisticsComponentCounter(name="implication graph - number of conflict variables", active=active)
+        self._component_list.append(self.__implication_graph_conflict_variables)
+
+        self.__implication_graph_strongly_connected_components: StatisticsComponentCounter = StatisticsComponentCounter(name="implication graph - number of strongly connected components", active=active)
+        self._component_list.append(self.__implication_graph_strongly_connected_components)
+
+        self.__implication_graph_strongly_connected_components_size: StatisticsComponentCounter = StatisticsComponentCounter(name="implication graph - size of strongly connected components", active=active)
+        self._component_list.append(self.__implication_graph_strongly_connected_components_size)
 
     # region Property
     @property
@@ -144,4 +156,16 @@ class IncidenceGraphStatistics(StatisticsTemplateAbstract):
     @property
     def get_redundant_clauses_size(self) -> StatisticsComponentCounter:
         return self.__get_redundant_clauses_size
+
+    @property
+    def implication_graph_conflict_variables(self) -> StatisticsComponentCounter:
+        return self.__implication_graph_conflict_variables
+
+    @property
+    def implication_graph_strongly_connected_components(self) -> StatisticsComponentCounter:
+        return self.__implication_graph_strongly_connected_components
+
+    @property
+    def implication_graph_strongly_connected_components_size(self) -> StatisticsComponentCounter:
+        return self.__implication_graph_strongly_connected_components_size
     # endregion

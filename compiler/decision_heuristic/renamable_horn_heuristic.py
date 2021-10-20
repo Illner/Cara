@@ -49,7 +49,7 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
         if is_renamable_horn:
             raise c_exception.SomethingWrongException(f"RenamableHornHeuristic - the formula is renamable Horn ({incidence_graph})")
 
-        conflict_variable_set, conflict_variable_component_dictionary, component_number_of_conflict_variables_dictionary, component_total_number_of_conflict_variables_dictionary = conflict_structure
+        conflict_variable_set, literal_component_dictionary, component_number_of_conflict_variables_dictionary, component_total_number_of_conflict_variables_dictionary = conflict_structure
 
         intersection_set = conflict_variable_set.intersection(preselected_variable_set)
         if not intersection_set:
@@ -65,12 +65,17 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
             additional_score_dictionary = dict()
 
             for variable in intersection_set:
-                component = conflict_variable_component_dictionary[variable]
+                number_of_conflict_variables = 0
 
-                if self.__use_total_number_of_conflict_variables:
-                    number_of_conflict_variables = component_total_number_of_conflict_variables_dictionary[component]
-                else:
-                    number_of_conflict_variables = component_number_of_conflict_variables_dictionary[component]
+                for sign in [+1, -1]:
+                    literal = sign * variable
+
+                    component = literal_component_dictionary[literal]
+
+                    if self.__use_total_number_of_conflict_variables:
+                        number_of_conflict_variables += component_total_number_of_conflict_variables_dictionary[component]
+                    else:
+                        number_of_conflict_variables += component_number_of_conflict_variables_dictionary[component]
 
                 additional_score_dictionary[variable] = number_of_conflict_variables
 

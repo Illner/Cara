@@ -75,7 +75,7 @@ def main(main_args):
 
                                   decision_heuristic_renamable_horn_use_total_number_of_conflict_variables=True,
                                   decision_heuristic_renamable_horn_use_conflicts=True,
-                                  decision_heuristic_renamable_horn_prefer_conflict_variables=True,
+                                  decision_heuristic_renamable_horn_prefer_conflict_variables=False,
 
                                   smooth=False,
                                   preprocessing=False,

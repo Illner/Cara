@@ -151,9 +151,6 @@ class Compiler:
         if disable_sat and ((implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP) or (first_implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP)):
             raise c_exception.InvalidConfigurationException("BCP is needed for disable_sat")
 
-        if decision_heuristic_renamable_horn_use_conflicts and not decision_heuristic_renamable_horn_prefer_conflict_variables:
-            raise c_exception.InvalidConfigurationException("decision_heuristic_renamable_horn_use_conflicts and decision_heuristic_renamable_horn_prefer_conflict_variables")
-
         # CNF
         if isinstance(cnf, Cnf):
             self.__cnf: Cnf = cnf
