@@ -47,7 +47,14 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
 
         # The formula is renamable Horn
         if is_renamable_horn:
-            raise c_exception.SomethingWrongException(f"RenamableHornHeuristic - the formula is renamable Horn ({incidence_graph})")
+            decision_variable = self.__decision_heuristic.get_decision_variable(cut_set=preselected_variable_set,
+                                                                                incidence_graph=incidence_graph,
+                                                                                solver=solver,
+                                                                                assignment_list=assignment_list,
+                                                                                depth=depth,
+                                                                                additional_score_dictionary=None)
+
+            return decision_variable
 
         conflict_variable_set, literal_component_dictionary, component_number_of_conflict_variables_dictionary, component_total_number_of_conflict_variables_dictionary = conflict_structure
 
