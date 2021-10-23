@@ -44,6 +44,7 @@ class Component:
     Private int base_class_threshold
     Private List<int> assignment_list
     Private float new_cut_set_threshold
+    Private float base_class_ratio_threshold
     Private float new_cut_set_threshold_reduction
     Private Set<BaseClassEnum> base_class_enum_set
     Private int eliminating_redundant_clauses_threshold
@@ -74,6 +75,7 @@ class Component:
                  hypergraph_partitioning: HypergraphPartitioning,
                  base_class_enum_set: Set[bc_enum.BaseClassEnum],
                  base_class_threshold: Union[int, None],
+                 base_class_ratio_threshold: Union[float, None],
                  implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  implied_literals_preselection_heuristic: PreselectionHeuristicAbstract,
                  first_implied_literals_enum: il_enum.ImpliedLiteralsEnum,
@@ -102,6 +104,7 @@ class Component:
         self.__base_class_threshold: Union[int, None] = base_class_threshold
         self.__base_class_enum_set: Set[bc_enum.BaseClassEnum] = base_class_enum_set
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
+        self.__base_class_ratio_threshold: Union[float, None] = base_class_ratio_threshold
         self.__component_caching_after_unit_propagation: bool = component_caching_after_unit_propagation
         self.__component_caching_before_unit_propagation: bool = component_caching_before_unit_propagation
         self.__eliminating_redundant_clauses_threshold: Union[int, None] = eliminating_redundant_clauses_threshold
@@ -360,6 +363,7 @@ class Component:
                                        hypergraph_partitioning=self.__hypergraph_partitioning,
                                        base_class_enum_set=self.__base_class_enum_set,
                                        base_class_threshold=self.__base_class_threshold,
+                                       base_class_ratio_threshold=self.__base_class_ratio_threshold,
                                        implied_literals_enum=self.__implied_literals_enum,
                                        implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                        first_implied_literals_enum=self.__first_implied_literals_enum,
@@ -597,7 +601,8 @@ class Component:
                 self.__statistics.component_statistics.component_caching_after_hit.add_count(0)  # counter
 
         # 2-CNF and Renamable Horn CNF
-        if (self.__base_class_threshold is None) or (self.__base_class_threshold <= self.__incidence_graph.number_of_edges()):
+        if ((self.__base_class_threshold is None) or (self.__base_class_threshold <= self.__incidence_graph.number_of_edges())) and \
+           ((self.__base_class_ratio_threshold is None) or (self.__base_class_ratio_threshold <= self.__incidence_graph.get_ratio())):
             # 2-CNF
             if (bc_enum.BaseClassEnum.TWO_CNF in self.__base_class_enum_set) and (self.__incidence_graph.number_of_variables() > 1) and self.__incidence_graph.is_2_cnf():
                 two_cnf = self.__incidence_graph.convert_to_2_cnf()

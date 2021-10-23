@@ -86,7 +86,8 @@ class IncidenceGraphTest(TestAbstract):
                  f"number of components: {incidence_graph.number_of_components()}, " \
                  f"number of nodes: {incidence_graph.number_of_nodes()}, " \
                  f"number of variables: {incidence_graph.number_of_variables()}, " \
-                 f"number of clauses: {incidence_graph.number_of_clauses()}"
+                 f"number of clauses: {incidence_graph.number_of_clauses()}, " \
+                 f"ratio: {incidence_graph.get_ratio()}"
 
         # Neighbours (variables)
         result = "\n".join((result, "Neighbours (variables)"))

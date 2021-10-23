@@ -74,6 +74,7 @@ class Compiler:
     Private int base_class_threshold
     Private str mapping_node_statistics
     Private float new_cut_set_threshold
+    Private float base_class_ratio_threshold
     Private float new_cut_set_threshold_reduction           # when the cache for cut sets can be used
     Private Set<BaseClassEnum> base_class_enum_set
     Private int eliminating_redundant_clauses_threshold
@@ -120,6 +121,7 @@ class Compiler:
                  hp_limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  hp_limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]] = (None, None),
                  base_class_threshold: Union[int, None] = None,
+                 base_class_ratio_threshold: Union[float, None] = None,
                  cut_set_try_cache: bool = False,
                  new_cut_set_threshold_reduction: float = 1,
                  implied_literals_preselection_heuristic_prop_z_depth_threshold: int = 5,
@@ -176,6 +178,7 @@ class Compiler:
         self.__mapping_node_statistics: Union[str, None] = mapping_node_statistics
         self.__base_class_enum_set: Set[bc_enum.BaseClassEnum] = base_class_enum_set
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
+        self.__base_class_ratio_threshold: Union[float, None] = base_class_ratio_threshold
         self.__component_caching_after_unit_propagation: bool = component_caching_after_unit_propagation
         self.__component_caching_before_unit_propagation: bool = component_caching_before_unit_propagation
         self.__eliminating_redundant_clauses_threshold: Union[int, None] = eliminating_redundant_clauses_threshold
@@ -529,6 +532,7 @@ class Compiler:
                                   hypergraph_partitioning=self.__hypergraph_partitioning,
                                   base_class_enum_set=self.__base_class_enum_set,
                                   base_class_threshold=self.__base_class_threshold,
+                                  base_class_ratio_threshold=self.__base_class_ratio_threshold,
                                   implied_literals_enum=self.__implied_literals_enum,
                                   implied_literals_preselection_heuristic=self.__implied_literals_preselection_heuristic,
                                   first_implied_literals_enum=self.__first_implied_literals_enum,

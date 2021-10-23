@@ -934,6 +934,16 @@ class IncidenceGraph(Graph):
         raise c_exception.FunctionNotImplementedException("get_redundant_clauses",
                                                           f"this procedure for determining redundant clauses ({eliminating_redundant_clauses_enum.name}) is not implemented")
 
+    def get_ratio(self) -> float:
+        """
+        :return: the ratio of clauses-to-variables
+        """
+
+        if self.number_of_variables() == 0:
+            return 0
+
+        return self.number_of_clauses() / self.number_of_variables()
+
     # region Assignment
     def remove_literal(self, literal: int, eliminating_redundant_clauses_enum: Union[erc_enum.EliminatingRedundantClausesEnum, None]) -> Set[int]:
         """

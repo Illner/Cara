@@ -13,6 +13,7 @@ import circuit.node.node_type_enum as nt_enum
 plot_path = r"C:\Users\illner\Desktop"
 
 bdmc_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC"
+bdmc_rh_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC RH"
 hp_cache_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\HP cache"
 cara_circuit_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\CaraCircuit"
 imbalance_factor_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\Imbalance factor"
@@ -54,6 +55,13 @@ class ExperimentEnum(str, Enum):
     BDMC_WEIGHTED_BINARIES_1 = "Weighted binaries, 0.1"
     BDMC_WEIGHTED_BINARIES_25 = "Weighted binaries, 0.25"
     BDMC_WEIGHTED_BINARIES_25_WITHOUT_GAMMA_0 = "Weighted binaries, 0.25, without gamma_0"
+
+    BDMC_RH_D4 = "D4 (BDMC RH)"
+    BDMC_RH_VSADS = "VSADS"
+    BDMC_RH_DLCS_DLIS_T_C_P = "DLCS-DLIS (t, c, p)"
+    BDMC_RH_DLCS_DLIS_T_C_nP = "DLCS-DLIS (t, c, -p)"
+    BDMC_RH_DLCS_DLIS_T_nC_P = "DLCS-DLIS (t, -c, p)"
+    BDMC_RH_DLCS_DLIS_T_nC_nP = "DLCS-DLIS (t, -c, -p)"
 
     HP_CACHE_NONE = "NONE"
     HP_CACHE_ISOMORFISM_250 = "ISOMORFISM 250"
@@ -106,30 +114,32 @@ class PlotEnum(IntEnum):
     HISTOGRAM = 3
 
 
-root_path = cara_circuit_root_path
+root_path = bdmc_rh_root_path
 
 # SCATTER
-directory_name_1: ExperimentEnum = ExperimentEnum.CARA_CIRCUIT_LIMIT_0_1
-directory_name_2: ExperimentEnum = ExperimentEnum.CARA_CIRCUIT_LIMIT_0
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_D4
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_T_C_P
 
 # BOXPLOT, HISTOGRAM
-directory_name_list: List[ExperimentEnum] = [ExperimentEnum.CARA_CIRCUIT_LIMIT_0_1,
-                                             ExperimentEnum.CARA_CIRCUIT_LIMIT_0_MOC_1]
+directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_RH_D4,
+                                             ExperimentEnum.BDMC_RH_VSADS,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_C_P,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_C_nP]
 
-none_value: float = 0   # 10**10
-uncompiled_value: Union[float, None] = None     # 10**10
+none_value: float = 10**10
+uncompiled_value: Union[float, None] = None
 
-title: str = "Number of decisions"
+title: str = "Size (d-DNNF vs d-BDMC)"
 
-percent: bool = True
-use_uncompiled: bool = True
-plot: PlotEnum = PlotEnum.BOXPLOT
+percent: bool = False
+use_uncompiled: bool = False
+plot: PlotEnum = PlotEnum.SCATTER
 plot_name: Union[str, None] = None
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 # SCATTER
-x_label: str = "size (clause reduction)"
-y_label: str = "size (clause reduction ext)"
+x_label: str = "# edges (d-DNNF VSADS)"
+y_label: str = "# edges (d-BDMC RH-DLCS-DLIS (t, c, p))"
 log_scale: bool = False
 set_together: bool = False
 
@@ -138,16 +148,24 @@ showfliers: bool = False
 
 # BOXPLOT, HISTOGRAM
 label_prefix: str = ""
-label_list: Union[List[List[str]], None] = [["VSADS"],
-                                            ["VSADS ext"],
-                                            ["ib 40 %"],
-                                            ["d-BDMC \nlimit 500"],
+label_list: Union[List[List[str]], None] = [["d-DNNF"],
+                                            ["d-BDMC \n VSADS"],
+                                            ["d-BDMC \n DLCS-DLIS \n (t, c, p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (t, c, -p)"],
                                             ["d-BDMC \nlimit 1000"],
                                             ["d-BDMC \nlimit 1500"]]
 
 
 def function(statistics: Statistics) -> Union[float, None]:
-    return statistics.component_statistics.component_caching_after_hit.average_count
+    # return statistics.size
+
+    try:
+        return statistics.number_of_edges
+    except AttributeError:
+        return statistics.size
+
+    # return statistics.component_statistics.renamable_horn_cnf_formula_length.average_count
+
     # return statistics.size  # + statistics.component_statistics.component_caching_after_cara_mapping_length.sum_count
     # return statistics.compiler_statistics.create_circuit.average_time
 

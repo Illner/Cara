@@ -54,6 +54,7 @@ def main(main_args):
                             sat_solver_enum=ss_enum.SatSolverEnum[main_args.sat_solver],
                             base_class_enum_set=set([bc_enum.BaseClassEnum[base_class] for base_class in base_class_list]),
                             base_class_threshold=main_args.bc_threshold,
+                            base_class_ratio_threshold=main_args.bc_ratio_threshold,
                             implied_literals_enum=il_enum.ImpliedLiteralsEnum[main_args.implied_literals],
                             implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum[main_args.il_preselection_heuristic],
                             first_implied_literals_enum=il_enum.ImpliedLiteralsEnum[main_args.first_implied_literals],
@@ -247,7 +248,7 @@ def str_to_bool_parser(value: Union[str, bool]) -> bool:
 
 def non_negative_int_or_none_parser(value: Union[int, str]) -> Union[int, None]:
     """
-    Check if the value is a (non-negative) number or None
+    Check if the value is a (non-negative) number (int) or None
     :raises ArgumentTypeError: if the value has an invalid type
     """
 
@@ -259,6 +260,28 @@ def non_negative_int_or_none_parser(value: Union[int, str]) -> Union[int, None]:
         value = int(value)
     except ValueError:
         raise argparse.ArgumentTypeError(f"{value} has an invalid type ({type(value)}), expected int or \"None\"!")
+
+    # Number
+    if value < 0:
+        raise argparse.ArgumentTypeError(f"{value} is negative!")
+
+    return value
+
+
+def non_negative_float_or_none_parser(value: Union[float, str]) -> Union[float, None]:
+    """
+    Check if the value is a (non-negative) number (float) or None
+    :raises ArgumentTypeError: if the value has an invalid type
+    """
+
+    # None
+    if isinstance(value, str) and value.lower() == "none":
+        return None
+
+    try:
+        value = float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"{value} has an invalid type ({type(value)}), expected float or \"None\"!")
 
     # Number
     if value < 0:
@@ -390,6 +413,13 @@ def create_parser() -> argparse.ArgumentParser:
                              type=non_negative_int_or_none_parser,
                              metavar="[non-negative number or None]",
                              help="threshold (formula length) for applying base classes (None for no limit)")
+    parser_temp.add_argument("-bc_rt",
+                             "--bc_ratio_threshold",
+                             action="store",
+                             default=None,
+                             type=non_negative_float_or_none_parser,
+                             metavar="[non-negative number or None]",
+                             help="threshold (formula ratio) for applying base classes (None for no limit)")
     parser_temp.add_argument("-dh",
                              "--decision_heuristic",
                              action="store",
