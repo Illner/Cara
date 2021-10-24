@@ -73,11 +73,9 @@ def main(main_args):
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
 
-                                  decision_heuristic_renamable_horn_use_total_number_of_conflict_variables=True,
+                                  decision_heuristic_renamable_horn_use_total_number_of_conflict_variables=False,
                                   decision_heuristic_renamable_horn_use_conflicts=True,
                                   decision_heuristic_renamable_horn_prefer_conflict_variables=True,
-
-                                  base_class_ratio_threshold=3,
 
                                   smooth=False,
                                   preprocessing=False,
