@@ -115,12 +115,12 @@ def scatter(data_x: Union[List[float], List[List[float]]], data_y: Union[List[fl
 
 
 def histogram(data: Union[List[float], List[List[float]]], labels: List[str], title: str,
-              x_label: Union[str, None] = None, y_label: Union[str, None] = None,
+              x_label: Union[str, None] = None, y_label: Union[str, None] = None, bins: int = 10,
               save_path: [str, Path, None] = None, show: bool = True) -> None:
     fig, ax = plt.subplots()
 
     try:
-        ax.hist(data)
+        ax.hist(data, bins=bins)
         plt.legend(labels)
 
         # Title and labels

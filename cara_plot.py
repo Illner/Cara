@@ -62,6 +62,14 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_DLCS_DLIS_T_C_nP = "DLCS-DLIS (t, c, -p)"
     BDMC_RH_DLCS_DLIS_T_nC_P = "DLCS-DLIS (t, -c, p)"
     BDMC_RH_DLCS_DLIS_T_nC_nP = "DLCS-DLIS (t, -c, -p)"
+    BDMC_RH_DLCS_DLIS_nT_C_P = "DLCS-DLIS (-t, c, p)"
+    BDMC_RH_DLCS_DLIS_nT_C_nP = "DLCS-DLIS (-t, c, -p)"
+    BDMC_RH_VSADS_T_C_P = "VSADS (t, c, p)"
+    BDMC_RH_VSADS_T_nC_P = "VSADS (t, -c, p)"
+    BDMC_RH_VSADS_nT_C_P = "VSADS (-t, c, p)"
+    BDMC_RH_DLCS_DLIS_2_25 = "2.25"
+    BDMC_RH_DLCS_DLIS_2_5 = "2.5"
+    BDMC_RH_DLCS_DLIS_3 = "3"
 
     HP_CACHE_NONE = "NONE"
     HP_CACHE_ISOMORFISM_250 = "ISOMORFISM 250"
@@ -118,13 +126,17 @@ root_path = bdmc_rh_root_path
 
 # SCATTER
 directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_T_C_P
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_nT_C_P
 
 # BOXPLOT, HISTOGRAM
 directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_RH_D4,
                                              ExperimentEnum.BDMC_RH_VSADS,
                                              ExperimentEnum.BDMC_RH_DLCS_DLIS_T_C_P,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_C_nP]
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_C_nP,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_nC_P,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_nC_nP,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nT_C_P,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nT_C_nP]
 
 none_value: float = 10**10
 uncompiled_value: Union[float, None] = None
@@ -133,18 +145,18 @@ title: str = "Size (d-DNNF vs d-BDMC)"
 
 percent: bool = False
 use_uncompiled: bool = False
-plot: PlotEnum = PlotEnum.SCATTER
+plot: PlotEnum = PlotEnum.BOXPLOT
 plot_name: Union[str, None] = None
-directory_set: DirectorySetEnum = DirectorySetEnum.all
+directory_set: DirectorySetEnum = DirectorySetEnum.circuit
 
 # SCATTER
-x_label: str = "# edges (d-DNNF VSADS)"
-y_label: str = "# edges (d-BDMC RH-DLCS-DLIS (t, c, p))"
+x_label: str = "size (d-DNNF VSADS)"
+y_label: str = "size (d-BDMC RH-DLCS-DLIS (-t, c, p))"
 log_scale: bool = False
 set_together: bool = False
 
 # BOXPLOT
-showfliers: bool = False
+showfliers: bool = True
 
 # BOXPLOT, HISTOGRAM
 label_prefix: str = ""
@@ -152,17 +164,20 @@ label_list: Union[List[List[str]], None] = [["d-DNNF"],
                                             ["d-BDMC \n VSADS"],
                                             ["d-BDMC \n DLCS-DLIS \n (t, c, p)"],
                                             ["d-BDMC \n DLCS-DLIS \n (t, c, -p)"],
-                                            ["d-BDMC \nlimit 1000"],
-                                            ["d-BDMC \nlimit 1500"]]
+                                            ["d-BDMC \n DLCS-DLIS \n (t, -c, p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (t, -c, -p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (-t, c, p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (-t, c, -p)"]]
 
 
 def function(statistics: Statistics) -> Union[float, None]:
-    # return statistics.size
+    # return statistics.component_statistics.renamable_horn_cnf_formula_length.sum_count
+    return statistics.size
 
-    try:
-        return statistics.number_of_edges
-    except AttributeError:
-        return statistics.size
+    # try:
+    #     return statistics.number_of_edges
+    # except AttributeError:
+    #     return statistics.size
 
     # return statistics.component_statistics.renamable_horn_cnf_formula_length.average_count
 
