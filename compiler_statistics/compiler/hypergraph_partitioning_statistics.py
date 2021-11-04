@@ -20,6 +20,9 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter cache_multi_occurrent_clauses
     Private StatisticsComponentCounter cut_set_size
     Private StatisticsComponentCounter empty_cut_set
+    Private StatisticsComponentCounter hypergraph_number_of_nodes
+    Private StatisticsComponentCounter hypergraph_number_of_hyperedges
+    Private StatisticsComponentCounter ratio_log_cut_set_size_and_log_number_of_hyperedges
     """
 
     def __init__(self, active: bool):
@@ -55,6 +58,15 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
                                                                                       active=active,
                                                                                       show_only_number_of_calls=True)
         self._component_list.append(self.__empty_cut_set)
+
+        self.__hypergraph_number_of_nodes: StatisticsComponentCounter = StatisticsComponentCounter(name="hypergraph - number of nodes", active=active)
+        self._component_list.append(self.__hypergraph_number_of_nodes)
+
+        self.__hypergraph_number_of_hyperedges: StatisticsComponentCounter = StatisticsComponentCounter(name="hypergraph - number of hyperedges", active=active)
+        self._component_list.append(self.__hypergraph_number_of_hyperedges)
+
+        self.__ratio_log_cut_set_size_and_log_number_of_hyperedges: StatisticsComponentCounter = StatisticsComponentCounter(name="log(cut set size) / log(number of hyperedges)", active=active)
+        self._component_list.append(self.__ratio_log_cut_set_size_and_log_number_of_hyperedges)
 
     # region Property
     @property
@@ -92,4 +104,16 @@ class HypergraphPartitioningStatistics(StatisticsTemplateAbstract):
     @property
     def empty_cut_set(self) -> StatisticsComponentCounter:
         return self.__empty_cut_set
+
+    @property
+    def hypergraph_number_of_nodes(self) -> StatisticsComponentCounter:
+        return self.__hypergraph_number_of_nodes
+
+    @property
+    def hypergraph_number_of_hyperedges(self) -> StatisticsComponentCounter:
+        return self.__hypergraph_number_of_hyperedges
+
+    @property
+    def ratio_log_cut_set_size_and_log_number_of_hyperedges(self) -> StatisticsComponentCounter:
+        return self.__ratio_log_cut_set_size_and_log_number_of_hyperedges
     # endregion

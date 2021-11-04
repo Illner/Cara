@@ -149,7 +149,8 @@ class Compiler:
                  name: str = "",
                  mapping_node_statistics: Union[str, None] = None,
                  node_statistics: Union[str, None] = None,
-                 disable_sat: bool = False):
+                 disable_sat: bool = False,
+                 disable_decomposition: bool = False):
         # Invalid configurations
         if disable_sat and ((implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP) or (first_implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP)):
             raise c_exception.InvalidConfigurationException("BCP is needed for disable_sat")
@@ -235,6 +236,7 @@ class Compiler:
                                                                 multi_occurrence_cache=hp_multi_occurrence_cache,
                                                                 limit_number_of_clauses_cache=hp_limit_number_of_clauses_cache,
                                                                 limit_number_of_variables_cache=hp_limit_number_of_variables_cache,
+                                                                disable_decomposition=disable_decomposition,
                                                                 patoh_sugparam_enum=hp_patoh_sugparam_enum,
                                                                 statistics=self.__statistics.hypergraph_partitioning_statistics)
 

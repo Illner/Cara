@@ -19,7 +19,7 @@ Python 3.8+ (64 bit)
 * <a href="https://pypi.org/project/python-sat/" target="_blank">python-sat</a> 0.1.6.dev11 (Windows / Linux / macOS)
 * <a href="https://github.com/Illner/pysat/" target="_blank">extended python-sat</a> 0.1.6.dev11 (Windows / Linux / macOS) (support VSIDS and VSADS decision heuristic)
 
-You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 hypernetx==0.3.7 matplotlib==3.3.4 numpy==1.20.2 kthread==0.2.2** python-sat==0.1.6.dev11 kahypar==1.1.6
+You can install all required packages to central user packages repository using **pip install --user sortedcontainers==2.3.0 hypernetx==0.3.7 networkx==2.6.2 matplotlib==3.3.4 numpy==1.20.2 kthread==0.2.2** python-sat==0.1.6.dev11 kahypar==1.1.6
 
 ## Software
 * <a href="http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview" target="_blank">hMETIS</a> 1.5.3 (Windows / Linux)

@@ -1,5 +1,6 @@
 # Import
 import os
+import math
 import ctypes
 import warnings
 import subprocess
@@ -37,6 +38,7 @@ class HypergraphPartitioning:
     Private Set<int> hyperedge_set
     Private int subsumption_threshold
     Private int total_number_of_nodes
+    Private bool disable_decomposition
     Private bool multi_occurrence_cache
     
     Private Tuple<int, int> limit_number_of_clauses_cache       # (lower_bound, upper_bound) - None = no limit
@@ -88,6 +90,7 @@ class HypergraphPartitioning:
                  multi_occurrence_cache: bool,
                  limit_number_of_clauses_cache: Tuple[Union[int, None], Union[int, None]],
                  limit_number_of_variables_cache: Tuple[Union[int, None], Union[int, None]],
+                 disable_decomposition: bool = False,
                  patoh_sugparam_enum: hpps_enum.PatohSugparamEnum = hpps_enum.PatohSugparamEnum.SPEED,
                  statistics: Union[HypergraphPartitioningStatistics, None] = None):
         # Statistics
@@ -97,10 +100,11 @@ class HypergraphPartitioning:
             self.__statistics: HypergraphPartitioningStatistics = statistics
 
         self.__cnf: Cnf = cnf
-        self.__subsumption_threshold: Union[int, None] = subsumption_threshold
         self.__hyperedge_set: Set[int] = cnf._variable_set
-        self.__total_number_of_nodes: int = cnf.real_number_of_clauses
+        self.__disable_decomposition: bool = disable_decomposition
         self.__multi_occurrence_cache: bool = multi_occurrence_cache
+        self.__total_number_of_nodes: int = cnf.real_number_of_clauses
+        self.__subsumption_threshold: Union[int, None] = subsumption_threshold
 
         self.__cache_enum: hpc_enum.HypergraphPartitioningCacheEnum = cache_enum
         self.__patoh_sugparam_enum: hpps_enum.PatohSugparamEnum = patoh_sugparam_enum
@@ -845,6 +849,14 @@ class HypergraphPartitioning:
 
         self.__statistics.get_cut_set.start_stopwatch()     # timer (start)
 
+        # The decomposition is disabled
+        if self.__disable_decomposition:
+            cut_set = incidence_graph.variable_set(copy=True)
+            HypergraphPartitioning.remove_reduction_incidence_graph(incidence_graph)
+
+            self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
+            return cut_set
+
         self.__set_dynamic_weights(incidence_graph)
 
         if not incidence_graph_is_reduced:
@@ -905,9 +917,16 @@ class HypergraphPartitioning:
 
             self.__add_cut_set_cache(key, cut_set_cache)
 
+        cut_set_size = len(cut_set)
+        number_of_nodes = incidence_graph.number_of_clauses()
+        number_of_hyperedges = incidence_graph.number_of_variables()
+        self.__statistics.hypergraph_number_of_nodes.add_count(number_of_nodes)             # counter
+        self.__statistics.hypergraph_number_of_hyperedges.add_count(number_of_hyperedges)   # counter
+        self.__statistics.ratio_log_cut_set_size_and_log_number_of_hyperedges.add_count(math.log(cut_set_size)/math.log(number_of_hyperedges))    # counter
+
         HypergraphPartitioning.remove_reduction_incidence_graph(incidence_graph)
 
-        self.__statistics.cut_set_size.add_count(len(cut_set))  # counter
+        self.__statistics.cut_set_size.add_count(cut_set_size)  # counter
         self.__statistics.get_cut_set.stop_stopwatch()  # timer (stop)
         return cut_set
 

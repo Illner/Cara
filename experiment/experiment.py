@@ -129,7 +129,8 @@ class Experiment:
                    component_caching_cara_caching_scheme_multi_occurrence: bool = False,
                    component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int = 50,
                    file_name_extension: str = "",
-                   disable_sat: bool = False) -> \
+                   disable_sat: bool = False,
+                   disable_decomposition: bool = False) -> \
             Tuple[bool, bool, Union[int, None], Statistics]:
         """
         :return: (timeout exceeded, exception, size of the circuit, statistics)
@@ -193,7 +194,8 @@ class Experiment:
                             component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold,
                             mapping_node_statistics=self.__mapping_node_statistics,
                             node_statistics=self.__node_statistics,
-                            disable_sat=disable_sat)
+                            disable_sat=disable_sat,
+                            disable_decomposition=disable_decomposition)
 
         experiment_thread: TExperimentThread = self.__ExperimentThread(compiler)
         thread = kthread.KThread(target=Experiment.__experiment, args=(experiment_thread,))
