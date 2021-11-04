@@ -58,18 +58,15 @@ class ExperimentEnum(str, Enum):
 
     BDMC_RH_D4 = "D4 (BDMC RH)"
     BDMC_RH_VSADS = "VSADS"
-    BDMC_RH_DLCS_DLIS_T_C_P = "DLCS-DLIS (t, c, p)"
-    BDMC_RH_DLCS_DLIS_T_C_nP = "DLCS-DLIS (t, c, -p)"
-    BDMC_RH_DLCS_DLIS_T_nC_P = "DLCS-DLIS (t, -c, p)"
-    BDMC_RH_DLCS_DLIS_T_nC_nP = "DLCS-DLIS (t, -c, -p)"
-    BDMC_RH_DLCS_DLIS_nT_C_P = "DLCS-DLIS (-t, c, p)"
-    BDMC_RH_DLCS_DLIS_nT_C_nP = "DLCS-DLIS (-t, c, -p)"
-    BDMC_RH_VSADS_T_C_P = "VSADS (t, c, p)"
-    BDMC_RH_VSADS_T_nC_P = "VSADS (t, -c, p)"
-    BDMC_RH_VSADS_nT_C_P = "VSADS (-t, c, p)"
-    BDMC_RH_DLCS_DLIS_2_25 = "2.25"
-    BDMC_RH_DLCS_DLIS_2_5 = "2.5"
-    BDMC_RH_DLCS_DLIS_3 = "3"
+    BDMC_RH_DLCS_DLIS_A_T_C_P = "DLCS-DLIS (a, t, c, p)"
+    BDMC_RH_DLCS_DLIS_A_T_C_nP = "DLCS-DLIS (a, t, c, -p)"
+    BDMC_RH_DLCS_DLIS_A_T_nC_P = "DLCS-DLIS (a, t, -c, p)"
+    BDMC_RH_DLCS_DLIS_A_T_nC_nP = "DLCS-DLIS (a, t, -c, -p)"
+    BDMC_RH_DLCS_DLIS_A_nT_C_P = "DLCS-DLIS (a, -t, c, p)"
+    BDMC_RH_DLCS_DLIS_A_nT_C_nP = "DLCS-DLIS (a, -t, c, -p)"
+    BDMC_RH_VSADS_A_T_C_P = "VSADS (a, t, c, p)"
+    BDMC_RH_VSADS_A_T_nC_P = "VSADS (a, t, -c, p)"
+    BDMC_RH_VSADS_A_nT_C_P = "VSADS (a, -t, c, p)"
 
     HP_CACHE_NONE = "NONE"
     HP_CACHE_ISOMORFISM_250 = "ISOMORFISM 250"
@@ -126,42 +123,43 @@ root_path = bdmc_rh_root_path
 
 # SCATTER
 directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_nT_C_P
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_A_nT_C_P
 
 # BOXPLOT, HISTOGRAM
-directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_RH_D4,
-                                             ExperimentEnum.BDMC_RH_VSADS,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_C_P,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_C_nP,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_nC_P,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_T_nC_nP,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nT_C_P,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nT_C_nP]
+directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.BDMC_RH_D4,
+                                             # ExperimentEnum.BDMC_RH_VSADS,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_C_P,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_C_nP,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_nC_P,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_nC_nP,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_nT_C_P,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_nT_C_nP]
 
-none_value: float = 10**10
+none_value: float = 0   # 10**10
 uncompiled_value: Union[float, None] = None
 
-title: str = "Size (d-DNNF vs d-BDMC)"
+title: str = "Number of splits \n Planning"
 
 percent: bool = False
 use_uncompiled: bool = False
 plot: PlotEnum = PlotEnum.BOXPLOT
-plot_name: Union[str, None] = None
-directory_set: DirectorySetEnum = DirectorySetEnum.circuit
+plot_name: Union[str, None] = None  # "number_of_splits_planning"
+directory_set: DirectorySetEnum = DirectorySetEnum.Planning
 
 # SCATTER
 x_label: str = "size (d-DNNF VSADS)"
 y_label: str = "size (d-BDMC RH-DLCS-DLIS (-t, c, p))"
 log_scale: bool = False
 set_together: bool = False
+use_point_label: bool = False
 
 # BOXPLOT
-showfliers: bool = True
+showfliers: bool = False
 
 # BOXPLOT, HISTOGRAM
 label_prefix: str = ""
-label_list: Union[List[List[str]], None] = [["d-DNNF"],
-                                            ["d-BDMC \n VSADS"],
+label_list: Union[List[List[str]], None] = [# ["d-DNNF"],
+                                            # ["d-BDMC \n VSADS"],
                                             ["d-BDMC \n DLCS-DLIS \n (t, c, p)"],
                                             ["d-BDMC \n DLCS-DLIS \n (t, c, -p)"],
                                             ["d-BDMC \n DLCS-DLIS \n (t, -c, p)"],
@@ -171,13 +169,17 @@ label_list: Union[List[List[str]], None] = [["d-DNNF"],
 
 
 def function(statistics: Statistics) -> Union[float, None]:
+    # return statistics.hypergraph_partitioning_statistics.cut_set_size.average_count
+    # return statistics.component_statistics.implied_literal.average_count
     # return statistics.component_statistics.renamable_horn_cnf_formula_length.sum_count
-    return statistics.size
+    # return statistics.incidence_graph_statistics.renamable_horn_formula_recognition_implication_graph_check.sum_time / statistics.compiler_statistics.create_circuit.sum_time
+    # return statistics.size
+    return statistics.component_statistics.split.sum_count
 
     # try:
     #     return statistics.number_of_edges
     # except AttributeError:
-    #     return statistics.size
+    #     return 0
 
     # return statistics.component_statistics.renamable_horn_cnf_formula_length.average_count
 
@@ -263,14 +265,14 @@ def get_value(statistics: Statistics):
 
 
 def generate_data(dictionary_1: Dict[str, Dict[str, Statistics]], dictionary_2: Dict[str, Dict[str, Statistics]]) -> \
-        Union[Tuple[List[float], List[float], Union[List[str], None]], Tuple[List[List[float]], List[List[float]], Union[List[str], None]]]:
-
+        Union[Tuple[List[float], List[float], List[str], Union[List[str], None]], Tuple[List[List[float]], List[List[float]], List[List[str]], Union[List[str], None]]]:
     label_list: Union[List[str], None] = None
     if not set_together:
         label_list = []
 
     list_1: List[Union[float, List[float]]] = []
     list_2: List[Union[float, List[float]]] = []
+    point_label: List[Union[str, List[str]]] = []
 
     set_key = set(dictionary_1.keys()).intersection(set(dictionary_2.keys()))
 
@@ -285,6 +287,7 @@ def generate_data(dictionary_1: Dict[str, Dict[str, Statistics]], dictionary_2: 
             label_list.append(set_name)
             list_1.append([])
             list_2.append([])
+            point_label.append([])
 
         experiment_key = set(dictionary_1_experiment.keys()).intersection(set(dictionary_2_experiment.keys()))
 
@@ -304,11 +307,13 @@ def generate_data(dictionary_1: Dict[str, Dict[str, Statistics]], dictionary_2: 
             if not set_together:
                 list_1[-1].append(value_1)
                 list_2[-1].append(value_2)
+                point_label[-1].append(experiment_name)
             else:
                 list_1.append(value_1)
                 list_2.append(value_2)
+                point_label.append(experiment_name)
 
-    return list_1, list_2, label_list
+    return list_1, list_2, point_label, label_list
 
 
 def generate_more_data(data_list: List[Dict[str, Dict[str, Statistics]]]) -> List[List[float]]:
@@ -396,7 +401,7 @@ if not use_more_directory:
     x, uncompiled_x, uncompiled_x_set = get_statistics(directory_name_1)
     y, uncompiled_y, uncompiled_y_set = get_statistics(directory_name_2)
 
-    data_x, data_y, labels = generate_data(x, y)
+    data_x, data_y, point_label, labels = generate_data(x, y)
 
     my_print(directory_name_1, x, uncompiled_x)
     my_print(directory_name_2, y, uncompiled_y)
@@ -438,11 +443,13 @@ if plot == PlotEnum.SCATTER:
             x_label=x_label,
             y_label=y_label,
             labels=labels,
+            point_label=point_label if use_point_label else None,
             log_scale=log_scale,
             save_path=save_path)
 
 elif plot == PlotEnum.BOXPLOT:
     boxplot(data=data,
+            y_label="%" if percent else None,
             labels=directory_name_labels_boxplot_list if label_list is None else label_list,
             title=title,
             showfliers=showfliers,

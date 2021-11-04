@@ -63,8 +63,9 @@ class HornCnfTest(TestAbstract):
                     renaming_function = True if len(renaming_function) > 0 else False
                 result = "\n".join((result, f"Renaming function: {renaming_function}"))
 
-                renaming_function = cnf._incidence_graph.is_renamable_horn_formula_using_implication_graph()
-                result = "\n".join((result, f"Renaming function (implication graph): {renaming_function[0]}"))
+                for use_auxiliary_variables in [True, False]:
+                    renaming_function = cnf._incidence_graph.is_renamable_horn_formula_using_implication_graph(use_auxiliary_variables=use_auxiliary_variables)
+                    result = "\n".join((result, f"Renaming function (implication graph - {use_auxiliary_variables}): {renaming_function[0]}"))
 
                 horn_cnf = cnf._incidence_graph.convert_to_horn_cnf()
                 result = "\n".join((result, HornCnfTest.__horn_cnf_str(horn_cnf), ""))

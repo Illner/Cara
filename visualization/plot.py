@@ -68,14 +68,25 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
 
 def scatter(data_x: Union[List[float], List[List[float]]], data_y: Union[List[float], List[List[float]]], title: str,
             x_label: Union[str, None] = None, y_label: Union[str, None] = None, labels: Union[List[List[str]], None] = None,
-            save_path: [str, Path, None] = None, show: bool = True, log_scale: bool = False) -> None:
+            point_label: Union[List[str], List[List[str]], None] = None, save_path: [str, Path, None] = None,
+            show: bool = True, log_scale: bool = False) -> None:
     fig, ax = plt.subplots()
 
     try:
-        data_x_temp, data_y_temp = [data_x], [data_y]
+        point_label_temp = None
 
+        # List[List[float]]
         if len(data_x) and isinstance(data_x[0], list):
             data_x_temp, data_y_temp = data_x, data_y
+
+            if point_label is not None:
+                point_label_temp = point_label
+        # List[float]
+        else:
+            data_x_temp, data_y_temp = [data_x], [data_y]
+
+            if point_label is not None:
+                point_label_temp = [point_label]
 
         for i in range(len(data_x_temp)):
             ax.scatter(x=data_x_temp[i], y=data_y_temp[i],
@@ -83,6 +94,11 @@ def scatter(data_x: Union[List[float], List[List[float]]], data_y: Union[List[fl
                        label="" if labels is None else labels[i],
                        color=COLOUR_LIST[i],
                        edgecolors="black")
+
+        if point_label_temp is not None:
+            for i in range(len(data_x_temp)):
+                for j, annotation in enumerate(point_label_temp[i]):
+                    ax.annotate(annotation, (data_x_temp[i][j], data_y_temp[i][j]))
 
         # Diagonal line
         ax.axline((1, 1), slope=1, color="red", ls='--')

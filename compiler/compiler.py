@@ -138,6 +138,7 @@ class Compiler:
                  decision_heuristic_ignore_binary_clauses: bool = False,
                  decision_heuristic_renamable_horn_use_total_number_of_conflict_variables: bool = True,
                  decision_heuristic_renamable_horn_use_conflicts: bool = True,
+                 decision_heuristic_renamable_horn_use_auxiliary_variables: bool = True,
                  decision_heuristic_renamable_horn_prefer_conflict_variables: bool = True,
                  decision_heuristic_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum = ph_enum.PreselectionHeuristicEnum.NONE,
                  decision_heuristic_preselection_heuristic_prop_z_depth_threshold: int = 5,
@@ -207,6 +208,7 @@ class Compiler:
                                       cra_rank=decision_heuristic_preselection_heuristic_cra_rank,
                                       renamable_horn_use_total_number_of_conflict_variables=decision_heuristic_renamable_horn_use_total_number_of_conflict_variables,
                                       renamable_horn_use_conflicts=decision_heuristic_renamable_horn_use_conflicts,
+                                      renamable_horn_use_auxiliary_variables=decision_heuristic_renamable_horn_use_auxiliary_variables,
                                       renamable_horn_prefer_conflict_variables=decision_heuristic_renamable_horn_prefer_conflict_variables)
 
         # Implied literals - preselection heuristic
@@ -282,6 +284,7 @@ class Compiler:
                                  cra_rank: float,
                                  renamable_horn_use_total_number_of_conflict_variables: bool,
                                  renamable_horn_use_conflicts: bool,
+                                 renamable_horn_use_auxiliary_variables: bool,
                                  renamable_horn_prefer_conflict_variables: bool) -> None:
 
         # Preselection heuristic
@@ -399,6 +402,7 @@ class Compiler:
                                                                decision_heuristic=decision_heuristic,
                                                                use_total_number_of_conflict_variables=renamable_horn_use_total_number_of_conflict_variables,
                                                                use_conflicts=renamable_horn_use_conflicts,
+                                                               use_auxiliary_variables=renamable_horn_use_auxiliary_variables,
                                                                prefer_conflict_variables=renamable_horn_prefer_conflict_variables)
             return
 
@@ -413,6 +417,7 @@ class Compiler:
                                                                decision_heuristic=decision_heuristic,
                                                                use_total_number_of_conflict_variables=renamable_horn_use_total_number_of_conflict_variables,
                                                                use_conflicts=renamable_horn_use_conflicts,
+                                                               use_auxiliary_variables=renamable_horn_use_auxiliary_variables,
                                                                prefer_conflict_variables=renamable_horn_prefer_conflict_variables)
             return
 
@@ -428,6 +433,7 @@ class Compiler:
                                                                decision_heuristic=decision_heuristic,
                                                                use_total_number_of_conflict_variables=renamable_horn_use_total_number_of_conflict_variables,
                                                                use_conflicts=renamable_horn_use_conflicts,
+                                                               use_auxiliary_variables=renamable_horn_use_auxiliary_variables,
                                                                prefer_conflict_variables=renamable_horn_prefer_conflict_variables)
             return
 

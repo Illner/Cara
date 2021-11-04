@@ -453,7 +453,40 @@ class IncidenceGraph(Graph):
 
     def __create_implication_graph_for_recognizing_renamable_horn_formula(self) -> DiGraph:
         """
-        Create an implication graph for recognizing a renamable Horn formula
+        Create an implication graph (without auxiliary variables) for recognizing a renamable Horn formula
+        :return: an implication graph
+        """
+
+        implication_graph: DiGraph = DiGraph()
+        implication_graph.add_nodes_from(self._variable_set)
+        implication_graph.add_nodes_from([-v for v in self._variable_set])
+
+        for clause_id in self._clause_id_set:
+            clause = list(self.__clause_dictionary[clause_id])
+            clause_len = len(clause)
+
+            # Unit clause
+            if clause_len == 1:
+                lit = clause[0]
+                # (lit)
+                implication_graph.add_edge(-lit, lit)
+                continue
+
+            for i in range(clause_len - 1):
+                lit_1 = clause[i]
+
+                for j in range(i + 1, clause_len):
+                    lit_2 = clause[j]
+
+                    # (lit_1 v lit_2)
+                    implication_graph.add_edge(-lit_1, lit_2)
+                    implication_graph.add_edge(-lit_2, lit_1)
+
+        return implication_graph
+
+    def __create_implication_graph_with_auxiliary_variables_for_recognizing_renamable_horn_formula(self) -> DiGraph:
+        """
+        Create an implication graph (with auxiliary variables) for recognizing a renamable Horn formula
         :return: an implication graph
         """
 
@@ -487,7 +520,7 @@ class IncidenceGraph(Graph):
                 # Get a new variable id
                 variable_id_counter += 1
                 new_y = variable_id_counter
-                implication_graph.add_node(new_y)
+                implication_graph.add_nodes_from([new_y, -new_y])
 
                 # First literal
                 if previous_y is None:
@@ -1425,8 +1458,10 @@ class IncidenceGraph(Graph):
         self.__statistics.renamable_horn_formula_recognition_check.stop_stopwatch()     # timer (stop)
         return result
 
-    def is_renamable_horn_formula_using_implication_graph(self) -> Tuple[bool, Union[Set[int], Tuple[Set[int], Dict[int, int], Dict[int, int], Dict[int, int]]]]:
+    def is_renamable_horn_formula_using_implication_graph(self, use_auxiliary_variables: bool) -> \
+            Tuple[bool, Union[Set[int], Tuple[Set[int], Dict[int, int], Dict[int, int], Dict[int, int]]]]:
         """
+        :param use_auxiliary_variables: can be auxiliary variables used in the implication graph
         :return: If the incidence graph represents a (renamable) Horn formula, (True, renaming function) is returned.
         Otherwise, (False, (conflict_variable_set, literal_component_dictionary, component_number_of_conflict_variables_dictionary,
         component_total_number_of_conflict_variables_dictionary)) is returned.
@@ -1434,12 +1469,16 @@ class IncidenceGraph(Graph):
 
         self.__statistics.renamable_horn_formula_recognition_implication_graph_check.start_stopwatch()  # timer (start)
 
-        implication_graph = self.__create_implication_graph_for_recognizing_renamable_horn_formula()
+        if use_auxiliary_variables:
+            implication_graph = self.__create_implication_graph_with_auxiliary_variables_for_recognizing_renamable_horn_formula()
+        else:
+            implication_graph = self.__create_implication_graph_for_recognizing_renamable_horn_formula()
+
         strongly_connected_components_list = list(nx.kosaraju_strongly_connected_components(implication_graph))
 
         conflict: bool = False
         conflict_variable_set: Set[int] = set()
-        literal_component_dictionary: Dict[int, int] = dict()                       # key: literal, value: component where the literal appears
+        literal_component_dictionary: Dict[int, int] = dict()                               # key: literal, value: component where the literal appears
         component_number_of_conflict_variables_dictionary: Dict[int, int] = dict()
         component_total_number_of_conflict_variables_dictionary: Dict[int, int] = dict()
 

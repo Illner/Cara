@@ -6,7 +6,6 @@ from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeur
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
 
 # Import exception
-import exception.cara_exception as c_exception
 import exception.compiler.heuristic_exception as h_exception
 
 
@@ -17,16 +16,18 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
 
     """
     Private bool use_conflicts
+    Private bool use_auxiliary_variables
     Private bool prefer_conflict_variables
     Private bool use_total_number_of_conflict_variables
     Private DecisionHeuristicAbstract decision_heuristic
     """
 
     def __init__(self, preselection_heuristic: PreselectionHeuristicAbstract, decision_heuristic: DecisionHeuristicAbstract,
-                 use_total_number_of_conflict_variables: bool, use_conflicts: bool, prefer_conflict_variables: bool):
+                 use_total_number_of_conflict_variables: bool, use_conflicts: bool, use_auxiliary_variables: bool, prefer_conflict_variables: bool):
         super().__init__(preselection_heuristic)
 
         self.__use_conflicts: bool = use_conflicts
+        self.__use_auxiliary_variables: bool = use_auxiliary_variables
         self.__prefer_conflict_variables: bool = prefer_conflict_variables
         self.__decision_heuristic: DecisionHeuristicAbstract = decision_heuristic
         self.__use_total_number_of_conflict_variables: bool = use_total_number_of_conflict_variables
@@ -43,7 +44,7 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
         if len(preselected_variable_set) == 1:
             return list(preselected_variable_set)[0]
 
-        is_renamable_horn, conflict_structure = incidence_graph.is_renamable_horn_formula_using_implication_graph()
+        is_renamable_horn, conflict_structure = incidence_graph.is_renamable_horn_formula_using_implication_graph(use_auxiliary_variables=self.__use_auxiliary_variables)
 
         # The formula is renamable Horn
         if is_renamable_horn:

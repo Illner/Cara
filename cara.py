@@ -106,9 +106,10 @@ def main(main_args):
         circuit = compiler.circuit
         statistics = compiler.statistics
         print(f"Time: {statistics.compiler_statistics.get_time()}")
-        print(f"Size: {statistics.size}\n")
+        print(f"Size: {statistics.size}")
+        # print(f"Number of models: {circuit.model_counting(assumption_set=set())}")
 
-        print("Generating file(s)...")
+        print("\nGenerating file(s)...")
         # Circuit
         with open(main_args.output_file, "w", encoding="utf-8") as file:
             circuit.save_to_io(source=file,

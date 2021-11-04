@@ -1,107 +1,158 @@
 import os
-import pickle
-import other.environment as env
-from compiler.compiler import Compiler
-
-# Import enum
-import compiler.enum.sat_solver_enum as ss_enum
-import compiler.enum.implied_literals_enum as il_enum
-import compiler.enum.component_caching_enum as cc_enum
-import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
-import formula.enum.eliminating_redundant_clauses_enum as erc_enum
-import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
-import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
-import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
-import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_weight_type_enum as hpwt_enum
-import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_patoh_sugparam_enum as hpps_enum
-import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_simplification_enum as hpvs_enum
+from formula.cnf import Cnf
+from compiler.solver import Solver
+from visualization.plot import histogram
+from compiler.enum.sat_solver_enum import SatSolverEnum
+from compiler.enum.implied_literals_enum import ImpliedLiteralsEnum
+from compiler.preselection_heuristic.none_heuristic import NoneHeuristic
+from compiler.decision_heuristic.jeroslow_wang_heuristic import JeroslowWangHeuristic
+from compiler.decision_heuristic.clause_reduction_heuristic import ClauseReductionHeuristic
+from compiler.enum.heuristic.mixed_difference_heuristic_enum import MixedDifferenceHeuristicEnum
 
 
-# folder_path = r"C:\Users\illner\Desktop\RH"
-#
-# files = [(file, file_path) for file in os.listdir(folder_path) if (os.path.isfile(file_path := os.path.join(folder_path, file)))]
-# files = sorted(files)
-#
-# temp_dict = {}
-#
-# for i, (file_name, file_path) in enumerate(files):
-#     print(f"{i + 1}/{len(files)}")
-#
-#     length = 0
-#
-#     with open(file_path, "r") as file:
-#         for line in file.readlines():
-#             temp = line.split(" ")
-#
-#             if line.startswith("p cnf"):
-#
-#                 number_of_variables = int(temp[2])
-#                 number_of_clauses = int(temp[3])
-#             else:
-#                 length += (len(temp) - 1)
-#
-#     compiler = Compiler(cnf=file_path,
-#                         statistics=False,
-#                         smooth=False,
-#                         preprocessing=False,
-#                         imbalance_factor=0.1,
-#                         subsumption_threshold=500,
-#                         new_cut_set_threshold=0.1,
-#                         decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.JEROSLOW_WANG_TWO_SIDED,
-#                         sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-#                         base_class_enum_set=set(),
-#                         implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
-#                         implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
-#                         first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
-#                         first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
-#                         component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
-#                         component_caching_before_unit_propagation=False,
-#                         component_caching_after_unit_propagation=True,
-#                         eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.NONE,
-#                         eliminating_redundant_clauses_threshold=None,
-#                         hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.NONE,
-#                         hp_software_enum=hps_enum.HypergraphPartitioningSoftwareEnum.HMETIS if env.is_windows() else hps_enum.HypergraphPartitioningSoftwareEnum.PATOH,
-#                         hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
-#                         hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
-#                         hp_variable_simplification_enum=hpvs_enum.HypergraphPartitioningVariableSimplificationEnum.EQUIV_SIMPL,
-#                         hp_patoh_sugparam_enum=hpps_enum.PatohSugparamEnum.QUALITY,
-#                         decision_heuristic_vsids_d4_version=True,
-#                         decision_heuristic_vsads_p_constant_factor=1,
-#                         decision_heuristic_vsads_q_constant_factor=1)
-#
-#     compiler.create_circuit()
-#
-#     size = compiler.circuit.size
-#
-#     temp_dict[file_name] = (number_of_variables, number_of_clauses, size, length)
-#     print(f"\t{file_name} \n\t\tSize: {size} \n\t\tRatio: {number_of_clauses / number_of_variables} \n\t\tLength: {length}")
-#
-#     if i%25 == 0:
-#         with open(r"C:\Users\illner\Desktop\temp_dictionary.pkl", "wb") as file:
-#             pickle.dump(temp_dict, file, pickle.HIGHEST_PROTOCOL)
-#
-# print(temp_dict)
-#
-# with open(r"C:\Users\illner\Desktop\temp_dictionary.pkl", "wb") as file:
-#     pickle.dump(temp_dict, file, pickle.HIGHEST_PROTOCOL)
+path_directory = r"D:\Storage\OneDrive\Public\Savický\RenamableHornFormulae\RH-DLCS-DLIS (-t, c, p)\planning"
+plot_path = r"C:\Users\illner\Desktop\temp"
 
-from visualization.plot import scatter
+ratio = []
+length = []
+pure_ratio = []
+horn_clause_ratio = []
+almost_pure_ratio = []
+file_list = [(file, file_path) for file in os.listdir(path_directory) if (os.path.isfile(file_path := os.path.join(path_directory, file)))]
 
-dict_path = r"C:\Users\illner\Desktop\temp_dictionary.pkl"
+suffix = "planning"
 
-data = None
-data_x = []
-data_y = []
+for i, (file_name, file_path) in enumerate(file_list):
+    # if not file_name.startswith("C203_FW"):
+    #     continue
 
-with (open(dict_path, "rb")) as file:
-    data = pickle.load(file)
+    literal = {}
+    variable = {}
+    variable_set = set()
+    number_of_clauses = 0
+    number_of_horn_clauses = 0
 
-print(len(data))
+    pure_literal = set()
+    almost_pure_literal = set()
 
-for file_name in data:
-    number_of_variables, number_of_clauses, size, length = data[file_name]
+    with open(file_path, "r") as file:
+        for line in file.readlines():
+            temp = line.split(" ")
 
-    data_x.append(number_of_clauses / number_of_variables)
-    data_y.append(size/length)
+            if line.startswith("p"):
+                continue
 
-scatter(data_x, data_y, "")
+            number_of_clauses += 1
+            positive_literals = 0
+
+            for j in temp:
+                l = int(j)
+
+                if l == 0:
+                    continue
+
+                if l > 0:
+                    positive_literals += 1
+
+                v = abs(l)
+
+                if v not in variable:
+                    variable[v] = 0
+                    literal[l] = 0
+                    literal[-l] = 0
+
+                    variable_set.add(v)
+
+                literal[l] += 1
+                variable[v] += 1
+
+            if positive_literals <= 1:
+                number_of_horn_clauses += 1
+
+    length.append(number_of_clauses)
+    ratio.append(number_of_clauses / len(variable_set))
+    horn_clause_ratio.append(number_of_horn_clauses / number_of_clauses)
+
+    for v in variable_set:
+        if literal[v] == 0:
+            pure_literal.add(v)
+            continue
+        elif literal[-v] == 0:
+            pure_literal.add(v)
+            continue
+
+        if literal[v] == 1:
+            almost_pure_literal.add(v)
+        elif literal[-v] == 1:
+            almost_pure_literal.add(v)
+
+    temp_2 = len(pure_literal) / len(variable_set)
+    pure_ratio.append(temp_2)
+
+    temp_2 = (len(almost_pure_literal) + len(pure_literal)) / len(variable_set)
+    almost_pure_ratio.append(temp_2)
+
+    print(f"{i}/{len(file_list)}")
+
+histogram(pure_ratio, [""], "# pure literals / # variables", bins=100,
+          x_label="# pure literals / # variables",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/pure_literals_{suffix}.png")
+histogram(almost_pure_ratio, [""], "(# pure literals + # almost pure literals) / # variables", bins=100,
+          x_label="(# pure literals + # almost pure literals) / # variables",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/almost_pure_literals_{suffix}.png")
+histogram(length, [""], "Number of clauses", bins=100,
+          x_label="Number of clauses",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/number_of_clauses_{suffix}.png")
+histogram(ratio, [""], "Ratio (# clauses / # variables)", bins=100,
+          x_label="Ratio (# clauses / # variables)",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/ratio_{suffix}.png")
+histogram(horn_clause_ratio, [""], "# horn clauses / # clauses", bins=100,
+          x_label="# horn clauses / # clauses",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/horn_clauses_ratio_{suffix}.png")
+
+# temp = sorted(variable, key=variable.get, reverse=True)
+#
+# for x in range(0, 0):
+#     l = temp[x]
+#     print(f"{l}: {variable[l]}")
+#     print(f"{l}: {literal[l]}")
+#     print(f"{-l}: {literal[-l]}")
+#     print()
+#
+# cnf = Cnf(path)
+# ig = cnf.get_incidence_graph(copy=False)
+# jw = JeroslowWangHeuristic(NoneHeuristic(), False, False)
+# # jw = ClauseReductionHeuristic(NoneHeuristic(), True, MixedDifferenceHeuristicEnum.OK_SOLVER)
+#
+# s = Solver(cnf, SatSolverEnum.MiniSAT, ImpliedLiteralsEnum.BCP)
+#
+# print(f"Number of clauses: {ig.number_of_clauses()}")
+#
+# decision_variable = jw.get_decision_variable(cut_set=ig.variable_set(copy=False),
+#                                              incidence_graph=ig,
+#                                              solver=s,
+#                                              assignment_list=[],
+#                                              depth=0)
+#
+# print(f"decision_variable: {decision_variable}")
+# print(f"{decision_variable}: {ig.literal_number_of_occurrences(decision_variable)}")
+# print(f"{-decision_variable}: {ig.literal_number_of_occurrences(-decision_variable)}")
+# implied_literals = s.unit_propagation([decision_variable])
+# implied_literals.add(decision_variable)
+# ig.remove_literal_list(list(implied_literals), None)
+# print(f"Decision variable - number of clauses: {ig.number_of_clauses()}")
+#
+# ig.restore_backup_literal_set(implied_literals)
+#
+# s = Solver(cnf, SatSolverEnum.MiniSAT, ImpliedLiteralsEnum.BCP)
+# implied_literals = s.unit_propagation([-decision_variable])
+# implied_literals.add(-decision_variable)
+# ig.remove_literal_list(list(implied_literals), None)
+# print(f"- Decision variable - number of clauses: {ig.number_of_clauses()}")
+#
+# ig.restore_backup_literal_set(implied_literals)
