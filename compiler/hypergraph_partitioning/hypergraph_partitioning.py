@@ -920,9 +920,10 @@ class HypergraphPartitioning:
         cut_set_size = len(cut_set)
         number_of_nodes = incidence_graph.number_of_clauses()
         number_of_hyperedges = incidence_graph.number_of_variables()
-        self.__statistics.hypergraph_number_of_nodes.add_count(number_of_nodes)             # counter
-        self.__statistics.hypergraph_number_of_hyperedges.add_count(number_of_hyperedges)   # counter
-        self.__statistics.ratio_log_cut_set_size_and_log_number_of_hyperedges.add_count(math.log(cut_set_size)/math.log(number_of_hyperedges))    # counter
+        temp = 1 if number_of_hyperedges == 1 else math.log(cut_set_size)/math.log(number_of_hyperedges)
+        self.__statistics.hypergraph_number_of_nodes.add_count(number_of_nodes)                 # counter
+        self.__statistics.hypergraph_number_of_hyperedges.add_count(number_of_hyperedges)       # counter
+        self.__statistics.ratio_log_cut_set_size_and_log_number_of_hyperedges.add_count(temp)   # counter
 
         HypergraphPartitioning.remove_reduction_incidence_graph(incidence_graph)
 
