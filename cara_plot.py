@@ -1,5 +1,6 @@
 # Import
 import os
+import sys
 import pickle
 from pathlib import Path
 from enum import Enum, unique, IntEnum
@@ -10,14 +11,23 @@ from visualization.plot import scatter, boxplot, histogram
 # Import enum
 import circuit.node.node_type_enum as nt_enum
 
-plot_path = r"C:\Users\illner\Desktop"
+# Import exception
+import exception.cara_exception as ca_exception
 
-bdmc_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC"
-bdmc_rh_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC RH"
-hp_cache_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\HP cache"
-cara_circuit_root_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\CaraCircuit"
-imbalance_factor_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\Imbalance factor"
-dnnf_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\DNNF"
+
+root_path = sys.argv[1]
+plot_path = sys.argv[2]
+file_path = sys.argv[2]
+
+# region Enum
+@unique
+class RootPathEnum(str, Enum):
+    BDMC = fr"{root_path}\BDMC"
+    BDMC_RH = fr"{root_path}\BDMC RH"
+    HP_CACHE = fr"{root_path}\HP cache"
+    CARA_CIRCUIT = fr"{root_path}\CaraCircuit"
+    IMBALANCE_FACTOR = fr"{root_path}\Imbalance factor"
+    DNNF = fr"{root_path}\DNNF"
 
 
 @unique
@@ -35,6 +45,7 @@ class DirectorySetEnum(str, Enum):
 
 @unique
 class ExperimentEnum(str, Enum):
+    # BDMC
     BDMC_LIMIT_250 = "250"
     BDMC_LIMIT_500 = "500"
     BDMC_LIMIT_1000 = "1000"
@@ -56,6 +67,7 @@ class ExperimentEnum(str, Enum):
     BDMC_WEIGHTED_BINARIES_25 = "Weighted binaries, 0.25"
     BDMC_WEIGHTED_BINARIES_25_WITHOUT_GAMMA_0 = "Weighted binaries, 0.25, without gamma_0"
 
+    # BDMC RH
     BDMC_RH_D4 = "D4 (BDMC RH)"
     BDMC_RH_VSADS = "VSADS"
     BDMC_RH_DLCS_DLIS_A_T_C_P = "DLCS-DLIS (a, t, c, p)"
@@ -64,10 +76,13 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_DLCS_DLIS_A_T_nC_nP = "DLCS-DLIS (a, t, -c, -p)"
     BDMC_RH_DLCS_DLIS_A_nT_C_P = "DLCS-DLIS (a, -t, c, p)"
     BDMC_RH_DLCS_DLIS_A_nT_C_nP = "DLCS-DLIS (a, -t, c, -p)"
+    BDMC_RH_DLCS_DLIS_nA_C_P = "DLCS-DLIS (-a, c, p)"
+    BDMC_RH_DLCS_DLIS_nA_C_P_nD = "DLCS-DLIS (-a, c, p, d_d)"
     BDMC_RH_VSADS_A_T_C_P = "VSADS (a, t, c, p)"
     BDMC_RH_VSADS_A_T_nC_P = "VSADS (a, t, -c, p)"
     BDMC_RH_VSADS_A_nT_C_P = "VSADS (a, -t, c, p)"
 
+    # HP cache
     HP_CACHE_NONE = "NONE"
     HP_CACHE_ISOMORFISM_250 = "ISOMORFISM 250"
     HP_CACHE_ISOMORFISM_250_NO_MOC = "ISOMORFISM 250 (no moc)"
@@ -86,6 +101,7 @@ class ExperimentEnum(str, Enum):
     HP_CACHE_ISOMORFISM_VARIANCE_1500 = "ISOMORFISM_VARIANCE 1500"
     HP_CACHE_ISOMORFISM_VARIANCE_1500_NO_MOC = "ISOMORFISM_VARIANCE 1500 (no moc)"
 
+    # CaraCircuit
     CARA_CIRCUIT_D4 = "D4 (CaraCircuit)"
     CARA_CIRCUIT_LIMIT_0 = "Limit 0"
     CARA_CIRCUIT_LIMIT_0_MOC = "Limit 0 (moc)"
@@ -97,6 +113,7 @@ class ExperimentEnum(str, Enum):
     CARA_CIRCUIT_LIMIT_0_1 = "Limit 0 (0.1)"
     CARA_CIRCUIT_LIMIT_0_MOC_1 = "Limit 0 (moc) (0.1)"
 
+    # Imbalance factor
     IMBALANCE_FACTOR_1 = "0.1"
     IMBALANCE_FACTOR_1_QUALITY = "0.1 PaToH quality"
     IMBALANCE_FACTOR_1_SPEED = "0.1 PaToH speed"
@@ -107,10 +124,12 @@ class ExperimentEnum(str, Enum):
     IMBALANCE_FACTOR_4_QUALITY = "0.4 PaToH quality"
     IMBALANCE_FACTOR_4_SPEED = "0.4 PaToH speed"
 
+    # DNNF
     DNNF_CLAUSE_REDUCTION = "Clause reduction"
     DNNF_CLAUSE_REDUCTION_EXT = "Clause reduction (ext)"
     DNNF_WEIGHTED_BINARIES = "Weighted binaries"
     DNNF_WEIGHTED_BINARIES_EXT = "Weighted binaries (ext)"
+
 
 @unique
 class PlotEnum(IntEnum):
@@ -119,15 +138,102 @@ class PlotEnum(IntEnum):
     HISTOGRAM = 3
 
 
-root_path = bdmc_rh_root_path
+@unique
+class FunctionEnum(str, Enum):
+    MANUAL = ""
 
-# SCATTER
+    # Circuit
+    CIRCUIT_SIZE = "Circuit size"
+    CIRCUIT_NUMBER_OF_EDGES = "Number of edges"
+    CIRCUIT_NUMBER_OF_NODES = "Number of nodes"
+    CIRCUIT_NUMBER_OF_VARIABLES = "Number of variables"
+    CIRCUIT_NUMBER_OF_RH_LEAVES = "Number of renamable Horn formulae/leaves"
+    CIRCUIT_NUMBER_OF_TWO_CNF_LEAVES = "Number of 2-CNF formulae/leaves"
+    CIRCUIT_NUMBER_OF_RH_AND_TWO_CNF_LEAVES = "Number of nontrivial leaves (renamable Horn + 2-CNF)"
+    COMPILATION_TIME = "Compilation time [ms]"
+
+    # Renamable Horn formulae, 2-CNF formulae and implication graph
+    RH_RECOGNITION = "Recognition of renamable Horn formulae [%]"
+    TWO_CNF_RECOGNITION = "Recognition of 2-CNF formulae [%]"
+    TOTAL_FORMULA_LENGTH_RH = "Total length of all renamable Horn formulae"
+    AVERAGE_FORMULA_LENGTH_RH = "Average length of a renamable Horn formula"
+    TOTAL_FORMULA_LENGTH_TWO_CNF = "Total length of all 2-CNF formulae"
+    AVERAGE_FORMULA_LENGTH_TWO_CNF = "Average length of a 2-CNF formula"
+    TOTAL_FORMULA_LENGTH_RH_AND_TWO_CNF = "Total length of all renamable Horn formulae and 2-CNF formulae"
+    AVERAGE_FORMULA_LENGTH_RH_AND_TWO_CNF = "Average length of a renamable Horn formula and 2-CNF formula"
+    TOTAL_TIME_CREATE_IMPLICATION_GRAPH = "Total time spent on creating all implication graphs [ms]"
+    AVERAGE_TIME_CREATE_IMPLICATION_GRAPH = "Average time spent on creating an implication graph [ms]"
+    TOTAL_NUMBER_OF_CONFLICT_VARIABLES_IMPLICATION_GRAPH = "Total number of conflict variables in all implication graphs"
+    AVERAGE_NUMBER_OF_CONFLICT_VARIABLES_IMPLICATION_GRAPH = "Average number of conflict variables in an implication graph"
+
+    # Hypergraph and cut set
+    TOTAL_CUT_SET_SIZE = "Total size of all cut sets"
+    AVERAGE_CUT_SET_SIZE = "Average size of a cut set"
+    HYPERGRAPH_CACHING_HIT = "Hypergraph caching hit [%]"
+    TOTAL_TIME_GET_CUT_SET = "Total time spent on getting all cut sets [ms]"
+    AVERAGE_TIME_GET_CUT_SET = "Average time spent on getting a cut set [ms]"
+    TOTAL_NUMBER_OF_HYPEREDGES_HYPERGRAPH = "Total number of hyperedges in all hypergraphs"
+    AVERAGE_NUMBER_OF_HYPEREDGES_HYPERGRAPH = "Average number of hyperedges in a hypergraph"
+    TOTAL_NUMBER_OF_NODES_HYPERGRAPH = "Total number of nodes in all hypergraphs"
+    AVERAGE_NUMBER_OF_NODES_HYPERGRAPH = "Average number of nodes in a hypergraph"
+    RATIO_LOG_CUT_SET_SIZE_AND_LOG_NUMBER_OF_HYPEREDGES_HYPERGRAPH = "log(size of a cut set) / log(number of hyperedges)"
+
+    # Component caching
+    TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING = "Total time spent on generating all keys for component caching [ms]"
+    AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING = "Average time spent on generating a key for component caching [ms]"
+    COMPONENT_CACHING_HIT = "Component caching hit [%]"
+    TOTAL_FORMULA_LENGTH_COMPONENT_CACHING = "Total length of all formulae that were cached"
+    AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING = "Average length of a formula that was cached"
+    TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING = "Total length of all formulae that were cached \n using a mapping function"
+    AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING = "Average length of a formula that was cached \n using a mapping function"
+
+    # Others
+    TOTAL_NUMBER_OF_IMPLIED_LITERALS = "Total number of implied literals"
+    AVERAGE_NUMBER_OF_IMPLIED_LITERALS = "Average number of implied literals"
+    NUMBER_OF_SPLITS = "Number of splits"
+    NUMBER_OF_DECISION_VARIABLES = "Number of decision variables"
+    RECOMPUTATION_CUT_SET = "Recomputation of cut sets [%]"
+    RATIO_GENERATE_KEY_COMPONENT_CACHING_TIME_AND_COMPILATION_TIME = "Total time spent on generating all keys for component \n caching / compilation time [%]"
+    RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME = "Total time spent on creating all implication \n graphs / compilation time [%]"
+# endregion
+
+#########################
+##### Configuration #####
+#########################
+
+experiment_path: RootPathEnum = RootPathEnum.BDMC_RH
+
+title: str = ""
+plot: PlotEnum = PlotEnum.SCATTER
+function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
+directory_set: DirectorySetEnum = DirectorySetEnum.all
+
+none_value: float = 0   # 10**10
+use_uncompiled: bool = False
+plot_name: Union[str, None] = None  # "name_of_saved_plot"
+file_name: Union[str, None] = None  # "name_of_saved_file"
+
+###################
+##### SCATTER #####
+###################
+
 directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_D4
 directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_A_nT_C_P
 
-# BOXPLOT, HISTOGRAM
+x_label: str = "size (d-DNNF)"
+y_label: str = "size (d-BDMC RH-DLCS-DLIS (a, -t, c, p))"
+
+log_scale: bool = False
+set_together: bool = False
+use_point_label: bool = False
+
+##############################
+##### BOXPLOT, HISTOGRAM #####
+##############################
+
 directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.BDMC_RH_D4,
                                              # ExperimentEnum.BDMC_RH_VSADS,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_C_P,
                                              ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_C_P,
                                              ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_C_nP,
                                              ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_nC_P,
@@ -135,93 +241,228 @@ directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.BDMC_RH_D4,
                                              ExperimentEnum.BDMC_RH_DLCS_DLIS_A_nT_C_P,
                                              ExperimentEnum.BDMC_RH_DLCS_DLIS_A_nT_C_nP]
 
-none_value: float = 0   # 10**10
-uncompiled_value: Union[float, None] = None
-
-title: str = "Number of splits \n Planning"
-
-percent: bool = False
-use_uncompiled: bool = False
-plot: PlotEnum = PlotEnum.BOXPLOT
-plot_name: Union[str, None] = None  # "number_of_splits_planning"
-directory_set: DirectorySetEnum = DirectorySetEnum.Planning
-
-# SCATTER
-x_label: str = "size (d-DNNF VSADS)"
-y_label: str = "size (d-BDMC RH-DLCS-DLIS (-t, c, p))"
-log_scale: bool = False
-set_together: bool = False
-use_point_label: bool = False
-
-# BOXPLOT
-showfliers: bool = False
-
-# BOXPLOT, HISTOGRAM
 label_prefix: str = ""
 label_list: Union[List[List[str]], None] = [# ["d-DNNF"],
                                             # ["d-BDMC \n VSADS"],
-                                            ["d-BDMC \n DLCS-DLIS \n (t, c, p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (t, c, -p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (t, -c, p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (t, -c, -p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (-t, c, p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (-t, c, -p)"]]
+                                            ["d-BDMC \n DLCS-DLIS \n (-a, c, p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (a, t, c, p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (a, t, c, -p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (a, t, -c, p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (a, t, -c, -p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (a, -t, c, p)"],
+                                            ["d-BDMC \n DLCS-DLIS \n (a, -t, c, -p)"]]
+# BOXPLOT
+showfliers: bool = False
 
+# HISTOGRAM
+number_of_bins: int = 10
 
-def function(statistics: Statistics) -> Union[float, None]:
-    # return statistics.hypergraph_partitioning_statistics.cut_set_size.average_count
-    # return statistics.component_statistics.implied_literal.average_count
-    # return statistics.component_statistics.renamable_horn_cnf_formula_length.sum_count
-    # return statistics.incidence_graph_statistics.renamable_horn_formula_recognition_implication_graph_check.sum_time / statistics.compiler_statistics.create_circuit.sum_time
-    # return statistics.size
-    return statistics.component_statistics.split.sum_count
+################################
+##### End of configuration #####
+################################
 
-    # try:
-    #     return statistics.number_of_edges
-    # except AttributeError:
-    #     return 0
+# region function
+def get_value_temp(statistics: Statistics) -> Union[float, None]:
+    # MANUAL
+    if function == FunctionEnum.MANUAL:
+        raise NotImplementedError()
 
-    # return statistics.component_statistics.renamable_horn_cnf_formula_length.average_count
+    # CIRCUIT_SIZE
+    if function == FunctionEnum.CIRCUIT_SIZE:
+        return statistics.size
 
-    # return statistics.size  # + statistics.component_statistics.component_caching_after_cara_mapping_length.sum_count
-    # return statistics.compiler_statistics.create_circuit.average_time
+    # CIRCUIT_NUMBER_OF_EDGES
+    if function == FunctionEnum.CIRCUIT_NUMBER_OF_EDGES:
+        try:
+            return statistics.number_of_edges
+        except AttributeError:
+            return statistics.size
 
-    # return statistics.hypergraph_partitioning_statistics.cut_set_size.average_count
+    # CIRCUIT_NUMBER_OF_NODES
+    if function == FunctionEnum.CIRCUIT_NUMBER_OF_NODES:
+        return statistics.number_of_nodes
 
-    # return statistics.get_node_type_counter(nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF) + statistics.get_node_type_counter(nt_enum.NodeTypeEnum.TWO_CNF)
+    # CIRCUIT_NUMBER_OF_VARIABLES
+    if function == FunctionEnum.CIRCUIT_NUMBER_OF_VARIABLES:
+        return statistics.number_of_variables
 
-    # two_cnf_number = statistics.component_statistics.two_cnf_formula_length.number_of_calls
-    # two_cnf_length = statistics.component_statistics.two_cnf_formula_length.sum_count
-    # two_cnf_length = 0 if two_cnf_length is None else two_cnf_length
-    #
-    # horn_cnf_number = statistics.component_statistics.renamable_horn_cnf_formula_length.number_of_calls
-    # horn_cnf_length = statistics.component_statistics.renamable_horn_cnf_formula_length.sum_count
-    # horn_cnf_length = 0 if horn_cnf_length is None else horn_cnf_length
-    #
-    # # return two_cnf_number + horn_cnf_number
-    #
-    # if two_cnf_number + horn_cnf_number == 0:
-    #     return 0
-    #
-    # x = (two_cnf_length + horn_cnf_length) / (two_cnf_number + horn_cnf_number)
-    #
-    # return x
+    # NUMBER_OF_SPLITS
+    if function == FunctionEnum.NUMBER_OF_SPLITS:
+        return statistics.component_statistics.split.sum_count
 
-    # try:
-    #     return statistics.get_node_type_counter(nt_enum.NodeTypeEnum.MAPPING_NODE)
-    # except KeyError:
-    #     return 0
-    # return statistics.component_statistics.component_caching_after_cara_mapping_length.number_of_calls
-    # return statistics.component_statistics.two_cnf_formula_length.average_count
-    # return statistics.hypergraph_partitioning_statistics.get_cut_set.average_time
-    # return statistics.hypergraph_partitioning_statistics.cache_hit.average_count
-    # return statistics.component_statistics.component_caching_after_hit.average_count
-    # return statistics.component_statistics.component_caching_after_formula_length.average_count
-    # return statistics.component_statistics.decision_variable.sum_count
+    # TOTAL_CUT_SET_SIZE
+    if function == FunctionEnum.TOTAL_CUT_SET_SIZE:
+        return statistics.hypergraph_partitioning_statistics.cut_set_size.sum_count
+
+    # AVERAGE_CUT_SET_SIZE
+    if function == FunctionEnum.AVERAGE_CUT_SET_SIZE:
+        return statistics.hypergraph_partitioning_statistics.cut_set_size.average_count
+
+    # COMPILATION_TIME
+    if function == FunctionEnum.COMPILATION_TIME:
+        return statistics.compiler_statistics.create_circuit.average_time
+
+    # CIRCUIT_NUMBER_OF_RH_LEAVES
+    if function == FunctionEnum.CIRCUIT_NUMBER_OF_RH_LEAVES:
+        return statistics.get_node_type_counter(nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF)
+
+    # CIRCUIT_NUMBER_OF_TWO_CNF_LEAVES
+    if function == FunctionEnum.CIRCUIT_NUMBER_OF_TWO_CNF_LEAVES:
+        return statistics.get_node_type_counter(nt_enum.NodeTypeEnum.TWO_CNF)
+
+    # CIRCUIT_NUMBER_OF_RH_AND_TWO_CNF_LEAVES
+    if function == FunctionEnum.CIRCUIT_NUMBER_OF_RH_AND_TWO_CNF_LEAVES:
+        return statistics.get_node_type_counter(nt_enum.NodeTypeEnum.RENAMABLE_HORN_CNF) + statistics.get_node_type_counter(nt_enum.NodeTypeEnum.TWO_CNF)
+
+    # RH_RECOGNITION
+    if function == FunctionEnum.RH_RECOGNITION:
+        return statistics.incidence_graph_statistics.renamable_horn_formula_ratio.average_count
+
+    # TWO_CNF_RECOGNITION
+    if function == FunctionEnum.TWO_CNF_RECOGNITION:
+        return statistics.incidence_graph_statistics.two_cnf_ratio.average_count
+
+    # TOTAL_TIME_CREATE_IMPLICATION_GRAPH
+    if function == FunctionEnum.TOTAL_TIME_CREATE_IMPLICATION_GRAPH:
+        return statistics.incidence_graph_statistics.renamable_horn_formula_recognition_implication_graph_check.sum_time
+
+    # AVERAGE_TIME_CREATE_IMPLICATION_GRAPH
+    if function == FunctionEnum.AVERAGE_TIME_CREATE_IMPLICATION_GRAPH:
+        return statistics.incidence_graph_statistics.renamable_horn_formula_recognition_implication_graph_check.average_time
+
+    # TOTAL_NUMBER_OF_CONFLICT_VARIABLES_IMPLICATION_GRAPH
+    if function == FunctionEnum.TOTAL_NUMBER_OF_CONFLICT_VARIABLES_IMPLICATION_GRAPH:
+        return statistics.incidence_graph_statistics.implication_graph_conflict_variables.sum_count
+
+    # AVERAGE_NUMBER_OF_CONFLICT_VARIABLES_IMPLICATION_GRAPH
+    if function == FunctionEnum.AVERAGE_NUMBER_OF_CONFLICT_VARIABLES_IMPLICATION_GRAPH:
+        return statistics.incidence_graph_statistics.implication_graph_conflict_variables.average_count
+
+    # HYPERGRAPH_CACHING_HIT
+    if function == FunctionEnum.HYPERGRAPH_CACHING_HIT:
+        return statistics.hypergraph_partitioning_statistics.cache_hit.average_count
+
+    # TOTAL_TIME_GET_CUT_SET
+    if function == FunctionEnum.TOTAL_TIME_GET_CUT_SET:
+        return statistics.hypergraph_partitioning_statistics.get_cut_set.sum_time
+
+    # AVERAGE_TIME_GET_CUT_SET
+    if function == FunctionEnum.AVERAGE_TIME_GET_CUT_SET:
+        return statistics.hypergraph_partitioning_statistics.get_cut_set.average_time
+
+    # TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING
+    if function == FunctionEnum.TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING:
+        return statistics.hypergraph_partitioning_statistics.generate_key_cache.sum_time
+
+    # AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING
+    if function == FunctionEnum.AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING:
+        return statistics.hypergraph_partitioning_statistics.generate_key_cache.average_time
+
+    # TOTAL_NUMBER_OF_IMPLIED_LITERALS
+    if function == FunctionEnum.TOTAL_NUMBER_OF_IMPLIED_LITERALS:
+        return statistics.component_statistics.implied_literal.sum_count
+
+    # AVERAGE_NUMBER_OF_IMPLIED_LITERALS
+    if function == FunctionEnum.AVERAGE_NUMBER_OF_IMPLIED_LITERALS:
+        return statistics.component_statistics.implied_literal.average_count
+
+    # COMPONENT_CACHING_HIT
+    if function == FunctionEnum.COMPONENT_CACHING_HIT:
+        return statistics.component_statistics.component_caching_after_hit.average_count
+
+    # TOTAL_FORMULA_LENGTH_COMPONENT_CACHING
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_COMPONENT_CACHING:
+        return statistics.component_statistics.component_caching_after_formula_length.sum_count
+
+    # AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING:
+        return statistics.component_statistics.component_caching_after_formula_length.average_count
+
+    # TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING:
+        return statistics.component_statistics.component_caching_after_cara_mapping_length.sum_count
+
+    # AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING:
+        return statistics.component_statistics.component_caching_after_cara_mapping_length.average_count
+
+    # NUMBER_OF_DECISION_VARIABLES
+    if function == FunctionEnum.NUMBER_OF_DECISION_VARIABLES:
+        return statistics.component_statistics.decision_variable.sum_count
+
+    # RECOMPUTATION_CUT_SET
+    if function == FunctionEnum.RECOMPUTATION_CUT_SET:
+        return statistics.component_statistics.recompute_cut_set.average_count
+
+    # TOTAL_FORMULA_LENGTH_RH
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_RH:
+        return statistics.component_statistics.renamable_horn_cnf_formula_length.sum_count
+
+    # AVERAGE_FORMULA_LENGTH_RH
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_RH:
+        return statistics.component_statistics.renamable_horn_cnf_formula_length.average_count
+
+    # TOTAL_FORMULA_LENGTH_TWO_CNF
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_TWO_CNF:
+        return statistics.component_statistics.two_cnf_formula_length.sum_count
+
+    # AVERAGE_FORMULA_LENGTH_TWO_CNF
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_TWO_CNF:
+        return statistics.component_statistics.two_cnf_formula_length.average_count
+
+    # TOTAL_FORMULA_LENGTH_RH_AND_TWO_CNF
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_RH_AND_TWO_CNF:
+        return statistics.component_statistics.renamable_horn_cnf_formula_length.sum_count + statistics.component_statistics.two_cnf_formula_length.sum_count
+
+    # AVERAGE_FORMULA_LENGTH_RH_AND_TWO_CNF
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_RH_AND_TWO_CNF:
+        two_cnf_number = statistics.component_statistics.two_cnf_formula_length.number_of_calls
+        two_cnf_length = statistics.component_statistics.two_cnf_formula_length.sum_count
+        two_cnf_length = 0 if two_cnf_length is None else two_cnf_length
+
+        horn_cnf_number = statistics.component_statistics.renamable_horn_cnf_formula_length.number_of_calls
+        horn_cnf_length = statistics.component_statistics.renamable_horn_cnf_formula_length.sum_count
+        horn_cnf_length = 0 if horn_cnf_length is None else horn_cnf_length
+
+        if (two_cnf_number + horn_cnf_number) == 0:
+            return 0
+
+        return (two_cnf_length + horn_cnf_length) / (two_cnf_number + horn_cnf_number)
+
+    # RATIO_GENERATE_KEY_COMPONENT_CACHING_TIME_AND_COMPILATION_TIME
+    if function == FunctionEnum.RATIO_GENERATE_KEY_COMPONENT_CACHING_TIME_AND_COMPILATION_TIME:
+        return statistics.component_statistics.component_caching_after_generate_key.sum_time / statistics.compiler_statistics.create_circuit.sum_time
+
+    # RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME
+    if function == FunctionEnum.RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME:
+        return statistics.incidence_graph_statistics.renamable_horn_formula_recognition_implication_graph_check.sum_time / statistics.compiler_statistics.create_circuit.sum_time
+
+    # TOTAL_NUMBER_OF_HYPEREDGES_HYPERGRAPH
+    if function == FunctionEnum.TOTAL_NUMBER_OF_HYPEREDGES_HYPERGRAPH:
+        return statistics.hypergraph_partitioning_statistics.hypergraph_number_of_hyperedges.sum_count
+
+    # AVERAGE_NUMBER_OF_HYPEREDGES_HYPERGRAPH
+    if function == FunctionEnum.AVERAGE_NUMBER_OF_HYPEREDGES_HYPERGRAPH:
+        return statistics.hypergraph_partitioning_statistics.hypergraph_number_of_hyperedges.average_count
+
+    # TOTAL_NUMBER_OF_NODES_HYPERGRAPH
+    if function == FunctionEnum.TOTAL_NUMBER_OF_NODES_HYPERGRAPH:
+        return statistics.hypergraph_partitioning_statistics.hypergraph_number_of_nodes.sum_count
+
+    # AVERAGE_NUMBER_OF_NODES_HYPERGRAPH
+    if function == FunctionEnum.AVERAGE_NUMBER_OF_NODES_HYPERGRAPH:
+        return statistics.hypergraph_partitioning_statistics.hypergraph_number_of_nodes.average_count
+
+    # RATIO_LOG_CUT_SET_SIZE_AND_LOG_NUMBER_OF_HYPEREDGES_HYPERGRAPH
+    if function == FunctionEnum.RATIO_LOG_CUT_SET_SIZE_AND_LOG_NUMBER_OF_HYPEREDGES_HYPERGRAPH:
+        return statistics.hypergraph_partitioning_statistics.ratio_log_cut_set_size_and_log_number_of_hyperedges.average_count
+
+    raise ca_exception.FunctionNotImplementedException("get_value_temp",
+                                                       f"this type of function ({function.name}) is not implemented")
 
 
 def get_statistics(directory_name: str) -> Tuple[Dict[str, Dict[str, Statistics]], Dict[str, Set[str]], Set[str]]:
-    path = Path(os.path.join(root_path, directory_name))
+    path = Path(os.path.join(experiment_path, directory_name))
 
     uncompiled_set: Set[str] = set()
     uncompiled_dictionary: Dict[str, Set[str]] = dict()
@@ -249,11 +490,7 @@ def get_statistics(directory_name: str) -> Tuple[Dict[str, Dict[str, Statistics]
 
 
 def get_value(statistics: Statistics):
-    if not statistics.compiled and (uncompiled_value is not None):
-        return uncompiled_value
-
-    # Function
-    value = function(statistics)
+    value = get_value_temp(statistics)
 
     if value is None:
         return none_value
@@ -265,14 +502,17 @@ def get_value(statistics: Statistics):
 
 
 def generate_data(dictionary_1: Dict[str, Dict[str, Statistics]], dictionary_2: Dict[str, Dict[str, Statistics]]) -> \
-        Union[Tuple[List[float], List[float], List[str], Union[List[str], None]], Tuple[List[List[float]], List[List[float]], List[List[str]], Union[List[str], None]]]:
+        Tuple[List[List[float]], List[float], List[List[float]], List[float], List[List[str]], List[str], Union[List[str], None]]:
     label_list: Union[List[str], None] = None
     if not set_together:
         label_list = []
 
-    list_1: List[Union[float, List[float]]] = []
-    list_2: List[Union[float, List[float]]] = []
-    point_label: List[Union[str, List[str]]] = []
+    list_1: List[List[float]] = []
+    list_1_together: List[float] = []
+    list_2: List[List[float]] = []
+    list_2_together: List[float] = []
+    point_labels: List[List[str]] = []
+    point_labels_together: List[str] = []
 
     set_key = set(dictionary_1.keys()).intersection(set(dictionary_2.keys()))
 
@@ -285,9 +525,10 @@ def generate_data(dictionary_1: Dict[str, Dict[str, Statistics]], dictionary_2: 
 
         if not set_together:
             label_list.append(set_name)
-            list_1.append([])
-            list_2.append([])
-            point_label.append([])
+
+        list_1.append([])
+        list_2.append([])
+        point_labels.append([])
 
         experiment_key = set(dictionary_1_experiment.keys()).intersection(set(dictionary_2_experiment.keys()))
 
@@ -304,20 +545,21 @@ def generate_data(dictionary_1: Dict[str, Dict[str, Statistics]], dictionary_2: 
             value_1 = get_value(dictionary_1_experiment[experiment_name])
             value_2 = get_value(dictionary_2_experiment[experiment_name])
 
-            if not set_together:
-                list_1[-1].append(value_1)
-                list_2[-1].append(value_2)
-                point_label[-1].append(experiment_name)
-            else:
-                list_1.append(value_1)
-                list_2.append(value_2)
-                point_label.append(experiment_name)
+            list_1[-1].append(value_1)
+            list_2[-1].append(value_2)
+            point_labels[-1].append(experiment_name)
 
-    return list_1, list_2, point_label, label_list
+            list_1_together.append(value_1)
+            list_2_together.append(value_2)
+            point_labels_together.append(experiment_name)
+
+    return list_1, list_1_together, list_2, list_2_together, point_labels, point_labels_together, label_list
 
 
-def generate_more_data(data_list: List[Dict[str, Dict[str, Statistics]]]) -> List[List[float]]:
+def generate_more_data(data_list: List[Dict[str, Dict[str, Statistics]]]) -> Tuple[List[List[float]], List[str]]:
     result_list = []
+    point_labels: List[str] = []
+
     for _ in data_list:
         result_list.append([])
 
@@ -359,7 +601,9 @@ def generate_more_data(data_list: List[Dict[str, Dict[str, Statistics]]]) -> Lis
             value = get_value(temp[experiment_name])
             result_list[i].append(value)
 
-    return result_list
+        point_labels.append(experiment_name)
+
+    return result_list, point_labels
 
 
 def my_print(directory_name: str, z: Dict[str, Dict[str, Statistics]], uncompiled_z: Dict[str, Set[str]]) -> None:
@@ -384,6 +628,42 @@ def my_print(directory_name: str, z: Dict[str, Dict[str, Statistics]], uncompile
         print()
     print()
 
+def create_file(data: List[List[float]], labels: List[List[str]], point_labels: List[str]) -> None:
+    if file_name is None:
+        return
+
+    path_temp = Path(os.path.join(file_path, f"{file_name}.txt"))
+
+    with open(path_temp, "w", encoding="utf-8") as file:
+        line = "Name"
+
+        # Head
+        for label in labels:
+            label_temp = label[0].replace(" ", "_").replace("\n", "_").replace("\t", "_")
+            line = f"{line}\t{label_temp}"
+
+        file.write(f"{line}\n")
+
+        for r in range(len(point_labels)):
+            point_label = point_labels[r]
+            point_label_temp = point_label.replace(" ", "_").replace("\n", "_").replace("\t", "_")
+            line = f"{point_label_temp}"
+
+            for i in range(len(data)):
+                temp = data[i][r]
+                line = f"{line}\t{temp}"
+
+            file.write(f"{line}\n")
+# endregion
+
+title = f"{function}" if title == "" else title
+title = title if directory_set == DirectorySetEnum.all else f"{title} \n{directory_set}"
+
+percent_function_list: List[FunctionEnum] = [FunctionEnum.RH_RECOGNITION, FunctionEnum.TWO_CNF_RECOGNITION, FunctionEnum.HYPERGRAPH_CACHING_HIT,
+                                             FunctionEnum.COMPONENT_CACHING_HIT, FunctionEnum.RECOMPUTATION_CUT_SET,
+                                             FunctionEnum.RATIO_GENERATE_KEY_COMPONENT_CACHING_TIME_AND_COMPILATION_TIME,
+                                             FunctionEnum.RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME]
+percent = True if function in percent_function_list else False
 
 if plot_name is None:
     save_path = None
@@ -401,17 +681,21 @@ if not use_more_directory:
     x, uncompiled_x, uncompiled_x_set = get_statistics(directory_name_1)
     y, uncompiled_y, uncompiled_y_set = get_statistics(directory_name_2)
 
-    data_x, data_y, point_label, labels = generate_data(x, y)
+    data_x, data_x_together, data_y, data_y_together, point_labels, point_labels_together, labels = generate_data(x, y)
 
     my_print(directory_name_1, x, uncompiled_x)
     my_print(directory_name_2, y, uncompiled_y)
 
     if set_together:
-        print(f"Total number: {len(data_x)}")
+        print(f"Total number: {len(data_x_together)}")
     else:
         print(f"Total number: {sum(len(i) for i in data_x)}")
 
     print(f"Total number (uncompiled intersection): {len(uncompiled_x_set.intersection(uncompiled_y_set))}")
+
+    create_file(data=[data_x_together, data_y_together],
+                labels=[[directory_name_1], [directory_name_2]],
+                point_labels=point_labels_together)
 
 else:
     directory_name_list = [directory_name.value for directory_name in directory_name_list]
@@ -425,7 +709,11 @@ else:
 
         my_print(directory_name, x, uncompiled_x)
 
-    data = generate_more_data(temp_list)
+    data, point_labels = generate_more_data(temp_list)
+
+    create_file(data=data,
+                labels=label_list,
+                point_labels=point_labels)
 
 if plot == PlotEnum.SCATTER:
     if x_label == "":
@@ -437,13 +725,13 @@ if plot == PlotEnum.SCATTER:
     x_label = f"{x_label} (log)" if log_scale else x_label
     y_label = f"{y_label} (log)" if log_scale else y_label
 
-    scatter(data_x=data_x,
-            data_y=data_y,
+    scatter(data_x=data_x_together if set_together else data_x,
+            data_y=data_y_together if set_together else data_y,
             title=f"{directory_name_1} vs {directory_name_2}" if title == "" else title,
             x_label=x_label,
             y_label=y_label,
             labels=labels,
-            point_label=point_label if use_point_label else None,
+            point_label=(point_labels_together if set_together else point_labels) if use_point_label else None,
             log_scale=log_scale,
             save_path=save_path)
 
@@ -459,4 +747,5 @@ elif plot == PlotEnum.HISTOGRAM:
     histogram(data=data,
               labels=directory_name_labels_histogram_list if label_list is None else label_list,
               title=title,
+              bins=number_of_bins,
               save_path=save_path)
