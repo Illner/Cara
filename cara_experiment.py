@@ -73,7 +73,7 @@ def main(main_args):
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
 
-                                  base_class_threshold=50,
+                                  base_class_threshold=100,
 
                                   decision_heuristic_renamable_horn_use_auxiliary_variables=False,
                                   decision_heuristic_renamable_horn_use_total_number_of_conflict_variables=False,
