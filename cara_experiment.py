@@ -37,7 +37,7 @@ def main(main_args):
                             directory_path=main_args.directory_path,
                             timeout_experiment=timeout_experiment,
                             log_directory_path=main_args.log_directory_path,
-                            save_circuit=False,
+                            save_circuit=True,
                             mapping_node_statistics=None,
                             node_statistics=None)
 
@@ -72,8 +72,6 @@ def main(main_args):
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
-
-                                  base_class_threshold=100,
 
                                   decision_heuristic_renamable_horn_use_auxiliary_variables=False,
                                   decision_heuristic_renamable_horn_use_total_number_of_conflict_variables=False,
