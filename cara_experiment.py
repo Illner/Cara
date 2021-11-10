@@ -37,7 +37,7 @@ def main(main_args):
                             directory_path=main_args.directory_path,
                             timeout_experiment=timeout_experiment,
                             log_directory_path=main_args.log_directory_path,
-                            save_circuit=True,
+                            save_circuit=False,
                             mapping_node_statistics=None,
                             node_statistics=None)
 
@@ -67,7 +67,7 @@ def main(main_args):
             experiment.experiment(file_name=file_name, file_path=file_path,
 
                                   decision_heuristic_ignore_binary_clauses=True,
-                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS,
+                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED,
                                   base_class_enum_set={bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF},
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
