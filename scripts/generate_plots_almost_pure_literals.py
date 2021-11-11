@@ -9,28 +9,51 @@ from compiler.decision_heuristic.jeroslow_wang_heuristic import JeroslowWangHeur
 from compiler.decision_heuristic.clause_reduction_heuristic import ClauseReductionHeuristic
 from compiler.enum.heuristic.mixed_difference_heuristic_enum import MixedDifferenceHeuristicEnum
 
+# C168_FW, C203_FW, C203_FS, C638_FKB
+# C220_FV, C220_FW, C140_FV, C208_FC, C129_FR, C208_FA
 
-path_directory = r"D:\Storage\OneDrive\Public\Savický\RenamableHornFormulae\RH-DLCS-DLIS (-t, c, p)\planning"
-plot_path = r"C:\Users\illner\Desktop\temp"
+configuration_name = "C168_FW"
+
+path_directory = r"C:\Users\illner\Desktop\Temp3"
+plot_path = fr"C:\Users\illner\Desktop\{configuration_name}"
 
 ratio = []
 length = []
 pure_ratio = []
 horn_clause_ratio = []
 almost_pure_ratio = []
+
+min_occurrence = []
+min_occurrence_number = 2
+min_occurrence_clauses = []
+
+max_variable_occurrence = []
+max_variable_occurrence_two_cnf = []
+min_variable_occurrence = []
+min_variable_occurrence_two_cnf = []
+
+two_cnf = []
+
 file_list = [(file, file_path) for file in os.listdir(path_directory) if (os.path.isfile(file_path := os.path.join(path_directory, file)))]
 
-suffix = "planning"
+suffix = configuration_name
 
 for i, (file_name, file_path) in enumerate(file_list):
-    # if not file_name.startswith("C203_FW"):
-    #     continue
+    if not file_name.startswith(configuration_name):
+        continue
 
     literal = {}
     variable = {}
     variable_set = set()
     number_of_clauses = 0
+    number_of_two_clauses = 0
     number_of_horn_clauses = 0
+
+    min_occurrence_temp = []
+    min_occurrence_clauses_temp = []
+
+    literal_two_clauses = {}
+    variable_two_clauses = {}
 
     pure_literal = set()
     almost_pure_literal = set()
@@ -44,12 +67,15 @@ for i, (file_name, file_path) in enumerate(file_list):
 
             number_of_clauses += 1
             positive_literals = 0
+            literal_temp = set()
 
             for j in temp:
                 l = int(j)
 
                 if l == 0:
                     continue
+
+                literal_temp.add(l)
 
                 if l > 0:
                     positive_literals += 1
@@ -60,6 +86,9 @@ for i, (file_name, file_path) in enumerate(file_list):
                     variable[v] = 0
                     literal[l] = 0
                     literal[-l] = 0
+                    literal_two_clauses[l] = 0
+                    literal_two_clauses[-l] = 0
+                    variable_two_clauses[v] = 0
 
                     variable_set.add(v)
 
@@ -69,11 +98,31 @@ for i, (file_name, file_path) in enumerate(file_list):
             if positive_literals <= 1:
                 number_of_horn_clauses += 1
 
+            if len(literal_temp) == 2:
+                number_of_two_clauses += 1
+                for lit in literal_temp:
+                    literal_two_clauses[lit] += 1
+                    variable_two_clauses[abs(lit)] += 1
+
+    two_cnf.append(number_of_two_clauses / number_of_clauses)
+
     length.append(number_of_clauses)
     ratio.append(number_of_clauses / len(variable_set))
     horn_clause_ratio.append(number_of_horn_clauses / number_of_clauses)
 
+    variable_occurrences = {}
+    min_variable_occurrences = {}
+
     for v in variable_set:
+        positive_occurrence = literal[v]
+        negative_occurrence = literal[-v]
+        min_occ = min(positive_occurrence, negative_occurrence)
+        min_occurrence_temp.append(min_occ)
+        min_occurrence_clauses_temp.append(min_occ / number_of_clauses)
+
+        variable_occurrences[v] = positive_occurrence + negative_occurrence
+        min_variable_occurrences[v] = min(positive_occurrence, negative_occurrence)
+
         if literal[v] == 0:
             pure_literal.add(v)
             continue
@@ -92,28 +141,75 @@ for i, (file_name, file_path) in enumerate(file_list):
     temp_2 = (len(almost_pure_literal) + len(pure_literal)) / len(variable_set)
     almost_pure_ratio.append(temp_2)
 
-    print(f"{i}/{len(file_list)}")
+    temptemp = sorted(min_occurrence_temp, reverse=True)[0:min_occurrence_number]
+    for x in temptemp:
+        min_occurrence.append(x)
 
-histogram(pure_ratio, [""], "# pure literals / # variables", bins=100,
+    temptemp = sorted(min_occurrence_clauses_temp, reverse=True)[0:min_occurrence_number]
+    for x in temptemp:
+        min_occurrence_clauses.append(x)
+
+    max_variable_occurrence_temp = [k for k, v in sorted(variable_occurrences.items(), key=lambda item: item[1], reverse = True)][0]
+    min_variable_occurrence_temp = [k for k, v in sorted(min_variable_occurrences.items(), key=lambda item: item[1], reverse = True)][0]
+
+    max_variable_occurrence.append(variable_occurrences[max_variable_occurrence_temp] / number_of_clauses)
+    max_variable_occurrence_two_cnf.append(variable_two_clauses[max_variable_occurrence_temp] / variable_occurrences[max_variable_occurrence_temp])
+
+    min_variable_occurrence.append(variable_occurrences[min_variable_occurrence_temp] / number_of_clauses)
+    min_variable_occurrence_two_cnf.append(variable_two_clauses[min_variable_occurrence_temp] / variable_occurrences[min_variable_occurrence_temp])
+
+    print(f"{i}/{len(file_list)} - {file_name}")
+
+histogram(pure_ratio, [""], f"# pure literals / # variables \n {suffix}", bins=100,
           x_label="# pure literals / # variables",
           y_label="Number of formulae",
           save_path=f"{plot_path}/pure_literals_{suffix}.png")
-histogram(almost_pure_ratio, [""], "(# pure literals + # almost pure literals) / # variables", bins=100,
+histogram(almost_pure_ratio, [""], f"(# pure literals + # almost pure literals) / # variables \n {suffix}", bins=100,
           x_label="(# pure literals + # almost pure literals) / # variables",
           y_label="Number of formulae",
           save_path=f"{plot_path}/almost_pure_literals_{suffix}.png")
-histogram(length, [""], "Number of clauses", bins=100,
+histogram(length, [""], f"Number of clauses \n {suffix}", bins=100,
           x_label="Number of clauses",
           y_label="Number of formulae",
           save_path=f"{plot_path}/number_of_clauses_{suffix}.png")
-histogram(ratio, [""], "Ratio (# clauses / # variables)", bins=100,
+histogram(ratio, [""], f"Ratio (# clauses / # variables) \n {suffix}", bins=100,
           x_label="Ratio (# clauses / # variables)",
           y_label="Number of formulae",
           save_path=f"{plot_path}/ratio_{suffix}.png")
-histogram(horn_clause_ratio, [""], "# horn clauses / # clauses", bins=100,
+histogram(horn_clause_ratio, [""], f"# horn clauses / # clauses \n {suffix}", bins=100,
           x_label="# horn clauses / # clauses",
           y_label="Number of formulae",
           save_path=f"{plot_path}/horn_clauses_ratio_{suffix}.png")
+histogram(min_occurrence, [""], f"min occurrence ({min_occurrence_number}) \n {suffix}", bins=100,
+          x_label=f"min occurrence ({min_occurrence_number})",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/min_occurrence_{suffix}.png")
+histogram(min_occurrence_clauses, [""], f"min occurrence ({min_occurrence_number}) / # clauses \n {suffix}", bins=100,
+          x_label=f"min occurrence ({min_occurrence_number}) / # clauses",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/min_occurrence_clauses_{suffix}.png")
+
+histogram(two_cnf, [""], f"# two clauses / # clauses \n {suffix}", bins=100,
+          x_label=f"# two clauses / # clauses",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/two_clauses_{suffix}.png")
+
+histogram(max_variable_occurrence, [""], f"(MAX) variable occurrence / # clauses \n {suffix}", bins=100,
+          x_label=f"(MAX) variable occurrence / # clauses",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/max_variable_occurrence_clauses_{suffix}.png")
+histogram(max_variable_occurrence_two_cnf, [""], f"(MAX) variable occurrence two cnf / variable occurrence \n {suffix}", bins=100,
+          x_label=f"(MAX) variable occurrence two cnf / variable occurrence",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/max_variable_occurrence_two_cnf_{suffix}.png")
+histogram(min_variable_occurrence, [""], f"(MIN) variable occurrence / # clauses \n {suffix}", bins=100,
+          x_label=f"(MIN) variable occurrence / # clauses",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/min_variable_occurrence_clauses_{suffix}.png")
+histogram(min_variable_occurrence_two_cnf, [""], f"(MIN) variable occurrence two cnf / variable occurrence \n {suffix}", bins=100,
+          x_label=f"(MIN) variable occurrence two cnf / variable occurrence",
+          y_label="Number of formulae",
+          save_path=f"{plot_path}/min_variable_occurrence_two_cnf_{suffix}.png")
 
 # temp = sorted(variable, key=variable.get, reverse=True)
 #

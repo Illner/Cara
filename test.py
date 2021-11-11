@@ -3,52 +3,63 @@
 
 # This example is a PuLP rendition of the todd.mod problem included in the GLPK
 # 4.4 distribution. It's a hard knapsack problem.
-
-import pulp as pl
-solver_list = pl.listSolvers(onlyAvailable=True)
-print(solver_list)
+import pulp
+# import pulp as pl
+# solver_list = pl.listSolvers(onlyAvailable=True)
+# print(solver_list)
 
 # Import PuLP modeler functions
-from pulp import *
+# from pulp import *
 
 # Import math functions
 from math import *
 
 # A new LP problem
-prob = LpProblem("test2", LpMaximize)
+prob = pulp.LpProblem("test", pulp.LpMaximize)
 
-# Parameters
-# Size of the problem
-n = 15
-k = floor(log(n) / log(2))
+# s1 = pulp.LpVariable("s1", 0, 1)
+# s2 = LpVariable("s2", 0, 1)
+# s3 = LpVariable("s3", 0, 1)
+# z1 = LpVariable("z1", 0, 1)
+# z2 = LpVariable("z2", 0, 1)
 
-# A vector of n binary variables
-x = LpVariable.matrix("x", list(range(n)), 0, 1, LpInteger)
+s = pulp.LpVariable.dicts(name="s", indexs=[i for i in range(1, 4)], lowBound=0, upBound=1, cat=pulp.LpContinuous)
+z = pulp.LpVariable.dicts(name="z", indexs=[i for i in range(1, 3)], lowBound=0, upBound=1, cat=pulp.LpInteger)
 
-# A vector of weights
-a = [pow(2, k + n + 1) + pow(2, k + n + 1 - j) + 1 for j in range(1, n + 1)]
-# The maximum weight
-b = 0.5 * floor(sum(a))
-
-# The total weight
-weight = lpDot(a, x)
+formula = [[1, 2, 3], [1, -2, -3]]
 
 # Objective
-prob += weight
+# prob += z[1] + z[2], "obj"
+prob += pulp.lpSum(z)
 # Constraint
-prob += weight <= b
+for i, clause in enumerate(formula):
+    prob += (pulp.lpSum([(1 - s[abs(lit)]) if lit > 0 else s[abs(lit)] for lit in clause]) <= 1+3*(1-z[i + 1]), f"clause_{i}")
+
+# prob += 1-s[1]+1-s[2] <= 1+3*(1-z[1]), "c1"
+# prob += s[1]+1-s[2]+s[3] <= 1+3*(1-z[2]), "c2"
+
+# s[1].setInitialValue(0)
+# s[1].fixValue()
+# s[1].unfixValue()
+
+# prob.writeLP("test1.lp")
 
 # Resolution
-solver = pulp.PULP_CBC_CMD(msg=False)
+solver = pulp.PULP_CBC_CMD(msg=False, threads=1)
+# solver.tmpDir = "temp"
 
 prob.solve(solver)
 
 # Print the status of the solved LP
-print("Status:", LpStatus[prob.status])
+print("Status:", pulp.LpStatus[prob.status])
 
-# Print the value of the variables at the optimum
-for v in prob.variables():
-    print(v.name, "=", v.varValue)
+if prob.status == pulp.LpSolutionOptimal:
+    # Print the value of the variables at the optimum
+    for v in prob.variables():
+        print(v.name, "=", v.varValue)
 
-# Print the value of the objective
-print("objective=", value(prob.objective))
+    # Print the value of the objective
+    print("objective=", pulp.value(prob.objective))
+
+    for i in z:
+        print(z[i].name, "=", pulp.value(z[i]))

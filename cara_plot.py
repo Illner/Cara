@@ -28,6 +28,7 @@ class RootPathEnum(str, Enum):
     CARA_CIRCUIT = fr"{root_path}\CaraCircuit"
     IMBALANCE_FACTOR = fr"{root_path}\Imbalance factor"
     DNNF = fr"{root_path}\DNNF"
+    TEMP = fr"C:\Users\illner\Desktop\Temp2"
 
 
 @unique
@@ -79,8 +80,8 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_DLCS_DLIS_nA_C_P = "DLCS-DLIS (-a, c, p)"
     BDMC_RH_DLCS_DLIS_nA_C_P_nD = "DLCS-DLIS (-a, c, p, d_d)"
     BDMC_RH_VSADS_A_T_C_P = "VSADS (a, t, c, p)"
-    BDMC_RH_VSADS_A_T_nC_P = "VSADS (a, t, -c, p)"
-    BDMC_RH_VSADS_A_nT_C_P = "VSADS (a, -t, c, p)"
+    BDMC_RH_JW_TS_nA_C_P = "JW-TS (-a, c, p)"
+    BDMC_RH_VSADS_nA_C_P = "VSADS (-a, c, p)"
 
     # HP cache
     HP_CACHE_NONE = "NONE"
@@ -129,6 +130,13 @@ class ExperimentEnum(str, Enum):
     DNNF_CLAUSE_REDUCTION_EXT = "Clause reduction (ext)"
     DNNF_WEIGHTED_BINARIES = "Weighted binaries"
     DNNF_WEIGHTED_BINARIES_EXT = "Weighted binaries (ext)"
+
+    # Temp
+    TEMP_D4 = "D4 (Temp)"
+    TEMP_LIMIT_0 = "Temp limit 0"
+    TEMP_LIMIT_50 = "Temp limit 50"
+    TEMP_LIMIT_100 = "Temp limit 100"
+    TEMP = "Temp"
 
 
 @unique
@@ -218,10 +226,10 @@ file_name: Union[str, None] = None  # "name_of_saved_file"
 ###################
 
 directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_A_nT_C_P
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_C_P
 
-x_label: str = "size (d-DNNF)"
-y_label: str = "size (d-BDMC RH-DLCS-DLIS (a, -t, c, p))"
+x_label: str = ""
+y_label: str = ""
 
 log_scale: bool = False
 set_together: bool = False
@@ -632,7 +640,7 @@ def create_file(data: List[List[float]], labels: List[List[str]], point_labels: 
     if file_name is None:
         return
 
-    path_temp = Path(os.path.join(file_path, f"{file_name}.txt"))
+    path_temp = Path(os.path.join(file_path, f"{file_name}.csv"))
 
     with open(path_temp, "w", encoding="utf-8") as file:
         line = "Name"
@@ -640,7 +648,7 @@ def create_file(data: List[List[float]], labels: List[List[str]], point_labels: 
         # Head
         for label in labels:
             label_temp = label[0].replace(" ", "_").replace("\n", "_").replace("\t", "_")
-            line = f"{line}\t{label_temp}"
+            line = f"{line};{label_temp}"
 
         file.write(f"{line}\n")
 
@@ -651,7 +659,7 @@ def create_file(data: List[List[float]], labels: List[List[str]], point_labels: 
 
             for i in range(len(data)):
                 temp = data[i][r]
-                line = f"{line}\t{temp}"
+                line = f"{line};{temp}"
 
             file.write(f"{line}\n")
 # endregion
