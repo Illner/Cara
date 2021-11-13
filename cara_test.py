@@ -11,6 +11,7 @@ import tests.formula.cnf.cnf_test as fc_test
 import tests.formula.two_cnf.two_cnf_test as ftc_test
 import tests.formula.horn_cnf.horn_cnf_test as fhc_test
 import tests.formula.incidence_graph.incidence_graph_test as fig_test
+import tests.formula.renamable_horn_formula_lp_formulation.renamable_horn_formula_lp_formulation_test as frhflpf_test
 
 # Circuit
 import tests.circuit.node.node_test as cn_test
@@ -65,6 +66,14 @@ def main(main_args):
         incidence_graph_test = fig_test.IncidenceGraphTest()
         print(incidence_graph_test.test_name, end=": ", flush=True)
         result, log_result = test(incidence_graph_test)
+        print(result)
+        log_string = "\n".join((log_string, log_result, ""))
+
+    # Renamable Horn formula - LP formulation test
+    if main_args.formula_renamable_horn_formula_lp_formulation_test:
+        renamable_horn_formula_lp_formulation_test = frhflpf_test.RenamableHornFormulaLpFormulationTest()
+        print(renamable_horn_formula_lp_formulation_test.test_name, end=": ", flush=True)
+        result, log_result = test(renamable_horn_formula_lp_formulation_test)
         print(result)
         log_string = "\n".join((log_string, log_result, ""))
 
@@ -189,6 +198,12 @@ def create_parser() -> argparse.ArgumentParser:
                              default=True,
                              type=cara.str_to_bool_parser,
                              help="test automation for incidence graphs")
+    parser_temp.add_argument("-frhflpft",
+                             "--formula_renamable_horn_formula_lp_formulation_test",
+                             action="store",
+                             default=True,
+                             type=cara.str_to_bool_parser,
+                             help="test automation for renamable Horn formula - LP formulation")
     parser_temp.add_argument("-cct",
                              "--circuit_test",
                              action="store",
