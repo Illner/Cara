@@ -160,12 +160,14 @@ class Compiler:
             self.__cnf: Cnf = cnf
             self.__statistics: Statistics = Statistics(active=statistics,
                                                        cnf_statistics=self.__cnf.cnf_statistics,
-                                                       incidence_graph_statistics=self.__cnf.incidence_graph_statistics)
+                                                       incidence_graph_statistics=self.__cnf.incidence_graph_statistics,
+                                                       renamable_horn_formula_lp_formulation_statistics=self.__cnf.renamable_horn_formula_lp_formulation_statistics)
         else:
             self.__statistics: Statistics = Statistics(active=statistics)
             self.__cnf: Cnf = Cnf(dimacs_cnf_source=cnf,
                                   cnf_statistics=self.__statistics.cnf_statistics,
-                                  incidence_graph_statistics=self.__statistics.incidence_graph_statistics)
+                                  incidence_graph_statistics=self.__statistics.incidence_graph_statistics,
+                                  renamable_horn_formula_lp_formulation_statistics=self.__statistics.renamable_horn_formula_lp_formulation_statistics)
 
         self.__statistics.set_name(name)
 

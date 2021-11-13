@@ -6,6 +6,7 @@ from networkx.classes.digraph import DiGraph
 from typing import Set, Dict, List, Union, TypeVar, Tuple
 from formula.renamable_horn_formula_recognition import RenamableHornFormulaRecognition
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
+from compiler_statistics.formula.renamable_horn_formula_lp_formulation_statistics import RenamableHornFormulaLpFormulationStatistics
 
 from formula.pysat_cnf import PySatCnf
 from formula.pysat_2_cnf import PySat2Cnf
@@ -43,6 +44,7 @@ class IncidenceGraph(Graph):
     Private Dict<int, str> clause_id_hash_dictionary
     
     Private IncidenceGraphStatistics statistics
+    Private RenamableHornFormulaLpFormulationStatistics renamable_horn_formula_lp_formulation_statistics
     
     # Clause length
     Private Dict<int, int> clause_length_dictionary                         # key: a clause, value: the length of the clause
@@ -69,6 +71,7 @@ class IncidenceGraph(Graph):
     """
 
     def __init__(self, statistics: Union[IncidenceGraphStatistics, None] = None,
+                 renamable_horn_formula_lp_formulation_statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None,
                  renamable_horn_formula_recognition: Union[RenamableHornFormulaRecognition, None] = None,
                  ignored_literal_set_renamable_horn_formula_recognition: Union[Set[int], None] = None):
         super().__init__()
@@ -97,11 +100,17 @@ class IncidenceGraph(Graph):
             self.__ignored_literal_set_renamable_horn_formula_recognition = ignored_literal_set_renamable_horn_formula_recognition
         self.__renamable_horn_formula_recognition: Union[RenamableHornFormulaRecognition, None] = renamable_horn_formula_recognition
 
-        # Statistics
+        # Statistics - incidence graph
         if statistics is None:
             self.__statistics: IncidenceGraphStatistics = IncidenceGraphStatistics(active=False)
         else:
             self.__statistics: IncidenceGraphStatistics = statistics
+
+        # Statistics - renamable Horn formula - LP formulation
+        if renamable_horn_formula_lp_formulation_statistics is None:
+            self.__renamable_horn_formula_lp_formulation_statistics: RenamableHornFormulaLpFormulationStatistics = RenamableHornFormulaLpFormulationStatistics(active=False)
+        else:
+            self.__renamable_horn_formula_lp_formulation_statistics: RenamableHornFormulaLpFormulationStatistics = renamable_horn_formula_lp_formulation_statistics
 
         # Backup - assignment
         self.__assigned_variable_set: Set[int] = set()
@@ -1739,6 +1748,7 @@ class IncidenceGraph(Graph):
 
         for component in nx.connected_components(self):
             incidence_graph_temp = IncidenceGraph(statistics=self.__statistics,
+                                                  renamable_horn_formula_lp_formulation_statistics=self.__renamable_horn_formula_lp_formulation_statistics,
                                                   renamable_horn_formula_recognition=self.__renamable_horn_formula_recognition,
                                                   ignored_literal_set_renamable_horn_formula_recognition=ignored_literal_set_temp)
 
@@ -1784,7 +1794,8 @@ class IncidenceGraph(Graph):
 
         self.__statistics.copy_incidence_graph.start_stopwatch()    # timer (start)
 
-        copy = IncidenceGraph(statistics=self.__statistics)
+        copy = IncidenceGraph(statistics=self.__statistics,
+                              renamable_horn_formula_lp_formulation_statistics=self.__renamable_horn_formula_lp_formulation_statistics)
 
         for node_hash in self.nodes:
             # The node is not a clause

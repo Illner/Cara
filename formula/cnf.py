@@ -5,6 +5,7 @@ from typing import Set, Dict, List, Union
 from formula.incidence_graph import IncidenceGraph
 from compiler_statistics.formula.cnf_statistics import CnfStatistics
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
+from compiler_statistics.formula.renamable_horn_formula_lp_formulation_statistics import RenamableHornFormulaLpFormulationStatistics
 
 # Import exception
 import exception.formula.formula_exception as f_exception
@@ -35,6 +36,7 @@ class Cnf:
     
     Private CnfStatistics cnf_statistics
     Private IncidenceGraphStatistics incidence_graph_statistics
+    Private RenamableHornFormulaLpFormulationStatistics renamable_horn_formula_lp_formulation_statistics
     
     Protected IncidenceGraph incidence_graph
     """
@@ -42,7 +44,8 @@ class Cnf:
     def __init__(self, dimacs_cnf_source: Union[str, StringIO],
                  starting_line_id: int = 0, variable_mapping: Union[Dict[int, int], None] = None,
                  cnf_statistics: Union[CnfStatistics, None] = None,
-                 incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = None):
+                 incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = None,
+                 renamable_horn_formula_lp_formulation_statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None):
         # region Initialization
         self.__comments: str = ""
         self.__number_of_clauses: int = 0
@@ -68,8 +71,18 @@ class Cnf:
             self.__cnf_statistics: CnfStatistics = CnfStatistics(active=False)
         else:
             self.__cnf_statistics: CnfStatistics = cnf_statistics
+
         # Statistics - incidence graph
-        self.__incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = incidence_graph_statistics
+        if incidence_graph_statistics is None:
+            self.__incidence_graph_statistics: IncidenceGraphStatistics = IncidenceGraphStatistics(active=False)
+        else:
+            self.__incidence_graph_statistics: IncidenceGraphStatistics = incidence_graph_statistics
+
+        # Statistics - renamable Horn formula - LP formulation
+        if renamable_horn_formula_lp_formulation_statistics is None:
+            self.__renamable_horn_formula_lp_formulation_statistics: RenamableHornFormulaLpFormulationStatistics = RenamableHornFormulaLpFormulationStatistics(active=False)
+        else:
+            self.__renamable_horn_formula_lp_formulation_statistics: RenamableHornFormulaLpFormulationStatistics = renamable_horn_formula_lp_formulation_statistics
 
         # Incidence graph
         self._incidence_graph: Union[IncidenceGraph, None] = None
@@ -147,7 +160,8 @@ class Cnf:
                     self.__number_of_literals = 2 * self.__number_of_variables
 
                     # Incidence graph
-                    self._incidence_graph = IncidenceGraph(statistics=self.__incidence_graph_statistics)
+                    self._incidence_graph = IncidenceGraph(statistics=self.__incidence_graph_statistics,
+                                                           renamable_horn_formula_lp_formulation_statistics=self.__renamable_horn_formula_lp_formulation_statistics)
 
                     continue
 
@@ -407,5 +421,9 @@ class Cnf:
 
     @property
     def incidence_graph_statistics(self) -> IncidenceGraphStatistics:
-        return self._incidence_graph.statistics
+        return self.__incidence_graph_statistics
+
+    @property
+    def renamable_horn_formula_lp_formulation_statistics(self) -> RenamableHornFormulaLpFormulationStatistics:
+        return self.__renamable_horn_formula_lp_formulation_statistics
     # endregion

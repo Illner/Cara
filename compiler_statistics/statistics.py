@@ -9,6 +9,7 @@ from compiler_statistics.compiler.component_statistics import ComponentStatistic
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 from compiler_statistics.compiler.preselection_heuristic_statistics import PreselectionHeuristicStatistics
 from compiler_statistics.compiler.hypergraph_partitioning_statistics import HypergraphPartitioningStatistics
+from compiler_statistics.formula.renamable_horn_formula_lp_formulation_statistics import RenamableHornFormulaLpFormulationStatistics
 
 # Import enum
 import circuit.node.node_type_enum as nt_enum
@@ -40,11 +41,13 @@ class Statistics:
     Private PreselectionHeuristicStatistics preselection_heuristic_implied_literals_statistics
     Private PreselectionHeuristicStatistics preselection_heuristic_decision_heuristic_statistics
     Private PreselectionHeuristicStatistics preselection_heuristic_first_implied_literals_statistics
+    Private RenamableHornFormulaLpFormulationStatistics renamable_horn_formula_lp_formulation_statistics
     """
 
     def __init__(self, active: bool,
                  cnf_statistics: Union[CnfStatistics, None] = None,
-                 incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = None):
+                 incidence_graph_statistics: Union[IncidenceGraphStatistics, None] = None,
+                 renamable_horn_formula_lp_formulation_statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None):
         self.__active: bool = active
         self.__template_list: List[StatisticsTemplateAbstract] = []
 
@@ -73,6 +76,13 @@ class Statistics:
         else:
             self.__incidence_graph_statistics: IncidenceGraphStatistics = incidence_graph_statistics
         self.__template_list.append(self.__incidence_graph_statistics)
+
+        # Renamable Horn formula - LP formulation
+        if renamable_horn_formula_lp_formulation_statistics is None:
+            self.__renamable_horn_formula_lp_formulation_statistics: RenamableHornFormulaLpFormulationStatistics = RenamableHornFormulaLpFormulationStatistics(active=active)
+        else:
+            self.__renamable_horn_formula_lp_formulation_statistics: RenamableHornFormulaLpFormulationStatistics = renamable_horn_formula_lp_formulation_statistics
+        self.__template_list.append(self.__renamable_horn_formula_lp_formulation_statistics)
 
         # Solver
         self.__solver_statistics: SolverStatistics = SolverStatistics(active=active)
@@ -160,6 +170,10 @@ class Statistics:
     @property
     def incidence_graph_statistics(self) -> IncidenceGraphStatistics:
         return self.__incidence_graph_statistics
+
+    @property
+    def renamable_horn_formula_lp_formulation_statistics(self) -> RenamableHornFormulaLpFormulationStatistics:
+        return self.__renamable_horn_formula_lp_formulation_statistics
 
     @property
     def solver_statistics(self) -> SolverStatistics:
