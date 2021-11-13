@@ -826,6 +826,22 @@ class IncidenceGraph(Graph):
 
         return clause.copy() if copy else clause
 
+    def get_clause_length(self, clause_id: int) -> int:
+        """
+        Return the length of a clause
+        :param clause_id: the clause's id
+        :return: the length of the clause
+        :raises ClauseIdDoesNotExistException: if the clause does not exist in the incidence graph
+        """
+
+        clause_id_hash = self.__clause_id_hash(clause_id)
+
+        # The clause does not exist in the incidence graph
+        if clause_id_hash not in self:
+            raise ig_exception.ClauseIdDoesNotExistException(clause_id)
+
+        return self.__clause_length_dictionary[clause_id]
+
     def get_sorted_clause(self, clause_id: int, copy: bool) -> List[int]:
         """
         Return a sorted clause with the given identifier
