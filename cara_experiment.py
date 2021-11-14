@@ -77,7 +77,7 @@ def main(main_args):
                                   decision_heuristic_maximum_renamable_horn_is_exact=True,
                                   decision_heuristic_maximum_renamable_horn_use_conflicts=True,
                                   decision_heuristic_maximum_renamable_horn_prefer_conflict_variables=True,
-                                  decision_heuristic_maximum_renamable_horn_objective_function=lpfof_enum.LpFormulationObjectiveFunctionEnum.RESPECT_DECOMPOSITION_HORN_FORMULA,
+                                  decision_heuristic_maximum_renamable_horn_objective_function=lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
                                   decision_heuristic_maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set=2,
 
                                   smooth=False,
