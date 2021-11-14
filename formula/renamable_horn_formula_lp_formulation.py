@@ -2,7 +2,6 @@
 import pulp
 from io import StringIO, FileIO
 from typing import Dict, Tuple, Union, TextIO, Set
-from formula.incidence_graph import IncidenceGraph
 from pulp import LpVariable, LpContinuous, LpInteger, lpSum, PULP_CBC_CMD
 from compiler_statistics.formula.renamable_horn_formula_lp_formulation_statistics import RenamableHornFormulaLpFormulationStatistics
 
@@ -32,7 +31,7 @@ class RenamableHornFormulaLpFormulation:
     Private RenamableHornFormulaLpFormulationStatistics statistics
     """
 
-    def __init__(self, incidence_graph: IncidenceGraph, number_of_threads: int = 1, is_exact: bool = False,
+    def __init__(self, incidence_graph, number_of_threads: int = 0, is_exact: bool = False,
                  objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
                  cut_set: Union[Set[int], None] = None, weight_for_clauses_without_variables_in_cut_set: int = 2,
                  statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None):
@@ -61,8 +60,7 @@ class RenamableHornFormulaLpFormulation:
                                         threads=number_of_threads)
 
     # region Private method
-    def __create_lp_formulation(self, incidence_graph: IncidenceGraph,
-                                cut_set: Union[Set[int], None], weight_for_clauses_without_variables_in_cut_set: int) -> None:
+    def __create_lp_formulation(self, incidence_graph, cut_set: Union[Set[int], None], weight_for_clauses_without_variables_in_cut_set: int) -> None:
         # Variables
         self.__lp_variable_clause_is_horn = LpVariable.dicts(name="z",
                                                              indexs=incidence_graph.clause_id_set(copy=False),

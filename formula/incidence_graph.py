@@ -5,6 +5,7 @@ from networkx.classes.graph import Graph
 from networkx.classes.digraph import DiGraph
 from typing import Set, Dict, List, Union, TypeVar, Tuple
 from formula.renamable_horn_formula_recognition import RenamableHornFormulaRecognition
+from formula.renamable_horn_formula_lp_formulation import RenamableHornFormulaLpFormulation
 from compiler_statistics.formula.incidence_graph_statistics import IncidenceGraphStatistics
 from compiler_statistics.formula.renamable_horn_formula_lp_formulation_statistics import RenamableHornFormulaLpFormulationStatistics
 
@@ -19,6 +20,7 @@ import exception.formula.incidence_graph_exception as ig_exception
 # Import enum
 import formula.enum.pysat_cnf_enum as psc_enum
 import formula.enum.eliminating_redundant_clauses_enum as erc_enum
+import formula.enum.lp_formulation_objective_function_enum as lpfof_enum
 
 # Type
 TIncidenceGraph = TypeVar("TIncidenceGraph", bound="IncidenceGraph")
@@ -1551,6 +1553,57 @@ class IncidenceGraph(Graph):
         self.__statistics.renamable_horn_formula_recognition_implication_graph_check.stop_stopwatch()  # timer (stop)
 
         return True, renaming_function
+
+    def get_maximum_renamable_horn_subformula(self, is_exact: bool, objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum, cut_set: Union[Set[int], None],
+                                              weight_for_clauses_without_variables_in_cut_set: int) -> Tuple[bool, Set[int], Dict[int, int]]:
+        """
+        Construct a linear programming formulation of the problem and solve it.
+        :param is_exact: True for integer linear programming. False for relaxed linear programming.
+        :param objective_function: an objective function
+        :param cut_set: a cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA)
+        :param weight_for_clauses_without_variables_in_cut_set: a weight that will be used for clauses that contain at least
+        one variable in the cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA)
+        :return: (is_renamable_horn, conflict_variable_set, variable_score_dictionary)
+        """
+
+        renamable_horn_formula_lp_formulation = RenamableHornFormulaLpFormulation(incidence_graph=self,
+                                                                                  is_exact=is_exact,
+                                                                                  objective_function=objective_function,
+                                                                                  cut_set=cut_set,
+                                                                                  weight_for_clauses_without_variables_in_cut_set=weight_for_clauses_without_variables_in_cut_set,
+                                                                                  statistics=self.__renamable_horn_formula_lp_formulation_statistics)
+        variable_is_switched_dictionary, clause_is_horn_dictionary = renamable_horn_formula_lp_formulation.solve()
+
+        # Relaxation is used => variable's values have to be rounded
+        if not is_exact:
+            raise NotImplemented()
+
+        is_renamable_horn: bool = True
+        conflict_variable_set: Set[int] = set()
+        variable_score_dictionary: Dict[int, int] = dict()
+
+        for clause_id in clause_is_horn_dictionary:
+            # The clause is Horn
+            if clause_is_horn_dictionary[clause_id] == 1:
+                continue
+
+            is_renamable_horn = False
+
+            clause = self.get_clause(clause_id, copy=False)
+
+            for lit in clause:
+                variable = abs(lit)
+                switching = -1 if variable_is_switched_dictionary[variable] == 1 else 1
+
+                conflict_variable_set.add(variable)
+                if variable not in variable_score_dictionary:
+                    variable_score_dictionary[variable] = 0
+
+                # After the switching the literal is positive
+                if lit * switching > 0:
+                    variable_score_dictionary[variable] += 1
+
+        return is_renamable_horn, conflict_variable_set, variable_score_dictionary
     # endregion
 
     # region Decision heuristics

@@ -22,6 +22,7 @@ import compiler.enum.component_caching_enum as cc_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
+import formula.enum.lp_formulation_objective_function_enum as lpfof_enum
 import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
@@ -124,8 +125,13 @@ class Experiment:
                    decision_heuristic_ignore_binary_clauses: bool = False,
                    decision_heuristic_renamable_horn_use_total_number_of_conflict_variables: bool = True,
                    decision_heuristic_renamable_horn_use_conflicts: bool = True,
-                   decision_heuristic_renamable_horn_use_auxiliary_variables: bool = True,
+                   decision_heuristic_renamable_horn_use_auxiliary_variables: bool = False,
                    decision_heuristic_renamable_horn_prefer_conflict_variables: bool = True,
+                   decision_heuristic_maximum_renamable_horn_is_exact: bool = True,
+                   decision_heuristic_maximum_renamable_horn_use_conflicts: bool = True,
+                   decision_heuristic_maximum_renamable_horn_prefer_conflict_variables: bool = True,
+                   decision_heuristic_maximum_renamable_horn_objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
+                   decision_heuristic_maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set: int = 2,
                    component_caching_cara_caching_scheme_multi_occurrence: bool = False,
                    component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold: int = 50,
                    file_name_extension: str = "",
@@ -190,6 +196,11 @@ class Experiment:
                             decision_heuristic_renamable_horn_use_conflicts=decision_heuristic_renamable_horn_use_conflicts,
                             decision_heuristic_renamable_horn_use_auxiliary_variables=decision_heuristic_renamable_horn_use_auxiliary_variables,
                             decision_heuristic_renamable_horn_prefer_conflict_variables=decision_heuristic_renamable_horn_prefer_conflict_variables,
+                            decision_heuristic_maximum_renamable_horn_is_exact=decision_heuristic_maximum_renamable_horn_is_exact,
+                            decision_heuristic_maximum_renamable_horn_use_conflicts=decision_heuristic_maximum_renamable_horn_use_conflicts,
+                            decision_heuristic_maximum_renamable_horn_prefer_conflict_variables=decision_heuristic_maximum_renamable_horn_prefer_conflict_variables,
+                            decision_heuristic_maximum_renamable_horn_objective_function=decision_heuristic_maximum_renamable_horn_objective_function,
+                            decision_heuristic_maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set=decision_heuristic_maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set,
                             component_caching_cara_caching_scheme_multi_occurrence=component_caching_cara_caching_scheme_multi_occurrence,
                             component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold,
                             mapping_node_statistics=self.__mapping_node_statistics,

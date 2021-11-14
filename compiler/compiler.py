@@ -25,6 +25,7 @@ from compiler.decision_heuristic.renamable_horn_heuristic import RenamableHornHe
 from compiler.decision_heuristic.eupc_heuristic import ExactUnitPropagationCountHeuristic
 from compiler.decision_heuristic.clause_reduction_heuristic import ClauseReductionHeuristic
 from compiler.decision_heuristic.weighted_binaries_heuristic import WeightedBinariesHeuristic
+from compiler.decision_heuristic.maximum_renamable_horn_heuristic import MaximumRenamableHornHeuristic
 
 # Import preselection heuristic
 from compiler.preselection_heuristic.none_heuristic import NoneHeuristic
@@ -42,6 +43,7 @@ import compiler.enum.component_caching_enum as cc_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
+import formula.enum.lp_formulation_objective_function_enum as lpfof_enum
 import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
 import compiler.enum.heuristic.literal_count_heuristic_function_enum as lchf_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
@@ -138,8 +140,13 @@ class Compiler:
                  decision_heuristic_ignore_binary_clauses: bool = False,
                  decision_heuristic_renamable_horn_use_total_number_of_conflict_variables: bool = True,
                  decision_heuristic_renamable_horn_use_conflicts: bool = True,
-                 decision_heuristic_renamable_horn_use_auxiliary_variables: bool = True,
+                 decision_heuristic_renamable_horn_use_auxiliary_variables: bool = False,
                  decision_heuristic_renamable_horn_prefer_conflict_variables: bool = True,
+                 decision_heuristic_maximum_renamable_horn_is_exact: bool = True,
+                 decision_heuristic_maximum_renamable_horn_use_conflicts: bool = True,
+                 decision_heuristic_maximum_renamable_horn_prefer_conflict_variables: bool = True,
+                 decision_heuristic_maximum_renamable_horn_objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
+                 decision_heuristic_maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set: int = 2,
                  decision_heuristic_preselection_heuristic_enum: ph_enum.PreselectionHeuristicEnum = ph_enum.PreselectionHeuristicEnum.NONE,
                  decision_heuristic_preselection_heuristic_prop_z_depth_threshold: int = 5,
                  decision_heuristic_preselection_heuristic_prop_z_number_of_variables_lower_bound: Union[int, None] = 10,
@@ -212,7 +219,12 @@ class Compiler:
                                       renamable_horn_use_total_number_of_conflict_variables=decision_heuristic_renamable_horn_use_total_number_of_conflict_variables,
                                       renamable_horn_use_conflicts=decision_heuristic_renamable_horn_use_conflicts,
                                       renamable_horn_use_auxiliary_variables=decision_heuristic_renamable_horn_use_auxiliary_variables,
-                                      renamable_horn_prefer_conflict_variables=decision_heuristic_renamable_horn_prefer_conflict_variables)
+                                      renamable_horn_prefer_conflict_variables=decision_heuristic_renamable_horn_prefer_conflict_variables,
+                                      maximum_renamable_horn_is_exact=decision_heuristic_maximum_renamable_horn_is_exact,
+                                      maximum_renamable_horn_use_conflicts=decision_heuristic_maximum_renamable_horn_use_conflicts,
+                                      maximum_renamable_horn_prefer_conflict_variables=decision_heuristic_maximum_renamable_horn_prefer_conflict_variables,
+                                      maximum_renamable_horn_objective_function=decision_heuristic_maximum_renamable_horn_objective_function,
+                                      maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set=decision_heuristic_maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set)
 
         # Implied literals - preselection heuristic
         self.__set_implied_literals_preselection_heuristic(implied_literals_preselection_heuristic_enum=implied_literals_preselection_heuristic_enum,
@@ -289,7 +301,12 @@ class Compiler:
                                  renamable_horn_use_total_number_of_conflict_variables: bool,
                                  renamable_horn_use_conflicts: bool,
                                  renamable_horn_use_auxiliary_variables: bool,
-                                 renamable_horn_prefer_conflict_variables: bool) -> None:
+                                 renamable_horn_prefer_conflict_variables: bool,
+                                 maximum_renamable_horn_is_exact: bool,
+                                 maximum_renamable_horn_use_conflicts: bool,
+                                 maximum_renamable_horn_prefer_conflict_variables: bool,
+                                 maximum_renamable_horn_objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum,
+                                 maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set) -> None:
 
         # Preselection heuristic
         # NONE
@@ -439,6 +456,54 @@ class Compiler:
                                                                use_conflicts=renamable_horn_use_conflicts,
                                                                use_auxiliary_variables=renamable_horn_use_auxiliary_variables,
                                                                prefer_conflict_variables=renamable_horn_prefer_conflict_variables)
+            return
+
+        # MAXIMUM_RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.MAXIMUM_RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED:
+            decision_heuristic = JeroslowWangHeuristic(preselection_heuristic=NoneHeuristic(),
+                                                       one_sided=False,
+                                                       ignore_binary_clauses=ignore_binary_clauses)
+
+            self.__decision_heuristic = MaximumRenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
+                                                                      decision_heuristic=decision_heuristic,
+                                                                      is_exact=maximum_renamable_horn_is_exact,
+                                                                      use_conflicts=maximum_renamable_horn_use_conflicts,
+                                                                      prefer_conflict_variables=maximum_renamable_horn_prefer_conflict_variables,
+                                                                      objective_function=maximum_renamable_horn_objective_function,
+                                                                      weight_for_clauses_without_variables_in_cut_set=maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set)
+            return
+
+        # MAXIMUM_RENAMABLE_HORN_DLCS_DLIS
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.MAXIMUM_RENAMABLE_HORN_DLCS_DLIS:
+            decision_heuristic = LiteralCountHeuristic(preselection_heuristic=NoneHeuristic(),
+                                                       ignore_binary_clauses=ignore_binary_clauses,
+                                                       function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.SUM,
+                                                       tie_breaker_function_enum=lchf_enum.LiteralCountHeuristicFunctionEnum.MAX)
+
+            self.__decision_heuristic = MaximumRenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
+                                                                      decision_heuristic=decision_heuristic,
+                                                                      is_exact=maximum_renamable_horn_is_exact,
+                                                                      use_conflicts=maximum_renamable_horn_use_conflicts,
+                                                                      prefer_conflict_variables=maximum_renamable_horn_prefer_conflict_variables,
+                                                                      objective_function=maximum_renamable_horn_objective_function,
+                                                                      weight_for_clauses_without_variables_in_cut_set=maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set)
+            return
+
+        # MAXIMUM_RENAMABLE_HORN_VSADS
+        if decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.MAXIMUM_RENAMABLE_HORN_VSADS:
+            decision_heuristic = VsadsHeuristic(preselection_heuristic=NoneHeuristic(),
+                                                ignore_binary_clauses=ignore_binary_clauses,
+                                                p_constant_factor=vsads_p_constant_factor,
+                                                q_constant_factor=vsads_q_constant_factor,
+                                                vsids_d4_version=vsids_d4_version)
+
+            self.__decision_heuristic = MaximumRenamableHornHeuristic(preselection_heuristic=preselection_heuristic,
+                                                                      decision_heuristic=decision_heuristic,
+                                                                      is_exact=maximum_renamable_horn_is_exact,
+                                                                      use_conflicts=maximum_renamable_horn_use_conflicts,
+                                                                      prefer_conflict_variables=maximum_renamable_horn_prefer_conflict_variables,
+                                                                      objective_function=maximum_renamable_horn_objective_function,
+                                                                      weight_for_clauses_without_variables_in_cut_set=maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set)
             return
 
         raise c_exception.FunctionNotImplementedException("set_decision_heuristic",
