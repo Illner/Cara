@@ -1,7 +1,7 @@
 # Import
 import pulp
 from io import StringIO, FileIO
-from typing import Dict, Tuple, Union, TextIO
+from typing import Dict, Tuple, Union, TextIO, Set
 from formula.incidence_graph import IncidenceGraph
 from pulp import LpVariable, LpContinuous, LpInteger, lpSum, PULP_CBC_CMD
 from compiler_statistics.formula.renamable_horn_formula_lp_formulation_statistics import RenamableHornFormulaLpFormulationStatistics
@@ -34,6 +34,7 @@ class RenamableHornFormulaLpFormulation:
 
     def __init__(self, incidence_graph: IncidenceGraph, number_of_threads: int = 1, is_exact: bool = False,
                  objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
+                 cut_set: Union[Set[int], None] = None, weight_for_clauses_without_variables_in_cut_set: int = 2,
                  statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None):
         # Statistics
         if statistics is None:
@@ -51,14 +52,17 @@ class RenamableHornFormulaLpFormulation:
         self.__objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = objective_function
 
         self.__statistics.create_lp_formulation.start_stopwatch()   # timer (start)
-        self.__create_lp_formulation(incidence_graph)
+        self.__create_lp_formulation(incidence_graph=incidence_graph,
+                                     cut_set=cut_set,
+                                     weight_for_clauses_without_variables_in_cut_set=weight_for_clauses_without_variables_in_cut_set)
         self.__statistics.create_lp_formulation.stop_stopwatch()    # timer (stop)
 
         self.__lp_solver = PULP_CBC_CMD(msg=False,
                                         threads=number_of_threads)
 
     # region Private method
-    def __create_lp_formulation(self, incidence_graph: IncidenceGraph):
+    def __create_lp_formulation(self, incidence_graph: IncidenceGraph,
+                                cut_set: Union[Set[int], None], weight_for_clauses_without_variables_in_cut_set: int) -> None:
         # Variables
         self.__lp_variable_clause_is_horn = LpVariable.dicts(name="z",
                                                              indexs=incidence_graph.clause_id_set(copy=False),
@@ -90,6 +94,19 @@ class RenamableHornFormulaLpFormulation:
         # SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA
         elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA:
             self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * ((1/self.__clause_length_dictionary[clause_id]) ** 2) for clause_id in self.__lp_variable_clause_is_horn])
+        # RESPECT_DECOMPOSITION_HORN_FORMULA
+        elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.RESPECT_DECOMPOSITION_HORN_FORMULA:
+            # Cut set is not defined
+            if cut_set is None:
+                raise rhflpf_exception.CutSetIsNotDefinedException()
+
+            clauses_with_variables_in_cut_set = set()
+            for variable in cut_set:
+                temp = incidence_graph.variable_neighbour_set(variable)
+                clauses_with_variables_in_cut_set.update(temp)
+
+            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * (1 if clause_id in clauses_with_variables_in_cut_set else weight_for_clauses_without_variables_in_cut_set) for clause_id in self.__lp_variable_clause_is_horn])
+        # Not implemented
         else:
             raise c_exception.FunctionNotImplementedException("__create_lp_formulation",
                                                               f"this type of objective function ({self.__objective_function.name}) is not implemented")
