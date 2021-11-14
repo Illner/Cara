@@ -113,9 +113,7 @@ class RenamableHornFormulaLpFormulation:
         for clause_id in self.__lp_variable_clause_is_horn:
             clause = incidence_graph.get_clause(clause_id=clause_id, copy=False)
             clause_length = self.__clause_length_dictionary[clause_id]
-            pulp.LpAffineExpression()
-            # self.__lp_formulation += (lpSum([self.__lp_variable_variable_is_switched[abs(lit)] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[abs(lit)]) for lit in clause]) <= clause_length - self.__lp_variable_clause_is_horn[clause_id] * (clause_length - 1), f"clause_{clause_id}")
-            self.__lp_formulation.addConstraint(lpSum([self.__lp_variable_variable_is_switched[abs(lit)] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[abs(lit)]) for lit in clause]) <= clause_length - self.__lp_variable_clause_is_horn[clause_id] * (clause_length - 1), f"clause_{clause_id}")
+            self.__lp_formulation += (lpSum([self.__lp_variable_variable_is_switched[abs(lit)] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[abs(lit)]) for lit in clause]) <= clause_length - self.__lp_variable_clause_is_horn[clause_id] * (clause_length - 1))
     # endregion
 
     # region Public method
