@@ -56,8 +56,7 @@ class RenamableHornFormulaLpFormulation:
                                      weight_for_clauses_without_variables_in_cut_set=weight_for_clauses_without_variables_in_cut_set)
         self.__statistics.create_lp_formulation.stop_stopwatch()    # timer (stop)
 
-        self.__lp_solver = PULP_CBC_CMD(msg=False,
-                                        threads=number_of_threads)
+        self.__lp_solver = pulp.CPLEX_PY(msg=False)
 
     # region Private method
     def __create_lp_formulation(self, incidence_graph, cut_set: Union[Set[int], None], weight_for_clauses_without_variables_in_cut_set: int) -> None:
