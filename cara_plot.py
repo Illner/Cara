@@ -24,6 +24,7 @@ file_path = sys.argv[2]
 class RootPathEnum(str, Enum):
     BDMC = fr"{root_path}\BDMC"
     BDMC_RH = fr"{root_path}\BDMC RH"
+    BDMC_MRH = fr"{root_path}\BDMC MRH"
     HP_CACHE = fr"{root_path}\HP cache"
     CARA_CIRCUIT = fr"{root_path}\CaraCircuit"
     IMBALANCE_FACTOR = fr"{root_path}\Imbalance factor"
@@ -82,6 +83,11 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_VSADS_A_T_C_P = "VSADS (a, t, c, p)"
     BDMC_RH_JW_TS_nA_C_P = "JW-TS (-a, c, p)"
     BDMC_RH_VSADS_nA_C_P = "VSADS (-a, c, p)"
+
+    # BDMC MRH
+    BDMC_MRH_D4 = "D4 (BDMC MRH)"
+    BDMC_MRH_VSADS_nA_C_P = "VSADS (-a, c, p) (BDMC MRH)"
+    BDMC_MRH_VSADS_E_C_P_HF = "VSADS (e, c, p, HF)"
 
     # HP cache
     HP_CACHE_NONE = "NONE"
@@ -209,7 +215,7 @@ class FunctionEnum(str, Enum):
 ##### Configuration #####
 #########################
 
-experiment_path: RootPathEnum = RootPathEnum.BDMC_RH
+experiment_path: RootPathEnum = RootPathEnum.BDMC_MRH
 
 title: str = ""
 plot: PlotEnum = PlotEnum.SCATTER
@@ -225,8 +231,8 @@ file_name: Union[str, None] = None  # "name_of_saved_file"
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_C_P
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_MRH_D4
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_MRH_VSADS_E_C_P_HF
 
 x_label: str = ""
 y_label: str = ""
