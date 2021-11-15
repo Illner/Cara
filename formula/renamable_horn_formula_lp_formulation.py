@@ -82,16 +82,16 @@ class RenamableHornFormulaLpFormulation:
             self.__lp_formulation += lpSum(self.__lp_variable_clause_is_horn)
         # LENGTH_WEIGHTED_HORN_FORMULA
         elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.LENGTH_WEIGHTED_HORN_FORMULA:
-            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * self.__clause_length_dictionary[clause_id] for clause_id in incidence_graph.clause_id_set(copy=False)])
+            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * self.__clause_length_dictionary[clause_id] for clause_id in self.__lp_variable_clause_is_horn])
         # SQUARED_LENGTH_WEIGHTED_HORN_FORMULA
         elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.SQUARED_LENGTH_WEIGHTED_HORN_FORMULA:
-            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * (self.__clause_length_dictionary[clause_id] ** 2) for clause_id in incidence_graph.clause_id_set(copy=False)])
+            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * (self.__clause_length_dictionary[clause_id] ** 2) for clause_id in self.__lp_variable_clause_is_horn])
         # INVERSE_LENGTH_WEIGHTED_HORN_FORMULA
         elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.INVERSE_LENGTH_WEIGHTED_HORN_FORMULA:
-            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * 1/self.__clause_length_dictionary[clause_id] for clause_id in incidence_graph.clause_id_set(copy=False)])
+            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * 1/self.__clause_length_dictionary[clause_id] for clause_id in self.__lp_variable_clause_is_horn])
         # SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA
         elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA:
-            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * ((1/self.__clause_length_dictionary[clause_id]) ** 2) for clause_id in incidence_graph.clause_id_set(copy=False)])
+            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * ((1/self.__clause_length_dictionary[clause_id]) ** 2) for clause_id in self.__lp_variable_clause_is_horn])
         # RESPECT_DECOMPOSITION_HORN_FORMULA
         elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.RESPECT_DECOMPOSITION_HORN_FORMULA:
             # Cut set is not defined
@@ -103,14 +103,14 @@ class RenamableHornFormulaLpFormulation:
                 temp = incidence_graph.variable_neighbour_set(variable)
                 clauses_with_variables_in_cut_set.update(temp)
 
-            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * (1 if clause_id in clauses_with_variables_in_cut_set else weight_for_clauses_without_variables_in_cut_set) for clause_id in incidence_graph.clause_id_set(copy=False)])
+            self.__lp_formulation += lpSum([self.__lp_variable_clause_is_horn[clause_id] * (1 if clause_id in clauses_with_variables_in_cut_set else weight_for_clauses_without_variables_in_cut_set) for clause_id in self.__lp_variable_clause_is_horn])
         # Not implemented
         else:
             raise c_exception.FunctionNotImplementedException("__create_lp_formulation",
                                                               f"this type of objective function ({self.__objective_function.name}) is not implemented")
 
         # Constraints
-        for clause_id in incidence_graph.clause_id_set(copy=False):
+        for clause_id in self.__lp_variable_clause_is_horn:
             clause = incidence_graph.get_clause(clause_id=clause_id, copy=False)
             clause_length = self.__clause_length_dictionary[clause_id]
             self.__lp_formulation += (lpSum([self.__lp_variable_variable_is_switched[abs(lit)] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[abs(lit)]) for lit in clause]) <= clause_length - self.__lp_variable_clause_is_horn[clause_id] * (clause_length - 1), f"clause_{clause_id}")
