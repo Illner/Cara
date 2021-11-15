@@ -24,7 +24,7 @@ class RenamableHornFormulaLpFormulationStatistics(StatisticsTemplateAbstract):
         self.__create_lp_formulation: StatisticsComponentTimer = StatisticsComponentTimer(name="create LP formulation", active=active)
         self._component_list.append(self.__create_lp_formulation)
 
-        self.__solve_lp_problem: StatisticsComponentTimer = StatisticsComponentTimer(name="solve LP problem", active=active)
+        self.__solve_lp_problem: StatisticsComponentTimer = StatisticsComponentTimer(name="solve LP problem", active=active, one_process=False)
         self._component_list.append(self.__solve_lp_problem)
 
         self.__switching_average: StatisticsComponentCounter = StatisticsComponentCounter(name="switching - average (1/|V| * sum_i s_i)", active=active)

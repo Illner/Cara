@@ -15,6 +15,7 @@ class StatisticsComponentTimer:
     """
     Private str name
     Private bool active
+    Private bool one_process
     Private bool show_only_sum_time
 
     Private int number_of_calls
@@ -25,9 +26,10 @@ class StatisticsComponentTimer:
     Private float stopwatch_time        # nanoseconds
     """
 
-    def __init__(self, name: str, active: bool = True, show_only_sum_time: bool = False):
+    def __init__(self, name: str, active: bool = True, show_only_sum_time: bool = False, one_process: bool = True):
         self.__name: str = name
         self.__active: bool = active
+        self.__one_process: bool = one_process
         self.__show_only_sum_time: bool = show_only_sum_time
 
         self.__number_of_calls: int = 0
@@ -81,7 +83,10 @@ class StatisticsComponentTimer:
         if self.__stopwatch_time is not None:
             raise s_exception.StopwatchIsAlreadyRunningException(self.__name)
 
-        self.__stopwatch_time = sys_time.perf_counter_ns()
+        if self.__one_process:
+            self.__stopwatch_time = sys_time.process_time_ns()
+        else:
+            self.__stopwatch_time = sys_time.perf_counter_ns()
 
     def stop_stopwatch(self) -> None:
         """
@@ -98,7 +103,12 @@ class StatisticsComponentTimer:
         if self.__stopwatch_time is None:
             raise s_exception.StopwatchHasNotBeenStartedException(self.__name)
 
-        time = sys_time.perf_counter_ns() - self.__stopwatch_time
+        if self.__one_process:
+            temp = sys_time.process_time_ns()
+        else:
+            temp = sys_time.perf_counter_ns()
+
+        time = temp - self.__stopwatch_time
         self.add_call(time)
 
         # Reset
