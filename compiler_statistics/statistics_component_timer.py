@@ -81,7 +81,8 @@ class StatisticsComponentTimer:
         if self.__stopwatch_time is not None:
             raise s_exception.StopwatchIsAlreadyRunningException(self.__name)
 
-        self.__stopwatch_time = sys_time.process_time_ns()
+        # self.__stopwatch_time = sys_time.process_time_ns()
+        self.__stopwatch_time = sys_time.perf_counter_ns()
 
     def stop_stopwatch(self) -> None:
         """
@@ -98,7 +99,8 @@ class StatisticsComponentTimer:
         if self.__stopwatch_time is None:
             raise s_exception.StopwatchHasNotBeenStartedException(self.__name)
 
-        time = sys_time.process_time_ns() - self.__stopwatch_time
+        #time = sys_time.process_time_ns() - self.__stopwatch_time
+        time = sys_time.perf_counter_ns() - self.__stopwatch_time
         self.add_call(time)
 
         # Reset
