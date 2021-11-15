@@ -31,7 +31,7 @@ class RenamableHornFormulaLpFormulation:
     Private RenamableHornFormulaLpFormulationStatistics statistics
     """
 
-    def __init__(self, incidence_graph, number_of_threads: int = 1, is_exact: bool = False,
+    def __init__(self, incidence_graph, number_of_threads: int = 16, is_exact: bool = False,
                  objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
                  cut_set: Union[Set[int], None] = None, weight_for_clauses_without_variables_in_cut_set: int = 2,
                  statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None):
@@ -56,7 +56,8 @@ class RenamableHornFormulaLpFormulation:
                                      weight_for_clauses_without_variables_in_cut_set=weight_for_clauses_without_variables_in_cut_set)
         self.__statistics.create_lp_formulation.stop_stopwatch()    # timer (stop)
 
-        self.__lp_solver = pulp.CPLEX_PY(msg=False)
+        self.__lp_solver = PULP_CBC_CMD(msg=False,
+                                        threads=number_of_threads)
 
     # region Private method
     def __create_lp_formulation(self, incidence_graph, cut_set: Union[Set[int], None], weight_for_clauses_without_variables_in_cut_set: int) -> None:
