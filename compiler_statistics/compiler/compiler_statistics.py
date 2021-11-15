@@ -19,7 +19,8 @@ class CompilerStatistics(StatisticsTemplateAbstract):
 
         self.__create_circuit: StatisticsComponentTimer = StatisticsComponentTimer(name="create circuit",
                                                                                    active=active,
-                                                                                   show_only_sum_time=True)
+                                                                                   show_only_sum_time=True,
+                                                                                   one_process=False)
         self._component_list.append(self.__create_circuit)
 
         self.__smooth: StatisticsComponentTimer = StatisticsComponentTimer(name="smooth",
