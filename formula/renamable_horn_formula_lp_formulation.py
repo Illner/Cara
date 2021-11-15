@@ -66,12 +66,12 @@ class RenamableHornFormulaLpFormulation:
                                                              indexs=incidence_graph.clause_id_set(copy=False),
                                                              lowBound=0,
                                                              upBound=1,
-                                                             cat=LpContinuous)
+                                                             cat=LpInteger if self.__is_exact else LpContinuous)
         self.__lp_variable_variable_is_switched = LpVariable.dicts(name="s",
                                                                    indexs=incidence_graph.variable_set(copy=False),
                                                                    lowBound=0,
                                                                    upBound=1,
-                                                                   cat=LpContinuous)
+                                                                   cat=LpInteger if self.__is_exact else LpContinuous)
 
         for clause_id in incidence_graph.clause_id_set(copy=False):
             self.__clause_length_dictionary[clause_id] = incidence_graph.get_clause_length(clause_id)
