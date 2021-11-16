@@ -29,7 +29,7 @@ for dir_name, dir_path in dir_list:
 
     for experiment_name, experiment_path in experiment_dir_list:
         if experiment_name not in experiment_name_benchmark_type_dictionary:
-            print(f"For {experiment_name} is missing the type of benchmark!")
+            print(f"!!!!! For {experiment_name} is missing the type of benchmark!")
             continue
 
         benchmark_type = experiment_name_benchmark_type_dictionary[experiment_name]
