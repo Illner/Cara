@@ -1858,7 +1858,7 @@ End
 Cut set: [1, 2]
 \* NoName *\
 Maximize
-OBJ: z_0 + z_1 + z_2 + z_3
+OBJ: 0.5 z_0 + z_1 + z_2 + z_3
 Subject To
 clause_0: s_1 - s_2 + z_0 <= 1
 clause_1: s_1 - s_3 + z_1 <= 1
@@ -1934,7 +1934,7 @@ End
 Cut set: [1, 2]
 \* NoName *\
 Maximize
-OBJ: z_0 + z_1 + z_2 + 2 z_3 + z_4 + z_5
+OBJ: z_0 + 0.5 z_1 + z_2 + 2 z_3 + z_4 + z_5
 Subject To
 clause_0: s_1 <= 1
 clause_1: - s_1 + s_2 + z_1 <= 1
@@ -2016,7 +2016,7 @@ End
 Cut set: [1, 2]
 \* NoName *\
 Maximize
-OBJ: z_0 + z_1 + z_2 + 2 z_3 + z_4 + z_5
+OBJ: z_0 + 0.5 z_1 + z_2 + 2 z_3 + z_4 + z_5
 Subject To
 clause_0: - s_1 <= 0
 clause_1: s_1 - s_2 + z_1 <= 1
@@ -2078,7 +2078,7 @@ End
 Cut set: [1, 2]
 \* NoName *\
 Maximize
-OBJ: z_0 + z_1 + z_2
+OBJ: z_0 + z_1 + 0.5 z_2
 Subject To
 clause_0: - s_1 <= 0
 clause_1: - s_2 + s_3 + z_1 <= 1
@@ -2134,7 +2134,7 @@ End
 Cut set: [1, 2]
 \* NoName *\
 Maximize
-OBJ: z_0 + z_1 + z_2 + z_3
+OBJ: 0.5 z_0 + z_1 + 0.5 z_2 + 0.5 z_3
 Subject To
 clause_0: - s_1 - s_2 + z_0 <= 0
 clause_1: - s_2 + s_3 + z_1 <= 1
@@ -2204,7 +2204,7 @@ End
 Cut set: [1, 2]
 \* NoName *\
 Maximize
-OBJ: z_0 + 2 z_1 + z_2 + z_3 + 2 z_4
+OBJ: 0.5 z_0 + 2 z_1 + z_2 + z_3 + 2 z_4
 Subject To
 clause_0: s_1 + s_2 + z_0 <= 2
 clause_1: s_3 + s_4 + z_1 <= 2
@@ -2280,7 +2280,7 @@ End
 Cut set: [1, 2]
 \* NoName *\
 Maximize
-OBJ: z_0 + 2 z_1 + z_2 + z_3 + 2 z_4
+OBJ: 0.5 z_0 + 2 z_1 + z_2 + z_3 + 2 z_4
 Subject To
 clause_0: s_1 + s_2 + z_0 <= 2
 clause_1: s_3 + s_4 + z_1 <= 2
@@ -2344,7 +2344,7 @@ End
 Cut set: [1, 2]
 \* NoName *\
 Maximize
-OBJ: z_0 + z_1 + z_2 + z_3
+OBJ: z_0 + 0.5 z_1 + z_2 + z_3
 Subject To
 clause_0: - s_1 <= 0
 clause_1: s_1 - s_2 + z_1 <= 1

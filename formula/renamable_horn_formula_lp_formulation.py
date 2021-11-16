@@ -31,7 +31,7 @@ class RenamableHornFormulaLpFormulation:
     Private RenamableHornFormulaLpFormulationStatistics statistics
     """
 
-    def __init__(self, incidence_graph, number_of_threads: int = 1, is_exact: bool = False,
+    def __init__(self, incidence_graph, number_of_threads: int = 2, is_exact: bool = False,
                  objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
                  cut_set: Union[Set[int], None] = None, weight_for_clauses_without_variables_in_cut_set: int = 2,
                  statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None):
@@ -98,12 +98,20 @@ class RenamableHornFormulaLpFormulation:
             if cut_set is None:
                 raise rhflpf_exception.CutSetIsNotDefinedException()
 
-            clauses_with_variables_in_cut_set = set()
+            clauses_with_variables_in_cut_set: Set[int] = set()
+            clause_number_of_variables_in_cut_set_dictionary: Dict[int, int] = dict()
+
             for variable in cut_set:
                 temp = incidence_graph.variable_neighbour_set(variable)
                 clauses_with_variables_in_cut_set.update(temp)
 
-            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * (1 if clause_id in clauses_with_variables_in_cut_set else weight_for_clauses_without_variables_in_cut_set) for clause_id in self.__lp_variable_clause_is_horn]))
+                for clause_id in temp:
+                    if clause_id not in clause_number_of_variables_in_cut_set_dictionary:
+                        clause_number_of_variables_in_cut_set_dictionary[clause_id] = 0
+
+                    clause_number_of_variables_in_cut_set_dictionary[clause_id] += 1
+
+            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * (1/clause_number_of_variables_in_cut_set_dictionary[clause_id] if clause_id in clauses_with_variables_in_cut_set else weight_for_clauses_without_variables_in_cut_set) for clause_id in self.__lp_variable_clause_is_horn]))
         # Not implemented
         else:
             raise c_exception.FunctionNotImplementedException("__create_lp_formulation",

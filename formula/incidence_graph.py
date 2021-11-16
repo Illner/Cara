@@ -1561,8 +1561,8 @@ class IncidenceGraph(Graph):
         :param is_exact: True for integer linear programming. False for relaxed linear programming.
         :param objective_function: an objective function
         :param cut_set: a cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA)
-        :param weight_for_clauses_without_variables_in_cut_set: a weight that will be used for clauses that contain at least
-        one variable in the cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA)
+        :param weight_for_clauses_without_variables_in_cut_set: a weight that will be used for clauses that do not contain any
+        variable in the cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA)
         :return: (is_renamable_horn, conflict_variable_set, variable_score_dictionary)
         """
 
@@ -1595,12 +1595,12 @@ class IncidenceGraph(Graph):
                 variable = abs(lit)
                 switching = -1 if variable_is_switched_dictionary[variable] == 1 else 1
 
-                conflict_variable_set.add(variable)
-                if variable not in variable_score_dictionary:
-                    variable_score_dictionary[variable] = 0
-
                 # After the switching the literal is positive
                 if lit * switching > 0:
+                    if variable not in variable_score_dictionary:
+                        variable_score_dictionary[variable] = 0
+
+                    conflict_variable_set.add(variable)
                     variable_score_dictionary[variable] += 1
 
         return is_renamable_horn, conflict_variable_set, variable_score_dictionary

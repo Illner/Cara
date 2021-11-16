@@ -458,7 +458,7 @@ def create_parser() -> argparse.ArgumentParser:
                              default=2,
                              type=non_negative_int_parser,
                              metavar="[non-negative number]",
-                             help="weight that will be used for clauses that contain at least one variable in the cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA) (MaximumRenamableHornHeuristic)")
+                             help="weight that will be used for clauses that do not contain any variable in the cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA) (MaximumRenamableHornHeuristic)")
     parser_temp.add_argument("-hp_c_rmoc",
                              "--hp_cache_remove_multi_occurrent_clauses",
                              action="store",
