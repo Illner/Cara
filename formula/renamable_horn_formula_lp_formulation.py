@@ -31,7 +31,7 @@ class RenamableHornFormulaLpFormulation:
     Private RenamableHornFormulaLpFormulationStatistics statistics
     """
 
-    def __init__(self, incidence_graph, number_of_threads: int = 2, is_exact: bool = False,
+    def __init__(self, incidence_graph, number_of_threads: int = 8, is_exact: bool = False,
                  objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
                  cut_set: Union[Set[int], None] = None, weight_for_clauses_without_variables_in_cut_set: int = 2,
                  statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None):
