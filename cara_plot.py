@@ -88,6 +88,9 @@ class ExperimentEnum(str, Enum):
     BDMC_MRH_D4 = "D4 (BDMC MRH)"
     BDMC_MRH_VSADS_nA_C_P = "VSADS (-a, c, p) (BDMC MRH)"
     BDMC_MRH_VSADS_E_C_P_HF = "VSADS (e, c, p, HF)"
+    BDMC_MRH_VSADS_E_C_P_RDHF_2 = "VSADS (e, c, p, RDHF_2)"
+    BDMC_MRH_VSADS_E_C_P_SLWHF = "VSADS (e, c, p, SLWHF)"
+    BDMC_MRH_VSADS_E_C_P_SILWHF = "VSADS (e, c, p, SILWHF)"
 
     # HP cache
     HP_CACHE_NONE = "NONE"

@@ -1,7 +1,7 @@
 # Import
 import pulp
 from io import StringIO, FileIO
-from typing import Dict, Tuple, Union, TextIO, Set
+from typing import Dict, Union, TextIO, Set
 from pulp import LpVariable, LpContinuous, LpInteger, lpSum, PULP_CBC_CMD
 from compiler_statistics.formula.renamable_horn_formula_lp_formulation_statistics import RenamableHornFormulaLpFormulationStatistics
 
@@ -10,125 +10,186 @@ import exception.cara_exception as c_exception
 import exception.formula.renamable_horn_formula_lp_formulation_exception as rhflpf_exception
 
 # Import enum
-import formula.enum.lp_formulation_objective_function_enum as lpfof_enum
+import formula.enum.lp_formulation_type_enum as lpft_enum
 
 
 class RenamableHornFormulaLpFormulation:
     """
     A linear programming formulation of problem MRH
-    BOROS, Endre. Maximum renamable Horn sub-CNFs. Discrete Applied Mathematics, 1999, 96: 29-40.
     """
 
     """
     Private LpSolver lp_solver
     Private LpProblem lp_formulation
     Private Dict<int, LpVariable> lp_variable_clause_is_horn            # z_C
-    Private Dict<int, LpVariable> lp_variable_variable_is_switched      # s_j
+    Private Dict<int, LpVariable> lp_variable_variable_is_switched      # s_i
     
     Private bool is_exact
     Private Dict<int, int> clause_length_dictionary
-    Private LpFormulationObjectiveFunctionEnum objective_function
+    Private LpFormulationTypeEnum lp_formulation_type
+    Private Set<int> clauses_with_variables_in_cut_set
+    Private Dict<int, int> clause_number_of_variables_in_cut_set_dictionary
+    
     Private RenamableHornFormulaLpFormulationStatistics statistics
     """
 
     def __init__(self, incidence_graph, number_of_threads: int = 8, is_exact: bool = False,
-                 objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
-                 cut_set: Union[Set[int], None] = None, weight_for_clauses_without_variables_in_cut_set: int = 2,
-                 statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None):
+                 lp_formulation_type: lpft_enum.LpFormulationTypeEnum = lpft_enum.LpFormulationTypeEnum.HORN_FORMULA, cut_set: Union[Set[int], None] = None,
+                 weight_for_variables_not_in_cut_set: int = 2, statistics: Union[RenamableHornFormulaLpFormulationStatistics, None] = None):
         # Statistics
         if statistics is None:
             self.__statistics: RenamableHornFormulaLpFormulationStatistics = RenamableHornFormulaLpFormulationStatistics(active=False)
         else:
             self.__statistics: RenamableHornFormulaLpFormulationStatistics = statistics
 
-        self.__lp_formulation = pulp.LpProblem(sense=pulp.LpMaximize)
-
-        self.__lp_variable_clause_is_horn: Dict[int, LpVariable] = dict()
-        self.__lp_variable_variable_is_switched: Dict[int, LpVariable] = dict()
-
         self.__is_exact: bool = is_exact
         self.__clause_length_dictionary: Dict[int, int] = dict()
-        self.__objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum = objective_function
-
-        self.__statistics.create_lp_formulation.start_stopwatch()   # timer (start)
-        self.__create_lp_formulation(incidence_graph=incidence_graph,
-                                     cut_set=cut_set,
-                                     weight_for_clauses_without_variables_in_cut_set=weight_for_clauses_without_variables_in_cut_set)
-        self.__statistics.create_lp_formulation.stop_stopwatch()    # timer (stop)
+        self.__lp_formulation_type: lpft_enum.LpFormulationTypeEnum = lp_formulation_type
 
         self.__lp_solver = PULP_CBC_CMD(msg=False,
                                         threads=number_of_threads)
 
-    # region Private method
-    def __create_lp_formulation(self, incidence_graph, cut_set: Union[Set[int], None], weight_for_clauses_without_variables_in_cut_set: int) -> None:
+        self.__statistics.create_lp_formulation.start_stopwatch()   # timer (start)
+
         # Variables
-        self.__lp_variable_clause_is_horn = LpVariable.dicts(name="z",
-                                                             indexs=incidence_graph.clause_id_set(copy=False),
-                                                             lowBound=0,
-                                                             upBound=1,
-                                                             cat=LpInteger if self.__is_exact else LpContinuous)
+        self.__lp_variable_clause_is_horn: Union[Dict[int, LpVariable], None] = None
         self.__lp_variable_variable_is_switched = LpVariable.dicts(name="s",
                                                                    indexs=incidence_graph.variable_set(copy=False),
                                                                    lowBound=0,
                                                                    upBound=1,
                                                                    cat=LpInteger if self.__is_exact else LpContinuous)
 
+        # Clause length
         for clause_id in incidence_graph.clause_id_set(copy=False):
             self.__clause_length_dictionary[clause_id] = incidence_graph.get_clause_length(clause_id)
 
-        # Objective function
-        # HORN_FORMULA
-        if self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA:
-            self.__lp_formulation.setObjective(lpSum(self.__lp_variable_clause_is_horn))
-        # LENGTH_WEIGHTED_HORN_FORMULA
-        elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.LENGTH_WEIGHTED_HORN_FORMULA:
-            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * self.__clause_length_dictionary[clause_id] for clause_id in self.__lp_variable_clause_is_horn]))
-        # SQUARED_LENGTH_WEIGHTED_HORN_FORMULA
-        elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.SQUARED_LENGTH_WEIGHTED_HORN_FORMULA:
-            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * (self.__clause_length_dictionary[clause_id] ** 2) for clause_id in self.__lp_variable_clause_is_horn]))
-        # INVERSE_LENGTH_WEIGHTED_HORN_FORMULA
-        elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.INVERSE_LENGTH_WEIGHTED_HORN_FORMULA:
-            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * 1/self.__clause_length_dictionary[clause_id] for clause_id in self.__lp_variable_clause_is_horn]))
-        # SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA
-        elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA:
-            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * ((1/self.__clause_length_dictionary[clause_id]) ** 2) for clause_id in self.__lp_variable_clause_is_horn]))
-        # RESPECT_DECOMPOSITION_HORN_FORMULA
-        elif self.__objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.RESPECT_DECOMPOSITION_HORN_FORMULA:
+        # Cut set
+        self.__clauses_with_variables_in_cut_set: Set[int] = set()
+        self.__clause_number_of_variables_in_cut_set_dictionary: Dict[int, int] = dict()
+
+        if self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_HORN_FORMULA:
+
             # Cut set is not defined
             if cut_set is None:
-                raise rhflpf_exception.CutSetIsNotDefinedException()
-
-            clauses_with_variables_in_cut_set: Set[int] = set()
-            clause_number_of_variables_in_cut_set_dictionary: Dict[int, int] = dict()
+                raise rhflpf_exception.CutSetIsNotDefinedException(self.__lp_formulation_type)
 
             for variable in cut_set:
                 temp = incidence_graph.variable_neighbour_set(variable)
-                clauses_with_variables_in_cut_set.update(temp)
+                self.__clauses_with_variables_in_cut_set.update(temp)
 
                 for clause_id in temp:
-                    if clause_id not in clause_number_of_variables_in_cut_set_dictionary:
-                        clause_number_of_variables_in_cut_set_dictionary[clause_id] = 0
+                    if clause_id not in self.__clause_number_of_variables_in_cut_set_dictionary:
+                        self.__clause_number_of_variables_in_cut_set_dictionary[clause_id] = 0
 
-                    clause_number_of_variables_in_cut_set_dictionary[clause_id] += 1
+                    self.__clause_number_of_variables_in_cut_set_dictionary[clause_id] += 1
 
-            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * (1/clause_number_of_variables_in_cut_set_dictionary[clause_id] if clause_id in clauses_with_variables_in_cut_set else weight_for_clauses_without_variables_in_cut_set) for clause_id in self.__lp_variable_clause_is_horn]))
+        # Number of Horn formulae
+        if (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.HORN_FORMULA) or \
+           (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.LENGTH_WEIGHTED_HORN_FORMULA) or \
+           (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.SQUARED_LENGTH_WEIGHTED_HORN_FORMULA) or \
+           (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.INVERSE_LENGTH_WEIGHTED_HORN_FORMULA) or \
+           (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA) or \
+           (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_HORN_FORMULA):
+
+            self.__lp_formulation = pulp.LpProblem(name="Number_of_Horn_formulae",
+                                                   sense=pulp.LpMaximize)
+            self.__create_lp_formulation_number_of_horn_formulae(incidence_graph=incidence_graph,
+                                                                 weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
+
+        # Number of edges
+        elif (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.NUMBER_OF_EDGES) or \
+             (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_EDGES):
+
+            self.__lp_formulation = pulp.LpProblem(name="Number_of_edges",
+                                                   sense=pulp.LpMinimize)
+            self.__create_lp_formulation_number_edges(incidence_graph=incidence_graph,
+                                                      weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
+
+        # Number of vertices
+        elif (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.NUMBER_OF_VERTICES) or \
+             (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES):
+
+            self.__lp_formulation = pulp.LpProblem(name="Number_of_vertices",
+                                                   sense=pulp.LpMinimize)
+            self.__create_lp_formulation_number_vertices(incidence_graph=incidence_graph,
+                                                         weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
+
+        # Vertex cover
+        elif (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.VERTEX_COVER) or \
+             (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_VERTEX_COVER):
+
+            self.__lp_formulation = pulp.LpProblem(name="Vertex_cover",
+                                                   sense=pulp.LpMinimize)
+            self.__create_lp_formulation_vertex_cover(incidence_graph=incidence_graph,
+                                                      weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
+
         # Not implemented
         else:
-            raise c_exception.FunctionNotImplementedException("__create_lp_formulation",
-                                                              f"this type of objective function ({self.__objective_function.name}) is not implemented")
+            raise c_exception.FunctionNotImplementedException("renamable_horn_formula_lp_formulation",
+                                                              f"this type of LP formulation ({self.__lp_formulation_type.name}) is not implemented")
+
+        self.__statistics.create_lp_formulation.stop_stopwatch()    # timer (stop)
+
+    # region Private method
+    def __create_lp_formulation_number_of_horn_formulae(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
+        # Variables
+        self.__lp_variable_clause_is_horn = LpVariable.dicts(name="z",
+                                                             indexs=incidence_graph.clause_id_set(copy=False),
+                                                             lowBound=0,
+                                                             upBound=1,
+                                                             cat=LpInteger if self.__is_exact else LpContinuous)
 
         # Constraints
         for clause_id in self.__lp_variable_clause_is_horn:
             clause = incidence_graph.get_clause(clause_id=clause_id, copy=False)
             clause_length = self.__clause_length_dictionary[clause_id]
             self.__lp_formulation.addConstraint(lpSum([self.__lp_variable_variable_is_switched[abs(lit)] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[abs(lit)]) for lit in clause]) <= clause_length - self.__lp_variable_clause_is_horn[clause_id] * (clause_length - 1), f"clause_{clause_id}")
+
+        # Objective function
+        # HORN_FORMULA
+        if self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.HORN_FORMULA:
+            self.__lp_formulation.setObjective(lpSum(self.__lp_variable_clause_is_horn))
+
+        # LENGTH_WEIGHTED_HORN_FORMULA
+        elif self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.LENGTH_WEIGHTED_HORN_FORMULA:
+            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * self.__clause_length_dictionary[clause_id] for clause_id in self.__lp_variable_clause_is_horn]))
+
+        # SQUARED_LENGTH_WEIGHTED_HORN_FORMULA
+        elif self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.SQUARED_LENGTH_WEIGHTED_HORN_FORMULA:
+            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * (self.__clause_length_dictionary[clause_id] ** 2) for clause_id in self.__lp_variable_clause_is_horn]))
+
+        # INVERSE_LENGTH_WEIGHTED_HORN_FORMULA
+        elif self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.INVERSE_LENGTH_WEIGHTED_HORN_FORMULA:
+            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * 1/self.__clause_length_dictionary[clause_id] for clause_id in self.__lp_variable_clause_is_horn]))
+
+        # SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA
+        elif self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA:
+            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * ((1/self.__clause_length_dictionary[clause_id]) ** 2) for clause_id in self.__lp_variable_clause_is_horn]))
+
+        # RESPECT_DECOMPOSITION_HORN_FORMULA
+        elif self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_HORN_FORMULA:
+            self.__lp_formulation.setObjective(lpSum([self.__lp_variable_clause_is_horn[clause_id] * (1/self.__clause_number_of_variables_in_cut_set_dictionary[clause_id] if clause_id in self.__clauses_with_variables_in_cut_set else weight_for_variables_not_in_cut_set) for clause_id in self.__lp_variable_clause_is_horn]))
+
+        # Not implemented
+        else:
+            raise c_exception.FunctionNotImplementedException("__create_lp_formulation_number_of_horn_formulae",
+                                                              f"this type of LP formulation ({self.__lp_formulation_type.name}) is not implemented")
+
+    def __create_lp_formulation_number_edges(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
+        pass
+
+    def __create_lp_formulation_number_vertices(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
+        pass
+
+    def __create_lp_formulation_vertex_cover(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
+        pass
     # endregion
 
     # region Public method
-    def solve(self) -> Tuple[Dict[int, float], Dict[int, float]]:
+    def solve(self) -> Dict[int, float]:
         """
         Solve the LP problem
-        :return: (variable, probability of switching), (clause_id, probability of being Horn)
+        :return: (variable, probability of switching)
         :raises SolutionDoesNotExistException: a solution does not exist
         """
 
@@ -142,7 +203,6 @@ class RenamableHornFormulaLpFormulation:
         if status != pulp.LpStatusOptimal:
             raise rhflpf_exception.SolutionDoesNotExistException(status)
 
-        horn_dictionary: Dict[int, float] = dict()
         switching_dictionary: Dict[int, float] = dict()
 
         # Switching
@@ -155,22 +215,21 @@ class RenamableHornFormulaLpFormulation:
 
         self.__statistics.switching_average.add_count(switching_sum / len(self.__lp_variable_variable_is_switched))  # counter
 
-        # Horn
-        horn_clauses_after_switching_sum = 0
-        horn_clauses_after_switching_length = 0
-        for clause_id in self.__lp_variable_clause_is_horn:
-            z_i = self.__lp_variable_clause_is_horn[clause_id].varValue
-            horn_dictionary[clause_id] = z_i
+        # Horn - statistics
+        if self.__lp_variable_clause_is_horn is not None:
+            horn_clauses_after_switching_sum = 0
+            horn_clauses_after_switching_length = 0
+            for clause_id in self.__lp_variable_clause_is_horn:
+                z_i = self.__lp_variable_clause_is_horn[clause_id].varValue
+                horn_clauses_after_switching_sum += z_i
+                horn_clauses_after_switching_length += z_i * self.__clause_length_dictionary[clause_id]
 
-            horn_clauses_after_switching_sum += z_i
-            horn_clauses_after_switching_length += z_i * self.__clause_length_dictionary[clause_id]
-
-        self.__statistics.horn_clauses_after_switching_average.add_count(horn_clauses_after_switching_sum / len(self.__lp_variable_clause_is_horn))     # counter
-        self.__statistics.horn_clauses_after_switching_length.add_count(horn_clauses_after_switching_length / len(self.__lp_variable_clause_is_horn))   # counter
+            self.__statistics.horn_clauses_after_switching_average.add_count(horn_clauses_after_switching_sum / len(self.__lp_variable_clause_is_horn))     # counter
+            self.__statistics.horn_clauses_after_switching_length.add_count(horn_clauses_after_switching_length / len(self.__lp_variable_clause_is_horn))   # counter
 
         self.__statistics.solve_lp_problem.stop_stopwatch()     # timer (stop)
 
-        return switching_dictionary, horn_dictionary
+        return switching_dictionary
 
     def save_to_io(self, source: Union[FileIO, StringIO, TextIO]) -> None:
         """

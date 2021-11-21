@@ -19,8 +19,8 @@ import exception.formula.incidence_graph_exception as ig_exception
 
 # Import enum
 import formula.enum.pysat_cnf_enum as psc_enum
+import formula.enum.lp_formulation_type_enum as lpft_enum
 import formula.enum.eliminating_redundant_clauses_enum as erc_enum
-import formula.enum.lp_formulation_objective_function_enum as lpfof_enum
 
 # Type
 TIncidenceGraph = TypeVar("TIncidenceGraph", bound="IncidenceGraph")
@@ -1554,27 +1554,26 @@ class IncidenceGraph(Graph):
 
         return True, renaming_function
 
-    def get_maximum_renamable_horn_subformula(self, is_exact: bool, objective_function: lpfof_enum.LpFormulationObjectiveFunctionEnum, cut_set: Union[Set[int], None],
-                                              weight_for_clauses_without_variables_in_cut_set: int) -> Tuple[bool, Set[int], Dict[int, int]]:
+    def get_maximum_renamable_horn_subformula(self, is_exact: bool, lp_formulation_type: lpft_enum.LpFormulationTypeEnum, cut_set: Union[Set[int], None],
+                                              weight_for_variables_not_in_cut_set: int) -> Tuple[bool, Set[int], Dict[int, int]]:
         """
         Construct a linear programming formulation of the problem and solve it.
         :param is_exact: True for integer linear programming. False for relaxed linear programming.
-        :param objective_function: an objective function
-        :param cut_set: a cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA)
-        :param weight_for_clauses_without_variables_in_cut_set: a weight that will be used for clauses that do not contain any
-        variable in the cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA)
+        :param lp_formulation_type: a linear programming formulation type
+        :param cut_set: a cut set (only for "weighted formulations")
+        :param weight_for_variables_not_in_cut_set: a weight used for variables that are not in the cut set (only for "weighted LP formulations")
         :return: (is_renamable_horn, conflict_variable_set, variable_score_dictionary)
         """
 
         renamable_horn_formula_lp_formulation = RenamableHornFormulaLpFormulation(incidence_graph=self,
                                                                                   is_exact=is_exact,
-                                                                                  objective_function=objective_function,
+                                                                                  lp_formulation_type=lp_formulation_type,
                                                                                   cut_set=cut_set,
-                                                                                  weight_for_clauses_without_variables_in_cut_set=weight_for_clauses_without_variables_in_cut_set,
+                                                                                  weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set,
                                                                                   statistics=self.__renamable_horn_formula_lp_formulation_statistics)
-        variable_is_switched_dictionary, clause_is_horn_dictionary = renamable_horn_formula_lp_formulation.solve()
+        variable_is_switched_dictionary = renamable_horn_formula_lp_formulation.solve()
 
-        # Relaxation is used => variable's values have to be rounded
+        # Relaxation is used => values have to be rounded
         if not is_exact:
             raise NotImplemented()
 
@@ -1582,14 +1581,9 @@ class IncidenceGraph(Graph):
         conflict_variable_set: Set[int] = set()
         variable_score_dictionary: Dict[int, int] = dict()
 
-        for clause_id in clause_is_horn_dictionary:
-            # The clause is Horn
-            if clause_is_horn_dictionary[clause_id] == 1:
-                continue
-
-            is_renamable_horn = False
-
-            clause = self.get_clause(clause_id, copy=False)
+        for clause_id in self.clause_id_set(copy=False):
+            number_of_positive_literals: int = 0
+            clause = self.get_clause(clause_id=clause_id, copy=False)
 
             for lit in clause:
                 variable = abs(lit)
@@ -1597,11 +1591,17 @@ class IncidenceGraph(Graph):
 
                 # After the switching the literal is positive
                 if lit * switching > 0:
+                    number_of_positive_literals += 1
+
                     if variable not in variable_score_dictionary:
                         variable_score_dictionary[variable] = 0
 
                     conflict_variable_set.add(variable)
                     variable_score_dictionary[variable] += 1
+
+            # The clause is not Horn after the switching
+            if number_of_positive_literals > 1:
+                is_renamable_horn = False
 
         return is_renamable_horn, conflict_variable_set, variable_score_dictionary
     # endregion

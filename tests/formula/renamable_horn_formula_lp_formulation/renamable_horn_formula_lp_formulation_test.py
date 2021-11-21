@@ -8,7 +8,7 @@ from formula.renamable_horn_formula_lp_formulation import RenamableHornFormulaLp
 import exception.cara_exception as c_exception
 
 # Import enum
-import formula.enum.lp_formulation_objective_function_enum as lpfof_enum
+import formula.enum.lp_formulation_type_enum as lpft_enum
 
 
 class RenamableHornFormulaLpFormulationTest(TestAbstract):
@@ -21,8 +21,8 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
     # region Override method
     def _get_actual_result(self) -> str:
         actual_result = ""
-        test_list = [("LP formulation", self.__test_1),
-                     ("LP formulation (RESPECT_DECOMPOSITION_HORN_FORMULA)", self.__test_2)]
+        test_list = [("LP formulation - number of Horn formulae", self.__test_1),
+                     ("LP formulation - number of Horn formulae (RESPECT_DECOMPOSITION_HORN_FORMULA)", self.__test_2)]
 
         for test_name, test in test_list:
             try:
@@ -36,7 +36,7 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
     # region Private method
     def __test_1(self) -> str:
         """
-        A test for LP formulation.
+        A test for LP formulation (number of Horn formulae).
         Positive
         :return: the result of the test
         """
@@ -50,19 +50,18 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
                 cnf = Cnf(file_path)
                 incidence_graph = cnf.get_incidence_graph(copy=False)
 
-                for objective_function in lpfof_enum.lp_formulation_objective_function_enum_values:
-                    if objective_function == lpfof_enum.LpFormulationObjectiveFunctionEnum.RESPECT_DECOMPOSITION_HORN_FORMULA:
-                        continue
-
+                for lp_formulation_type in [lpft_enum.LpFormulationTypeEnum.HORN_FORMULA,
+                                            lpft_enum.LpFormulationTypeEnum.LENGTH_WEIGHTED_HORN_FORMULA, lpft_enum.LpFormulationTypeEnum.SQUARED_LENGTH_WEIGHTED_HORN_FORMULA,
+                                            lpft_enum.LpFormulationTypeEnum.INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, lpft_enum.LpFormulationTypeEnum.SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA]:
                     for is_exact in [True, False]:
                         try:
-                            result = "\n".join((result, f"Objective function: {lpfof_enum.LpFormulationObjectiveFunctionEnum._value2member_map_[objective_function].name}, "
+                            result = "\n".join((result, f"LP formulation type: {lpft_enum.LpFormulationTypeEnum._value2member_map_[lp_formulation_type].name}, "
                                                         f"is exact: {is_exact}"))
 
                             renamable_horn_formula_lp_formulation = RenamableHornFormulaLpFormulation(incidence_graph=incidence_graph,
                                                                                                       number_of_threads=0,
                                                                                                       is_exact=is_exact,
-                                                                                                      objective_function=objective_function)
+                                                                                                      lp_formulation_type=lp_formulation_type)
                             result = "\n".join((result, str(renamable_horn_formula_lp_formulation)))
 
                             _ = renamable_horn_formula_lp_formulation.solve()
@@ -77,7 +76,7 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
 
     def __test_2(self) -> str:
         """
-        A test for LP formulation (RESPECT_DECOMPOSITION_HORN_FORMULA)
+        A test for LP formulation (number of Horn formulae - RESPECT_DECOMPOSITION_HORN_FORMULA).
         Positive
         :return: the result of the test
         """
@@ -98,9 +97,9 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
                         renamable_horn_formula_lp_formulation = RenamableHornFormulaLpFormulation(incidence_graph=incidence_graph,
                                                                                                   number_of_threads=0,
                                                                                                   is_exact=True,
-                                                                                                  objective_function=lpfof_enum.LpFormulationObjectiveFunctionEnum.RESPECT_DECOMPOSITION_HORN_FORMULA,
+                                                                                                  lp_formulation_type=lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_HORN_FORMULA,
                                                                                                   cut_set=cut_set,
-                                                                                                  weight_for_clauses_without_variables_in_cut_set=2)
+                                                                                                  weight_for_variables_not_in_cut_set=2)
                         result = "\n".join((result, str(renamable_horn_formula_lp_formulation)))
 
                         _ = renamable_horn_formula_lp_formulation.solve()

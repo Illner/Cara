@@ -16,10 +16,10 @@ import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.component_caching_enum as cc_enum
+import formula.enum.lp_formulation_type_enum as lpft_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
-import formula.enum.lp_formulation_objective_function_enum as lpfof_enum
 import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
@@ -95,8 +95,8 @@ def main(main_args):
                             decision_heuristic_maximum_renamable_horn_is_exact=main_args.dh_mrh_exact,
                             decision_heuristic_maximum_renamable_horn_use_conflicts=main_args.dh_mrh_use_conflicts,
                             decision_heuristic_maximum_renamable_horn_prefer_conflict_variables=main_args.dh_mrh_prefer_conflict_variables,
-                            decision_heuristic_maximum_renamable_horn_objective_function=lpfof_enum.LpFormulationObjectiveFunctionEnum[main_args.dh_mrh_objective_function],
-                            decision_heuristic_maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set=main_args.dh_mrh_weight_for_clauses_without_variables_in_cut_set,
+                            decision_heuristic_maximum_renamable_horn_lp_formulation_type=lpft_enum.LpFormulationTypeEnum[main_args.dh_mrh_lp_formulation_type],
+                            decision_heuristic_maximum_renamable_horn_weight_for_variables_not_in_cut_set=main_args.dh_mrh_weight_for_variables_not_in_cut_set,
                             decision_heuristic_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum[main_args.dh_preselection_heuristic],
                             decision_heuristic_preselection_heuristic_prop_z_depth_threshold=main_args.dh_ph_prop_z_depth_threshold,
                             decision_heuristic_preselection_heuristic_prop_z_number_of_variables_lower_bound=main_args.dh_ph_prop_z_number_of_variables_lower_bound,
@@ -445,20 +445,20 @@ def create_parser() -> argparse.ArgumentParser:
                              type=str_to_bool_parser,
                              metavar="[True, False]",
                              help="prefer conflict variables (MaximumRenamableHornHeuristic)")
-    parser_temp.add_argument("-dh_mrh_of",
-                             "--dh_mrh_objective_function",
+    parser_temp.add_argument("-dh_mrh_lpft",
+                             "--dh_mrh_lp_formulation_type",
                              action="store",
-                             default=lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA.name,
+                             default=lpft_enum.LpFormulationTypeEnum.HORN_FORMULA.name,
                              type=str,
-                             choices=lpfof_enum.lp_formulation_objective_function_enum_names,
-                             help="objective function (MaximumRenamableHornHeuristic)")
-    parser_temp.add_argument("-dh_mrh_wfcwvics",
-                             "--dh_mrh_weight_for_clauses_without_variables_in_cut_set",
+                             choices=lpft_enum.lp_formulation_type_enum_names,
+                             help="LP formulation type (MaximumRenamableHornHeuristic)")
+    parser_temp.add_argument("-dh_mrh_wfvnics",
+                             "--dh_mrh_weight_for_variables_not_in_cut_set",
                              action="store",
                              default=2,
                              type=non_negative_int_parser,
                              metavar="[non-negative number]",
-                             help="weight that will be used for clauses that do not contain any variable in the cut set (only for RESPECT_DECOMPOSITION_HORN_FORMULA) (MaximumRenamableHornHeuristic)")
+                             help="weight used for variables that are not in the cut set (only for \"weighted LP formulations\") (MaximumRenamableHornHeuristic)")
     parser_temp.add_argument("-hp_c_rmoc",
                              "--hp_cache_remove_multi_occurrent_clauses",
                              action="store",

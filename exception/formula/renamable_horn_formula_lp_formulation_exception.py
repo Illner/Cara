@@ -4,6 +4,9 @@ from pulp import LpStatus
 # Import exception
 from exception.cara_exception import CaraException
 
+# Import enum
+import formula.enum.lp_formulation_type_enum as lpft_enum
+
 
 class RenamableHornFormulaLpFormulationException(CaraException):
     def __init__(self, message: str):
@@ -25,6 +28,6 @@ class CutSetIsNotDefinedException(RenamableHornFormulaLpFormulationException):
     A cut set is not defined
     """
 
-    def __init__(self):
-        self.message = "A cut set is necessary for this objective function (RESPECT_DECOMPOSITION_HORN_FORMULA)!"
+    def __init__(self, lp_formulation_type: lpft_enum.LpFormulationTypeEnum):
+        self.message = f"A cut set is necessary for this LP formulation type ({lp_formulation_type.name})!"
         super().__init__(self.message)

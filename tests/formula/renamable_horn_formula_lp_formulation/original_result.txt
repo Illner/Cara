@@ -1,9 +1,9 @@
 
-LP formulation
+LP formulation - number of Horn formulae
 
 2_cnf.cnf
-Objective function: HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3
 Subject To
@@ -23,8 +23,8 @@ z_2
 z_3
 End
 
-Objective function: HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3
 Subject To
@@ -44,8 +44,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3
 Subject To
@@ -65,8 +65,8 @@ z_2
 z_3
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3
 Subject To
@@ -86,8 +86,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 4 z_0 + 4 z_1 + 4 z_2 + 4 z_3
 Subject To
@@ -107,8 +107,8 @@ z_2
 z_3
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 4 z_0 + 4 z_1 + 4 z_2 + 4 z_3
 Subject To
@@ -128,8 +128,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 0.5 z_1 + 0.5 z_2 + 0.5 z_3
 Subject To
@@ -149,8 +149,8 @@ z_2
 z_3
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 0.5 z_1 + 0.5 z_2 + 0.5 z_3
 Subject To
@@ -170,8 +170,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.25 z_0 + 0.25 z_1 + 0.25 z_2 + 0.25 z_3
 Subject To
@@ -191,8 +191,8 @@ z_2
 z_3
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.25 z_0 + 0.25 z_1 + 0.25 z_2 + 0.25 z_3
 Subject To
@@ -213,8 +213,8 @@ Bounds
 End
 
 dual_horn.cnf
-Objective function: HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3 + z_4 + z_5
 Subject To
@@ -240,8 +240,8 @@ z_4
 z_5
 End
 
-Objective function: HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3 + z_4 + z_5
 Subject To
@@ -267,8 +267,8 @@ Bounds
  z_5 <= 1
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 4 z_3 + 2 z_4 + 2 z_5
 Subject To
@@ -294,8 +294,8 @@ z_4
 z_5
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 4 z_3 + 2 z_4 + 2 z_5
 Subject To
@@ -321,8 +321,8 @@ Bounds
  z_5 <= 1
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 4 z_1 + 4 z_2 + 16 z_3 + 4 z_4 + 4 z_5
 Subject To
@@ -348,8 +348,8 @@ z_4
 z_5
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 4 z_1 + 4 z_2 + 16 z_3 + 4 z_4 + 4 z_5
 Subject To
@@ -375,8 +375,8 @@ Bounds
  z_5 <= 1
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + 0.5 z_2 + 0.25 z_3 + 0.5 z_4 + 0.5 z_5
 Subject To
@@ -402,8 +402,8 @@ z_4
 z_5
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + 0.5 z_2 + 0.25 z_3 + 0.5 z_4 + 0.5 z_5
 Subject To
@@ -429,8 +429,8 @@ Bounds
  z_5 <= 1
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.25 z_1 + 0.25 z_2 + 0.0625 z_3 + 0.25 z_4 + 0.25 z_5
 Subject To
@@ -456,8 +456,8 @@ z_4
 z_5
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.25 z_1 + 0.25 z_2 + 0.0625 z_3 + 0.25 z_4 + 0.25 z_5
 Subject To
@@ -484,8 +484,8 @@ Bounds
 End
 
 horn.cnf
-Objective function: HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3 + z_4 + z_5
 Subject To
@@ -511,8 +511,8 @@ z_4
 z_5
 End
 
-Objective function: HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3 + z_4 + z_5
 Subject To
@@ -538,8 +538,8 @@ Bounds
  z_5 <= 1
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 4 z_3 + 2 z_4 + 2 z_5
 Subject To
@@ -565,8 +565,8 @@ z_4
 z_5
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 4 z_3 + 2 z_4 + 2 z_5
 Subject To
@@ -592,8 +592,8 @@ Bounds
  z_5 <= 1
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 4 z_1 + 4 z_2 + 16 z_3 + 4 z_4 + 4 z_5
 Subject To
@@ -619,8 +619,8 @@ z_4
 z_5
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 4 z_1 + 4 z_2 + 16 z_3 + 4 z_4 + 4 z_5
 Subject To
@@ -646,8 +646,8 @@ Bounds
  z_5 <= 1
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + 0.5 z_2 + 0.25 z_3 + 0.5 z_4 + 0.5 z_5
 Subject To
@@ -673,8 +673,8 @@ z_4
 z_5
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + 0.5 z_2 + 0.25 z_3 + 0.5 z_4 + 0.5 z_5
 Subject To
@@ -700,8 +700,8 @@ Bounds
  z_5 <= 1
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.25 z_1 + 0.25 z_2 + 0.0625 z_3 + 0.25 z_4 + 0.25 z_5
 Subject To
@@ -727,8 +727,8 @@ z_4
 z_5
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.25 z_1 + 0.25 z_2 + 0.0625 z_3 + 0.25 z_4 + 0.25 z_5
 Subject To
@@ -755,8 +755,8 @@ Bounds
 End
 
 no_horn.cnf
-Objective function: HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2
 Subject To
@@ -772,8 +772,8 @@ z_1
 z_2
 End
 
-Objective function: HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2
 Subject To
@@ -789,8 +789,8 @@ Bounds
  z_2 <= 1
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2
 Subject To
@@ -806,8 +806,8 @@ z_1
 z_2
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2
 Subject To
@@ -823,8 +823,8 @@ Bounds
  z_2 <= 1
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 4 z_1 + 4 z_2
 Subject To
@@ -840,8 +840,8 @@ z_1
 z_2
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 4 z_1 + 4 z_2
 Subject To
@@ -857,8 +857,8 @@ Bounds
  z_2 <= 1
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + 0.5 z_2
 Subject To
@@ -874,8 +874,8 @@ z_1
 z_2
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + 0.5 z_2
 Subject To
@@ -891,8 +891,8 @@ Bounds
  z_2 <= 1
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.25 z_1 + 0.25 z_2
 Subject To
@@ -908,8 +908,8 @@ z_1
 z_2
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.25 z_1 + 0.25 z_2
 Subject To
@@ -926,8 +926,8 @@ Bounds
 End
 
 no_horn_2.cnf
-Objective function: HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3
 Subject To
@@ -945,8 +945,8 @@ z_2
 z_3
 End
 
-Objective function: HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3
 Subject To
@@ -964,8 +964,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 3 z_2 + 3 z_3
 Subject To
@@ -983,8 +983,8 @@ z_2
 z_3
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 3 z_2 + 3 z_3
 Subject To
@@ -1002,8 +1002,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 4 z_0 + 4 z_1 + 9 z_2 + 9 z_3
 Subject To
@@ -1021,8 +1021,8 @@ z_2
 z_3
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 4 z_0 + 4 z_1 + 9 z_2 + 9 z_3
 Subject To
@@ -1040,8 +1040,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 0.5 z_1 + 0.333333333333 z_2 + 0.333333333333 z_3
 Subject To
@@ -1059,8 +1059,8 @@ z_2
 z_3
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 0.5 z_1 + 0.333333333333 z_2 + 0.333333333333 z_3
 Subject To
@@ -1078,8 +1078,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.25 z_0 + 0.25 z_1 + 0.111111111111 z_2 + 0.111111111111 z_3
 Subject To
@@ -1097,8 +1097,8 @@ z_2
 z_3
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.25 z_0 + 0.25 z_1 + 0.111111111111 z_2 + 0.111111111111 z_3
 Subject To
@@ -1117,8 +1117,8 @@ Bounds
 End
 
 no_positive.cnf
-Objective function: HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3 + z_4
 Subject To
@@ -1142,8 +1142,8 @@ z_3
 z_4
 End
 
-Objective function: HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3 + z_4
 Subject To
@@ -1167,8 +1167,8 @@ Bounds
  z_4 <= 1
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 3 z_2 + 5 z_3 + z_4
 Subject To
@@ -1192,8 +1192,8 @@ z_3
 z_4
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 3 z_2 + 5 z_3 + z_4
 Subject To
@@ -1217,8 +1217,8 @@ Bounds
  z_4 <= 1
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 4 z_0 + 4 z_1 + 9 z_2 + 25 z_3 + z_4
 Subject To
@@ -1242,8 +1242,8 @@ z_3
 z_4
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 4 z_0 + 4 z_1 + 9 z_2 + 25 z_3 + z_4
 Subject To
@@ -1267,8 +1267,8 @@ Bounds
  z_4 <= 1
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 0.5 z_1 + 0.333333333333 z_2 + 0.2 z_3 + z_4
 Subject To
@@ -1292,8 +1292,8 @@ z_3
 z_4
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 0.5 z_1 + 0.333333333333 z_2 + 0.2 z_3 + z_4
 Subject To
@@ -1317,8 +1317,8 @@ Bounds
  z_4 <= 1
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.25 z_0 + 0.25 z_1 + 0.111111111111 z_2 + 0.04 z_3 + z_4
 Subject To
@@ -1342,8 +1342,8 @@ z_3
 z_4
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.25 z_0 + 0.25 z_1 + 0.111111111111 z_2 + 0.04 z_3 + z_4
 Subject To
@@ -1368,8 +1368,8 @@ Bounds
 End
 
 renamable_horn.cnf
-Objective function: HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3 + z_4
 Subject To
@@ -1393,8 +1393,8 @@ z_3
 z_4
 End
 
-Objective function: HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3 + z_4
 Subject To
@@ -1418,8 +1418,8 @@ Bounds
  z_4 <= 1
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 3 z_2 + 5 z_3 + z_4
 Subject To
@@ -1443,8 +1443,8 @@ z_3
 z_4
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 3 z_2 + 5 z_3 + z_4
 Subject To
@@ -1468,8 +1468,8 @@ Bounds
  z_4 <= 1
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 4 z_0 + 4 z_1 + 9 z_2 + 25 z_3 + z_4
 Subject To
@@ -1493,8 +1493,8 @@ z_3
 z_4
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 4 z_0 + 4 z_1 + 9 z_2 + 25 z_3 + z_4
 Subject To
@@ -1518,8 +1518,8 @@ Bounds
  z_4 <= 1
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 0.5 z_1 + 0.333333333333 z_2 + 0.2 z_3 + z_4
 Subject To
@@ -1543,8 +1543,8 @@ z_3
 z_4
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 0.5 z_1 + 0.333333333333 z_2 + 0.2 z_3 + z_4
 Subject To
@@ -1568,8 +1568,8 @@ Bounds
  z_4 <= 1
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.25 z_0 + 0.25 z_1 + 0.111111111111 z_2 + 0.04 z_3 + z_4
 Subject To
@@ -1593,8 +1593,8 @@ z_3
 z_4
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.25 z_0 + 0.25 z_1 + 0.111111111111 z_2 + 0.04 z_3 + z_4
 Subject To
@@ -1619,8 +1619,8 @@ Bounds
 End
 
 unsatisfiable.cnf
-Objective function: HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3
 Subject To
@@ -1638,8 +1638,8 @@ z_2
 z_3
 End
 
-Objective function: HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3
 Subject To
@@ -1657,8 +1657,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 2 z_3
 Subject To
@@ -1676,8 +1676,8 @@ z_2
 z_3
 End
 
-Objective function: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 2 z_3
 Subject To
@@ -1695,8 +1695,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 4 z_1 + 4 z_2 + 4 z_3
 Subject To
@@ -1714,8 +1714,8 @@ z_2
 z_3
 End
 
-Objective function: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 4 z_1 + 4 z_2 + 4 z_3
 Subject To
@@ -1733,8 +1733,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + 0.5 z_2 + 0.5 z_3
 Subject To
@@ -1752,8 +1752,8 @@ z_2
 z_3
 End
 
-Objective function: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + 0.5 z_2 + 0.5 z_3
 Subject To
@@ -1771,8 +1771,8 @@ Bounds
  z_3 <= 1
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: True
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.25 z_1 + 0.25 z_2 + 0.25 z_3
 Subject To
@@ -1790,8 +1790,8 @@ z_2
 z_3
 End
 
-Objective function: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
-\* NoName *\
+LP formulation type: SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA, is exact: False
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.25 z_1 + 0.25 z_2 + 0.25 z_3
 Subject To
@@ -1810,11 +1810,11 @@ Bounds
 End
 
 
-LP formulation (RESPECT_DECOMPOSITION_HORN_FORMULA)
+LP formulation - number of Horn formulae (RESPECT_DECOMPOSITION_HORN_FORMULA)
 
 2_cnf.cnf
 Cut set: []
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3
 Subject To
@@ -1835,7 +1835,7 @@ z_3
 End
 
 Cut set: [2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 2 z_3
 Subject To
@@ -1856,7 +1856,7 @@ z_3
 End
 
 Cut set: [1, 2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + z_1 + z_2 + z_3
 Subject To
@@ -1878,7 +1878,7 @@ End
 
 dual_horn.cnf
 Cut set: []
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4 + 2 z_5
 Subject To
@@ -1905,7 +1905,7 @@ z_5
 End
 
 Cut set: [2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + z_1 + z_2 + 2 z_3 + 2 z_4 + 2 z_5
 Subject To
@@ -1932,7 +1932,7 @@ z_5
 End
 
 Cut set: [1, 2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + z_2 + 2 z_3 + z_4 + z_5
 Subject To
@@ -1960,7 +1960,7 @@ End
 
 horn.cnf
 Cut set: []
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4 + 2 z_5
 Subject To
@@ -1987,7 +1987,7 @@ z_5
 End
 
 Cut set: [2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + z_1 + z_2 + 2 z_3 + 2 z_4 + 2 z_5
 Subject To
@@ -2014,7 +2014,7 @@ z_5
 End
 
 Cut set: [1, 2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + z_2 + 2 z_3 + z_4 + z_5
 Subject To
@@ -2042,7 +2042,7 @@ End
 
 no_horn.cnf
 Cut set: []
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2
 Subject To
@@ -2059,7 +2059,7 @@ z_2
 End
 
 Cut set: [2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + z_1 + z_2
 Subject To
@@ -2076,7 +2076,7 @@ z_2
 End
 
 Cut set: [1, 2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + 0.5 z_2
 Subject To
@@ -2094,7 +2094,7 @@ End
 
 no_horn_2.cnf
 Cut set: []
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3
 Subject To
@@ -2113,7 +2113,7 @@ z_3
 End
 
 Cut set: [2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3
 Subject To
@@ -2132,7 +2132,7 @@ z_3
 End
 
 Cut set: [1, 2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + z_1 + 0.5 z_2 + 0.5 z_3
 Subject To
@@ -2152,7 +2152,7 @@ End
 
 no_positive.cnf
 Cut set: []
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4
 Subject To
@@ -2177,7 +2177,7 @@ z_4
 End
 
 Cut set: [2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4
 Subject To
@@ -2202,7 +2202,7 @@ z_4
 End
 
 Cut set: [1, 2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 2 z_1 + z_2 + z_3 + 2 z_4
 Subject To
@@ -2228,7 +2228,7 @@ End
 
 renamable_horn.cnf
 Cut set: []
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4
 Subject To
@@ -2253,7 +2253,7 @@ z_4
 End
 
 Cut set: [2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4
 Subject To
@@ -2278,7 +2278,7 @@ z_4
 End
 
 Cut set: [1, 2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 2 z_1 + z_2 + z_3 + 2 z_4
 Subject To
@@ -2304,7 +2304,7 @@ End
 
 unsatisfiable.cnf
 Cut set: []
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3
 Subject To
@@ -2323,7 +2323,7 @@ z_3
 End
 
 Cut set: [2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + z_1 + z_2 + z_3
 Subject To
@@ -2342,7 +2342,7 @@ z_3
 End
 
 Cut set: [1, 2]
-\* NoName *\
+\* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + z_2 + z_3
 Subject To

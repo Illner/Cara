@@ -16,10 +16,10 @@ import compiler.enum.sat_solver_enum as ss_enum
 import compiler.enum.base_class_enum as bc_enum
 import compiler.enum.implied_literals_enum as il_enum
 import compiler.enum.component_caching_enum as cc_enum
+import formula.enum.lp_formulation_type_enum as lpft_enum
 import compiler.enum.heuristic.decision_heuristic_enum as dh_enum
 import formula.enum.eliminating_redundant_clauses_enum as erc_enum
 import compiler.enum.heuristic.preselection_heuristic_enum as ph_enum
-import formula.enum.lp_formulation_objective_function_enum as lpfof_enum
 import compiler.enum.heuristic.mixed_difference_heuristic_enum as mdh_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_cache_enum as hpc_enum
 import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_software_enum as hps_enum
@@ -77,8 +77,8 @@ def main(main_args):
                                   decision_heuristic_maximum_renamable_horn_is_exact=True,
                                   decision_heuristic_maximum_renamable_horn_use_conflicts=True,
                                   decision_heuristic_maximum_renamable_horn_prefer_conflict_variables=True,
-                                  decision_heuristic_maximum_renamable_horn_objective_function=lpfof_enum.LpFormulationObjectiveFunctionEnum.HORN_FORMULA,
-                                  decision_heuristic_maximum_renamable_horn_weight_for_clauses_without_variables_in_cut_set=2,
+                                  decision_heuristic_maximum_renamable_horn_lp_formulation_type=lpft_enum.LpFormulationTypeEnum.HORN_FORMULA,
+                                  decision_heuristic_maximum_renamable_horn_weight_for_variables_not_in_cut_set=2,
 
                                   smooth=False,
                                   preprocessing=False,
