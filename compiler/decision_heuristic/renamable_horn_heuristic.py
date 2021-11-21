@@ -39,9 +39,6 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
         if additional_score_dictionary is not None:
             raise h_exception.AdditionalScoreIsNotSupportedException()
 
-        if 1816 in incidence_graph.variable_set(copy=False):
-            return 1816
-
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
         if len(preselected_variable_set) == 1:
