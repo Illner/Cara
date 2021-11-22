@@ -2377,7 +2377,7 @@ End
 LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
 \* Number_of_edges *\
 Minimize
-OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5
+OBJ: 0.5 e_1_2 + e_1_3 + e_1_4 + e_1_5
 Subject To
 clause_0_0_1: - e_1_2 + s_1 - s_2 <= 0
 clause_1_0_1: - e_1_3 + s_1 - s_3 <= 0
@@ -2552,7 +2552,7 @@ End
 LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
 \* Number_of_edges *\
 Minimize
-OBJ: e_1_2 + e_1_6 + e_1_7 + e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7 + 2 e_5_6
+OBJ: 0.5 e_1_2 + e_1_6 + e_1_7 + e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7 + 2 e_5_6
  + 2 e_5_7 + 2 e_6_7
 Subject To
 clause_1_0_1: - e_1_2 - s_1 + s_2 <= 0
@@ -2742,7 +2742,7 @@ End
 LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
 \* Number_of_edges *\
 Minimize
-OBJ: e_1_2 + e_1_6 + e_1_7 + e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7 + 2 e_5_6
+OBJ: 0.5 e_1_2 + e_1_6 + e_1_7 + e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7 + 2 e_5_6
  + 2 e_5_7 + 2 e_6_7
 Subject To
 clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
@@ -2860,7 +2860,7 @@ End
 LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
 \* Number_of_edges *\
 Minimize
-OBJ: e_1_2 + e_2_3
+OBJ: 0.5 e_1_2 + e_2_3
 Subject To
 clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
 clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
@@ -2977,7 +2977,7 @@ End
 LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
 \* Number_of_edges *\
 Minimize
-OBJ: e_1_2 + e_1_3 + e_2_3
+OBJ: 0.5 e_1_2 + e_1_3 + e_2_3
 Subject To
 clause_0_0_1: - e_1_2 - s_1 - s_2 <= -1
 clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
@@ -3157,7 +3157,7 @@ End
 LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
 \* Number_of_edges *\
 Minimize
-OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + 2 e_3_4 + 2 e_3_5 + 2 e_3_6
+OBJ: 0.5 e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + 2 e_3_4 + 2 e_3_5 + 2 e_3_6
  + 2 e_4_5 + 2 e_4_6 + 2 e_5_6
 Subject To
 clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
@@ -3356,7 +3356,7 @@ End
 LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
 \* Number_of_edges *\
 Minimize
-OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + 2 e_3_4 + 2 e_3_5 + 2 e_3_6
+OBJ: 0.5 e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + 2 e_3_4 + 2 e_3_5 + 2 e_3_6
  + 2 e_4_5 + 2 e_4_6 + 2 e_5_6
 Subject To
 clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
@@ -3487,7 +3487,7 @@ End
 LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
 \* Number_of_edges *\
 Minimize
-OBJ: e_1_2 + e_2_3
+OBJ: 0.5 e_1_2 + e_2_3
 Subject To
 clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
 clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0

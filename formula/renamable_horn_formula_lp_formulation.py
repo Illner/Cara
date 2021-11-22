@@ -178,14 +178,14 @@ class RenamableHornFormulaLpFormulation:
 
     def __create_lp_formulation_number_of_edges(self, incidence_graph, weight_for_variables_not_in_cut_set: int, cut_set: Union[Set[int], None]) -> None:
         # Variables
-        lp_variable_is_edge: Dict[str, Tuple[LpVariable, Set[int]]] = dict()
+        lp_variable_is_edge: Dict[str, Tuple[LpVariable, int]] = dict()
 
         # Constraints
         for clause_id in incidence_graph.clause_id_set(copy=False):
             clause = list(incidence_graph.get_clause(clause_id=clause_id, copy=False))
             clause_length = len(clause)
 
-            for i in range(clause_length):
+            for i in range(clause_length - 1):
                 for j in range(i + 1, clause_length):
                     lit_i = clause[i]
                     lit_j = clause[j]
@@ -206,7 +206,12 @@ class RenamableHornFormulaLpFormulation:
                                            lowBound=0,
                                            upBound=1,
                                            cat=LpInteger if self.__is_exact else LpContinuous)
-                        lp_variable_is_edge[key] = (e_i_j, {var_i, var_j})
+
+                        temp = 0
+                        if self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_EDGES:
+                            temp = len({var_i, var_j}.intersection(cut_set))
+
+                        lp_variable_is_edge[key] = (e_i_j, temp)
 
                     self.__lp_formulation.addConstraint(lpSum([self.__lp_variable_variable_is_switched[abs(lit)] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[abs(lit)]) for lit in [lit_i, lit_j]]) <= 1 + e_i_j, f"clause_{clause_id}_{i}_{j}")
 
@@ -221,7 +226,7 @@ class RenamableHornFormulaLpFormulation:
             if cut_set is None:
                 raise rhflpf_exception.CutSetIsNotDefinedException(self.__lp_formulation_type)
 
-            self.__lp_formulation.setObjective(lpSum([lp_variable_is_edge[key][0] * (1 if lp_variable_is_edge[key][1].intersection(cut_set) else weight_for_variables_not_in_cut_set) for key in lp_variable_is_edge.keys()]))
+            self.__lp_formulation.setObjective(lpSum([lp_variable_is_edge[key][0] * (1/lp_variable_is_edge[key][1] if lp_variable_is_edge[key][1] > 0 else weight_for_variables_not_in_cut_set) for key in lp_variable_is_edge.keys()]))
 
         # Not implemented
         else:
