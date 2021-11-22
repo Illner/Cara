@@ -254,6 +254,74 @@ Bounds
  s_5 <= 1
 End
 
+LP formulation type: NUMBER_OF_VERTICES, is exact: True
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5
+Subject To
+clause_0: s_1 - s_2 + z_0 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: s_1 - s_3 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_3: - s_3 - v_3 - z_1 <= -1
+clause_2: s_1 - s_4 + z_2 <= 1
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_4: - s_4 - v_4 - z_2 <= -1
+clause_3: s_1 - s_5 + z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+v_1
+v_2
+v_3
+v_4
+v_5
+z_0
+z_1
+z_2
+z_3
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: False
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5
+Subject To
+clause_0: s_1 - s_2 + z_0 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: s_1 - s_3 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_3: - s_3 - v_3 - z_1 <= -1
+clause_2: s_1 - s_4 + z_2 <= 1
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_4: - s_4 - v_4 - z_2 <= -1
+clause_3: s_1 - s_5 + z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+Bounds
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
+ v_1 <= 1
+ v_2 <= 1
+ v_3 <= 1
+ v_4 <= 1
+ v_5 <= 1
+ z_0 <= 1
+ z_1 <= 1
+ z_2 <= 1
+ z_3 <= 1
+End
+
 dual_horn.cnf
 LP formulation type: HORN_FORMULA, is exact: True
 \* Number_of_Horn_formulae *\
@@ -595,6 +663,100 @@ Bounds
  s_5 <= 1
  s_6 <= 1
  s_7 <= 1
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: True
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5 + v_6 + v_7
+Subject To
+clause_0: s_1 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_1: - s_1 + s_2 + z_1 <= 1
+clause_1_1: - s_1 - v_1 - z_1 <= -1
+clause_1_2: s_2 - v_2 - z_1 <= 0
+clause_2: - s_2 + s_3 + z_2 <= 1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: - s_4 - s_5 - s_6 - s_7 + 3 z_3 <= 0
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_3_7: - s_7 - v_7 - z_3 <= -1
+clause_4: s_1 - s_6 + z_4 <= 1
+clause_4_1: s_1 - v_1 - z_4 <= 0
+clause_4_6: - s_6 - v_6 - z_4 <= -1
+clause_5: s_1 - s_7 + z_5 <= 1
+clause_5_1: s_1 - v_1 - z_5 <= 0
+clause_5_7: - s_7 - v_7 - z_5 <= -1
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+z_5
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: False
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5 + v_6 + v_7
+Subject To
+clause_0: s_1 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_1: - s_1 + s_2 + z_1 <= 1
+clause_1_1: - s_1 - v_1 - z_1 <= -1
+clause_1_2: s_2 - v_2 - z_1 <= 0
+clause_2: - s_2 + s_3 + z_2 <= 1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: - s_4 - s_5 - s_6 - s_7 + 3 z_3 <= 0
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_3_7: - s_7 - v_7 - z_3 <= -1
+clause_4: s_1 - s_6 + z_4 <= 1
+clause_4_1: s_1 - v_1 - z_4 <= 0
+clause_4_6: - s_6 - v_6 - z_4 <= -1
+clause_5: s_1 - s_7 + z_5 <= 1
+clause_5_1: s_1 - v_1 - z_5 <= 0
+clause_5_7: - s_7 - v_7 - z_5 <= -1
+Bounds
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
+ s_6 <= 1
+ s_7 <= 1
+ v_1 <= 1
+ v_2 <= 1
+ v_3 <= 1
+ v_4 <= 1
+ v_5 <= 1
+ v_6 <= 1
+ v_7 <= 1
+ z_0 <= 1
+ z_1 <= 1
+ z_2 <= 1
+ z_3 <= 1
+ z_4 <= 1
+ z_5 <= 1
 End
 
 horn.cnf
@@ -940,6 +1102,100 @@ Bounds
  s_7 <= 1
 End
 
+LP formulation type: NUMBER_OF_VERTICES, is exact: True
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5 + v_6 + v_7
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_4 + s_5 + s_6 + s_7 + 3 z_3 <= 4
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_3_7: s_7 - v_7 - z_3 <= 0
+clause_4: - s_1 + s_6 + z_4 <= 1
+clause_4_1: - s_1 - v_1 - z_4 <= -1
+clause_4_6: s_6 - v_6 - z_4 <= 0
+clause_5: - s_1 + s_7 + z_5 <= 1
+clause_5_1: - s_1 - v_1 - z_5 <= -1
+clause_5_7: s_7 - v_7 - z_5 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+z_5
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: False
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5 + v_6 + v_7
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_4 + s_5 + s_6 + s_7 + 3 z_3 <= 4
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_3_7: s_7 - v_7 - z_3 <= 0
+clause_4: - s_1 + s_6 + z_4 <= 1
+clause_4_1: - s_1 - v_1 - z_4 <= -1
+clause_4_6: s_6 - v_6 - z_4 <= 0
+clause_5: - s_1 + s_7 + z_5 <= 1
+clause_5_1: - s_1 - v_1 - z_5 <= -1
+clause_5_7: s_7 - v_7 - z_5 <= 0
+Bounds
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
+ s_6 <= 1
+ s_7 <= 1
+ v_1 <= 1
+ v_2 <= 1
+ v_3 <= 1
+ v_4 <= 1
+ v_5 <= 1
+ v_6 <= 1
+ v_7 <= 1
+ z_0 <= 1
+ z_1 <= 1
+ z_2 <= 1
+ z_3 <= 1
+ z_4 <= 1
+ z_5 <= 1
+End
+
 no_horn.cnf
 LP formulation type: HORN_FORMULA, is exact: True
 \* Number_of_Horn_formulae *\
@@ -1139,6 +1395,56 @@ Bounds
  s_1 <= 1
  s_2 <= 1
  s_3 <= 1
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: True
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + z_2 <= 0
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: False
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + z_2 <= 0
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+Bounds
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ v_1 <= 1
+ v_2 <= 1
+ v_3 <= 1
+ z_0 <= 1
+ z_1 <= 1
+ z_2 <= 1
 End
 
 no_horn_2.cnf
@@ -1374,6 +1680,70 @@ Bounds
  s_1 <= 1
  s_2 <= 1
  s_3 <= 1
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: True
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3
+Subject To
+clause_0: - s_1 - s_2 + z_0 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + s_3 + 2 z_2 <= 1
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: s_1 + s_2 - s_3 + 2 z_3 <= 2
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+z_3
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: False
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3
+Subject To
+clause_0: - s_1 - s_2 + z_0 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + s_3 + 2 z_2 <= 1
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: s_1 + s_2 - s_3 + 2 z_3 <= 2
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+Bounds
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ v_1 <= 1
+ v_2 <= 1
+ v_3 <= 1
+ z_0 <= 1
+ z_1 <= 1
+ z_2 <= 1
+ z_3 <= 1
 End
 
 no_positive.cnf
@@ -1709,6 +2079,96 @@ Bounds
  s_6 <= 1
 End
 
+LP formulation type: NUMBER_OF_VERTICES, is exact: True
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5 + v_6 + v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 + s_3 + s_4 + s_5 + s_6 + 4 z_3 <= 5
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: False
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5 + v_6 + v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 + s_3 + s_4 + s_5 + s_6 + 4 z_3 <= 5
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Bounds
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
+ s_6 <= 1
+ s_7 <= 1
+ v_1 <= 1
+ v_2 <= 1
+ v_3 <= 1
+ v_4 <= 1
+ v_5 <= 1
+ v_6 <= 1
+ v_7 <= 1
+ z_0 <= 1
+ z_1 <= 1
+ z_2 <= 1
+ z_3 <= 1
+ z_4 <= 1
+End
+
 renamable_horn.cnf
 LP formulation type: HORN_FORMULA, is exact: True
 \* Number_of_Horn_formulae *\
@@ -2042,6 +2502,96 @@ Bounds
  s_6 <= 1
 End
 
+LP formulation type: NUMBER_OF_VERTICES, is exact: True
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5 + v_6 + v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 - s_3 - s_4 - s_5 - s_6 + 4 z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: False
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3 + v_4 + v_5 + v_6 + v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 - s_3 - s_4 - s_5 - s_6 + 4 z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Bounds
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
+ s_6 <= 1
+ s_7 <= 1
+ v_1 <= 1
+ v_2 <= 1
+ v_3 <= 1
+ v_4 <= 1
+ v_5 <= 1
+ v_6 <= 1
+ v_7 <= 1
+ z_0 <= 1
+ z_1 <= 1
+ z_2 <= 1
+ z_3 <= 1
+ z_4 <= 1
+End
+
 unsatisfiable.cnf
 LP formulation type: HORN_FORMULA, is exact: True
 \* Number_of_Horn_formulae *\
@@ -2263,6 +2813,64 @@ Bounds
  s_1 <= 1
  s_2 <= 1
  s_3 <= 1
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: True
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_2 + s_3 + z_3 <= 2
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+z_3
+End
+
+LP formulation type: NUMBER_OF_VERTICES, is exact: False
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_2 + s_3 + z_3 <= 2
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+Bounds
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ v_1 <= 1
+ v_2 <= 1
+ v_3 <= 1
+ z_0 <= 1
+ z_1 <= 1
+ z_2 <= 1
+ z_3 <= 1
 End
 
 
@@ -2395,6 +3003,108 @@ s_4
 s_5
 End
 
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: []
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + 2 v_2 + 2 v_3 + 2 v_4 + 2 v_5
+Subject To
+clause_0: s_1 - s_2 + z_0 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: s_1 - s_3 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_3: - s_3 - v_3 - z_1 <= -1
+clause_2: s_1 - s_4 + z_2 <= 1
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_4: - s_4 - v_4 - z_2 <= -1
+clause_3: s_1 - s_5 + z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+v_1
+v_2
+v_3
+v_4
+v_5
+z_0
+z_1
+z_2
+z_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [2]
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5
+Subject To
+clause_0: s_1 - s_2 + z_0 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: s_1 - s_3 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_3: - s_3 - v_3 - z_1 <= -1
+clause_2: s_1 - s_4 + z_2 <= 1
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_4: - s_4 - v_4 - z_2 <= -1
+clause_3: s_1 - s_5 + z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+v_1
+v_2
+v_3
+v_4
+v_5
+z_0
+z_1
+z_2
+z_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [1, 2]
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5
+Subject To
+clause_0: s_1 - s_2 + z_0 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: s_1 - s_3 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_3: - s_3 - v_3 - z_1 <= -1
+clause_2: s_1 - s_4 + z_2 <= 1
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_4: - s_4 - v_4 - z_2 <= -1
+clause_3: s_1 - s_5 + z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+v_1
+v_2
+v_3
+v_4
+v_5
+z_0
+z_1
+z_2
+z_3
+End
+
 dual_horn.cnf
 LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
@@ -2583,6 +3293,147 @@ s_4
 s_5
 s_6
 s_7
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: []
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + 2 v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: s_1 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_1: - s_1 + s_2 + z_1 <= 1
+clause_1_1: - s_1 - v_1 - z_1 <= -1
+clause_1_2: s_2 - v_2 - z_1 <= 0
+clause_2: - s_2 + s_3 + z_2 <= 1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: - s_4 - s_5 - s_6 - s_7 + 3 z_3 <= 0
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_3_7: - s_7 - v_7 - z_3 <= -1
+clause_4: s_1 - s_6 + z_4 <= 1
+clause_4_1: s_1 - v_1 - z_4 <= 0
+clause_4_6: - s_6 - v_6 - z_4 <= -1
+clause_5: s_1 - s_7 + z_5 <= 1
+clause_5_1: s_1 - v_1 - z_5 <= 0
+clause_5_7: - s_7 - v_7 - z_5 <= -1
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+z_5
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [2]
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: s_1 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_1: - s_1 + s_2 + z_1 <= 1
+clause_1_1: - s_1 - v_1 - z_1 <= -1
+clause_1_2: s_2 - v_2 - z_1 <= 0
+clause_2: - s_2 + s_3 + z_2 <= 1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: - s_4 - s_5 - s_6 - s_7 + 3 z_3 <= 0
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_3_7: - s_7 - v_7 - z_3 <= -1
+clause_4: s_1 - s_6 + z_4 <= 1
+clause_4_1: s_1 - v_1 - z_4 <= 0
+clause_4_6: - s_6 - v_6 - z_4 <= -1
+clause_5: s_1 - s_7 + z_5 <= 1
+clause_5_1: s_1 - v_1 - z_5 <= 0
+clause_5_7: - s_7 - v_7 - z_5 <= -1
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+z_5
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [1, 2]
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: s_1 <= 1
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_1: - s_1 + s_2 + z_1 <= 1
+clause_1_1: - s_1 - v_1 - z_1 <= -1
+clause_1_2: s_2 - v_2 - z_1 <= 0
+clause_2: - s_2 + s_3 + z_2 <= 1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: - s_4 - s_5 - s_6 - s_7 + 3 z_3 <= 0
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_3_7: - s_7 - v_7 - z_3 <= -1
+clause_4: s_1 - s_6 + z_4 <= 1
+clause_4_1: s_1 - v_1 - z_4 <= 0
+clause_4_6: - s_6 - v_6 - z_4 <= -1
+clause_5: s_1 - s_7 + z_5 <= 1
+clause_5_1: s_1 - v_1 - z_5 <= 0
+clause_5_7: - s_7 - v_7 - z_5 <= -1
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+z_5
 End
 
 horn.cnf
@@ -2775,6 +3626,147 @@ s_6
 s_7
 End
 
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: []
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + 2 v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_4 + s_5 + s_6 + s_7 + 3 z_3 <= 4
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_3_7: s_7 - v_7 - z_3 <= 0
+clause_4: - s_1 + s_6 + z_4 <= 1
+clause_4_1: - s_1 - v_1 - z_4 <= -1
+clause_4_6: s_6 - v_6 - z_4 <= 0
+clause_5: - s_1 + s_7 + z_5 <= 1
+clause_5_1: - s_1 - v_1 - z_5 <= -1
+clause_5_7: s_7 - v_7 - z_5 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+z_5
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [2]
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_4 + s_5 + s_6 + s_7 + 3 z_3 <= 4
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_3_7: s_7 - v_7 - z_3 <= 0
+clause_4: - s_1 + s_6 + z_4 <= 1
+clause_4_1: - s_1 - v_1 - z_4 <= -1
+clause_4_6: s_6 - v_6 - z_4 <= 0
+clause_5: - s_1 + s_7 + z_5 <= 1
+clause_5_1: - s_1 - v_1 - z_5 <= -1
+clause_5_7: s_7 - v_7 - z_5 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+z_5
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [1, 2]
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_4 + s_5 + s_6 + s_7 + 3 z_3 <= 4
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_3_7: s_7 - v_7 - z_3 <= 0
+clause_4: - s_1 + s_6 + z_4 <= 1
+clause_4_1: - s_1 - v_1 - z_4 <= -1
+clause_4_6: s_6 - v_6 - z_4 <= 0
+clause_5: - s_1 + s_7 + z_5 <= 1
+clause_5_1: - s_1 - v_1 - z_5 <= -1
+clause_5_7: s_7 - v_7 - z_5 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+z_5
+End
+
 no_horn.cnf
 LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
@@ -2870,6 +3862,81 @@ e_2_3
 s_1
 s_2
 s_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: []
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + 2 v_2 + 2 v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + z_2 <= 0
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [2]
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + v_2 + 2 v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + z_2 <= 0
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [1, 2]
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + 2 v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + z_2 <= 0
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
 End
 
 no_horn_2.cnf
@@ -2994,6 +4061,102 @@ e_2_3
 s_1
 s_2
 s_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: []
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + 2 v_2 + 2 v_3
+Subject To
+clause_0: - s_1 - s_2 + z_0 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + s_3 + 2 z_2 <= 1
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: s_1 + s_2 - s_3 + 2 z_3 <= 2
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+z_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [2]
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + v_2 + 2 v_3
+Subject To
+clause_0: - s_1 - s_2 + z_0 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + s_3 + 2 z_2 <= 1
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: s_1 + s_2 - s_3 + 2 z_3 <= 2
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+z_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [1, 2]
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + 2 v_3
+Subject To
+clause_0: - s_1 - s_2 + z_0 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_0_2: - s_2 - v_2 - z_0 <= -1
+clause_1: - s_2 + s_3 + z_1 <= 1
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_2: - s_1 - s_2 + s_3 + 2 z_2 <= 1
+clause_2_1: - s_1 - v_1 - z_2 <= -1
+clause_2_2: - s_2 - v_2 - z_2 <= -1
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_3: s_1 + s_2 - s_3 + 2 z_3 <= 2
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+z_3
 End
 
 no_positive.cnf
@@ -3195,6 +4358,141 @@ s_5
 s_6
 End
 
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: []
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + 2 v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 + s_3 + s_4 + s_5 + s_6 + 4 z_3 <= 5
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [2]
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 + s_3 + s_4 + s_5 + s_6 + 4 z_3 <= 5
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [1, 2]
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 + s_3 + s_4 + s_5 + s_6 + 4 z_3 <= 5
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+clause_3_4: s_4 - v_4 - z_3 <= 0
+clause_3_5: s_5 - v_5 - z_3 <= 0
+clause_3_6: s_6 - v_6 - z_3 <= 0
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+End
+
 renamable_horn.cnf
 LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
@@ -3394,6 +4692,141 @@ s_5
 s_6
 End
 
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: []
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + 2 v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 - s_3 - s_4 - s_5 - s_6 + 4 z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [2]
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 - s_3 - s_4 - s_5 - s_6 + 4 z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [1, 2]
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + 2 v_3 + 2 v_4 + 2 v_5 + 2 v_6 + 2 v_7
+Subject To
+clause_0: s_1 + s_2 + z_0 <= 2
+clause_0_1: s_1 - v_1 - z_0 <= 0
+clause_0_2: s_2 - v_2 - z_0 <= 0
+clause_1: s_3 + s_4 + z_1 <= 2
+clause_1_3: s_3 - v_3 - z_1 <= 0
+clause_1_4: s_4 - v_4 - z_1 <= 0
+clause_2: s_1 + s_3 + s_5 + 2 z_2 <= 3
+clause_2_1: s_1 - v_1 - z_2 <= 0
+clause_2_3: s_3 - v_3 - z_2 <= 0
+clause_2_5: s_5 - v_5 - z_2 <= 0
+clause_3: s_1 - s_3 - s_4 - s_5 - s_6 + 4 z_3 <= 1
+clause_3_1: s_1 - v_1 - z_3 <= 0
+clause_3_3: - s_3 - v_3 - z_3 <= -1
+clause_3_4: - s_4 - v_4 - z_3 <= -1
+clause_3_5: - s_5 - v_5 - z_3 <= -1
+clause_3_6: - s_6 - v_6 - z_3 <= -1
+clause_4: s_7 <= 1
+clause_4_7: s_7 - v_7 - z_4 <= 0
+Binaries
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+v_1
+v_2
+v_3
+v_4
+v_5
+v_6
+v_7
+z_0
+z_1
+z_2
+z_3
+z_4
+End
+
 unsatisfiable.cnf
 LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
@@ -3498,5 +4931,92 @@ e_2_3
 s_1
 s_2
 s_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: []
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + 2 v_2 + 2 v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_2 + s_3 + z_3 <= 2
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+z_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [2]
+\* Number_of_vertices *\
+Minimize
+OBJ: 2 v_1 + v_2 + 2 v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_2 + s_3 + z_3 <= 2
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+z_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES, cut set: [1, 2]
+\* Number_of_vertices *\
+Minimize
+OBJ: v_1 + v_2 + 2 v_3
+Subject To
+clause_0: - s_1 <= 0
+clause_0_1: - s_1 - v_1 - z_0 <= -1
+clause_1: s_1 - s_2 + z_1 <= 1
+clause_1_1: s_1 - v_1 - z_1 <= 0
+clause_1_2: - s_2 - v_2 - z_1 <= -1
+clause_2: s_2 - s_3 + z_2 <= 1
+clause_2_2: s_2 - v_2 - z_2 <= 0
+clause_2_3: - s_3 - v_3 - z_2 <= -1
+clause_3: s_2 + s_3 + z_3 <= 2
+clause_3_2: s_2 - v_2 - z_3 <= 0
+clause_3_3: s_3 - v_3 - z_3 <= 0
+Binaries
+s_1
+s_2
+s_3
+v_1
+v_2
+v_3
+z_0
+z_1
+z_2
+z_3
 End
 

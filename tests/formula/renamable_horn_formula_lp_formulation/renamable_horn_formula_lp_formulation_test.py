@@ -55,7 +55,8 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
                                             lpft_enum.LpFormulationTypeEnum.SQUARED_LENGTH_WEIGHTED_HORN_FORMULA,
                                             lpft_enum.LpFormulationTypeEnum.INVERSE_LENGTH_WEIGHTED_HORN_FORMULA,
                                             lpft_enum.LpFormulationTypeEnum.SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA,
-                                            lpft_enum.LpFormulationTypeEnum.NUMBER_OF_EDGES]:
+                                            lpft_enum.LpFormulationTypeEnum.NUMBER_OF_EDGES,
+                                            lpft_enum.LpFormulationTypeEnum.NUMBER_OF_VERTICES]:
                     for is_exact in [True, False]:
                         try:
                             result = "\n".join((result, f"LP formulation type: {lpft_enum.LpFormulationTypeEnum._value2member_map_[lp_formulation_type].name}, "
@@ -94,7 +95,8 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
                 incidence_graph = cnf.get_incidence_graph(copy=False)
 
                 for lp_formulation_type in [lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_HORN_FORMULA,
-                                            lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_EDGES]:
+                                            lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_EDGES,
+                                            lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES]:
                     for cut_set in [set(), {2}, {1, 2}]:
                         try:
                             result = "\n".join((result, f"LP formulation type: {lpft_enum.LpFormulationTypeEnum._value2member_map_[lp_formulation_type].name}, "

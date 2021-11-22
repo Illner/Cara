@@ -103,8 +103,8 @@ class RenamableHornFormulaLpFormulation:
             self.__lp_formulation = pulp.LpProblem(name="Number_of_edges",
                                                    sense=pulp.LpMinimize)
             self.__create_lp_formulation_number_of_edges(incidence_graph=incidence_graph,
-                                                         cut_set=cut_set,
-                                                         weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
+                                                         weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set,
+                                                         cut_set=cut_set)
 
         # Number of vertices
         elif (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.NUMBER_OF_VERTICES) or \
@@ -113,7 +113,8 @@ class RenamableHornFormulaLpFormulation:
             self.__lp_formulation = pulp.LpProblem(name="Number_of_vertices",
                                                    sense=pulp.LpMinimize)
             self.__create_lp_formulation_number_of_vertices(incidence_graph=incidence_graph,
-                                                            weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
+                                                            weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set,
+                                                            cut_set=cut_set)
 
         # Vertex cover
         elif (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.VERTEX_COVER) or \
@@ -233,8 +234,42 @@ class RenamableHornFormulaLpFormulation:
             raise c_exception.FunctionNotImplementedException("__create_lp_formulation_number_of_edges",
                                                               f"this type of LP formulation ({self.__lp_formulation_type.name}) is not implemented")
 
-    def __create_lp_formulation_number_of_vertices(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
-        pass
+    def __create_lp_formulation_number_of_vertices(self, incidence_graph, weight_for_variables_not_in_cut_set: int, cut_set: Union[Set[int], None]) -> None:
+        # Variables
+        self.__lp_variable_clause_is_horn = LpVariable.dicts(name="z",
+                                                             indexs=incidence_graph.clause_id_set(copy=False),
+                                                             lowBound=0,
+                                                             upBound=1,
+                                                             cat=LpInteger if self.__is_exact else LpContinuous)
+        lp_variable_is_vertex = LpVariable.dicts(name="v",
+                                                 indexs=incidence_graph.variable_set(copy=False),
+                                                 lowBound=0,
+                                                 upBound=1,
+                                                 cat=LpInteger if self.__is_exact else LpContinuous)
+
+        # Constraints
+        for clause_id in self.__lp_variable_clause_is_horn:
+            clause = incidence_graph.get_clause(clause_id=clause_id, copy=False)
+            clause_length = self.__clause_length_dictionary[clause_id]
+            self.__lp_formulation.addConstraint(lpSum([self.__lp_variable_variable_is_switched[abs(lit)] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[abs(lit)]) for lit in clause]) <= clause_length - self.__lp_variable_clause_is_horn[clause_id] * (clause_length - 1), f"clause_{clause_id}")
+
+            for lit in clause:
+                var = abs(lit)
+                self.__lp_formulation.addConstraint((self.__lp_variable_variable_is_switched[var] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[var])) <= self.__lp_variable_clause_is_horn[clause_id] + lp_variable_is_vertex[var], f"clause_{clause_id}_{var}")
+
+        # Objective function
+        # NUMBER_OF_VERTICES
+        if self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.NUMBER_OF_VERTICES:
+            self.__lp_formulation.setObjective(lpSum(lp_variable_is_vertex))
+
+        # RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES
+        elif self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES:
+            self.__lp_formulation.setObjective(lpSum([lp_variable_is_vertex[vertex] * (1 if vertex in cut_set else weight_for_variables_not_in_cut_set) for vertex in lp_variable_is_vertex]))
+
+        # Not implemented
+        else:
+            raise c_exception.FunctionNotImplementedException("__create_lp_formulation_number_of_vertices",
+                                                              f"this type of LP formulation ({self.__lp_formulation_type.name}) is not implemented")
 
     def __create_lp_formulation_vertex_cover(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
         pass
