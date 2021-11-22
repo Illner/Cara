@@ -1,7 +1,7 @@
 # Import
 import pulp
 from io import StringIO, FileIO
-from typing import Dict, Union, TextIO, Set
+from typing import Dict, Union, TextIO, Set, Tuple
 from pulp import LpVariable, LpContinuous, LpInteger, lpSum, PULP_CBC_CMD
 from compiler_statistics.formula.renamable_horn_formula_lp_formulation_statistics import RenamableHornFormulaLpFormulationStatistics
 
@@ -102,8 +102,9 @@ class RenamableHornFormulaLpFormulation:
 
             self.__lp_formulation = pulp.LpProblem(name="Number_of_edges",
                                                    sense=pulp.LpMinimize)
-            self.__create_lp_formulation_number_edges(incidence_graph=incidence_graph,
-                                                      weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
+            self.__create_lp_formulation_number_of_edges(incidence_graph=incidence_graph,
+                                                         cut_set=cut_set,
+                                                         weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
 
         # Number of vertices
         elif (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.NUMBER_OF_VERTICES) or \
@@ -111,8 +112,8 @@ class RenamableHornFormulaLpFormulation:
 
             self.__lp_formulation = pulp.LpProblem(name="Number_of_vertices",
                                                    sense=pulp.LpMinimize)
-            self.__create_lp_formulation_number_vertices(incidence_graph=incidence_graph,
-                                                         weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
+            self.__create_lp_formulation_number_of_vertices(incidence_graph=incidence_graph,
+                                                            weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
 
         # Vertex cover
         elif (self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.VERTEX_COVER) or \
@@ -175,10 +176,59 @@ class RenamableHornFormulaLpFormulation:
             raise c_exception.FunctionNotImplementedException("__create_lp_formulation_number_of_horn_formulae",
                                                               f"this type of LP formulation ({self.__lp_formulation_type.name}) is not implemented")
 
-    def __create_lp_formulation_number_edges(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
-        pass
+    def __create_lp_formulation_number_of_edges(self, incidence_graph, weight_for_variables_not_in_cut_set: int, cut_set: Union[Set[int], None]) -> None:
+        # Variables
+        lp_variable_is_edge: Dict[str, Tuple[LpVariable, Set[int]]] = dict()
 
-    def __create_lp_formulation_number_vertices(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
+        # Constraints
+        for clause_id in incidence_graph.clause_id_set(copy=False):
+            clause = list(incidence_graph.get_clause(clause_id=clause_id, copy=False))
+            clause_length = len(clause)
+
+            for i in range(clause_length):
+                for j in range(i + 1, clause_length):
+                    lit_i = clause[i]
+                    lit_j = clause[j]
+                    var_i = abs(lit_i)
+                    var_j = abs(lit_j)
+
+                    # i > j
+                    if var_i > var_j:
+                        lit_i, lit_j = lit_j, lit_i
+                        var_i, var_j = var_j, var_i
+
+                    key = f"{var_i}_{var_j}"
+
+                    if key in lp_variable_is_edge:
+                        e_i_j = lp_variable_is_edge[key][0]
+                    else:
+                        e_i_j = LpVariable(name=f"e_{key}",
+                                           lowBound=0,
+                                           upBound=1,
+                                           cat=LpInteger if self.__is_exact else LpContinuous)
+                        lp_variable_is_edge[key] = (e_i_j, {var_i, var_j})
+
+                    self.__lp_formulation.addConstraint(lpSum([self.__lp_variable_variable_is_switched[abs(lit)] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[abs(lit)]) for lit in [lit_i, lit_j]]) <= 1 + e_i_j, f"clause_{clause_id}_{i}_{j}")
+
+        # Objective function
+        # NUMBER_OF_EDGES
+        if self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.NUMBER_OF_EDGES:
+            self.__lp_formulation.setObjective(lpSum([lp_variable_is_edge[key][0] for key in lp_variable_is_edge.keys()]))
+
+        # RESPECT_DECOMPOSITION_NUMBER_OF_EDGES
+        elif self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_EDGES:
+            # Cut set is not defined
+            if cut_set is None:
+                raise rhflpf_exception.CutSetIsNotDefinedException(self.__lp_formulation_type)
+
+            self.__lp_formulation.setObjective(lpSum([lp_variable_is_edge[key][0] * (1 if lp_variable_is_edge[key][1].intersection(cut_set) else weight_for_variables_not_in_cut_set) for key in lp_variable_is_edge.keys()]))
+
+        # Not implemented
+        else:
+            raise c_exception.FunctionNotImplementedException("__create_lp_formulation_number_of_edges",
+                                                              f"this type of LP formulation ({self.__lp_formulation_type.name}) is not implemented")
+
+    def __create_lp_formulation_number_of_vertices(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
         pass
 
     def __create_lp_formulation_vertex_cover(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
@@ -209,6 +259,10 @@ class RenamableHornFormulaLpFormulation:
         switching_sum = 0
         for variable in self.__lp_variable_variable_is_switched:
             s_i = self.__lp_variable_variable_is_switched[variable].varValue
+
+            if s_i is None:
+                s_i = 0
+
             switching_dictionary[variable] = s_i
 
             switching_sum += s_i

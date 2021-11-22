@@ -1,5 +1,5 @@
 
-LP formulation - number of Horn formulae
+LP formulation
 
 2_cnf.cnf
 LP formulation type: HORN_FORMULA, is exact: True
@@ -210,6 +210,48 @@ Bounds
  z_1 <= 1
  z_2 <= 1
  z_3 <= 1
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: True
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5
+Subject To
+clause_0_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_1_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_2_0_1: - e_1_4 + s_1 - s_4 <= 0
+clause_3_0_1: - e_1_5 + s_1 - s_5 <= 0
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+s_1
+s_2
+s_3
+s_4
+s_5
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: False
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5
+Subject To
+clause_0_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_1_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_2_0_1: - e_1_4 + s_1 - s_4 <= 0
+clause_3_0_1: - e_1_5 + s_1 - s_5 <= 0
+Bounds
+ e_1_2 <= 1
+ e_1_3 <= 1
+ e_1_4 <= 1
+ e_1_5 <= 1
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
 End
 
 dual_horn.cnf
@@ -483,6 +525,78 @@ Bounds
  z_5 <= 1
 End
 
+LP formulation type: NUMBER_OF_EDGES, is exact: True
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_6 + e_1_7 + e_2_3 + e_4_5 + e_4_6 + e_4_7 + e_5_6 + e_5_7
+ + e_6_7
+Subject To
+clause_1_0_1: - e_1_2 - s_1 + s_2 <= 0
+clause_2_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_4_5 - s_4 - s_5 <= -1
+clause_3_0_2: - e_4_6 - s_4 - s_6 <= -1
+clause_3_0_3: - e_4_7 - s_4 - s_7 <= -1
+clause_3_1_2: - e_5_6 - s_5 - s_6 <= -1
+clause_3_1_3: - e_5_7 - s_5 - s_7 <= -1
+clause_3_2_3: - e_6_7 - s_6 - s_7 <= -1
+clause_4_0_1: - e_1_6 + s_1 - s_6 <= 0
+clause_5_0_1: - e_1_7 + s_1 - s_7 <= 0
+Binaries
+e_1_2
+e_1_6
+e_1_7
+e_2_3
+e_4_5
+e_4_6
+e_4_7
+e_5_6
+e_5_7
+e_6_7
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: False
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_6 + e_1_7 + e_2_3 + e_4_5 + e_4_6 + e_4_7 + e_5_6 + e_5_7
+ + e_6_7
+Subject To
+clause_1_0_1: - e_1_2 - s_1 + s_2 <= 0
+clause_2_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_4_5 - s_4 - s_5 <= -1
+clause_3_0_2: - e_4_6 - s_4 - s_6 <= -1
+clause_3_0_3: - e_4_7 - s_4 - s_7 <= -1
+clause_3_1_2: - e_5_6 - s_5 - s_6 <= -1
+clause_3_1_3: - e_5_7 - s_5 - s_7 <= -1
+clause_3_2_3: - e_6_7 - s_6 - s_7 <= -1
+clause_4_0_1: - e_1_6 + s_1 - s_6 <= 0
+clause_5_0_1: - e_1_7 + s_1 - s_7 <= 0
+Bounds
+ e_1_2 <= 1
+ e_1_6 <= 1
+ e_1_7 <= 1
+ e_2_3 <= 1
+ e_4_5 <= 1
+ e_4_6 <= 1
+ e_4_7 <= 1
+ e_5_6 <= 1
+ e_5_7 <= 1
+ e_6_7 <= 1
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
+ s_6 <= 1
+ s_7 <= 1
+End
+
 horn.cnf
 LP formulation type: HORN_FORMULA, is exact: True
 \* Number_of_Horn_formulae *\
@@ -754,6 +868,78 @@ Bounds
  z_5 <= 1
 End
 
+LP formulation type: NUMBER_OF_EDGES, is exact: True
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_6 + e_1_7 + e_2_3 + e_4_5 + e_4_6 + e_4_7 + e_5_6 + e_5_7
+ + e_6_7
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_6_7 + s_6 + s_7 <= 1
+clause_3_0_2: - e_5_7 + s_5 + s_7 <= 1
+clause_3_0_3: - e_4_7 + s_4 + s_7 <= 1
+clause_3_1_2: - e_5_6 + s_5 + s_6 <= 1
+clause_3_1_3: - e_4_6 + s_4 + s_6 <= 1
+clause_3_2_3: - e_4_5 + s_4 + s_5 <= 1
+clause_4_0_1: - e_1_6 - s_1 + s_6 <= 0
+clause_5_0_1: - e_1_7 - s_1 + s_7 <= 0
+Binaries
+e_1_2
+e_1_6
+e_1_7
+e_2_3
+e_4_5
+e_4_6
+e_4_7
+e_5_6
+e_5_7
+e_6_7
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: False
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_6 + e_1_7 + e_2_3 + e_4_5 + e_4_6 + e_4_7 + e_5_6 + e_5_7
+ + e_6_7
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_6_7 + s_6 + s_7 <= 1
+clause_3_0_2: - e_5_7 + s_5 + s_7 <= 1
+clause_3_0_3: - e_4_7 + s_4 + s_7 <= 1
+clause_3_1_2: - e_5_6 + s_5 + s_6 <= 1
+clause_3_1_3: - e_4_6 + s_4 + s_6 <= 1
+clause_3_2_3: - e_4_5 + s_4 + s_5 <= 1
+clause_4_0_1: - e_1_6 - s_1 + s_6 <= 0
+clause_5_0_1: - e_1_7 - s_1 + s_7 <= 0
+Bounds
+ e_1_2 <= 1
+ e_1_6 <= 1
+ e_1_7 <= 1
+ e_2_3 <= 1
+ e_4_5 <= 1
+ e_4_6 <= 1
+ e_4_7 <= 1
+ e_5_6 <= 1
+ e_5_7 <= 1
+ e_6_7 <= 1
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
+ s_6 <= 1
+ s_7 <= 1
+End
+
 no_horn.cnf
 LP formulation type: HORN_FORMULA, is exact: True
 \* Number_of_Horn_formulae *\
@@ -923,6 +1109,36 @@ Bounds
  z_0 <= 1
  z_1 <= 1
  z_2 <= 1
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: True
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_2_3
+Subject To
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+Binaries
+e_1_2
+e_2_3
+s_1
+s_2
+s_3
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: False
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_2_3
+Subject To
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+Bounds
+ e_1_2 <= 1
+ e_2_3 <= 1
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
 End
 
 no_horn_2.cnf
@@ -1114,6 +1330,50 @@ Bounds
  z_1 <= 1
  z_2 <= 1
  z_3 <= 1
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: True
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_2_3
+Subject To
+clause_0_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_2_0_2: - e_1_3 - s_1 + s_3 <= 0
+clause_2_1_2: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_3_0_2: - e_2_3 + s_2 - s_3 <= 0
+clause_3_1_2: - e_1_2 + s_1 + s_2 <= 1
+Binaries
+e_1_2
+e_1_3
+e_2_3
+s_1
+s_2
+s_3
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: False
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_2_3
+Subject To
+clause_0_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_2_0_2: - e_1_3 - s_1 + s_3 <= 0
+clause_2_1_2: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_3_0_2: - e_2_3 + s_2 - s_3 <= 0
+clause_3_1_2: - e_1_2 + s_1 + s_2 <= 1
+Bounds
+ e_1_2 <= 1
+ e_1_3 <= 1
+ e_2_3 <= 1
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
 End
 
 no_positive.cnf
@@ -1367,6 +1627,88 @@ Bounds
  z_4 <= 1
 End
 
+LP formulation type: NUMBER_OF_EDGES, is exact: True
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + e_3_4 + e_3_5 + e_3_6 + e_4_5
+ + e_4_6 + e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_5_6 + s_5 + s_6 <= 1
+clause_3_0_2: - e_4_6 + s_4 + s_6 <= 1
+clause_3_0_3: - e_3_6 + s_3 + s_6 <= 1
+clause_3_0_4: - e_1_6 + s_1 + s_6 <= 1
+clause_3_1_2: - e_4_5 + s_4 + s_5 <= 1
+clause_3_1_3: - e_3_5 + s_3 + s_5 <= 1
+clause_3_1_4: - e_1_5 + s_1 + s_5 <= 1
+clause_3_2_3: - e_3_4 + s_3 + s_4 <= 1
+clause_3_2_4: - e_1_4 + s_1 + s_4 <= 1
+clause_3_3_4: - e_1_3 + s_1 + s_3 <= 1
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+e_1_6
+e_3_4
+e_3_5
+e_3_6
+e_4_5
+e_4_6
+e_5_6
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: False
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + e_3_4 + e_3_5 + e_3_6 + e_4_5
+ + e_4_6 + e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_5_6 + s_5 + s_6 <= 1
+clause_3_0_2: - e_4_6 + s_4 + s_6 <= 1
+clause_3_0_3: - e_3_6 + s_3 + s_6 <= 1
+clause_3_0_4: - e_1_6 + s_1 + s_6 <= 1
+clause_3_1_2: - e_4_5 + s_4 + s_5 <= 1
+clause_3_1_3: - e_3_5 + s_3 + s_5 <= 1
+clause_3_1_4: - e_1_5 + s_1 + s_5 <= 1
+clause_3_2_3: - e_3_4 + s_3 + s_4 <= 1
+clause_3_2_4: - e_1_4 + s_1 + s_4 <= 1
+clause_3_3_4: - e_1_3 + s_1 + s_3 <= 1
+Bounds
+ e_1_2 <= 1
+ e_1_3 <= 1
+ e_1_4 <= 1
+ e_1_5 <= 1
+ e_1_6 <= 1
+ e_3_4 <= 1
+ e_3_5 <= 1
+ e_3_6 <= 1
+ e_4_5 <= 1
+ e_4_6 <= 1
+ e_5_6 <= 1
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
+ s_6 <= 1
+End
+
 renamable_horn.cnf
 LP formulation type: HORN_FORMULA, is exact: True
 \* Number_of_Horn_formulae *\
@@ -1618,6 +1960,88 @@ Bounds
  z_4 <= 1
 End
 
+LP formulation type: NUMBER_OF_EDGES, is exact: True
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + e_3_4 + e_3_5 + e_3_6 + e_4_5
+ + e_4_6 + e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_3_4 - s_3 - s_4 <= -1
+clause_3_0_2: - e_3_5 - s_3 - s_5 <= -1
+clause_3_0_3: - e_3_6 - s_3 - s_6 <= -1
+clause_3_0_4: - e_1_3 + s_1 - s_3 <= 0
+clause_3_1_2: - e_4_5 - s_4 - s_5 <= -1
+clause_3_1_3: - e_4_6 - s_4 - s_6 <= -1
+clause_3_1_4: - e_1_4 + s_1 - s_4 <= 0
+clause_3_2_3: - e_5_6 - s_5 - s_6 <= -1
+clause_3_2_4: - e_1_5 + s_1 - s_5 <= 0
+clause_3_3_4: - e_1_6 + s_1 - s_6 <= 0
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+e_1_6
+e_3_4
+e_3_5
+e_3_6
+e_4_5
+e_4_6
+e_5_6
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+End
+
+LP formulation type: NUMBER_OF_EDGES, is exact: False
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + e_3_4 + e_3_5 + e_3_6 + e_4_5
+ + e_4_6 + e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_3_4 - s_3 - s_4 <= -1
+clause_3_0_2: - e_3_5 - s_3 - s_5 <= -1
+clause_3_0_3: - e_3_6 - s_3 - s_6 <= -1
+clause_3_0_4: - e_1_3 + s_1 - s_3 <= 0
+clause_3_1_2: - e_4_5 - s_4 - s_5 <= -1
+clause_3_1_3: - e_4_6 - s_4 - s_6 <= -1
+clause_3_1_4: - e_1_4 + s_1 - s_4 <= 0
+clause_3_2_3: - e_5_6 - s_5 - s_6 <= -1
+clause_3_2_4: - e_1_5 + s_1 - s_5 <= 0
+clause_3_3_4: - e_1_6 + s_1 - s_6 <= 0
+Bounds
+ e_1_2 <= 1
+ e_1_3 <= 1
+ e_1_4 <= 1
+ e_1_5 <= 1
+ e_1_6 <= 1
+ e_3_4 <= 1
+ e_3_5 <= 1
+ e_3_6 <= 1
+ e_4_5 <= 1
+ e_4_6 <= 1
+ e_5_6 <= 1
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+ s_4 <= 1
+ s_5 <= 1
+ s_6 <= 1
+End
+
 unsatisfiable.cnf
 LP formulation type: HORN_FORMULA, is exact: True
 \* Number_of_Horn_formulae *\
@@ -1809,11 +2233,43 @@ Bounds
  z_3 <= 1
 End
 
+LP formulation type: NUMBER_OF_EDGES, is exact: True
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_2_3
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_2_3 + s_2 + s_3 <= 1
+Binaries
+e_1_2
+e_2_3
+s_1
+s_2
+s_3
+End
 
-LP formulation - number of Horn formulae (RESPECT_DECOMPOSITION_HORN_FORMULA)
+LP formulation type: NUMBER_OF_EDGES, is exact: False
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_2_3
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_2_3 + s_2 + s_3 <= 1
+Bounds
+ e_1_2 <= 1
+ e_2_3 <= 1
+ s_1 <= 1
+ s_2 <= 1
+ s_3 <= 1
+End
+
+
+Weighted LP formulation
 
 2_cnf.cnf
-Cut set: []
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3
@@ -1834,7 +2290,7 @@ z_2
 z_3
 End
 
-Cut set: [2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 2 z_3
@@ -1855,7 +2311,7 @@ z_2
 z_3
 End
 
-Cut set: [1, 2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [1, 2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + z_1 + z_2 + z_3
@@ -1876,8 +2332,71 @@ z_2
 z_3
 End
 
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: []
+\* Number_of_edges *\
+Minimize
+OBJ: 2 e_1_2 + 2 e_1_3 + 2 e_1_4 + 2 e_1_5
+Subject To
+clause_0_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_1_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_2_0_1: - e_1_4 + s_1 - s_4 <= 0
+clause_3_0_1: - e_1_5 + s_1 - s_5 <= 0
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+s_1
+s_2
+s_3
+s_4
+s_5
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + 2 e_1_3 + 2 e_1_4 + 2 e_1_5
+Subject To
+clause_0_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_1_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_2_0_1: - e_1_4 + s_1 - s_4 <= 0
+clause_3_0_1: - e_1_5 + s_1 - s_5 <= 0
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+s_1
+s_2
+s_3
+s_4
+s_5
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5
+Subject To
+clause_0_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_1_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_2_0_1: - e_1_4 + s_1 - s_4 <= 0
+clause_3_0_1: - e_1_5 + s_1 - s_5 <= 0
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+s_1
+s_2
+s_3
+s_4
+s_5
+End
+
 dual_horn.cnf
-Cut set: []
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4 + 2 z_5
@@ -1904,7 +2423,7 @@ z_4
 z_5
 End
 
-Cut set: [2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + z_1 + z_2 + 2 z_3 + 2 z_4 + 2 z_5
@@ -1931,7 +2450,7 @@ z_4
 z_5
 End
 
-Cut set: [1, 2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [1, 2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + z_2 + 2 z_3 + z_4 + z_5
@@ -1956,10 +2475,118 @@ z_2
 z_3
 z_4
 z_5
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: []
+\* Number_of_edges *\
+Minimize
+OBJ: 2 e_1_2 + 2 e_1_6 + 2 e_1_7 + 2 e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7
+ + 2 e_5_6 + 2 e_5_7 + 2 e_6_7
+Subject To
+clause_1_0_1: - e_1_2 - s_1 + s_2 <= 0
+clause_2_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_4_5 - s_4 - s_5 <= -1
+clause_3_0_2: - e_4_6 - s_4 - s_6 <= -1
+clause_3_0_3: - e_4_7 - s_4 - s_7 <= -1
+clause_3_1_2: - e_5_6 - s_5 - s_6 <= -1
+clause_3_1_3: - e_5_7 - s_5 - s_7 <= -1
+clause_3_2_3: - e_6_7 - s_6 - s_7 <= -1
+clause_4_0_1: - e_1_6 + s_1 - s_6 <= 0
+clause_5_0_1: - e_1_7 + s_1 - s_7 <= 0
+Binaries
+e_1_2
+e_1_6
+e_1_7
+e_2_3
+e_4_5
+e_4_6
+e_4_7
+e_5_6
+e_5_7
+e_6_7
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + 2 e_1_6 + 2 e_1_7 + e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7 + 2 e_5_6
+ + 2 e_5_7 + 2 e_6_7
+Subject To
+clause_1_0_1: - e_1_2 - s_1 + s_2 <= 0
+clause_2_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_4_5 - s_4 - s_5 <= -1
+clause_3_0_2: - e_4_6 - s_4 - s_6 <= -1
+clause_3_0_3: - e_4_7 - s_4 - s_7 <= -1
+clause_3_1_2: - e_5_6 - s_5 - s_6 <= -1
+clause_3_1_3: - e_5_7 - s_5 - s_7 <= -1
+clause_3_2_3: - e_6_7 - s_6 - s_7 <= -1
+clause_4_0_1: - e_1_6 + s_1 - s_6 <= 0
+clause_5_0_1: - e_1_7 + s_1 - s_7 <= 0
+Binaries
+e_1_2
+e_1_6
+e_1_7
+e_2_3
+e_4_5
+e_4_6
+e_4_7
+e_5_6
+e_5_7
+e_6_7
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_6 + e_1_7 + e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7 + 2 e_5_6
+ + 2 e_5_7 + 2 e_6_7
+Subject To
+clause_1_0_1: - e_1_2 - s_1 + s_2 <= 0
+clause_2_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_4_5 - s_4 - s_5 <= -1
+clause_3_0_2: - e_4_6 - s_4 - s_6 <= -1
+clause_3_0_3: - e_4_7 - s_4 - s_7 <= -1
+clause_3_1_2: - e_5_6 - s_5 - s_6 <= -1
+clause_3_1_3: - e_5_7 - s_5 - s_7 <= -1
+clause_3_2_3: - e_6_7 - s_6 - s_7 <= -1
+clause_4_0_1: - e_1_6 + s_1 - s_6 <= 0
+clause_5_0_1: - e_1_7 + s_1 - s_7 <= 0
+Binaries
+e_1_2
+e_1_6
+e_1_7
+e_2_3
+e_4_5
+e_4_6
+e_4_7
+e_5_6
+e_5_7
+e_6_7
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
 End
 
 horn.cnf
-Cut set: []
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4 + 2 z_5
@@ -1986,7 +2613,7 @@ z_4
 z_5
 End
 
-Cut set: [2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + z_1 + z_2 + 2 z_3 + 2 z_4 + 2 z_5
@@ -2013,7 +2640,7 @@ z_4
 z_5
 End
 
-Cut set: [1, 2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [1, 2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + z_2 + 2 z_3 + z_4 + z_5
@@ -2040,8 +2667,116 @@ z_4
 z_5
 End
 
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: []
+\* Number_of_edges *\
+Minimize
+OBJ: 2 e_1_2 + 2 e_1_6 + 2 e_1_7 + 2 e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7
+ + 2 e_5_6 + 2 e_5_7 + 2 e_6_7
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_6_7 + s_6 + s_7 <= 1
+clause_3_0_2: - e_5_7 + s_5 + s_7 <= 1
+clause_3_0_3: - e_4_7 + s_4 + s_7 <= 1
+clause_3_1_2: - e_5_6 + s_5 + s_6 <= 1
+clause_3_1_3: - e_4_6 + s_4 + s_6 <= 1
+clause_3_2_3: - e_4_5 + s_4 + s_5 <= 1
+clause_4_0_1: - e_1_6 - s_1 + s_6 <= 0
+clause_5_0_1: - e_1_7 - s_1 + s_7 <= 0
+Binaries
+e_1_2
+e_1_6
+e_1_7
+e_2_3
+e_4_5
+e_4_6
+e_4_7
+e_5_6
+e_5_7
+e_6_7
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + 2 e_1_6 + 2 e_1_7 + e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7 + 2 e_5_6
+ + 2 e_5_7 + 2 e_6_7
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_6_7 + s_6 + s_7 <= 1
+clause_3_0_2: - e_5_7 + s_5 + s_7 <= 1
+clause_3_0_3: - e_4_7 + s_4 + s_7 <= 1
+clause_3_1_2: - e_5_6 + s_5 + s_6 <= 1
+clause_3_1_3: - e_4_6 + s_4 + s_6 <= 1
+clause_3_2_3: - e_4_5 + s_4 + s_5 <= 1
+clause_4_0_1: - e_1_6 - s_1 + s_6 <= 0
+clause_5_0_1: - e_1_7 - s_1 + s_7 <= 0
+Binaries
+e_1_2
+e_1_6
+e_1_7
+e_2_3
+e_4_5
+e_4_6
+e_4_7
+e_5_6
+e_5_7
+e_6_7
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_6 + e_1_7 + e_2_3 + 2 e_4_5 + 2 e_4_6 + 2 e_4_7 + 2 e_5_6
+ + 2 e_5_7 + 2 e_6_7
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_6_7 + s_6 + s_7 <= 1
+clause_3_0_2: - e_5_7 + s_5 + s_7 <= 1
+clause_3_0_3: - e_4_7 + s_4 + s_7 <= 1
+clause_3_1_2: - e_5_6 + s_5 + s_6 <= 1
+clause_3_1_3: - e_4_6 + s_4 + s_6 <= 1
+clause_3_2_3: - e_4_5 + s_4 + s_5 <= 1
+clause_4_0_1: - e_1_6 - s_1 + s_6 <= 0
+clause_5_0_1: - e_1_7 - s_1 + s_7 <= 0
+Binaries
+e_1_2
+e_1_6
+e_1_7
+e_2_3
+e_4_5
+e_4_6
+e_4_7
+e_5_6
+e_5_7
+e_6_7
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+s_7
+End
+
 no_horn.cnf
-Cut set: []
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2
@@ -2058,7 +2793,7 @@ z_1
 z_2
 End
 
-Cut set: [2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + z_1 + z_2
@@ -2075,7 +2810,7 @@ z_1
 z_2
 End
 
-Cut set: [1, 2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [1, 2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + 0.5 z_2
@@ -2092,8 +2827,53 @@ z_1
 z_2
 End
 
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: []
+\* Number_of_edges *\
+Minimize
+OBJ: 2 e_1_2 + 2 e_2_3
+Subject To
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+Binaries
+e_1_2
+e_2_3
+s_1
+s_2
+s_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_2_3
+Subject To
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+Binaries
+e_1_2
+e_2_3
+s_1
+s_2
+s_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_2_3
+Subject To
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+Binaries
+e_1_2
+e_2_3
+s_1
+s_2
+s_3
+End
+
 no_horn_2.cnf
-Cut set: []
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3
@@ -2112,7 +2892,7 @@ z_2
 z_3
 End
 
-Cut set: [2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + z_1 + z_2 + z_3
@@ -2131,7 +2911,7 @@ z_2
 z_3
 End
 
-Cut set: [1, 2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [1, 2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + z_1 + 0.5 z_2 + 0.5 z_3
@@ -2150,8 +2930,74 @@ z_2
 z_3
 End
 
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: []
+\* Number_of_edges *\
+Minimize
+OBJ: 2 e_1_2 + 2 e_1_3 + 2 e_2_3
+Subject To
+clause_0_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_2_0_2: - e_1_3 - s_1 + s_3 <= 0
+clause_2_1_2: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_3_0_2: - e_2_3 + s_2 - s_3 <= 0
+clause_3_1_2: - e_1_2 + s_1 + s_2 <= 1
+Binaries
+e_1_2
+e_1_3
+e_2_3
+s_1
+s_2
+s_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + 2 e_1_3 + e_2_3
+Subject To
+clause_0_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_2_0_2: - e_1_3 - s_1 + s_3 <= 0
+clause_2_1_2: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_3_0_2: - e_2_3 + s_2 - s_3 <= 0
+clause_3_1_2: - e_1_2 + s_1 + s_2 <= 1
+Binaries
+e_1_2
+e_1_3
+e_2_3
+s_1
+s_2
+s_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_2_3
+Subject To
+clause_0_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_1_0_1: - e_2_3 - s_2 + s_3 <= 0
+clause_2_0_1: - e_1_2 - s_1 - s_2 <= -1
+clause_2_0_2: - e_1_3 - s_1 + s_3 <= 0
+clause_2_1_2: - e_2_3 - s_2 + s_3 <= 0
+clause_3_0_1: - e_1_3 + s_1 - s_3 <= 0
+clause_3_0_2: - e_2_3 + s_2 - s_3 <= 0
+clause_3_1_2: - e_1_2 + s_1 + s_2 <= 1
+Binaries
+e_1_2
+e_1_3
+e_2_3
+s_1
+s_2
+s_3
+End
+
 no_positive.cnf
-Cut set: []
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4
@@ -2176,7 +3022,7 @@ z_3
 z_4
 End
 
-Cut set: [2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4
@@ -2201,7 +3047,7 @@ z_3
 z_4
 End
 
-Cut set: [1, 2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [1, 2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 2 z_1 + z_2 + z_3 + 2 z_4
@@ -2224,10 +3070,133 @@ z_1
 z_2
 z_3
 z_4
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: []
+\* Number_of_edges *\
+Minimize
+OBJ: 2 e_1_2 + 2 e_1_3 + 2 e_1_4 + 2 e_1_5 + 2 e_1_6 + 2 e_3_4 + 2 e_3_5
+ + 2 e_3_6 + 2 e_4_5 + 2 e_4_6 + 2 e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_5_6 + s_5 + s_6 <= 1
+clause_3_0_2: - e_4_6 + s_4 + s_6 <= 1
+clause_3_0_3: - e_3_6 + s_3 + s_6 <= 1
+clause_3_0_4: - e_1_6 + s_1 + s_6 <= 1
+clause_3_1_2: - e_4_5 + s_4 + s_5 <= 1
+clause_3_1_3: - e_3_5 + s_3 + s_5 <= 1
+clause_3_1_4: - e_1_5 + s_1 + s_5 <= 1
+clause_3_2_3: - e_3_4 + s_3 + s_4 <= 1
+clause_3_2_4: - e_1_4 + s_1 + s_4 <= 1
+clause_3_3_4: - e_1_3 + s_1 + s_3 <= 1
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+e_1_6
+e_3_4
+e_3_5
+e_3_6
+e_4_5
+e_4_6
+e_5_6
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + 2 e_1_3 + 2 e_1_4 + 2 e_1_5 + 2 e_1_6 + 2 e_3_4 + 2 e_3_5
+ + 2 e_3_6 + 2 e_4_5 + 2 e_4_6 + 2 e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_5_6 + s_5 + s_6 <= 1
+clause_3_0_2: - e_4_6 + s_4 + s_6 <= 1
+clause_3_0_3: - e_3_6 + s_3 + s_6 <= 1
+clause_3_0_4: - e_1_6 + s_1 + s_6 <= 1
+clause_3_1_2: - e_4_5 + s_4 + s_5 <= 1
+clause_3_1_3: - e_3_5 + s_3 + s_5 <= 1
+clause_3_1_4: - e_1_5 + s_1 + s_5 <= 1
+clause_3_2_3: - e_3_4 + s_3 + s_4 <= 1
+clause_3_2_4: - e_1_4 + s_1 + s_4 <= 1
+clause_3_3_4: - e_1_3 + s_1 + s_3 <= 1
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+e_1_6
+e_3_4
+e_3_5
+e_3_6
+e_4_5
+e_4_6
+e_5_6
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + 2 e_3_4 + 2 e_3_5 + 2 e_3_6
+ + 2 e_4_5 + 2 e_4_6 + 2 e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_5_6 + s_5 + s_6 <= 1
+clause_3_0_2: - e_4_6 + s_4 + s_6 <= 1
+clause_3_0_3: - e_3_6 + s_3 + s_6 <= 1
+clause_3_0_4: - e_1_6 + s_1 + s_6 <= 1
+clause_3_1_2: - e_4_5 + s_4 + s_5 <= 1
+clause_3_1_3: - e_3_5 + s_3 + s_5 <= 1
+clause_3_1_4: - e_1_5 + s_1 + s_5 <= 1
+clause_3_2_3: - e_3_4 + s_3 + s_4 <= 1
+clause_3_2_4: - e_1_4 + s_1 + s_4 <= 1
+clause_3_3_4: - e_1_3 + s_1 + s_3 <= 1
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+e_1_6
+e_3_4
+e_3_5
+e_3_6
+e_4_5
+e_4_6
+e_5_6
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
 End
 
 renamable_horn.cnf
-Cut set: []
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4
@@ -2252,7 +3221,7 @@ z_3
 z_4
 End
 
-Cut set: [2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 2 z_1 + 2 z_2 + 2 z_3 + 2 z_4
@@ -2277,7 +3246,7 @@ z_3
 z_4
 End
 
-Cut set: [1, 2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [1, 2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 0.5 z_0 + 2 z_1 + z_2 + z_3 + 2 z_4
@@ -2302,8 +3271,131 @@ z_3
 z_4
 End
 
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: []
+\* Number_of_edges *\
+Minimize
+OBJ: 2 e_1_2 + 2 e_1_3 + 2 e_1_4 + 2 e_1_5 + 2 e_1_6 + 2 e_3_4 + 2 e_3_5
+ + 2 e_3_6 + 2 e_4_5 + 2 e_4_6 + 2 e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_3_4 - s_3 - s_4 <= -1
+clause_3_0_2: - e_3_5 - s_3 - s_5 <= -1
+clause_3_0_3: - e_3_6 - s_3 - s_6 <= -1
+clause_3_0_4: - e_1_3 + s_1 - s_3 <= 0
+clause_3_1_2: - e_4_5 - s_4 - s_5 <= -1
+clause_3_1_3: - e_4_6 - s_4 - s_6 <= -1
+clause_3_1_4: - e_1_4 + s_1 - s_4 <= 0
+clause_3_2_3: - e_5_6 - s_5 - s_6 <= -1
+clause_3_2_4: - e_1_5 + s_1 - s_5 <= 0
+clause_3_3_4: - e_1_6 + s_1 - s_6 <= 0
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+e_1_6
+e_3_4
+e_3_5
+e_3_6
+e_4_5
+e_4_6
+e_5_6
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + 2 e_1_3 + 2 e_1_4 + 2 e_1_5 + 2 e_1_6 + 2 e_3_4 + 2 e_3_5
+ + 2 e_3_6 + 2 e_4_5 + 2 e_4_6 + 2 e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_3_4 - s_3 - s_4 <= -1
+clause_3_0_2: - e_3_5 - s_3 - s_5 <= -1
+clause_3_0_3: - e_3_6 - s_3 - s_6 <= -1
+clause_3_0_4: - e_1_3 + s_1 - s_3 <= 0
+clause_3_1_2: - e_4_5 - s_4 - s_5 <= -1
+clause_3_1_3: - e_4_6 - s_4 - s_6 <= -1
+clause_3_1_4: - e_1_4 + s_1 - s_4 <= 0
+clause_3_2_3: - e_5_6 - s_5 - s_6 <= -1
+clause_3_2_4: - e_1_5 + s_1 - s_5 <= 0
+clause_3_3_4: - e_1_6 + s_1 - s_6 <= 0
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+e_1_6
+e_3_4
+e_3_5
+e_3_6
+e_4_5
+e_4_6
+e_5_6
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_1_3 + e_1_4 + e_1_5 + e_1_6 + 2 e_3_4 + 2 e_3_5 + 2 e_3_6
+ + 2 e_4_5 + 2 e_4_6 + 2 e_5_6
+Subject To
+clause_0_0_1: - e_1_2 + s_1 + s_2 <= 1
+clause_1_0_1: - e_3_4 + s_3 + s_4 <= 1
+clause_2_0_1: - e_3_5 + s_3 + s_5 <= 1
+clause_2_0_2: - e_1_5 + s_1 + s_5 <= 1
+clause_2_1_2: - e_1_3 + s_1 + s_3 <= 1
+clause_3_0_1: - e_3_4 - s_3 - s_4 <= -1
+clause_3_0_2: - e_3_5 - s_3 - s_5 <= -1
+clause_3_0_3: - e_3_6 - s_3 - s_6 <= -1
+clause_3_0_4: - e_1_3 + s_1 - s_3 <= 0
+clause_3_1_2: - e_4_5 - s_4 - s_5 <= -1
+clause_3_1_3: - e_4_6 - s_4 - s_6 <= -1
+clause_3_1_4: - e_1_4 + s_1 - s_4 <= 0
+clause_3_2_3: - e_5_6 - s_5 - s_6 <= -1
+clause_3_2_4: - e_1_5 + s_1 - s_5 <= 0
+clause_3_3_4: - e_1_6 + s_1 - s_6 <= 0
+Binaries
+e_1_2
+e_1_3
+e_1_4
+e_1_5
+e_1_6
+e_3_4
+e_3_5
+e_3_6
+e_4_5
+e_4_6
+e_5_6
+s_1
+s_2
+s_3
+s_4
+s_5
+s_6
+End
+
 unsatisfiable.cnf
-Cut set: []
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: []
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + 2 z_1 + 2 z_2 + 2 z_3
@@ -2322,7 +3414,7 @@ z_2
 z_3
 End
 
-Cut set: [2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: 2 z_0 + z_1 + z_2 + z_3
@@ -2341,7 +3433,7 @@ z_2
 z_3
 End
 
-Cut set: [1, 2]
+LP formulation type: RESPECT_DECOMPOSITION_HORN_FORMULA, cut set: [1, 2]
 \* Number_of_Horn_formulae *\
 Maximize
 OBJ: z_0 + 0.5 z_1 + z_2 + z_3
@@ -2358,5 +3450,53 @@ z_0
 z_1
 z_2
 z_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: []
+\* Number_of_edges *\
+Minimize
+OBJ: 2 e_1_2 + 2 e_2_3
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_2_3 + s_2 + s_3 <= 1
+Binaries
+e_1_2
+e_2_3
+s_1
+s_2
+s_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_2_3
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_2_3 + s_2 + s_3 <= 1
+Binaries
+e_1_2
+e_2_3
+s_1
+s_2
+s_3
+End
+
+LP formulation type: RESPECT_DECOMPOSITION_NUMBER_OF_EDGES, cut set: [1, 2]
+\* Number_of_edges *\
+Minimize
+OBJ: e_1_2 + e_2_3
+Subject To
+clause_1_0_1: - e_1_2 + s_1 - s_2 <= 0
+clause_2_0_1: - e_2_3 + s_2 - s_3 <= 0
+clause_3_0_1: - e_2_3 + s_2 + s_3 <= 1
+Binaries
+e_1_2
+e_2_3
+s_1
+s_2
+s_3
 End
 

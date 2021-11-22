@@ -68,7 +68,7 @@ def main(main_args):
             experiment.experiment(file_name=file_name, file_path=file_path,
 
                                   decision_heuristic_ignore_binary_clauses=True,
-                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.MAXIMUM_RENAMABLE_HORN_VSADS,
+                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.MAXIMUM_RENAMABLE_HORN_DLCS_DLIS,
                                   base_class_enum_set={bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF},
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
@@ -77,7 +77,7 @@ def main(main_args):
                                   decision_heuristic_maximum_renamable_horn_is_exact=True,
                                   decision_heuristic_maximum_renamable_horn_use_conflicts=True,
                                   decision_heuristic_maximum_renamable_horn_prefer_conflict_variables=True,
-                                  decision_heuristic_maximum_renamable_horn_lp_formulation_type=lpft_enum.LpFormulationTypeEnum.SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA,
+                                  decision_heuristic_maximum_renamable_horn_lp_formulation_type=lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_HORN_FORMULA,
                                   decision_heuristic_maximum_renamable_horn_weight_for_variables_not_in_cut_set=2,
 
                                   smooth=False,
