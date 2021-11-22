@@ -123,7 +123,8 @@ class RenamableHornFormulaLpFormulation:
             self.__lp_formulation = pulp.LpProblem(name="Vertex_cover",
                                                    sense=pulp.LpMinimize)
             self.__create_lp_formulation_vertex_cover(incidence_graph=incidence_graph,
-                                                      weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set)
+                                                      weight_for_variables_not_in_cut_set=weight_for_variables_not_in_cut_set,
+                                                      cut_set=cut_set)
 
         # Not implemented
         else:
@@ -271,8 +272,41 @@ class RenamableHornFormulaLpFormulation:
             raise c_exception.FunctionNotImplementedException("__create_lp_formulation_number_of_vertices",
                                                               f"this type of LP formulation ({self.__lp_formulation_type.name}) is not implemented")
 
-    def __create_lp_formulation_vertex_cover(self, incidence_graph, weight_for_variables_not_in_cut_set: int) -> None:
-        pass
+    def __create_lp_formulation_vertex_cover(self, incidence_graph, weight_for_variables_not_in_cut_set: int, cut_set: Union[Set[int], None]) -> None:
+        # Variables
+        lp_variable_is_vertex_covered = LpVariable.dicts(name="c",
+                                                         indexs=incidence_graph.variable_set(copy=False),
+                                                         lowBound=0,
+                                                         upBound=1,
+                                                         cat=LpInteger if self.__is_exact else LpContinuous)
+
+        # Constraints
+        for clause_id in incidence_graph.clause_id_set(copy=False):
+            clause = list(incidence_graph.get_clause(clause_id=clause_id, copy=False))
+            clause_length = len(clause)
+
+            for i in range(clause_length - 1):
+                for j in range(i + 1, clause_length):
+                    lit_i = clause[i]
+                    lit_j = clause[j]
+                    var_i = abs(lit_i)
+                    var_j = abs(lit_j)
+
+                    self.__lp_formulation.addConstraint(lpSum([self.__lp_variable_variable_is_switched[abs(lit)] if -lit > 0 else (1 - self.__lp_variable_variable_is_switched[abs(lit)]) for lit in [lit_i, lit_j]]) <= 1 + lp_variable_is_vertex_covered[var_i] + lp_variable_is_vertex_covered[var_j], f"clause_{clause_id}_{i}_{j}")
+
+        # Objective function
+        # VERTEX_COVER
+        if self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.VERTEX_COVER:
+            self.__lp_formulation.setObjective(lpSum(lp_variable_is_vertex_covered))
+
+        # RESPECT_DECOMPOSITION_VERTEX_COVER
+        elif self.__lp_formulation_type == lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_VERTEX_COVER:
+            self.__lp_formulation.setObjective(lpSum([lp_variable_is_vertex_covered[vertex] * (1 if vertex in cut_set else weight_for_variables_not_in_cut_set) for vertex in lp_variable_is_vertex_covered]))
+
+        # Not implemented
+        else:
+            raise c_exception.FunctionNotImplementedException("__create_lp_formulation_vertex_cover",
+                                                              f"this type of LP formulation ({self.__lp_formulation_type.name}) is not implemented")
     # endregion
 
     # region Public method

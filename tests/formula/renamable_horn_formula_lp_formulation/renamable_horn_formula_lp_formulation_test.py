@@ -56,7 +56,8 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
                                             lpft_enum.LpFormulationTypeEnum.INVERSE_LENGTH_WEIGHTED_HORN_FORMULA,
                                             lpft_enum.LpFormulationTypeEnum.SQUARED_INVERSE_LENGTH_WEIGHTED_HORN_FORMULA,
                                             lpft_enum.LpFormulationTypeEnum.NUMBER_OF_EDGES,
-                                            lpft_enum.LpFormulationTypeEnum.NUMBER_OF_VERTICES]:
+                                            lpft_enum.LpFormulationTypeEnum.NUMBER_OF_VERTICES,
+                                            lpft_enum.LpFormulationTypeEnum.VERTEX_COVER]:
                     for is_exact in [True, False]:
                         try:
                             result = "\n".join((result, f"LP formulation type: {lpft_enum.LpFormulationTypeEnum._value2member_map_[lp_formulation_type].name}, "
@@ -96,7 +97,8 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
 
                 for lp_formulation_type in [lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_HORN_FORMULA,
                                             lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_EDGES,
-                                            lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES]:
+                                            lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_NUMBER_OF_VERTICES,
+                                            lpft_enum.LpFormulationTypeEnum.RESPECT_DECOMPOSITION_VERTEX_COVER]:
                     for cut_set in [set(), {2}, {1, 2}]:
                         try:
                             result = "\n".join((result, f"LP formulation type: {lpft_enum.LpFormulationTypeEnum._value2member_map_[lp_formulation_type].name}, "
@@ -104,7 +106,7 @@ class RenamableHornFormulaLpFormulationTest(TestAbstract):
 
                             renamable_horn_formula_lp_formulation = RenamableHornFormulaLpFormulation(incidence_graph=incidence_graph,
                                                                                                       number_of_threads=0,
-                                                                                                      is_exact=True,
+                                                                                                      is_exact=False,
                                                                                                       lp_formulation_type=lp_formulation_type,
                                                                                                       cut_set=cut_set,
                                                                                                       weight_for_variables_not_in_cut_set=2)

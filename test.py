@@ -1,4 +1,0 @@
-from tests.formula.renamable_horn_formula_lp_formulation.renamable_horn_formula_lp_formulation_test import RenamableHornFormulaLpFormulationTest
-
-t = RenamableHornFormulaLpFormulationTest()
-t.save()
