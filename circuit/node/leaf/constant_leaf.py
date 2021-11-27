@@ -47,6 +47,9 @@ class ConstantLeaf(LeafAbstract):
             return 0
         else:
             return math.inf
+
+    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
+        return self.id
     # endregion
 
     # region Magic method

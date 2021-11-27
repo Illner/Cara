@@ -74,6 +74,10 @@ class NodeAbstract(ABC):
     @abstractmethod
     def get_number_of_children(self) -> int:
         pass
+
+    @abstractmethod
+    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
+        pass
     # endregion
 
     # region Static method

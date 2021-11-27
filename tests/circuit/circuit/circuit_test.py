@@ -25,7 +25,8 @@ class CircuitTest(TestAbstract):
                      ("Properties", self.__test_5),
                      ("Checking an assumption set and exist quantification set", self.__test_6),
                      ("Smoothness", self.__test_7),
-                     ("Leaf as root", self.__test_8)]
+                     ("Leaf as root", self.__test_8),
+                     ("Copying circuits", self.__test_9)]
 
         for test_name, test in test_list:
             try:
@@ -176,6 +177,32 @@ class CircuitTest(TestAbstract):
         circuit.create_and_node({7, 10, 11})            # 13
 
         max_id = circuit.create_or_node({12, 13}, 1)    # 14
+
+        if set_root:
+            circuit.set_root(max_id)
+
+        return circuit, max_id
+
+    @staticmethod
+    def __create_circuit_12(set_root: bool = True) -> (Circuit, int):
+        """
+        Create a circuit (circuit_12)
+        Non-decomposable
+        Non-deterministic
+        Non-smooth
+        """
+
+        circuit = Circuit(circuit_name="circuit_12")
+
+        circuit.create_literal_leaf(-3)             # 0
+        circuit.create_literal_leaf(1)              # 1
+        circuit.create_constant_leaf(False)         # 2
+        circuit.create_literal_leaf(2)              # 3
+
+        circuit.create_and_node({0, 1})             # 4
+        circuit.create_or_node({1, 2, 3})           # 5
+
+        max_id = circuit.create_and_node({4, 5})    # 6
 
         if set_root:
             circuit.set_root(max_id)
@@ -464,6 +491,40 @@ class CircuitTest(TestAbstract):
             # Properties
             result = "\n".join((result, f"Decomposability: {circuit.is_decomposable()}, determinism: {circuit.is_deterministic()}, smoothness: {circuit.is_smooth()}, circuit type: {circuit.circuit_type.name}"))
 
+        except c_exception.CaraException as err:
+            result = "\n".join((result, str(err)))
+
+        return result
+
+    def __test_9(self) -> str:
+        """
+        A test for copying circuits.
+        Positive
+        :return: the result of the test
+        """
+
+        result = ""
+        try:
+            # Before copying
+            c, _ = CircuitTest.__create_circuit_12()
+            result = "Before copying circuits"
+            result = "\n".join((result, repr(c)))
+
+            # Copy a circuit with the root 5
+            result = "\n".join((result, "Copy a circuit with the root 5"))
+            new_node_id = c.get_node(5).copy_circuit(mapping_dictionary={1: 2, 2: 3},
+                                                     circuit=c)
+
+            c.add_edge(6, new_node_id)
+            result = "\n".join((result, repr(c)))
+
+            # Copy a circuit with the root 4
+            result = "\n".join((result, "Copy a circuit with the root 4"))
+            new_node_id = c.get_node(4).copy_circuit(mapping_dictionary={1: 4, 3: 3},
+                                                     circuit=c)
+
+            c.add_edge(4, new_node_id)
+            result = "\n".join((result, repr(c)))
         except c_exception.CaraException as err:
             result = "\n".join((result, str(err)))
 

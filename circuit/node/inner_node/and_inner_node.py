@@ -173,4 +173,36 @@ class AndInnerNode(InnerNodeAbstract):
             self._add_minimal_default_cardinality_cache(key, default_cardinality)
 
         return default_cardinality
+
+    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
+        if copied_node_dictionary is None:
+            copied_node_dictionary = dict()
+
+        node_id = self.id
+
+        # The node has been already processed
+        if node_id in copied_node_dictionary:
+            return copied_node_dictionary[node_id]
+
+        new_child_id_set: Set[int] = set()
+        for child in self._child_set:
+            child_id = child.id
+
+            # The child has been already processed
+            if child_id in copied_node_dictionary:
+                new_child_id = copied_node_dictionary[child_id]
+            else:
+                new_child_id = child.copy_circuit(mapping_dictionary=mapping_dictionary,
+                                                  circuit=circuit,
+                                                  copied_node_dictionary=copied_node_dictionary)
+                copied_node_dictionary[child_id] = new_child_id
+
+            new_child_id_set.add(new_child_id)
+
+        new_node_id = circuit.create_and_node(child_id_set=new_child_id_set,
+                                              use_unique_node_cache=True)
+
+        copied_node_dictionary[node_id] = new_node_id
+
+        return new_node_id
     # endregion

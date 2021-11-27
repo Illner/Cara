@@ -4,6 +4,9 @@ from typing import Set, Dict
 # Import exception
 from exception.cara_exception import CaraException
 
+# Import enum
+import circuit.node.node_type_enum as nt_enum
+
 
 class CircuitException(CaraException):
     def __init__(self, message: str):
@@ -206,4 +209,14 @@ class MappingIsIncompleteException(CircuitException):
 
     def __init__(self, mapping_dictionary: Dict[int, int], variable_or_literal_in_circuit: Set[int]):
         self.message = f"The mapping ({mapping_dictionary}) is incomplete in the sub-circuit ({variable_or_literal_in_circuit})!"
+        super().__init__(self.message)
+
+
+class CopyingCircuitsIsNotSupportedForNontrivialLeavesAndMappingNodesException(CircuitException):
+    """
+    Copying circuits is not supported for non-trivial leaves (2-CNF, HornCNF) and mapping nodes
+    """
+
+    def __init__(self, node_type: nt_enum.NodeTypeEnum):
+        self.message = f"Copying circuits is not supported for non-trivial leaves and mapping nodes ({node_type.name})!"
         super().__init__(self.message)
