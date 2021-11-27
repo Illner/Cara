@@ -523,7 +523,7 @@ class Component:
                     return cache_id
 
                 node_id, mapping_variable_id_variable_cache_dictionary = self.__circuit.create_mapping_node(child_id=cache_id,
-                                                                                                            variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                                                                            variable_id_mapping_id_dictionary=cache_mapping,
                                                                                                             mapping_id_variable_id_dictionary=cache_mapping_before_unit_propagation[1])
 
                 # Mapping is used
@@ -582,7 +582,7 @@ class Component:
                 # Mapping is used
                 if cache_mapping_after_unit_propagation is not None:
                     node_temp, mapping_variable_id_variable_cache_dictionary = self.__circuit.create_mapping_node(child_id=cache_id,
-                                                                                                                  variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                                                                                  variable_id_mapping_id_dictionary=cache_mapping,
                                                                                                                   mapping_id_variable_id_dictionary=cache_mapping_after_unit_propagation[1])
 
                     if node_temp != cache_id:

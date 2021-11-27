@@ -294,7 +294,7 @@ class Circuit:
                         raise c_exception.InvalidDimacsNnfFormatException(f"some variable in the mapping ({line}) mentioned at line {line_id} in the mapping node is not an integer")
 
                     root_id, _ = self.create_mapping_node(child_id=child_id_temp,
-                                                          variable_id_mapping_id_dictionary_cache=variable_id_mapping_id_dictionary_temp,
+                                                          variable_id_mapping_id_dictionary=variable_id_mapping_id_dictionary_temp,
                                                           mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary_temp,
                                                           composition_needed=False)
                     continue
@@ -690,6 +690,43 @@ class Circuit:
         key_string = child_id_sorted_list.str_delimiter("-")
 
         return key_string
+
+    @staticmethod
+    def compose_mappings(variable_id_mapping_id_dictionary_cache: Dict[int, int], mapping_id_variable_id_dictionary: Dict[int, int]) -> Tuple[bool, Dict[int, int], Dict[int, int]]:
+        """
+        Compose the mappings (variable_id_mapping_id_dictionary_cache o mapping_id_variable_id_dictionary)
+        :param variable_id_mapping_id_dictionary_cache: variable_id -> mapping_id (mapping from the node in the cache)
+        :param mapping_id_variable_id_dictionary: mapping_id -> variable_id (mapping from the generated key)
+        :return: (is identity, variable_id_mapping_id_dictionary, mapping_id_variable_id_dictionary)
+        :raises MappingIsIncompleteException: if one of the mappings is invalid
+        """
+
+        # Initialization
+        is_identity: bool = True
+        composed_mapping_variable_id_variable_cache_dictionary: Dict[int, int] = dict()
+        composed_mapping_variable_cache_variable_id_dictionary: Dict[int, int] = dict()
+
+        for variable_cache in variable_id_mapping_id_dictionary_cache:
+            mapping_id = variable_id_mapping_id_dictionary_cache[variable_cache]
+
+            if mapping_id not in mapping_id_variable_id_dictionary:
+                raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
+                                                               variable_or_literal_in_circuit=set(variable_id_mapping_id_dictionary_cache.values()))
+
+            variable_id = mapping_id_variable_id_dictionary[mapping_id]
+
+            composed_mapping_variable_id_variable_cache_dictionary[variable_id] = variable_cache
+            composed_mapping_variable_cache_variable_id_dictionary[variable_cache] = variable_id
+
+        # Check identity
+        for variable_cache in composed_mapping_variable_cache_variable_id_dictionary:
+            variable_id = composed_mapping_variable_cache_variable_id_dictionary[variable_cache]
+
+            if variable_cache != variable_id:
+                is_identity = False
+                break
+
+        return is_identity, composed_mapping_variable_id_variable_cache_dictionary, composed_mapping_variable_cache_variable_id_dictionary
     # endregion
 
     # region Public method
@@ -928,49 +965,28 @@ class Circuit:
 
         return or_node_id
 
-    def create_mapping_node(self, child_id: int, variable_id_mapping_id_dictionary_cache: Dict[int, int],
-                            mapping_id_variable_id_dictionary: Dict[int, int], composition_needed: bool = True) -> Tuple[int, Dict[int, int]]:
+    def create_mapping_node(self, child_id: int, variable_id_mapping_id_dictionary: Dict[int, int], mapping_id_variable_id_dictionary: Dict[int, int],
+                            composition_needed: bool = True) -> Tuple[int, Dict[int, int]]:
         """
         Create a new mapping node in the circuit
         :param child_id: an identifier of the child
-        :param variable_id_mapping_id_dictionary_cache: variable_id -> mapping_id (mapping from the node in the cache)
-        :param mapping_id_variable_id_dictionary: mapping_id -> variable_id (mapping from the generated key)
-        :param composition_needed: True if the composition is needed to be done (mainly for caching) (variable_id_mapping_id_dictionary_cache o mapping_id_variable_id_dictionary)
+        :param variable_id_mapping_id_dictionary: variable_id -> mapping_id
+        :param mapping_id_variable_id_dictionary: mapping_id -> variable_id
+        :param composition_needed: True if the composition is needed to be done (variable_id_mapping_id_dictionary o mapping_id_variable_id_dictionary)
         :return: the identifier of the node and the mapping function
-        :raises MappingIsIncompleteException: if one of the mappings is invalid
         :raises NodeWithIDDoesNotExistInCircuitException: if the child's id does not exist in the circuit
         """
 
-        composed_mapping_variable_cache_variable_id_dictionary: Dict[int, int] = dict()
-        composed_mapping_variable_id_variable_cache_dictionary: Dict[int, int] = dict()
-
-        # The composition is needed
+        # Composition is needed
         if composition_needed:
-            for variable_cache in variable_id_mapping_id_dictionary_cache:
-                mapping_id = variable_id_mapping_id_dictionary_cache[variable_cache]
-
-                if mapping_id not in mapping_id_variable_id_dictionary:
-                    raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_id_variable_id_dictionary,
-                                                                   variable_or_literal_in_circuit=set(variable_id_mapping_id_dictionary_cache.values()))
-
-                variable_id = mapping_id_variable_id_dictionary[mapping_id]
-
-                composed_mapping_variable_cache_variable_id_dictionary[variable_cache] = variable_id
-                composed_mapping_variable_id_variable_cache_dictionary[variable_id] = variable_cache
-
-            mapping_is_needed = False
-            for variable_cache in composed_mapping_variable_cache_variable_id_dictionary:
-                variable_id = composed_mapping_variable_cache_variable_id_dictionary[variable_cache]
-
-                if variable_cache != variable_id:
-                    mapping_is_needed = True
-                    break
+            is_identity, composed_mapping_variable_id_variable_cache_dictionary, composed_mapping_variable_cache_variable_id_dictionary = Circuit.compose_mappings(variable_id_mapping_id_dictionary_cache=variable_id_mapping_id_dictionary,
+                                                                                                                                                                   mapping_id_variable_id_dictionary=mapping_id_variable_id_dictionary)
 
             # Mapping is not needed
-            if not mapping_is_needed:
+            if is_identity:
                 return child_id, dict()
         else:
-            composed_mapping_variable_id_variable_cache_dictionary = variable_id_mapping_id_dictionary_cache
+            composed_mapping_variable_id_variable_cache_dictionary = variable_id_mapping_id_dictionary
             composed_mapping_variable_cache_variable_id_dictionary = mapping_id_variable_id_dictionary
 
         child_temp = self.get_node(child_id)

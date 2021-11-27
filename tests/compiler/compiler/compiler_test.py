@@ -67,7 +67,7 @@ class CompilerTest(TestAbstract):
                                                     for component_caching_before_unit_propagation in [True, False]:
                                                         for component_caching_after_unit_propagation in [True, False]:
                                                             for smooth in [True, False]:
-                                                                for disable_sat in [True]:
+                                                                for disable_sat in [False, True]:
                                                                     for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
                                                                         for first_implied_literals_enum in il_enum.implied_literals_enum_values:
                                                                             for implied_literals_enum in il_enum.implied_literals_enum_values:
@@ -75,7 +75,10 @@ class CompilerTest(TestAbstract):
                                                                                     try:
                                                                                         if (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_VSADS) or \
                                                                                            (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS) or \
-                                                                                           (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED):
+                                                                                           (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED) or \
+                                                                                           (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.MAXIMUM_RENAMABLE_HORN_VSADS) or \
+                                                                                           (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.MAXIMUM_RENAMABLE_HORN_DLCS_DLIS) or \
+                                                                                           (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.MAXIMUM_RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED):
                                                                                             continue
 
                                                                                         # if (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.VSADS) or \
@@ -123,17 +126,6 @@ class CompilerTest(TestAbstract):
                                                                                             result_temp = "|"
                                                                                         else:
                                                                                             result_temp = "X"
-                                                                                            print(f"{number_of_models}, {real_number_of_models}")
-                                                                                            print(f"hp_variable_simplification_enum: {hp_variable_simplification_enum}, "
-                                                                                                  f"implied_literals_enum: {implied_literals_enum}, "
-                                                                                                  f"first_implied_literals_enum: {first_implied_literals_enum}, "
-                                                                                                  f"decision_heuristic_enum: {decision_heuristic_enum}, "
-                                                                                                  f"disable_sat: {disable_sat}, "
-                                                                                                  f"smooth: {smooth}, "
-                                                                                                  f"component_caching_after_unit_propagation: {component_caching_after_unit_propagation}, "
-                                                                                                  f"component_caching_before_unit_propagation: {component_caching_before_unit_propagation}, "
-                                                                                                  f"component_caching_enum: {component_caching_enum}")
-                                                                                            print()
 
                                                                                         print(result_temp, end="\n" if count % 100 == 0 else ("" if count % 10 != 0 else " "), flush=True)
 
