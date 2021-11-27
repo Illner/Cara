@@ -566,3 +566,519 @@ Minimum cardinality: 1
 Remove a literal leaf (-6)
 Minimum cardinality: 0
 Minimum cardinality: 1
+
+Leaf nodes and inner nodes
+
+_create_circuit_1
+Node: 0
+Leaf nodes: [0]
+Inner nodes: []
+
+Node: 1
+Leaf nodes: [1]
+Inner nodes: []
+
+Node: 2
+Leaf nodes: [0, 1]
+Inner nodes: [2]
+
+Node: 3
+Leaf nodes: [3]
+Inner nodes: []
+
+Node: 4
+Leaf nodes: [4]
+Inner nodes: []
+
+Node: 5
+Leaf nodes: [5]
+Inner nodes: []
+
+Node: 6
+Leaf nodes: [0, 1]
+Inner nodes: [2, 6]
+
+Node: 7
+Leaf nodes: [3, 4, 5]
+Inner nodes: [7]
+
+Node: 8
+Leaf nodes: [0, 1, 3, 4, 5]
+Inner nodes: [2, 6, 7, 8]
+
+_create_circuit_2
+Node: 0
+Leaf nodes: [0]
+Inner nodes: []
+
+Node: 1
+Leaf nodes: [1]
+Inner nodes: []
+
+Node: 2
+Leaf nodes: [2]
+Inner nodes: []
+
+Node: 3
+Leaf nodes: [3]
+Inner nodes: []
+
+Node: 4
+Leaf nodes: [0, 1]
+Inner nodes: [4]
+
+Node: 5
+Leaf nodes: [1, 2, 3]
+Inner nodes: [5]
+
+Node: 6
+Leaf nodes: [0, 1, 2, 3]
+Inner nodes: [4, 5, 6]
+
+_create_circuit_3
+Node: 0
+Leaf nodes: [0]
+Inner nodes: []
+
+Node: 1
+Leaf nodes: [1]
+Inner nodes: []
+
+Node: 2
+Leaf nodes: [2]
+Inner nodes: []
+
+Node: 3
+Leaf nodes: [3]
+Inner nodes: []
+
+Node: 4
+Leaf nodes: [4]
+Inner nodes: []
+
+Node: 5
+Leaf nodes: [5]
+Inner nodes: []
+
+Node: 6
+Leaf nodes: [6]
+Inner nodes: []
+
+Node: 7
+Leaf nodes: [7]
+Inner nodes: []
+
+Node: 8
+Leaf nodes: [0, 1]
+Inner nodes: [8]
+
+Node: 9
+Leaf nodes: [0, 2]
+Inner nodes: [9]
+
+Node: 10
+Leaf nodes: [1, 3]
+Inner nodes: [10]
+
+Node: 11
+Leaf nodes: [2, 3]
+Inner nodes: [11]
+
+Node: 12
+Leaf nodes: [4, 5]
+Inner nodes: [12]
+
+Node: 13
+Leaf nodes: [4, 6]
+Inner nodes: [13]
+
+Node: 14
+Leaf nodes: [5, 7]
+Inner nodes: [14]
+
+Node: 15
+Leaf nodes: [6, 7]
+Inner nodes: [15]
+
+Node: 16
+Leaf nodes: [0, 1, 2, 3]
+Inner nodes: [8, 11, 16]
+
+Node: 17
+Leaf nodes: [4, 5, 6, 7]
+Inner nodes: [13, 14, 17]
+
+Node: 18
+Leaf nodes: [0, 1, 2, 3]
+Inner nodes: [9, 10, 18]
+
+Node: 19
+Leaf nodes: [4, 5, 6, 7]
+Inner nodes: [12, 15, 19]
+
+Node: 20
+Leaf nodes: [0, 1, 2, 3, 4, 5, 6, 7]
+Inner nodes: [8, 11, 13, 14, 16, 17, 20]
+
+Node: 21
+Leaf nodes: [0, 1, 2, 3, 4, 5, 6, 7]
+Inner nodes: [9, 10, 12, 15, 18, 19, 21]
+
+Node: 22
+Leaf nodes: [22]
+Inner nodes: []
+
+Node: 23
+Leaf nodes: [23]
+Inner nodes: []
+
+Node: 24
+Leaf nodes: [0, 1, 2, 3, 4, 5, 6, 7]
+Inner nodes: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24]
+
+_create_circuit_4
+Node: 0
+Leaf nodes: [0]
+Inner nodes: []
+
+Node: 1
+Leaf nodes: [1]
+Inner nodes: []
+
+Node: 2
+Leaf nodes: [2]
+Inner nodes: []
+
+Node: 3
+Leaf nodes: [3]
+Inner nodes: []
+
+Node: 4
+Leaf nodes: [4]
+Inner nodes: []
+
+Node: 5
+Leaf nodes: [5]
+Inner nodes: []
+
+Node: 6
+Leaf nodes: [0, 1]
+Inner nodes: [6]
+
+Node: 7
+Leaf nodes: [2, 3]
+Inner nodes: [7]
+
+Node: 8
+Leaf nodes: [4, 5]
+Inner nodes: [8]
+
+Node: 9
+Leaf nodes: [9]
+Inner nodes: []
+
+Node: 10
+Leaf nodes: [10]
+Inner nodes: []
+
+Node: 11
+Leaf nodes: [11]
+Inner nodes: []
+
+Node: 12
+Leaf nodes: [0, 2, 3, 4, 5, 9]
+Inner nodes: [7, 8, 12]
+
+Node: 13
+Leaf nodes: [0, 1, 2, 4, 5, 10]
+Inner nodes: [6, 8, 13]
+
+Node: 14
+Leaf nodes: [0, 1, 2, 3, 5, 11]
+Inner nodes: [6, 7, 14]
+
+Node: 15
+Leaf nodes: [15]
+Inner nodes: []
+
+Node: 16
+Leaf nodes: [0, 1, 2, 3, 4, 5, 9, 10, 11]
+Inner nodes: [6, 7, 8, 12, 13, 14, 16]
+
+Node: 17
+Leaf nodes: [17]
+Inner nodes: []
+
+Node: 18
+Leaf nodes: [0, 1, 2, 3, 4, 5, 9, 10, 11, 15]
+Inner nodes: [6, 7, 8, 12, 13, 14, 16, 18]
+
+Node: 19
+Leaf nodes: [19]
+Inner nodes: []
+
+Node: 20
+Leaf nodes: [20]
+Inner nodes: []
+
+Node: 21
+Leaf nodes: [0, 1, 2, 3, 4, 5, 9, 10, 11, 15, 17]
+Inner nodes: [6, 7, 8, 12, 13, 14, 16, 18, 21]
+
+_create_circuit_5
+Node: 0
+Leaf nodes: [0]
+Inner nodes: []
+
+Node: 1
+Leaf nodes: [1]
+Inner nodes: []
+
+Node: 2
+Leaf nodes: [2]
+Inner nodes: []
+
+Node: 3
+Leaf nodes: [3]
+Inner nodes: []
+
+Node: 4
+Leaf nodes: [4]
+Inner nodes: []
+
+Node: 5
+Leaf nodes: [5]
+Inner nodes: []
+
+Node: 6
+Leaf nodes: [6]
+Inner nodes: []
+
+Node: 7
+Leaf nodes: [7]
+Inner nodes: []
+
+Node: 8
+Leaf nodes: [0, 4]
+Inner nodes: [8]
+
+Node: 9
+Leaf nodes: [1, 5]
+Inner nodes: [9]
+
+Node: 10
+Leaf nodes: [2, 4]
+Inner nodes: [10]
+
+Node: 11
+Leaf nodes: [3, 5]
+Inner nodes: [11]
+
+Node: 12
+Leaf nodes: [0, 1, 4, 5, 6]
+Inner nodes: [8, 9, 12]
+
+Node: 13
+Leaf nodes: [2, 3, 4, 5, 7]
+Inner nodes: [10, 11, 13]
+
+Node: 14
+Leaf nodes: [14]
+Inner nodes: []
+
+Node: 15
+Leaf nodes: [15]
+Inner nodes: []
+
+Node: 16
+Leaf nodes: [0, 1, 2, 3, 4, 5, 6, 7]
+Inner nodes: [8, 9, 10, 11, 12, 13, 16]
+
+_create_circuit_6
+Node: 0
+Leaf nodes: [0]
+Inner nodes: []
+
+Node: 1
+Leaf nodes: [1]
+Inner nodes: []
+
+Node: 2
+Leaf nodes: [2]
+Inner nodes: []
+
+Node: 3
+Leaf nodes: [3]
+Inner nodes: []
+
+Node: 4
+Leaf nodes: [0, 1]
+Inner nodes: [4]
+
+Node: 5
+Leaf nodes: [2, 3]
+Inner nodes: [5]
+
+Node: 6
+Leaf nodes: [0, 1, 2, 3]
+Inner nodes: [4, 5, 6]
+
+Node: 7
+Leaf nodes: [0, 1, 2, 3]
+Inner nodes: [4, 5, 6, 7]
+
+Node: 8
+Leaf nodes: [0, 1, 2, 3]
+Inner nodes: [4, 5, 6, 7, 8]
+
+_create_circuit_7
+Node: 0
+Leaf nodes: [0]
+Inner nodes: []
+
+Node: 1
+Leaf nodes: [1]
+Inner nodes: []
+
+Node: 2
+Leaf nodes: [2]
+Inner nodes: []
+
+Node: 3
+Leaf nodes: [3]
+Inner nodes: []
+
+Node: 4
+Leaf nodes: [0, 1]
+Inner nodes: [4]
+
+Node: 5
+Leaf nodes: [2, 3]
+Inner nodes: [5]
+
+Node: 6
+Leaf nodes: [0, 1, 2, 3]
+Inner nodes: [4, 5, 6]
+
+Node: 7
+Leaf nodes: [7]
+Inner nodes: []
+
+Node: 8
+Leaf nodes: [8]
+Inner nodes: []
+
+Node: 9
+Leaf nodes: [9]
+Inner nodes: []
+
+Node: 10
+Leaf nodes: [10]
+Inner nodes: []
+
+Node: 11
+Leaf nodes: [7, 8]
+Inner nodes: [11]
+
+Node: 12
+Leaf nodes: [9, 10]
+Inner nodes: [12]
+
+Node: 13
+Leaf nodes: [7, 8, 9, 10]
+Inner nodes: [11, 12, 13]
+
+Node: 14
+Leaf nodes: [0, 1, 2, 3, 7, 8, 9, 10]
+Inner nodes: [4, 5, 6, 11, 12, 13, 14]
+
+_create_circuit_8
+Node: 0
+Leaf nodes: [0]
+Inner nodes: []
+
+Node: 1
+Leaf nodes: [1]
+Inner nodes: []
+
+Node: 2
+Leaf nodes: [0, 1]
+Inner nodes: [2]
+
+Node: 3
+Leaf nodes: [0, 1]
+Inner nodes: [2, 3]
+
+Node: 4
+Leaf nodes: [0, 1]
+Inner nodes: [2, 3, 4]
+
+Node: 5
+Leaf nodes: [0, 1]
+Inner nodes: [2, 3, 4, 5]
+
+Node: 6
+Leaf nodes: [0, 1]
+Inner nodes: [2, 3, 4, 5, 6]
+
+_create_circuit_9
+Node: 0
+Leaf nodes: [0]
+Inner nodes: []
+
+Node: 1
+Leaf nodes: [1]
+Inner nodes: []
+
+Node: 2
+Leaf nodes: [0, 1]
+Inner nodes: [2]
+
+Node: 3
+Leaf nodes: [3]
+Inner nodes: []
+
+Node: 4
+Leaf nodes: [4]
+Inner nodes: []
+
+Node: 5
+Leaf nodes: [3, 4]
+Inner nodes: [5]
+
+Node: 6
+Leaf nodes: [0, 1, 3, 4]
+Inner nodes: [2, 5, 6]
+
+Node: 7
+Leaf nodes: [7]
+Inner nodes: []
+
+Node: 8
+Leaf nodes: [8]
+Inner nodes: []
+
+Node: 9
+Leaf nodes: [7, 8]
+Inner nodes: [9]
+
+Node: 10
+Leaf nodes: [10]
+Inner nodes: []
+
+Node: 11
+Leaf nodes: [11]
+Inner nodes: []
+
+Node: 12
+Leaf nodes: [10, 11]
+Inner nodes: [12]
+
+Node: 13
+Leaf nodes: [7, 8, 10, 11]
+Inner nodes: [9, 12, 13]
+
+Node: 14
+Leaf nodes: [0, 1, 3, 4, 7, 8, 10, 11]
+Inner nodes: [2, 5, 6, 9, 12, 13, 14]
+

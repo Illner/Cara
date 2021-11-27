@@ -1,6 +1,6 @@
 # Import
 import os
-from typing import List, Union
+from typing import List, Union, Set
 from other.sorted_list import SortedList
 from tests.test_abstract import TestAbstract
 from circuit.node.node_abstract import NodeAbstract
@@ -35,7 +35,8 @@ class NodeTest(TestAbstract):
                      ("Model counting (negative)", self.__test_7),
                      ("Minimum default-cardinality", self.__test_8),
                      ("Minimum default-cardinality (negative)", self.__test_9),
-                     ("Caches", self.__test_10)]
+                     ("Caches", self.__test_10),
+                     ("Leaf nodes and inner nodes", self.__test_12)]
 
         for test_name, test in test_list:
             try:
@@ -665,6 +666,50 @@ class NodeTest(TestAbstract):
                     for assumption in assumption_list_temp:
                         result = "\n".join((result, f"Assumption: {SortedList(assumption)}, cache: {bool(cache)}, sat: {root.is_satisfiable(assumption, set(), use_cache=bool(cache))}"))
 
+            except c_exception.CaraException as err:
+                result = "\n".join((result, str(err)))
+
+        return result
+
+    def __test_12(self) -> str:
+        """
+        A test for collecting all leaf nodes and inner nodes.
+        Positive
+        :return: the result of the test
+        """
+
+        result = ""
+        circuits = [NodeTest._create_circuit_1, NodeTest._create_circuit_2,
+                    NodeTest._create_circuit_3, NodeTest._create_circuit_4, NodeTest._create_circuit_5,
+                    NodeTest._create_circuit_6, NodeTest._create_circuit_7,
+                    NodeTest._create_circuit_8, NodeTest._create_circuit_9]
+
+        for circuit in circuits:
+            try:
+                result = "\n".join((result, circuit.__name__))
+
+                node_list = circuit()
+
+                for node in node_list:
+                    leaf_node_set: Set[NodeAbstract] = set()
+                    inner_node_set: Set[NodeAbstract] = set()
+
+                    node.collect_leaf_nodes_and_inner_nodes(leaf_node_set=leaf_node_set,
+                                                            inner_node_set=inner_node_set)
+
+                    # Leaf nodes
+                    leaf_node_id_set: Set[int] = set()
+                    for leaf_node in leaf_node_set:
+                        leaf_node_id = leaf_node.id
+                        leaf_node_id_set.add(leaf_node_id)
+
+                    # Inner nodes
+                    inner_node_id_set: Set[int] = set()
+                    for inner_node in inner_node_set:
+                        inner_node_id = inner_node.id
+                        inner_node_id_set.add(inner_node_id)
+
+                    result = "\n".join((result, f"Node: {node.id}", f"Leaf nodes: {sorted(leaf_node_id_set)}", f"Inner nodes: {sorted(inner_node_id_set)}\n"))
             except c_exception.CaraException as err:
                 result = "\n".join((result, str(err)))
 

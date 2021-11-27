@@ -78,6 +78,10 @@ class NodeAbstract(ABC):
     @abstractmethod
     def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
         pass
+
+    @abstractmethod
+    def collect_leaf_nodes_and_inner_nodes(self, leaf_node_set: Set[TNodeAbstract], inner_node_set: Set[TNodeAbstract]) -> None:
+        pass
     # endregion
 
     # region Static method

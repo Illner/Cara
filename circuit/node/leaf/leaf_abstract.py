@@ -106,6 +106,14 @@ class LeafAbstract(NodeAbstract, ABC):
         """
 
         return 0
+
+    def collect_leaf_nodes_and_inner_nodes(self, leaf_node_set: Set[NodeAbstract], inner_node_set: Set[NodeAbstract]) -> None:
+        """
+        Collect all leaf nodes and inner nodes in the circuit
+        :return: None
+        """
+
+        leaf_node_set.add(self)
     # endregion
 
     # region Magic method
