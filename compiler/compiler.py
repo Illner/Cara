@@ -70,6 +70,7 @@ class Compiler:
     
     Private bool smooth
     Private bool disable_sat
+    Private bool cara_circuit
     Private bool preprocessing
     Private str node_statistics
     Private bool cut_set_try_cache
@@ -157,7 +158,8 @@ class Compiler:
                  mapping_node_statistics: Union[str, None] = None,
                  node_statistics: Union[str, None] = None,
                  disable_sat: bool = False,
-                 disable_decomposition: bool = False):
+                 disable_decomposition: bool = False,
+                 cara_circuit: bool = True):
         # Invalid configurations
         if disable_sat and ((implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP) or (first_implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP)):
             raise c_exception.InvalidConfigurationException("BCP is needed for disable_sat")
@@ -181,6 +183,7 @@ class Compiler:
         self.__smooth: bool = smooth
         self.__circuit: Circuit = Circuit()
         self.__disable_sat: bool = disable_sat
+        self.__cara_circuit: bool = cara_circuit
         self.__preprocessing: bool = preprocessing
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__node_statistics: Union[str, None] = node_statistics
@@ -615,7 +618,8 @@ class Compiler:
                                   statistics=self.__statistics,
                                   mapping_node_statistics=self.__mapping_node_statistics,
                                   node_statistics=self.__node_statistics,
-                                  disable_sat=self.__disable_sat)
+                                  disable_sat=self.__disable_sat,
+                                  cara_circuit=self.__cara_circuit)
             node_id = component.create_circuit()
             node_id_set.add(node_id)
 

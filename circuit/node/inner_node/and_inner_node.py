@@ -1,5 +1,5 @@
 # Import
-from typing import Set, Union, Dict
+from typing import Set, Union, Dict, Tuple
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
@@ -174,7 +174,8 @@ class AndInnerNode(InnerNodeAbstract):
 
         return default_cardinality
 
-    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
+    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit,
+                     copied_node_dictionary: Union[Dict[int, int], None] = None, size: int = 0) -> Tuple[int, int]:
         if copied_node_dictionary is None:
             copied_node_dictionary = dict()
 
@@ -182,19 +183,22 @@ class AndInnerNode(InnerNodeAbstract):
 
         # The node has been already processed
         if node_id in copied_node_dictionary:
-            return copied_node_dictionary[node_id]
+            return copied_node_dictionary[node_id], size
 
         new_child_id_set: Set[int] = set()
         for child in self._child_set:
+            size += 1
             child_id = child.id
 
             # The child has been already processed
             if child_id in copied_node_dictionary:
                 new_child_id = copied_node_dictionary[child_id]
             else:
-                new_child_id = child.copy_circuit(mapping_dictionary=mapping_dictionary,
-                                                  circuit=circuit,
-                                                  copied_node_dictionary=copied_node_dictionary)
+                new_child_id, size_temp = child.copy_circuit(mapping_dictionary=mapping_dictionary,
+                                                             circuit=circuit,
+                                                             copied_node_dictionary=copied_node_dictionary,
+                                                             size=size)
+                size = size_temp
                 copied_node_dictionary[child_id] = new_child_id
 
             new_child_id_set.add(new_child_id)
@@ -204,5 +208,5 @@ class AndInnerNode(InnerNodeAbstract):
 
         copied_node_dictionary[node_id] = new_node_id
 
-        return new_node_id
+        return new_node_id, size
     # endregion

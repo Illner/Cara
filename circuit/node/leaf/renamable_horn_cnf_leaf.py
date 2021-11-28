@@ -100,7 +100,8 @@ class RenamableHornCnfLeaf(LeafAbstract):
     def str_with_mapping(self) -> Tuple[str, Dict[int, int]]:
         return self.__cnf.str_with_mapping(horn_renaming_function=self.__renaming_function)
 
-    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
+    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit,
+                     copied_node_dictionary: Union[Dict[int, int], None] = None, size: int = 0) -> Tuple[int, int]:
         raise c_exception.CopyingCircuitsIsNotSupportedForNontrivialLeavesAndMappingNodesException(self.node_type)
     # endregion
 

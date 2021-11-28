@@ -512,16 +512,20 @@ class CircuitTest(TestAbstract):
 
             # Copy a circuit with the root 5
             result = "\n".join((result, "Copy a circuit with the root 5"))
-            new_node_id = c.get_node(5).copy_circuit(mapping_dictionary={1: 2, 2: 3},
-                                                     circuit=c)
+            new_node_id, size_temp = c.get_node(5).copy_circuit(mapping_dictionary={1: 2, 2: 3},
+                                                                circuit=c)
+
+            result = "\n".join((result, f"Size of the copied circuit: {size_temp}"))
 
             c.add_edge(6, new_node_id)
             result = "\n".join((result, repr(c)))
 
             # Copy a circuit with the root 4
             result = "\n".join((result, "Copy a circuit with the root 4"))
-            new_node_id = c.get_node(4).copy_circuit(mapping_dictionary={1: 4, 3: 3},
-                                                     circuit=c)
+            new_node_id, size_temp = c.get_node(4).copy_circuit(mapping_dictionary={1: 4, 3: 3},
+                                                                circuit=c)
+
+            result = "\n".join((result, f"Size of the copied circuit: {size_temp}"))
 
             c.add_edge(4, new_node_id)
             result = "\n".join((result, repr(c)))

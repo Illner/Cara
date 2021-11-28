@@ -40,6 +40,7 @@ class Component:
     Private PreselectionHeuristicAbstract first_implied_literals_preselection_heuristic
     
     Private bool disable_sat
+    Private bool cara_circuit
     Private bool cut_set_try_cache
     Private int base_class_threshold
     Private List<int> assignment_list
@@ -83,7 +84,8 @@ class Component:
                  statistics: Statistics,
                  mapping_node_statistics: Union[str, None],
                  node_statistics: Union[str, None],
-                 disable_sat: bool):
+                 disable_sat: bool,
+                 cara_circuit: bool):
         self.__cnf: Cnf = cnf
         self.__solver: Solver = solver
         self.__circuit: Circuit = circuit
@@ -98,6 +100,7 @@ class Component:
         self.__first_implied_literals_preselection_heuristic: PreselectionHeuristicAbstract = first_implied_literals_preselection_heuristic
 
         self.__disable_sat: bool = disable_sat
+        self.__cara_circuit: bool = cara_circuit
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__assignment_list: List[int] = assignment_list
         self.__new_cut_set_threshold: float = new_cut_set_threshold
@@ -371,7 +374,8 @@ class Component:
                                        statistics=self.__statistics,
                                        mapping_node_statistics=self.__mapping_node_statistics,
                                        node_statistics=self.__node_statistics,
-                                       disable_sat=self.__disable_sat)
+                                       disable_sat=self.__disable_sat,
+                                       cara_circuit=self.__cara_circuit)
 
             # cut_set_restriction = cut_set.intersection(incidence_graph.variable_set(copy=False))
             node_id = component_temp.create_circuit(depth=(depth + 1),
@@ -522,16 +526,39 @@ class Component:
                 if cache_mapping_before_unit_propagation is None:
                     return cache_id
 
-                node_id, mapping_variable_id_variable_cache_dictionary = self.__circuit.create_mapping_node(child_id=cache_id,
-                                                                                                            variable_id_mapping_id_dictionary=cache_mapping,
-                                                                                                            mapping_id_variable_id_dictionary=cache_mapping_before_unit_propagation[1])
-
                 # Mapping is used
-                if node_id != cache_id:
-                    self.__statistics.component_statistics.component_caching_cara_mapping_length.add_count(len(cache_mapping))  # counter
+                # cd-DNNF
+                if self.__cara_circuit:
+                    node_id, mapping_variable_id_variable_cache_dictionary = self.__circuit.create_mapping_node(child_id=cache_id,
+                                                                                                                variable_id_mapping_id_dictionary=cache_mapping,
+                                                                                                                mapping_id_variable_id_dictionary=cache_mapping_before_unit_propagation[1])
 
-                    # Mapping node statistics
-                    self.__create_mapping_node_statistics(node_id, mapping_variable_id_variable_cache_dictionary)
+                    # Mapping is used - statistics
+                    if node_id != cache_id:
+                        self.__statistics.component_statistics.component_caching_cara_mapping_length.add_count(len(cache_mapping))  # counter
+
+                        # Mapping node statistics
+                        self.__create_mapping_node_statistics(node_id, mapping_variable_id_variable_cache_dictionary)
+                # d-DNNF
+                else:
+                    is_identity, composed_mapping_variable_id_variable_cache_dictionary, composed_mapping_variable_cache_variable_id_dictionary = Circuit.compose_mappings(variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                                                                                                                                           mapping_id_variable_id_dictionary=cache_mapping_before_unit_propagation[1])
+                    # Copying is not needed
+                    if is_identity:
+                        node_id = cache_id
+                        self.__statistics.component_statistics.copying_circuits_identity.add_count(1)   # counter
+                    # Copying is needed
+                    else:
+                        cache_node = self.__circuit.get_node(cache_id)
+                        self.__statistics.component_statistics.copying_circuits.start_stopwatch()   # timer (start)
+
+                        node_id, size_temp = cache_node.copy_circuit(mapping_dictionary=composed_mapping_variable_cache_variable_id_dictionary,
+                                                                     circuit=self.__circuit)
+
+                        self.__statistics.component_statistics.copying_circuits.stop_stopwatch()    # timer (stop)
+                        self.__statistics.component_statistics.copying_circuits_formula_length.add_count(self.__incidence_graph.number_of_edges())  # counter
+                        self.__statistics.component_statistics.copying_circuits_identity.add_count(0)       # counter
+                        self.__statistics.component_statistics.copying_circuits_size.add_count(size_temp)   # counter
 
                 return node_id
             else:
@@ -581,15 +608,38 @@ class Component:
 
                 # Mapping is used
                 if cache_mapping_after_unit_propagation is not None:
-                    node_temp, mapping_variable_id_variable_cache_dictionary = self.__circuit.create_mapping_node(child_id=cache_id,
-                                                                                                                  variable_id_mapping_id_dictionary=cache_mapping,
-                                                                                                                  mapping_id_variable_id_dictionary=cache_mapping_after_unit_propagation[1])
+                    # cd-DNNF
+                    if self.__cara_circuit:
+                        node_temp, mapping_variable_id_variable_cache_dictionary = self.__circuit.create_mapping_node(child_id=cache_id,
+                                                                                                                      variable_id_mapping_id_dictionary=cache_mapping,
+                                                                                                                      mapping_id_variable_id_dictionary=cache_mapping_after_unit_propagation[1])
 
-                    if node_temp != cache_id:
-                        self.__statistics.component_statistics.component_caching_after_cara_mapping_length.add_count(len(cache_mapping))    # counter
+                        # Mapping is used - statistics
+                        if node_temp != cache_id:
+                            self.__statistics.component_statistics.component_caching_after_cara_mapping_length.add_count(len(cache_mapping))    # counter
 
-                        # Mapping node statistics
-                        self.__create_mapping_node_statistics(node_temp, mapping_variable_id_variable_cache_dictionary)
+                            # Mapping node statistics
+                            self.__create_mapping_node_statistics(node_temp, mapping_variable_id_variable_cache_dictionary)
+                    # d-DNNF
+                    else:
+                        is_identity, composed_mapping_variable_id_variable_cache_dictionary, composed_mapping_variable_cache_variable_id_dictionary = Circuit.compose_mappings(variable_id_mapping_id_dictionary_cache=cache_mapping,
+                                                                                                                                                                               mapping_id_variable_id_dictionary=cache_mapping_after_unit_propagation[1])
+                        # Copying is not needed
+                        if is_identity:
+                            node_temp = cache_id
+                            self.__statistics.component_statistics.copying_circuits_after_identity.add_count(1)     # counter
+                        # Copying is needed
+                        else:
+                            cache_node = self.__circuit.get_node(cache_id)
+                            self.__statistics.component_statistics.copying_circuits_after.start_stopwatch()  # timer (start)
+
+                            node_temp, size_temp = cache_node.copy_circuit(mapping_dictionary=composed_mapping_variable_cache_variable_id_dictionary,
+                                                                           circuit=self.__circuit)
+
+                            self.__statistics.component_statistics.copying_circuits_after.stop_stopwatch()  # timer (stop)
+                            self.__statistics.component_statistics.copying_circuits_after_formula_length.add_count(self.__incidence_graph.number_of_edges())    # counter
+                            self.__statistics.component_statistics.copying_circuits_after_identity.add_count(0)         # counter
+                            self.__statistics.component_statistics.copying_circuits_after_size.add_count(size_temp)     # counter
 
                     cache_id = node_temp
 

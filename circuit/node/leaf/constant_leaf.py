@@ -1,6 +1,6 @@
 # Import
 import math
-from typing import Set, Union, Dict
+from typing import Set, Union, Dict, Tuple
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import enum
@@ -48,8 +48,9 @@ class ConstantLeaf(LeafAbstract):
         else:
             return math.inf
 
-    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
-        return self.id
+    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit,
+                     copied_node_dictionary: Union[Dict[int, int], None] = None, size: int = 0) -> Tuple[int, int]:
+        return self.id, size
     # endregion
 
     # region Magic method

@@ -1,7 +1,7 @@
 # Import
 from abc import ABC, abstractmethod
 from other.sorted_list import SortedList
-from typing import Set, Dict, Union, TypeVar
+from typing import Set, Dict, Union, TypeVar, Tuple
 
 # Import exception
 import exception.circuit.circuit_exception as c_exception
@@ -76,7 +76,8 @@ class NodeAbstract(ABC):
         pass
 
     @abstractmethod
-    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
+    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit,
+                     copied_node_dictionary: Union[Dict[int, int], None] = None, size: int = 0) -> Tuple[int, int]:
         pass
 
     @abstractmethod

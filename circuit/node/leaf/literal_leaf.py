@@ -1,6 +1,6 @@
 # Import
 import math
-from typing import Set, Union, Dict
+from typing import Set, Union, Dict, Tuple
 from circuit.node.leaf.leaf_abstract import LeafAbstract
 
 # Import exception
@@ -98,7 +98,8 @@ class LiteralLeaf(LeafAbstract):
 
         return 0
 
-    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
+    def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit,
+                     copied_node_dictionary: Union[Dict[int, int], None] = None, size: int = 0) -> Tuple[int, int]:
         # The variable is not included in the mapping function
         if self.__variable not in mapping_dictionary:
             raise c_exception.MappingIsIncompleteException(mapping_dictionary=mapping_dictionary,
@@ -108,7 +109,7 @@ class LiteralLeaf(LeafAbstract):
         new_node_id = circuit.create_literal_leaf(literal=mapped_variable if self.__is_positive else -mapped_variable,
                                                   use_unique_node_cache=True)
 
-        return new_node_id
+        return new_node_id, size
     # endregion
 
     # endregion Magic method

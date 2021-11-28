@@ -106,7 +106,8 @@ def main(main_args):
                             mapping_node_statistics=mapping_node_statistics,
                             node_statistics=node_statistics,
                             disable_sat=main_args.disable_sat,
-                            disable_decomposition=main_args.disable_decomposition)
+                            disable_decomposition=main_args.disable_decomposition,
+                            cara_circuit=main_args.cara_circuit)
 
         print("The formula has been processed!\n")
 
@@ -377,6 +378,13 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="disable the decomposition")
+    parser_temp.add_argument("-cara_c",
+                             "--cara_circuit",
+                             action="store",
+                             default=True,
+                             type=str_to_bool_parser,
+                             metavar="[True, False]",
+                             help="compile into a cd-DNNF circuit (only for caching schemes with a mapping function)")
     parser_temp.add_argument("-dh_ibc",
                              "--dh_ignore_binary_clauses",
                              action="store_true",

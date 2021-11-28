@@ -60,14 +60,14 @@ class CompilerTest(TestAbstract):
                         for eliminating_redundant_clauses_enum in erc_enum.eliminating_redundant_clauses_enum_values:
                             for eliminating_redundant_clauses_threshold in [100, None]:
                                 for hp_cache_enum in hpc_enum.hpc_enum_values:
-                                    for decision_heuristic_vsids_d4_version in [True, False]:
-                                        for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
-                                            for decision_heuristic_ignore_binary_clauses in [True, False]:
-                                                for component_caching_enum in [cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME, cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME]:
-                                                    for component_caching_before_unit_propagation in [True, False]:
-                                                        for component_caching_after_unit_propagation in [True, False]:
-                                                            for smooth in [True, False]:
-                                                                for disable_sat in [False, True]:
+                                    for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
+                                        for decision_heuristic_ignore_binary_clauses in [True, False]:
+                                            for component_caching_enum in [cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME, cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME]:
+                                                for component_caching_before_unit_propagation in [True, False]:
+                                                    for component_caching_after_unit_propagation in [True, False]:
+                                                        for smooth in [False, True]:
+                                                            for disable_sat in [False, True]:
+                                                                for cara_circuit in [True, False]:
                                                                     for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
                                                                         for first_implied_literals_enum in il_enum.implied_literals_enum_values:
                                                                             for implied_literals_enum in il_enum.implied_literals_enum_values:
@@ -114,10 +114,11 @@ class CompilerTest(TestAbstract):
                                                                                                             hp_variable_simplification_enum=hp_variable_simplification_enum,
                                                                                                             hp_limit_number_of_clauses_cache=(None, 500),
                                                                                                             hp_limit_number_of_variables_cache=(None, 500),
-                                                                                                            decision_heuristic_vsids_d4_version=decision_heuristic_vsids_d4_version,
+                                                                                                            decision_heuristic_vsids_d4_version=True,
                                                                                                             decision_heuristic_weight_for_satisfied_clauses=decision_heuristic_weight_for_satisfied_clauses,
                                                                                                             decision_heuristic_ignore_binary_clauses=decision_heuristic_ignore_binary_clauses,
-                                                                                                            disable_sat=disable_sat)
+                                                                                                            disable_sat=disable_sat,
+                                                                                                            cara_circuit=cara_circuit)
                                                                                         circuit = compiler.create_circuit()
                                                                                         number_of_models = circuit.model_counting(set())
                                                                                         real_number_of_models = int(cnf.comments)
