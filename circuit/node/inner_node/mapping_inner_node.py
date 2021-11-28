@@ -170,6 +170,7 @@ class MappingInnerNode(InnerNodeAbstract):
         return default_cardinality
 
     def copy_circuit(self, mapping_dictionary: Dict[int, int], circuit, copied_node_dictionary: Union[Dict[int, int], None] = None) -> int:
+        # TODO copy_circuit
         raise c_exception.CopyingCircuitsIsNotSupportedForNontrivialLeavesAndMappingNodesException(self.node_type)
 
     def str_mapping(self) -> str:
