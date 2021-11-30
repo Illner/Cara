@@ -3,7 +3,7 @@
 
 **Backdoor Decomposable Monotone Circuits (BDMC) compiler**
 
-<a href="https://dspace.cuni.cz/handle/20.500.11956/147674" target="_blank"> diploma thesis (Czech) </a>
+<a href="https://dspace.cuni.cz/handle/20.500.11956/147674" target="_blank"> Diploma thesis (in Czech) </a>
 
 ## Language
 Python 3.8+ (64 bit)
