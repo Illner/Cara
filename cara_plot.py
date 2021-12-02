@@ -95,6 +95,9 @@ class ExperimentEnum(str, Enum):
     BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_2 = "DLCS-DLIS (e, c, p, RDHF_2)"
     BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_4 = "DLCS-DLIS (e, c, p, RDHF_4)"
     BDMC_MRH_DLCS_DLIS_E_C_P_LWHF = "DLCS-DLIS (e, c, p, LWHF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_SLWHF = "DLCS-DLIS (e, c, p, SLWHF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_ILWHF = "DLCS-DLIS (e, c, p, ILWHF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_SILWHF = "DLCS-DLIS (e, c, p, SILWHF)"
     BDMC_MRH_DLCS_DLIS_E_C_P_HF = "DLCS-DLIS (e, c, p, HF)"
 
     # HP cache
@@ -140,6 +143,8 @@ class ExperimentEnum(str, Enum):
     IMBALANCE_FACTOR_4_SPEED = "0.4 PaToH speed"
 
     # DNNF
+    DNNF_D4 = "D4 (DNNF)"
+    DNNF_COPY = "CaraCircuit (copy)"
     DNNF_CLAUSE_REDUCTION = "Clause reduction"
     DNNF_CLAUSE_REDUCTION_EXT = "Clause reduction (ext)"
     DNNF_WEIGHTED_BINARIES = "Weighted binaries"
@@ -223,11 +228,11 @@ class FunctionEnum(str, Enum):
 ##### Configuration #####
 #########################
 
-experiment_path: RootPathEnum = RootPathEnum.BDMC_MRH
+experiment_path: RootPathEnum = RootPathEnum.DNNF
 
 title: str = ""
 plot: PlotEnum = PlotEnum.SCATTER
-function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
+function: FunctionEnum = FunctionEnum.COMPILATION_TIME
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
@@ -239,8 +244,8 @@ file_name: Union[str, None] = None  # "name_of_saved_file"
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_MRH_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_MRH_VSADS_E_C_P_HF
+directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_D4
+directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_COPY
 
 x_label: str = ""
 y_label: str = ""
