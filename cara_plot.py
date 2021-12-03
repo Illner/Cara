@@ -214,6 +214,13 @@ class FunctionEnum(str, Enum):
     TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING = "Total length of all formulae that were cached \n using a mapping function"
     AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING = "Average length of a formula that was cached \n using a mapping function"
 
+    # Copy
+    RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME = "Total time spent on copying circuits / compilation time [%]"
+    TOTAL_COPIED_CIRCUIT_SIZE = "Total size of copied circuits"
+    AVERAGE_COPIED_CIRCUIT_SIZE = "Average size of a copied circuit"
+    TOTAL_FORMULA_LENGTH_COPIED_CIRCUIT = "Total length of all formulae for which copying was used"
+    AVERAGE_FORMULA_LENGTH_COPIED_CIRCUIT = "Average length of a formula for which copying was used"
+
     # Others
     TOTAL_NUMBER_OF_IMPLIED_LITERALS = "Total number of implied literals"
     AVERAGE_NUMBER_OF_IMPLIED_LITERALS = "Average number of implied literals"
@@ -260,24 +267,12 @@ use_point_label: bool = False
 
 directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.BDMC_RH_D4,
                                              # ExperimentEnum.BDMC_RH_VSADS,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_C_P,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_C_P,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_C_nP,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_nC_P,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_nC_nP,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_nT_C_P,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_A_nT_C_nP]
+                                             ExperimentEnum.DNNF_COPY]
 
 label_prefix: str = ""
 label_list: Union[List[List[str]], None] = [# ["d-DNNF"],
                                             # ["d-BDMC \n VSADS"],
-                                            ["d-BDMC \n DLCS-DLIS \n (-a, c, p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (a, t, c, p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (a, t, c, -p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (a, t, -c, p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (a, t, -c, -p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (a, -t, c, p)"],
-                                            ["d-BDMC \n DLCS-DLIS \n (a, -t, c, -p)"]]
+                                            ["D4 (cara caching scheme + copy)"]]
 # BOXPLOT
 showfliers: bool = False
 
@@ -484,6 +479,26 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
     if function == FunctionEnum.RATIO_LOG_CUT_SET_SIZE_AND_LOG_NUMBER_OF_HYPEREDGES_HYPERGRAPH:
         return statistics.hypergraph_partitioning_statistics.ratio_log_cut_set_size_and_log_number_of_hyperedges.average_count
 
+    # RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME
+    if function == FunctionEnum.RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME:
+        return statistics.component_statistics.copying_circuits_after.sum_time / statistics.compiler_statistics.create_circuit.sum_time
+
+    # TOTAL_COPIED_CIRCUIT_SIZE
+    if function == FunctionEnum.TOTAL_COPIED_CIRCUIT_SIZE:
+        return statistics.component_statistics.copying_circuits_after_size.sum_count
+
+    # AVERAGE_COPIED_CIRCUIT_SIZE
+    if function == FunctionEnum.AVERAGE_COPIED_CIRCUIT_SIZE:
+        return statistics.component_statistics.copying_circuits_after_size.average_count
+
+    # TOTAL_FORMULA_LENGTH_COPIED_CIRCUIT
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_COPIED_CIRCUIT:
+        return statistics.component_statistics.copying_circuits_after_formula_length.sum_count
+
+    # AVERAGE_FORMULA_LENGTH_COPIED_CIRCUIT
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_COPIED_CIRCUIT:
+        return statistics.component_statistics.copying_circuits_after_formula_length.average_count
+
     raise ca_exception.FunctionNotImplementedException("get_value_temp",
                                                        f"this type of function ({function.name}) is not implemented")
 
@@ -689,7 +704,8 @@ title = title if directory_set == DirectorySetEnum.all else f"{title} \n{directo
 percent_function_list: List[FunctionEnum] = [FunctionEnum.RH_RECOGNITION, FunctionEnum.TWO_CNF_RECOGNITION, FunctionEnum.HYPERGRAPH_CACHING_HIT,
                                              FunctionEnum.COMPONENT_CACHING_HIT, FunctionEnum.RECOMPUTATION_CUT_SET,
                                              FunctionEnum.RATIO_GENERATE_KEY_COMPONENT_CACHING_TIME_AND_COMPILATION_TIME,
-                                             FunctionEnum.RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME]
+                                             FunctionEnum.RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME,
+                                             FunctionEnum.RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME]
 percent = True if function in percent_function_list else False
 
 if plot_name is None:
