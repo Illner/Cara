@@ -99,6 +99,7 @@ class ExperimentEnum(str, Enum):
     BDMC_MRH_DLCS_DLIS_E_C_P_ILWHF = "DLCS-DLIS (e, c, p, ILWHF)"
     BDMC_MRH_DLCS_DLIS_E_C_P_SILWHF = "DLCS-DLIS (e, c, p, SILWHF)"
     BDMC_MRH_DLCS_DLIS_E_C_P_HF = "DLCS-DLIS (e, c, p, HF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_VC = "DLCS-DLIS (e, c, p, VC)"
 
     # HP cache
     HP_CACHE_NONE = "NONE"
