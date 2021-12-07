@@ -19,6 +19,7 @@ root_path = sys.argv[1]
 plot_path = sys.argv[2]
 file_path = sys.argv[2]
 
+
 # region Enum
 @unique
 class RootPathEnum(str, Enum):
@@ -223,6 +224,15 @@ class FunctionEnum(str, Enum):
     TOTAL_FORMULA_LENGTH_COPIED_CIRCUIT = "Total length of all formulae for which copying was used"
     AVERAGE_FORMULA_LENGTH_COPIED_CIRCUIT = "Average length of a formula for which copying was used"
 
+    # LP formulation
+    TOTAL_TIME_CREATE_LP_FORMULATION = "Total time spent on creating all LP formulations [ms] \n (LP formulation)"
+    AVERAGE_TIME_CREATE_LP_FORMULATION = "Average time spent on creating an LP formulation [ms] \n (LP formulation)"
+    TOTAL_TIME_SOLVE_LP_FORMULATION = "Total time spent on solving all LP formulations [ms] \n (LP formulation)"
+    AVERAGE_TIME_SOLVE_LP_FORMULATION = "Average time spent on solving an LP formulation [ms] \n (LP formulation)"
+    HORN_CLAUSE_LENGTH_LP_FORMULATION = "Average length of a Horn clause after switching \n (LP formulation)"
+    RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION = "Number of Horn clauses after switching / number of clauses [%] \n (LP formulation)"
+    RATIO_NUMBER_OF_SWITCHED_VARIABLES_AND_NUMBER_OF_VARIABLES_LP_FORMULATION = "Number of switched variables / number of variables [%] \n (LP formulation)"
+
     # Others
     TOTAL_NUMBER_OF_IMPLIED_LITERALS = "Total number of implied literals"
     AVERAGE_NUMBER_OF_IMPLIED_LITERALS = "Average number of implied literals"
@@ -240,22 +250,25 @@ class FunctionEnum(str, Enum):
 experiment_path: RootPathEnum = RootPathEnum.BDMC_MRH
 
 title: str = ""
-plot: PlotEnum = PlotEnum.SCATTER
-function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
+plot: PlotEnum = PlotEnum.BOXPLOT
+function: FunctionEnum = FunctionEnum.RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
 use_uncompiled: bool = False
 
+plot_name: Union[str, None] = None
+file_name: Union[str, None] = None
+
 ###################
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_MRH_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_VC
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_2
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_4
 
-x_label: str = ""
-y_label: str = ""
+x_label: str = f""
+y_label: str = f""
 
 log_scale: bool = False
 set_together: bool = False
@@ -265,26 +278,19 @@ use_point_label: bool = False
 ##### BOXPLOT, HISTOGRAM #####
 ##############################
 
-directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.BDMC_RH_D4,
-                                             # ExperimentEnum.BDMC_RH_VSADS,
-                                             ExperimentEnum.DNNF_COPY]
+directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_HF,
+                                             ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_2,
+                                             ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_4]
 
 label_prefix: str = ""
-label_list: Union[List[List[str]], None] = [# ["d-DNNF"],
-                                            # ["d-BDMC \n VSADS"],
-                                            ["D4 (cara caching scheme + copy)"]]
+label_list: Union[List[List[str]], None] = [["d-BDMC MRH \n DLCS-DLIS \n (e, c, p, HF)"],
+                                            ["d-BDMC MRH \n DLCS-DLIS \n (e, c, p, RDHF_2)"],
+                                            ["d-BDMC MRH \n DLCS-DLIS \n (e, c, p, RDHF_4)"]]
 # BOXPLOT
 showfliers: bool = False
 
 # HISTOGRAM
 number_of_bins: int = 10
-
-#######################
-##### Plot / file #####
-#######################
-
-plot_name: Union[str, None] = f"({directory_name_1.name})_vs_({directory_name_2.name})___({function.name})"
-file_name: Union[str, None] = plot_name
 
 ################################
 ##### End of configuration #####
@@ -506,6 +512,34 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
     if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_COPIED_CIRCUIT:
         return statistics.component_statistics.copying_circuits_after_formula_length.average_count
 
+    # TOTAL_TIME_CREATE_LP_FORMULATION
+    if function == FunctionEnum.TOTAL_TIME_CREATE_LP_FORMULATION:
+        return statistics.renamable_horn_formula_lp_formulation_statistics.create_lp_formulation.sum_time
+
+    # AVERAGE_TIME_CREATE_LP_FORMULATION
+    if function == FunctionEnum.AVERAGE_TIME_CREATE_LP_FORMULATION:
+        return statistics.renamable_horn_formula_lp_formulation_statistics.create_lp_formulation.average_time
+
+    # TOTAL_TIME_SOLVE_LP_FORMULATION
+    if function == FunctionEnum.TOTAL_TIME_SOLVE_LP_FORMULATION:
+        return statistics.renamable_horn_formula_lp_formulation_statistics.solve_lp_problem.sum_time
+
+    # AVERAGE_TIME_SOLVE_LP_FORMULATION
+    if function == FunctionEnum.AVERAGE_TIME_SOLVE_LP_FORMULATION:
+        return statistics.renamable_horn_formula_lp_formulation_statistics.solve_lp_problem.average_time
+
+    # HORN_CLAUSE_LENGTH_LP_FORMULATION
+    if function == FunctionEnum.HORN_CLAUSE_LENGTH_LP_FORMULATION:
+        return statistics.renamable_horn_formula_lp_formulation_statistics.horn_clauses_after_switching_length.average_count
+
+    # RATIO_NUMBER_OF_SWITCHED_VARIABLES_AND_NUMBER_OF_VARIABLES_LP_FORMULATION
+    if function == FunctionEnum.RATIO_NUMBER_OF_SWITCHED_VARIABLES_AND_NUMBER_OF_VARIABLES_LP_FORMULATION:
+        return statistics.renamable_horn_formula_lp_formulation_statistics.switching_average.average_count
+
+    # RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION
+    if function == FunctionEnum.RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION:
+        return statistics.renamable_horn_formula_lp_formulation_statistics.horn_clauses_after_switching_average.average_count
+
     raise ca_exception.FunctionNotImplementedException("get_value_temp",
                                                        f"this type of function ({function.name}) is not implemented")
 
@@ -712,7 +746,9 @@ percent_function_list: List[FunctionEnum] = [FunctionEnum.RH_RECOGNITION, Functi
                                              FunctionEnum.COMPONENT_CACHING_HIT, FunctionEnum.RECOMPUTATION_CUT_SET,
                                              FunctionEnum.RATIO_GENERATE_KEY_COMPONENT_CACHING_TIME_AND_COMPILATION_TIME,
                                              FunctionEnum.RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME,
-                                             FunctionEnum.RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME]
+                                             FunctionEnum.RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME,
+                                             FunctionEnum.RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION,
+                                             FunctionEnum.RATIO_NUMBER_OF_SWITCHED_VARIABLES_AND_NUMBER_OF_VARIABLES_LP_FORMULATION]
 percent = True if function in percent_function_list else False
 
 if plot_name is None:
