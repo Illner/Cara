@@ -279,9 +279,9 @@ showfliers: bool = False
 # HISTOGRAM
 number_of_bins: int = 10
 
-#########################
-##### Configuration #####
-#########################
+#######################
+##### Plot / file #####
+#######################
 
 plot_name: Union[str, None] = f"({directory_name_1.name})_vs_({directory_name_2.name})___({function.name})"
 file_name: Union[str, None] = plot_name
