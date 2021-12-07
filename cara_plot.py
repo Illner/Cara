@@ -100,6 +100,7 @@ class ExperimentEnum(str, Enum):
     BDMC_MRH_DLCS_DLIS_E_C_P_SILWHF = "DLCS-DLIS (e, c, p, SILWHF)"
     BDMC_MRH_DLCS_DLIS_E_C_P_HF = "DLCS-DLIS (e, c, p, HF)"
     BDMC_MRH_DLCS_DLIS_E_C_P_VC = "DLCS-DLIS (e, c, p, VC)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_RDVC_2 = "DLCS-DLIS (e, c, p, RDVC_2)"
 
     # HP cache
     HP_CACHE_NONE = "NONE"
@@ -236,24 +237,22 @@ class FunctionEnum(str, Enum):
 ##### Configuration #####
 #########################
 
-experiment_path: RootPathEnum = RootPathEnum.DNNF
+experiment_path: RootPathEnum = RootPathEnum.BDMC_MRH
 
 title: str = ""
 plot: PlotEnum = PlotEnum.SCATTER
-function: FunctionEnum = FunctionEnum.COMPILATION_TIME
+function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
 use_uncompiled: bool = False
-plot_name: Union[str, None] = None  # "name_of_saved_plot"
-file_name: Union[str, None] = None  # "name_of_saved_file"
 
 ###################
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_COPY
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_MRH_D4
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_VC
 
 x_label: str = ""
 y_label: str = ""
@@ -279,6 +278,13 @@ showfliers: bool = False
 
 # HISTOGRAM
 number_of_bins: int = 10
+
+#########################
+##### Configuration #####
+#########################
+
+plot_name: Union[str, None] = f"({directory_name_1.name})_vs_({directory_name_2.name})___({function.name})"
+file_name: Union[str, None] = plot_name
 
 ################################
 ##### End of configuration #####
