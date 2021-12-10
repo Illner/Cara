@@ -562,6 +562,7 @@ class Component:
 
                 return node_id
             else:
+                self.__statistics.component_statistics.component_caching_formula_length_not_cached.add_count(self.__incidence_graph.number_of_edges())  # counter
                 self.__statistics.component_statistics.component_caching_hit.add_count(0)  # counter
 
         # Implied literals
@@ -648,6 +649,7 @@ class Component:
                 self.__remove_literals(implied_literal_set)    # restore the implied literals
                 return node_id
             else:
+                self.__statistics.component_statistics.component_caching_after_formula_length_not_cached.add_count(self.__incidence_graph.number_of_edges())    # counter
                 self.__statistics.component_statistics.component_caching_after_hit.add_count(0)  # counter
 
         # 2-CNF and Renamable Horn CNF

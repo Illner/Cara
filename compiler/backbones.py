@@ -1,18 +1,27 @@
 # Import
 from compiler.solver import Solver
 from typing import Set, List, Union
+from compiler_statistics.compiler.solver_statistics import SolverStatistics
 
 
 class Backbones:
     """
     Backbones
+    Janota, Mikoláš & Lynce, Ines & Marques-Sliva, Joao. (2015). Algorithms for computing backbones of propositional formulae. Ai Communications. 28. 161-177. 10.3233/AIC-140640.
     """
 
     """
     Private Solver solver
+    Private SolverStatistics statistics
     """
 
-    def __init__(self, solver: Solver):
+    def __init__(self, solver: Solver, statistics: Union[SolverStatistics, None] = None):
+        # Statistics
+        if statistics is None:
+            self.__statistics: SolverStatistics = SolverStatistics(active=False)
+        else:
+            self.__statistics: SolverStatistics = statistics
+
         self.__solver: Solver = solver
 
     # region Public method
@@ -35,20 +44,34 @@ class Backbones:
         Iterative algorithm (one test per variable)
         """
 
-        result = self.__solver.get_model(assignment_list)
+        # Get implied literals by unit propagation
+        result = self.__solver.unit_propagation(assignment_list=assignment_list)
 
         # The formula is unsatisfiable => no backbones
         if result is None:
             return None
 
+        backbone_literal_set = result
+        for implied_literal in result:
+            assignment_list.append(implied_literal)
+
+        # Get model
+        result = self.__solver.get_model(assignment_list=assignment_list)
+
+        # The formula is unsatisfiable => no backbones
+        if result is None:
+            return None
+
+        number_of_iterations: int = 0
         literal_to_try_set = set(result)
-        backbone_literal_set = set()
 
         while len(literal_to_try_set):
+            number_of_iterations += 1
+
             literal = literal_to_try_set.pop()
 
             assignment_list.append(-literal)
-            result = self.__solver.get_model(assignment_list)
+            result = self.__solver.get_model(assignment_list=assignment_list)
             assignment_list.pop()
 
             # A backbone literal has been found
@@ -58,5 +81,6 @@ class Backbones:
             else:
                 literal_to_try_set.intersection_update(result)
 
+        self.__statistics.backbone_literals_iteration.add_count(number_of_iterations)   # counter
         return backbone_literal_set
     # endregion

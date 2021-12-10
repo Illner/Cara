@@ -247,11 +247,11 @@ class FunctionEnum(str, Enum):
 ##### Configuration #####
 #########################
 
-experiment_path: RootPathEnum = RootPathEnum.BDMC_MRH
+experiment_path: RootPathEnum = RootPathEnum.BDMC_RH
 
 title: str = ""
-plot: PlotEnum = PlotEnum.BOXPLOT
-function: FunctionEnum = FunctionEnum.RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION
+plot: PlotEnum = PlotEnum.SCATTER
+function: FunctionEnum = FunctionEnum.COMPILATION_TIME
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
@@ -264,8 +264,8 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_2
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_4
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_D4
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_nC_P
 
 x_label: str = f""
 y_label: str = f""

@@ -26,8 +26,10 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter empty_incidence_graph
     Private StatisticsComponentCounter component_caching_hit
     Private StatisticsComponentCounter component_caching_formula_length
+    Private StatisticsComponentCounter component_caching_formula_length_not_cached
     Private StatisticsComponentCounter component_caching_after_hit
     Private StatisticsComponentCounter component_caching_after_formula_length
+    Private StatisticsComponentCounter component_caching_after_formula_length_not_cached
     Private StatisticsComponentCounter component_caching_cara_mapping_length
     Private StatisticsComponentCounter component_caching_after_cara_mapping_length
     Private StatisticsComponentCounter split
@@ -81,6 +83,9 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         self.__component_caching_formula_length: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (before BCP) - formula length", active=active)
         self._component_list.append(self.__component_caching_formula_length)
 
+        self.__component_caching_formula_length_not_cached: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (before BCP) - formula length - not cached", active=active)
+        self._component_list.append(self.__component_caching_formula_length_not_cached)
+
         self.__component_caching_after_generate_key: StatisticsComponentTimer = StatisticsComponentTimer(name="component caching (after BCP) - generate key", active=active)
         self._component_list.append(self.__component_caching_after_generate_key)
 
@@ -89,6 +94,9 @@ class ComponentStatistics(StatisticsTemplateAbstract):
 
         self.__component_caching_after_formula_length: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (after BCP) - formula length", active=active)
         self._component_list.append(self.__component_caching_after_formula_length)
+
+        self.__component_caching_after_formula_length_not_cached: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (after BCP) - formula length - not cached", active=active)
+        self._component_list.append(self.__component_caching_after_formula_length_not_cached)
 
         self.__component_caching_cara_mapping_length: StatisticsComponentCounter = StatisticsComponentCounter(name="component caching (before BCP) - cara caching scheme - mapping length", active=active)
         self._component_list.append(self.__component_caching_cara_mapping_length)
@@ -190,6 +198,10 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         return self.__component_caching_formula_length
 
     @property
+    def component_caching_formula_length_not_cached(self) -> StatisticsComponentCounter:
+        return self.__component_caching_formula_length_not_cached
+
+    @property
     def component_caching_after_generate_key(self) -> StatisticsComponentTimer:
         return self.__component_caching_after_generate_key
 
@@ -200,6 +212,10 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def component_caching_after_formula_length(self) -> StatisticsComponentCounter:
         return self.__component_caching_after_formula_length
+
+    @property
+    def component_caching_after_formula_length_not_cached(self) -> StatisticsComponentCounter:
+        return self.__component_caching_after_formula_length_not_cached
 
     @property
     def component_caching_cara_mapping_length(self) -> StatisticsComponentCounter:

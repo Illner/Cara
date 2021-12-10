@@ -134,7 +134,8 @@ class Solver:
 
         # Backbones
         from compiler.backbones import Backbones
-        self.__backbones = Backbones(self)
+        self.__backbones = Backbones(solver=self,
+                                     statistics=self.__statistics)
 
         self.__statistics.first_implied_literals.start_stopwatch()  # timer (start - first_implied_literals)
 

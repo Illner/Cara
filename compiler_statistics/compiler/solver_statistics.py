@@ -16,8 +16,10 @@ class SolverStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentTimer unit_propagation
     Private StatisticsComponentTimer implicit_unit_propagation
     Private StatisticsComponentTimer iterative_implicit_unit_propagation
-    Private StatisticsComponentCounter iterative_implicit_unit_propagation_iteration
     Private StatisticsComponentTimer backbone_literals
+    
+    Private StatisticsComponentCounter backbone_literals_iteration
+    Private StatisticsComponentCounter iterative_implicit_unit_propagation_iteration
     """
 
     def __init__(self, active: bool):
@@ -46,6 +48,9 @@ class SolverStatistics(StatisticsTemplateAbstract):
 
         self.__backbone_literals: StatisticsComponentTimer = StatisticsComponentTimer(name="backbone literals", active=active)
         self._component_list.append(self.__backbone_literals)
+
+        self.__backbone_literals_iteration: StatisticsComponentCounter = StatisticsComponentCounter(name="backbone literals - iteration", active=active)
+        self._component_list.append(self.__backbone_literals_iteration)
 
     # region Property
     @property
@@ -79,4 +84,8 @@ class SolverStatistics(StatisticsTemplateAbstract):
     @property
     def backbone_literals(self) -> StatisticsComponentTimer:
         return self.__backbone_literals
+
+    @property
+    def backbone_literals_iteration(self) -> StatisticsComponentCounter:
+        return self.__backbone_literals_iteration
     # endregion
