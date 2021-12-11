@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG  -rdynamic CMakeFiles/gdbasis.dir/gdbasis.cpp.o  -o gdbasis  ../lib/libsubool.a -lboost_program_options-mt 

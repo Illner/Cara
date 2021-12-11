@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG  -rdynamic CMakeFiles/rhornsplit.dir/rhornsplit.cpp.o  -o rhornsplit  ../lib/libsubool.a 

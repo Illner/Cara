@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG  -rdynamic CMakeFiles/cnfgraph.dir/cnfgraphx.cpp.o  -o cnfgraph  ../lib/libsubool.a -lboost_program_options-mt 

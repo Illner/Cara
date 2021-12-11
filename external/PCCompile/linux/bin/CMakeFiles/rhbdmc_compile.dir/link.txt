@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG  -rdynamic CMakeFiles/rhbdmc_compile.dir/rhbdmc_compile.cpp.o  -o rhbdmc_compile  ../lib/libsubool.a ../../solvers/glucose/simp/lib_release.a -lboost_program_options-mt -lpthread 
