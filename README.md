@@ -27,6 +27,7 @@ You can install all required packages to central user packages repository using 
 ## Software
 * <a href="http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview" target="_blank">hMETIS</a> 1.5.3 (Windows / Linux)
 * <a href="https://www.cc.gatech.edu/~umit/software.html" target="_blank">PaToH</a> 3.3 (Linux / macOS)
+* <a href="https://gitlab.mff.cuni.cz/kucep6am/pccompile" target="_blank">PCCompile</a> (Linux)
 
 ## Cara
 ### Example
