@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG  -rdynamic CMakeFiles/test_cnfutil.dir/test_cnfutil.cpp.o  -o test_cnfutil  ../lib/libsubool.a ../../solvers/glucose/simp/lib_release.a 

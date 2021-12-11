@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_prob.cpp
+chrono
+-
+iostream
+-
+random
+-
+

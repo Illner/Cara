@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../lib/assign.h
+iostream
+-
+vector
+-
+literal.h
+../lib/literal.h
+
+../lib/literal.h
+boost/container_hash/hash.hpp
+-
+iostream
+-
+vector
+-
+
+/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_assign.cpp
+test_assign.h
+/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_assign.h
+
+/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_assign.h
+vector
+-
+assign.h
+/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/assign.h
+

@@ -1,0 +1,572 @@
+[
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/abscomp.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/abscomp.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/abscomp.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/absenc.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/absenc.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/absenc.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/absinccomp.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/absinccomp.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/absinccomp.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/assign.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/assign.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/assign.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/canon.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/canon.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/canon.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/cardinal.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cardinal.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cardinal.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/cardinal_opt.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cardinal_opt.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cardinal_opt.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/cl2lit.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cl2lit.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cl2lit.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/cnfcompare.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cnfcompare.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cnfcompare.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/cnfcompress.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cnfcompress.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cnfcompress.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/cnfgraph.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cnfgraph.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cnfgraph.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/cnfutil.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cnfutil.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cnfutil.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/comp_hypothesis.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/comp_hypothesis.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/comp_hypothesis.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/cpuutil.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cpuutil.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/cpuutil.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/dnnf.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/dnnf.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/dnnf.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/dnnf_enc.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/dnnf_enc.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/dnnf_enc.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/dpelim.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/dpelim.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/dpelim.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/dpelim_opt.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/dpelim_opt.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/dpelim_opt.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/drenc.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/drenc.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/drenc.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/empower.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/empower.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/empower.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/empower2.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/empower2.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/empower2.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/enc_is_provider.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/enc_is_provider.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/enc_is_provider.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/encoding.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/encoding.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/encoding.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/glucose_bind.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/glucose_bind.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/glucose_bind.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/horn.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/horn.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/horn.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/impl_system_graph.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/impl_system_graph.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/impl_system_graph.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/implic_learn.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/implic_learn.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/implic_learn.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/literal.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/literal.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/literal.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/logstream.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/logstream.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/logstream.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/min_model.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/min_model.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/min_model.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/mrh.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/mrh.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/mrh.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/nnf.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnf.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnf.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/nnfgate.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnfgate.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnfgate.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/nnfleaf.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnfleaf.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnfleaf.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/nnfnode.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnfnode.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnfnode.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/nnfnodelist.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnfnodelist.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nnfnodelist.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/nullstream.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nullstream.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/nullstream.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/pc_opt.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pc_opt.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pc_opt.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/pcchecker.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pcchecker.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pcchecker.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/pccomp.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pccomp.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pccomp.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/pcenc.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pcenc.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pcenc.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/pcl_negative.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pcl_negative.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pcl_negative.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/pclearncomp.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pclearncomp.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/pclearncomp.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/prgutil.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/prgutil.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/prgutil.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/propagate.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/propagate.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/propagate.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/random_utils.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/random_utils.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/random_utils.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/resolve.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/resolve.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/resolve.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/rh_bdmc.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/rh_bdmc.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/rh_bdmc.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/rhorn.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/rhorn.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/rhorn.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/schoning.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/schoning.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/schoning.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/simple_constraints.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/simple_constraints.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/simple_constraints.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/smutex.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/smutex.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/smutex.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/solver_bind.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/solver_bind.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/solver_bind.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/uccomp.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/uccomp.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/uccomp.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/ucenc.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/ucenc.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/ucenc.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/unitprop.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/unitprop.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/unitprop.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/unitprop2.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/unitprop2.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/unitprop2.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_impl_level.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_impl_level.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_impl_level.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_levels.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_levels.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_levels.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_log.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_log.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_log.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_max.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_max.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_max.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_min_lq.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_min_lq.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_min_lq.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_onelevel.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_onelevel.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_onelevel.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_onelevel_is.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_onelevel_is.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_onelevel_is.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_quad.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_quad.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_quad.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_quad_impl.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_quad_impl.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_quad_impl.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_scc_bin_direct.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_scc_bin_direct.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_scc_bin_direct.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_scc_binary.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_scc_binary.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_scc_binary.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/up_scc_unary.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_scc_unary.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/up_scc_unary.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/lib",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/subool.dir/varstore.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/varstore.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib/varstore.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_dimacs.dir/test_dimacs.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_dimacs.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_dimacs.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_cardinal.dir/test_cardinal.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_cardinal.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_cardinal.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_smutex.dir/test_smutex.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_smutex.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_smutex.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_imp_system.dir/test_imp_system.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_imp_system.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_imp_system.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_prob.dir/test_prob.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_prob.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_prob.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_rhbdmc.dir/test_rhbdmc.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_rhbdmc.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_rhbdmc.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_nnftraits.dir/test_nnftraits.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_nnftraits.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_nnftraits.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_dnnf.dir/test_dnnf.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_dnnf.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_dnnf.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_dnnf.dir/test_common.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_common.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_common.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_unitprop.dir/test_unitprop.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_unitprop.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_unitprop.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_assign.dir/test_assign.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_assign.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_assign.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_schoning.dir/test_schoning.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_schoning.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_schoning.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_nnfnode.dir/test_nnfnode.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_nnfnode.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_nnfnode.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_nfliteralset.dir/test_nfliteralset.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_nfliteralset.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_nfliteralset.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_horn.dir/test_horn.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_horn.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_horn.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_canon.dir/test_canon.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_canon.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_canon.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_resolve.dir/test_resolve.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_resolve.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_resolve.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_encoding.dir/test_encoding.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_encoding.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_encoding.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_encoding.dir/test_common.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_common.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_common.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_upenc.dir/test_upenc.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_upenc.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_upenc.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_empower2.dir/test_empower2.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_empower2.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_empower2.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_unitprop2.dir/test_unitprop2.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_unitprop2.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_unitprop2.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_glucose.dir/test_glucose.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_glucose.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_glucose.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_cnfcompress.dir/test_cnfcompress.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_cnfcompress.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_cnfcompress.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_normalform.dir/test_normalform.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_normalform.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_normalform.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_cnfutil.dir/test_cnfutil.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_cnfutil.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_cnfutil.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_propagate.dir/test_propagate.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_propagate.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_propagate.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/test",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/test_propagate.dir/test_common.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_common.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_common.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/cnfcanon.dir/cnfcanon.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfcanon.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfcanon.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/pccheck.dir/pccheck.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/pccheck.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/pccheck.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/cnfprime.dir/cnfprime.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfprime.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfprime.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/pcminimize.dir/pcminimize.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/pcminimize.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/pcminimize.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/gdbasis.dir/gdbasis.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/gdbasis.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/gdbasis.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/dpelim.dir/dpelim.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/dpelim.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/dpelim.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/pccompile.dir/pccompile.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/pccompile.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/pccompile.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/balanced_cnf.dir/balanced_cnf.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/balanced_cnf.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/balanced_cnf.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/cnfcomp.dir/cnfcomp.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfcomp.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfcomp.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/cnfdiff.dir/cnfdiff.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfdiff.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfdiff.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/triple_cnf.dir/triple_cnf.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/triple_cnf.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/triple_cnf.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/cnfgraph.dir/cnfgraphx.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfgraphx.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/cnfgraphx.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/nnfsmooth.dir/nnfsmooth.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/nnfsmooth.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/nnfsmooth.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/rhornsplit.dir/rhornsplit.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/rhornsplit.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/rhornsplit.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/nnfencode.dir/nnfencode.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/nnfencode.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/nnfencode.cpp"
+},
+{
+  "directory": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/build/bin",
+  "command": "/usr/bin/c++   -I/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/lib -isystem /cvmfs/software.metacentrum.cz/software/boost/linux-debian9-x86_64/1.66.0-gcc-qvwna/include -isystem /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/solvers/glucose  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG   -std=c++17 -o CMakeFiles/rhbdmc_compile.dir/rhbdmc_compile.cpp.o -c /scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/rhbdmc_compile.cpp",
+  "file": "/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/bin/rhbdmc_compile.cpp"
+}
+]

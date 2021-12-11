@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../lib/smutex.h
+mutex
+-
+
+/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_smutex.cpp
+iostream
+-
+thread
+-
+smutex.h
+/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/smutex.h
+test_smutex.h
+/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_smutex.h
+
+/scratch/illner/job_9760050.meta-pbs.metacentrum.cz/pccompile/test/test_smutex.h
+
