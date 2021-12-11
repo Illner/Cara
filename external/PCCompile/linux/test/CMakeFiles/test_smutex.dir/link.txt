@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Wextra -Weffc++ -Wimplicit-fallthrough -DINCREMENTAL -DINCREMNENTAL -fno-operator-names -O3 -DNDEBUG  -rdynamic CMakeFiles/test_smutex.dir/test_smutex.cpp.o  -o test_smutex  ../lib/libsubool.a -lpthread 
