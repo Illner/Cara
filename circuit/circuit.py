@@ -931,6 +931,51 @@ class Circuit:
 
         return node_id
 
+    def create_extended_decision_node(self, children_list: List[Tuple[int, Set[int]]],
+                                      decision_variable: Union[int, None] = None, use_unique_node_cache: bool = True) -> int:
+        """
+        Create a new extended decision node in the circuit
+        (children_list[0][0] AND children_list[0][1]*) OR (children_list[1][0] AND children_list[1][1]*) OR ... OR (children_list[n][0] AND children_list[n][1]*)
+        :param children_list: a list of tuples, where a tuple consists of a node's identifier and a set of literals
+        :param decision_variable: a decision variable (optional)
+        :param use_unique_node_cache: True if unique node caching can be used
+        :return: the identifier of the node
+        :raises NodeWithIDDoesNotExistInCircuitException: if any node's identifier does not exist in the circuit
+        :raises ExtendedDecisionNodeNoChildrenException: if the children_list is empty
+        """
+
+        # No children
+        if not len(children_list):
+            c_exception.ExtendedDecisionNodeNoChildrenException()
+
+        and_node_id_set: Set[int] = set()
+
+        for node_id, literal_set in children_list:
+            # The node does not exist in the circuit
+            if node_id not in self.__id_node_dictionary:
+                raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(node_id), message_extension="extended decision node")
+
+            child_id_set: Set[int] = {node_id}
+
+            for literal in literal_set:
+                literal_node_id = self.create_literal_leaf(literal=literal,
+                                                           use_unique_node_cache=use_unique_node_cache)
+                child_id_set.add(literal_node_id)
+
+            and_node_id = self.create_and_node(child_id_set=child_id_set,
+                                               use_unique_node_cache=use_unique_node_cache)
+            and_node_id_set.add(and_node_id)
+
+        # An OR node is not necessary
+        if len(and_node_id_set) == 1:
+            return list(and_node_id_set)[0]
+
+        or_node_id = self.create_or_node(child_id_set=and_node_id_set,
+                                         decision_variable=decision_variable,
+                                         use_unique_node_cache=use_unique_node_cache)
+
+        return or_node_id
+
     def create_decision_node(self, variable: int, true_node_id: int, false_node_id: int, use_unique_node_cache: bool = True) -> int:
         """
         Create a new decision node in the circuit
@@ -950,20 +995,25 @@ class Circuit:
         if false_node_id not in self.__id_node_dictionary:
             raise c_exception.NodeWithIDDoesNotExistInCircuitException(str(false_node_id), message_extension="decision node (false_node)")
 
-        true_literal_leaf_id = self.create_literal_leaf(literal=variable,
-                                                        use_unique_node_cache=use_unique_node_cache)
-        false_literal_leaf_id = self.create_literal_leaf(literal=(-variable),
-                                                         use_unique_node_cache=use_unique_node_cache)
+        # true_literal_leaf_id = self.create_literal_leaf(literal=variable,
+        #                                                 use_unique_node_cache=use_unique_node_cache)
+        # false_literal_leaf_id = self.create_literal_leaf(literal=(-variable),
+        #                                                  use_unique_node_cache=use_unique_node_cache)
+        #
+        # true_and_node_id = self.create_and_node(child_id_set={true_node_id, true_literal_leaf_id},
+        #                                         use_unique_node_cache=use_unique_node_cache)
+        # false_and_node_id = self.create_and_node(child_id_set={false_node_id, false_literal_leaf_id},
+        #                                          use_unique_node_cache=use_unique_node_cache)
+        # or_node_id = self.create_or_node(child_id_set={true_and_node_id, false_and_node_id},
+        #                                  decision_variable=variable,
+        #                                  use_unique_node_cache=use_unique_node_cache)
+        #
+        # return or_node_id
 
-        true_and_node_id = self.create_and_node(child_id_set={true_node_id, true_literal_leaf_id},
-                                                use_unique_node_cache=use_unique_node_cache)
-        false_and_node_id = self.create_and_node(child_id_set={false_node_id, false_literal_leaf_id},
-                                                 use_unique_node_cache=use_unique_node_cache)
-        or_node_id = self.create_or_node(child_id_set={true_and_node_id, false_and_node_id},
-                                         decision_variable=variable,
-                                         use_unique_node_cache=use_unique_node_cache)
-
-        return or_node_id
+        node_id = self.create_extended_decision_node(children_list=[(true_node_id, {variable}), (false_node_id, {-variable})],
+                                                     decision_variable=variable,
+                                                     use_unique_node_cache=use_unique_node_cache)
+        return node_id
 
     def create_mapping_node(self, child_id: int, variable_id_mapping_id_dictionary: Dict[int, int], mapping_id_variable_id_dictionary: Dict[int, int],
                             composition_needed: bool = True) -> Tuple[int, Dict[int, int]]:

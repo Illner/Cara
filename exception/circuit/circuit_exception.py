@@ -220,3 +220,13 @@ class CopyingCircuitsIsNotSupportedForNontrivialLeavesAndMappingNodesException(C
     def __init__(self, node_type: nt_enum.NodeTypeEnum):
         self.message = f"Copying circuits is not supported for non-trivial leaves and mapping nodes ({node_type.name})!"
         super().__init__(self.message)
+
+
+class ExtendedDecisionNodeNoChildrenException(CircuitException):
+    """
+    The extended decision node does not have any children
+    """
+
+    def __init__(self):
+        self.message = "The extended decision node does not have any children!"
+        super().__init__(self.message)
