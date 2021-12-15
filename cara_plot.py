@@ -428,7 +428,7 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
 
     # NUMBER_OF_DECISION_VARIABLES
     if function == FunctionEnum.NUMBER_OF_DECISION_VARIABLES:
-        return statistics.component_statistics.decision_variable.sum_count
+        return statistics.component_statistics.decision_variable_size.sum_count
 
     # RECOMPUTATION_CUT_SET
     if function == FunctionEnum.RECOMPUTATION_CUT_SET:

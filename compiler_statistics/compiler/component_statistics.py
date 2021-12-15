@@ -33,7 +33,7 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter component_caching_cara_mapping_length
     Private StatisticsComponentCounter component_caching_after_cara_mapping_length
     Private StatisticsComponentCounter split
-    Private StatisticsComponentCounter decision_variable
+    Private StatisticsComponentCounter decision_variable_size
     Private StatisticsComponentCounter recompute_cut_set
     Private StatisticsComponentCounter cut_set_try_cache_hit
     Private StatisticsComponentCounter two_cnf_formula_length
@@ -109,10 +109,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
                                                                               show_only_number_of_calls=True)
         self._component_list.append(self.__split)
 
-        self.__decision_variable: StatisticsComponentCounter = StatisticsComponentCounter(name="decision variable",
-                                                                                          active=active,
-                                                                                          show_only_number_of_calls=True)
-        self._component_list.append(self.__decision_variable)
+        self.__decision_variable_size: StatisticsComponentCounter = StatisticsComponentCounter(name="decision variable - size", active=active)
+        self._component_list.append(self.__decision_variable_size)
 
         self.__recompute_cut_set: StatisticsComponentCounter = StatisticsComponentCounter(name="recompute cut set", active=active)
         self._component_list.append(self.__recompute_cut_set)
@@ -230,8 +228,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
         return self.__split
 
     @property
-    def decision_variable(self) -> StatisticsComponentCounter:
-        return self.__decision_variable
+    def decision_variable_size(self) -> StatisticsComponentCounter:
+        return self.__decision_variable_size
 
     @property
     def recompute_cut_set(self) -> StatisticsComponentCounter:

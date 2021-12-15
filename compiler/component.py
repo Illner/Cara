@@ -1,4 +1,5 @@
 # Import
+import itertools
 from formula.cnf import Cnf
 from compiler.solver import Solver
 from circuit.circuit import Circuit
@@ -42,8 +43,10 @@ class Component:
     Private bool disable_sat
     Private bool cara_circuit
     Private bool cut_set_try_cache
+    Private bool strong_determinism
     Private int base_class_threshold
     Private List<int> assignment_list
+    Private int strong_determinism_max
     Private float new_cut_set_threshold
     Private float base_class_ratio_threshold
     Private float new_cut_set_threshold_reduction
@@ -85,7 +88,9 @@ class Component:
                  mapping_node_statistics: Union[str, None],
                  node_statistics: Union[str, None],
                  disable_sat: bool,
-                 cara_circuit: bool):
+                 cara_circuit: bool,
+                 strong_determinism: bool,
+                 strong_determinism_max: Union[int, None]):
         self.__cnf: Cnf = cnf
         self.__solver: Solver = solver
         self.__circuit: Circuit = circuit
@@ -103,8 +108,10 @@ class Component:
         self.__cara_circuit: bool = cara_circuit
         self.__cut_set_try_cache: bool = cut_set_try_cache
         self.__assignment_list: List[int] = assignment_list
+        self.__strong_determinism: bool = strong_determinism
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__base_class_threshold: Union[int, None] = base_class_threshold
+        self.__strong_determinism_max: Union[int, None] = strong_determinism_max
         self.__base_class_enum_set: Set[bc_enum.BaseClassEnum] = base_class_enum_set
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
         self.__base_class_ratio_threshold: Union[float, None] = base_class_ratio_threshold
@@ -265,12 +272,12 @@ class Component:
         self.__statistics.component_statistics.is_suggested_new_cut_set.stop_stopwatch()    # timer (stop)
         return False
 
-    def __get_decision_variable_from_cut_set(self, cut_set: Set[int], depth: int) -> int:
+    def __get_decision_variable_from_cut_set(self, cut_set: Set[int], depth: int) -> List[int]:
         """
-        Return a decision variable from the cut set based on the decision heuristic (decision_heuristic)
+        Return a list of decision variables from the cut set based on the decision heuristic (decision_heuristic)
         :param cut_set: a cut set
         :param depth: depth of the node
-        :return: a decision variable (based on the heuristic) from the cut set
+        :return: a list of decision variables (based on the heuristic) from the cut set
         :raises TryingGetVariableFromEmptyCutSetException: if the cut set is empty
         """
 
@@ -284,9 +291,15 @@ class Component:
                                                                             incidence_graph=self.__incidence_graph,
                                                                             solver=self.__solver,
                                                                             assignment_list=self.__assignment_list,
-                                                                            depth=depth)
+                                                                            depth=depth,
+                                                                            additional_score_dictionary=None,
+                                                                            max_number_of_returned_decision_variables=1 if not self.__strong_determinism else self.__strong_determinism_max)
 
-        self.__statistics.component_statistics.get_decision_variable_from_cut_set.stop_stopwatch()     # timer (stop)
+        if isinstance(decision_variable, int):
+            decision_variable = [decision_variable]
+
+        self.__statistics.component_statistics.decision_variable_size.add_count(len(decision_variable))     # counter
+        self.__statistics.component_statistics.get_decision_variable_from_cut_set.stop_stopwatch()          # timer (stop)
         return decision_variable
 
     def __exist_more_components(self) -> bool:
@@ -375,7 +388,9 @@ class Component:
                                        mapping_node_statistics=self.__mapping_node_statistics,
                                        node_statistics=self.__node_statistics,
                                        disable_sat=self.__disable_sat,
-                                       cara_circuit=self.__cara_circuit)
+                                       cara_circuit=self.__cara_circuit,
+                                       strong_determinism=self.__strong_determinism,
+                                       strong_determinism_max=self.__strong_determinism_max)
 
             # cut_set_restriction = cut_set.intersection(incidence_graph.variable_set(copy=False))
             node_id = component_temp.create_circuit(depth=(depth + 1),
@@ -446,33 +461,39 @@ class Component:
                     HypergraphPartitioning.remove_reduction_incidence_graph(self.__incidence_graph)     # because of cut set - try cache
                 self.__statistics.component_statistics.recompute_cut_set.add_count(0)   # counter
 
-        decision_variable = self.__get_decision_variable_from_cut_set(cut_set=cut_set_restriction,
-                                                                      depth=depth)
-        self.__statistics.component_statistics.decision_variable.add_count(1)   # counter
+        decision_variable_list = self.__get_decision_variable_from_cut_set(cut_set=cut_set_restriction,
+                                                                           depth=depth)
+        children_list: List[Tuple[int, Set[int]]] = []
+        mask_iterator = itertools.product([+1, -1], repeat=len(decision_variable_list))
 
-        node_id_list = []
-        for sign in [+1, -1]:
-            literal = sign * decision_variable
+        # Iterate over all possible assignments
+        for mask in mask_iterator:
+            literal_list: List[int] = []
 
-            self.__add_literals([literal])
+            for i, sign in enumerate(mask):
+                var = decision_variable_list[i]
+                literal_list.append(sign * var)
+
+            self.__add_literals(literal_list)
             node_id = self.__create_circuit(depth=(depth + 1),
                                             cut_set=cut_set_restriction,
                                             first_implied_literals=new_component,
                                             previous_implied_literal_set=None)
-            node_id_list.append(node_id)
+            children_list.append((node_id, set(literal_list)))
 
-            self.__remove_literals({literal})
+            self.__remove_literals(set(literal_list))
 
-        decision_node_id = self.__circuit.create_decision_node(decision_variable, node_id_list[0], node_id_list[1])
+        extended_decision_node_id = self.__circuit.create_extended_decision_node(children_list=children_list,
+                                                                                 decision_variable=decision_variable_list[0] if len(decision_variable_list) == 1 else None)
 
         # Node statistics
         if self.__node_statistics is not None:
-            node_statistics_file = self.__node_statistics + f".{decision_node_id}.temp.n.stat"
+            node_statistics_file = self.__node_statistics + f".{extended_decision_node_id}.temp.n.stat"
             with open(node_statistics_file, "w", encoding="utf-8") as file:
                 file.write(self.__incidence_graph.convert_to_cnf().str_with_mapping(horn_renaming_function=set(),
                                                                                     normalize_variables=False)[0])
 
-        return decision_node_id
+        return extended_decision_node_id
 
     def __create_circuit(self, depth: int, cut_set: Set[int], first_implied_literals: bool, previous_implied_literal_set: Union[Set[int], None]) -> int:
         """

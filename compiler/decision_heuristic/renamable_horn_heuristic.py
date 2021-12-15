@@ -34,7 +34,8 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
 
     # region Override method
     def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
-                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None) -> int:
+                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None,
+                              max_number_of_returned_decision_variables: Union[int, None] = 1) -> Union[int, List[int]]:
         # Additional score is used
         if additional_score_dictionary is not None:
             raise h_exception.AdditionalScoreIsNotSupportedException()

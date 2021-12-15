@@ -74,7 +74,9 @@ class Compiler:
     Private bool preprocessing
     Private str node_statistics
     Private bool cut_set_try_cache
+    Private bool strong_determinism
     Private int base_class_threshold
+    Private int strong_determinism_max
     Private str mapping_node_statistics
     Private float new_cut_set_threshold
     Private float base_class_ratio_threshold
@@ -159,7 +161,9 @@ class Compiler:
                  node_statistics: Union[str, None] = None,
                  disable_sat: bool = False,
                  disable_decomposition: bool = False,
-                 cara_circuit: bool = True):
+                 cara_circuit: bool = True,
+                 strong_determinism: bool = False,
+                 strong_determinism_max: Union[int, None] = None):
         # Invalid configurations
         if disable_sat and ((implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP) or (first_implied_literals_enum != il_enum.ImpliedLiteralsEnum.BCP)):
             raise c_exception.InvalidConfigurationException("BCP is needed for disable_sat")
@@ -186,9 +190,11 @@ class Compiler:
         self.__cara_circuit: bool = cara_circuit
         self.__preprocessing: bool = preprocessing
         self.__cut_set_try_cache: bool = cut_set_try_cache
+        self.__strong_determinism: bool = strong_determinism
         self.__node_statistics: Union[str, None] = node_statistics
         self.__new_cut_set_threshold: float = new_cut_set_threshold
         self.__base_class_threshold: Union[int, None] = base_class_threshold
+        self.__strong_determinism_max: Union[int, None] = strong_determinism_max
         self.__mapping_node_statistics: Union[str, None] = mapping_node_statistics
         self.__base_class_enum_set: Set[bc_enum.BaseClassEnum] = base_class_enum_set
         self.__new_cut_set_threshold_reduction: float = new_cut_set_threshold_reduction
@@ -619,7 +625,9 @@ class Compiler:
                                   mapping_node_statistics=self.__mapping_node_statistics,
                                   node_statistics=self.__node_statistics,
                                   disable_sat=self.__disable_sat,
-                                  cara_circuit=self.__cara_circuit)
+                                  cara_circuit=self.__cara_circuit,
+                                  strong_determinism=self.__strong_determinism,
+                                  strong_determinism_max=self.__strong_determinism_max)
             node_id = component.create_circuit()
             node_id_set.add(node_id)
 

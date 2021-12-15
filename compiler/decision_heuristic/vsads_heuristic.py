@@ -32,7 +32,12 @@ class VsadsHeuristic(DecisionHeuristicAbstract):
 
     # region Override method
     def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
-                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None) -> int:
+                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None,
+                              max_number_of_returned_decision_variables: Union[int, None] = 1) -> Union[int, List[int]]:
+        # Returning more decision variables is not supported
+        if max_number_of_returned_decision_variables != 1:
+            raise h_exception.DecisionHeuristicDoesNotSupportReturningMoreDecisionVariablesException()
+
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
         vsids_score_list = solver.get_vsids_score(d4_version=self.__vsids_d4_version)

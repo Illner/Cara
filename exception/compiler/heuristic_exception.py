@@ -58,3 +58,13 @@ class AdditionalScoreIsNotSupportedException(HeuristicException):
     def __init__(self):
         self.message = f"Additional score is not supported by this decision heuristic!"
         super().__init__(self.message)
+
+
+class DecisionHeuristicDoesNotSupportReturningMoreDecisionVariablesException(HeuristicException):
+    """
+    The decision heuristic does not support returning more decision variables
+    """
+
+    def __init__(self):
+        self.message = "The decision variable does not support returning more decision variables!"
+        super().__init__(self.message)

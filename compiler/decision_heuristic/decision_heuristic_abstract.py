@@ -28,16 +28,20 @@ class DecisionHeuristicAbstract(ABC):
     # region Abstract method
     @abstractmethod
     def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
-                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None) -> int:
+                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None,
+                              max_number_of_returned_decision_variables: Union[int, None] = 1) -> Union[int, List[int]]:
         """
-        Compute a decision variable
+        Compute decision variable(s)
         :param cut_set: a cut set
         :param incidence_graph: an incidence graph
         :param solver: a solver
         :param assignment_list: a partial assignment for the solver
         :param depth: depth of the node
+        :param max_number_of_returned_decision_variables: maximum number of returned decision variables (None for no limit).
+        For 1, an integer is returned. Otherwise, a list is returned.
         :param additional_score_dictionary: a dictionary that contains additional scores
-        :return: a decision variable
+        :return: a decision variable or a list of decision variables
+        :raise DecisionHeuristicDoesNotSupportReturningMoreDecisionVariablesException: if the decision heuristic does not support returning more decision variables
         """
 
         pass

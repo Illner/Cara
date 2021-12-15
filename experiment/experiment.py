@@ -137,7 +137,9 @@ class Experiment:
                    file_name_extension: str = "",
                    disable_sat: bool = False,
                    disable_decomposition: bool = False,
-                   cara_circuit: bool = True) -> \
+                   cara_circuit: bool = True,
+                   strong_determinism: bool = False,
+                   strong_determinism_max: Union[int, None] = None) -> \
             Tuple[bool, bool, Union[int, None], Statistics]:
         """
         :return: (timeout exceeded, exception, size of the circuit, statistics)
@@ -208,7 +210,9 @@ class Experiment:
                             node_statistics=self.__node_statistics,
                             disable_sat=disable_sat,
                             disable_decomposition=disable_decomposition,
-                            cara_circuit=cara_circuit)
+                            cara_circuit=cara_circuit,
+                            strong_determinism=strong_determinism,
+                            strong_determinism_max=strong_determinism_max)
 
         experiment_thread: TExperimentThread = self.__ExperimentThread(compiler)
         thread = kthread.KThread(target=Experiment.__experiment, args=(experiment_thread,))

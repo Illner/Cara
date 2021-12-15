@@ -107,7 +107,9 @@ def main(main_args):
                             node_statistics=node_statistics,
                             disable_sat=main_args.disable_sat,
                             disable_decomposition=main_args.disable_decomposition,
-                            cara_circuit=main_args.cara_circuit)
+                            cara_circuit=main_args.cara_circuit,
+                            strong_determinism=main_args.strong_determinism,
+                            strong_determinism_max=main_args.strong_determinism_max)
 
         print("The formula has been processed!\n")
 
@@ -378,6 +380,11 @@ def create_parser() -> argparse.ArgumentParser:
                              action="store_true",
                              default=False,
                              help="disable the decomposition")
+    parser_temp.add_argument("-s_d",
+                             "--strong_determinism",
+                             action="store_true",
+                             default=False,
+                             help="strong determinism")
     parser_temp.add_argument("-cara_c",
                              "--cara_circuit",
                              action="store",
@@ -585,6 +592,13 @@ def create_parser() -> argparse.ArgumentParser:
                              type=float,
                              metavar="[0.01-0.49]",
                              help="imbalance factor that is used for hypergraph partitioning (hMETIS - UBfactor, PaToH - final_imbal, KaHyPar - epsilon)")
+    parser_temp.add_argument("-sd_m",
+                             "--strong_determinism_max",
+                             action="store",
+                             default=None,
+                             type=non_negative_int_or_none_parser,
+                             metavar="[non-negative number or None]",
+                             help="maximum number of decision variables that can be returned by the decision heuristic (only for strong determinism) (None for no limit)")
     parser_temp.add_argument("-st",
                              "--subsumption_threshold",
                              action="store",

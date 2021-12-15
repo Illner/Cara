@@ -62,16 +62,16 @@ class CompilerTest(TestAbstract):
                                 for hp_cache_enum in hpc_enum.hpc_enum_values:
                                     for decision_heuristic_weight_for_satisfied_clauses in [True, False]:
                                         for decision_heuristic_ignore_binary_clauses in [True, False]:
-                                            for component_caching_enum in [cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME, cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME]:
-                                                for component_caching_before_unit_propagation in [True, False]:
-                                                    for component_caching_after_unit_propagation in [True, False]:
-                                                        for smooth in [False, True]:
-                                                            for disable_sat in [False, True]:
-                                                                for cara_circuit in [True, False]:
-                                                                    for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
-                                                                        for first_implied_literals_enum in il_enum.implied_literals_enum_values:
-                                                                            for implied_literals_enum in il_enum.implied_literals_enum_values:
-                                                                                for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
+                                            for hp_variable_simplification_enum in hpvs_enum.hpvs_enum_values:
+                                                for component_caching_enum in [cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME, cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME]:
+                                                    for component_caching_before_unit_propagation in [True, False]:
+                                                        for component_caching_after_unit_propagation in [True, False]:
+                                                            for smooth in [False, True]:
+                                                                for disable_sat in [False, True]:
+                                                                    for cara_circuit in [False, True]:
+                                                                        for decision_heuristic_enum in dh_enum.decision_heuristic_enum_values:
+                                                                            for first_implied_literals_enum in il_enum.implied_literals_enum_values:
+                                                                                for implied_literals_enum in il_enum.implied_literals_enum_values:
                                                                                     try:
                                                                                         if (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_VSADS) or \
                                                                                            (decision_heuristic_enum == dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS) or \
