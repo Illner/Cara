@@ -5794,6 +5794,39 @@ A 3 8 10 12
 O 1 2 7 13
 
 
+__create_circuit_13
+C CaraCompiler
+C Name: circuit_13
+C Type: D_DNNF
+C Decomposability: True
+C Determinism: True
+C Smoothness: False
+C AND_NODE: 5
+C OR_NODE: 2
+C MAPPING_NODE: 0
+C CONSTANT: 2
+C LITERAL: 7
+C TWO_CNF: 0
+C RENAMABLE_HORN_CNF: 0
+nnf 16 20 4
+L 1
+L 2
+L 3
+O 0 0
+O 0 2 2 3
+A 3 0 1 4
+L -1
+A 3 1 2 6
+L -2
+A 0
+A 3 0 8 9
+L -3
+L -4
+A 2 11 12
+A 3 6 8 13
+O 0 4 5 7 10 14
+
+
 
 Modification
 

@@ -208,6 +208,38 @@ class CircuitTest(TestAbstract):
             circuit.set_root(max_id)
 
         return circuit, max_id
+
+    @staticmethod
+    def __create_circuit_13(set_root: bool = True) -> (Circuit, int):
+        """
+        Create a circuit (circuit_13)
+        Decomposable
+        Non-deterministic
+        Non-smooth
+        """
+
+        circuit = Circuit(circuit_name="circuit_13")
+
+        circuit.create_literal_leaf(1)              # 0
+        circuit.create_literal_leaf(2)              # 1
+        circuit.create_literal_leaf(-2)             # 2
+        circuit.create_literal_leaf(-1)             # 3
+        circuit.create_literal_leaf(3)              # 4
+        circuit.create_literal_leaf(-3)             # 5
+        circuit.create_literal_leaf(-4)             # 6
+
+        circuit.create_constant_leaf(False)         # 7
+        circuit.create_constant_leaf(True)          # 8
+
+        circuit.create_or_node({4, 7})              # 9
+        circuit.create_and_node({5, 6})             # 10
+
+        max_id = circuit.create_extended_decision_node(children_list=[(9, {1, 2}), (4, {-1, 2}), (8, {1, -2}), (10, {-1, -2})])     # 15
+
+        if set_root:
+            circuit.set_root(max_id)
+
+        return circuit, max_id
     # endregion
 
     # region Private method
@@ -238,7 +270,8 @@ class CircuitTest(TestAbstract):
 
         result = ""
         circuit_list = [CircuitTest.__create_circuit_2, CircuitTest.__create_circuit_3,
-                        CircuitTest.__create_circuit_4, CircuitTest.__create_circuit_5]
+                        CircuitTest.__create_circuit_4, CircuitTest.__create_circuit_5,
+                        CircuitTest.__create_circuit_13]
 
         for circuit in circuit_list:
             result = "\n".join((result, circuit.__name__))
