@@ -1,6 +1,6 @@
 # Import
 from compiler.solver import Solver
-from typing import List, Set, Dict, Union
+from typing import List, Set, Dict, Union, Tuple
 from formula.incidence_graph import IncidenceGraph
 from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
@@ -41,9 +41,9 @@ class MaximumRenamableHornHeuristic(DecisionHeuristicAbstract):
         self.__lp_formulation_type: lpft_enum.LpFormulationTypeEnum = lp_formulation_type
 
     # region Override method
-    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
-                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None,
-                              max_number_of_returned_decision_variables: Union[int, None] = 1) -> Union[int, List[int]]:
+    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int,
+                              additional_score_dictionary: Union[Dict[int, int], None] = None, max_number_of_returned_decision_variables: Union[int, None] = 1,
+                              return_score: bool = False) -> Union[Union[int, List[int]], Tuple[Union[int, List[int]], Union[int, Tuple[float, float, float, float, float]]]]:
         # Additional score is used
         if additional_score_dictionary is not None:
             raise h_exception.AdditionalScoreIsNotSupportedException()
@@ -55,7 +55,8 @@ class MaximumRenamableHornHeuristic(DecisionHeuristicAbstract):
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
         if len(preselected_variable_set) == 1:
-            return list(preselected_variable_set)[0]
+            decision_variable = list(preselected_variable_set)[0]
+            return (decision_variable, 0) if return_score else decision_variable
 
         is_renamable_horn, conflict_variable_set, variable_score_dictionary = incidence_graph.get_maximum_renamable_horn_subformula(is_exact=self.__is_exact,
                                                                                                                                     lp_formulation_type=self.__lp_formulation_type,
@@ -64,14 +65,16 @@ class MaximumRenamableHornHeuristic(DecisionHeuristicAbstract):
 
         # The formula is renamable Horn
         if is_renamable_horn:
-            decision_variable = self.__decision_heuristic.get_decision_variable(cut_set=preselected_variable_set,
-                                                                                incidence_graph=incidence_graph,
-                                                                                solver=solver,
-                                                                                assignment_list=assignment_list,
-                                                                                depth=depth,
-                                                                                additional_score_dictionary=None)
+            result = self.__decision_heuristic.get_decision_variable(cut_set=preselected_variable_set,
+                                                                     incidence_graph=incidence_graph,
+                                                                     solver=solver,
+                                                                     assignment_list=assignment_list,
+                                                                     depth=depth,
+                                                                     additional_score_dictionary=None,
+                                                                     max_number_of_returned_decision_variables=max_number_of_returned_decision_variables,
+                                                                     return_score=return_score)
 
-            return decision_variable
+            return result
 
         intersection_set = conflict_variable_set.intersection(preselected_variable_set)
         if not intersection_set:
@@ -80,12 +83,14 @@ class MaximumRenamableHornHeuristic(DecisionHeuristicAbstract):
             else:
                 intersection_set = preselected_variable_set
 
-        decision_variable = self.__decision_heuristic.get_decision_variable(cut_set=intersection_set,
-                                                                            incidence_graph=incidence_graph,
-                                                                            solver=solver,
-                                                                            assignment_list=assignment_list,
-                                                                            depth=depth,
-                                                                            additional_score_dictionary=variable_score_dictionary if self.__use_conflicts else None)
+        result = self.__decision_heuristic.get_decision_variable(cut_set=intersection_set,
+                                                                 incidence_graph=incidence_graph,
+                                                                 solver=solver,
+                                                                 assignment_list=assignment_list,
+                                                                 depth=depth,
+                                                                 additional_score_dictionary=variable_score_dictionary if self.__use_conflicts else None,
+                                                                 max_number_of_returned_decision_variables=max_number_of_returned_decision_variables,
+                                                                 return_score=return_score)
 
-        return decision_variable
+        return result
     # endregion

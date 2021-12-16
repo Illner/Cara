@@ -1,7 +1,7 @@
 # Import
 import random
 from compiler.solver import Solver
-from typing import List, Set, Dict, Union
+from typing import List, Set, Dict, Union, Tuple
 from formula.incidence_graph import IncidenceGraph
 from compiler.decision_heuristic.decision_heuristic_abstract import DecisionHeuristicAbstract
 from compiler.preselection_heuristic.preselection_heuristic_abstract import PreselectionHeuristicAbstract
@@ -30,9 +30,9 @@ class ExactUnitPropagationCountHeuristic(DecisionHeuristicAbstract):
         self.__mixed_difference_heuristic_enum: mdf_enum.MixedDifferenceHeuristicEnum = mixed_difference_heuristic_enum
 
     # region Override method
-    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
-                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None,
-                              max_number_of_returned_decision_variables: Union[int, None] = 1) -> Union[int, List[int]]:
+    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int,
+                              additional_score_dictionary: Union[Dict[int, int], None] = None, max_number_of_returned_decision_variables: Union[int, None] = 1,
+                              return_score: bool = False) -> Union[Union[int, List[int]], Tuple[Union[int, List[int]], int]]:
         # Additional score is used
         if additional_score_dictionary is not None:
             raise h_exception.AdditionalScoreIsNotSupportedException()
@@ -44,14 +44,16 @@ class ExactUnitPropagationCountHeuristic(DecisionHeuristicAbstract):
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
         if len(preselected_variable_set) == 1:
-            return list(preselected_variable_set)[0]
+            decision_variable = list(preselected_variable_set)[0]
+            return (decision_variable, 0) if return_score else decision_variable
 
         implicit_bcp_dictionary = solver.implicit_unit_propagation(assignment_list=assignment_list,
                                                                    variable_restriction_set=preselected_variable_set)
 
         # disable_sat => the formula can be unsatisfiable
         if implicit_bcp_dictionary is None:
-            return random.sample(preselected_variable_set, 1)[0]
+            decision_variable = random.sample(preselected_variable_set, 1)[0]
+            return (decision_variable, 0) if return_score else decision_variable
 
         score_dictionary: Dict[int, int] = dict()   # key: variable, value: score of the variable
 
@@ -82,5 +84,5 @@ class ExactUnitPropagationCountHeuristic(DecisionHeuristicAbstract):
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)
 
-        return decision_variable
+        return (decision_variable, score_dictionary[decision_variable]) if return_score else decision_variable
     # endregion

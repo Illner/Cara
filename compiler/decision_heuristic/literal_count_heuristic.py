@@ -69,9 +69,9 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
     # endregion
 
     # region Override method
-    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
-                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None,
-                              max_number_of_returned_decision_variables: Union[int, None] = 1) -> Union[int, List[int]]:
+    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int,
+                              additional_score_dictionary: Union[Dict[int, int], None] = None, max_number_of_returned_decision_variables: Union[int, None] = 1,
+                              return_score: bool = False) -> Union[Union[int, List[int]], Tuple[Union[int, List[int]], Union[int, Tuple[int, int], Tuple[int, int, int], Tuple[int, int, int, int], Tuple[int, int, int, int, int]]]]:
         # Returning more decision variables is not supported
         if max_number_of_returned_decision_variables != 1:
             raise h_exception.DecisionHeuristicDoesNotSupportReturningMoreDecisionVariablesException()
@@ -79,7 +79,8 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
 
         if len(preselected_variable_set) == 1:
-            return list(preselected_variable_set)[0]
+            decision_variable = list(preselected_variable_set)[0]
+            return (decision_variable, 0) if return_score else decision_variable
 
         # key: variable, value: ([additional_score], score_1, score_2, [score_3, score_4])
         score_dictionary: Dict[int, Union[Tuple[int, int], Tuple[int, int, int], Tuple[int, int, int, int], Tuple[int, int, int, int, int]]] = dict()
@@ -123,5 +124,5 @@ class LiteralCountHeuristic(DecisionHeuristicAbstract):
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)
 
-        return decision_variable
+        return (decision_variable, score_dictionary[decision_variable]) if return_score else decision_variable
     # endregion

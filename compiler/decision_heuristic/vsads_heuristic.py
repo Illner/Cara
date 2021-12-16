@@ -31,14 +31,18 @@ class VsadsHeuristic(DecisionHeuristicAbstract):
         self.__ignore_binary_clauses: bool = ignore_binary_clauses
 
     # region Override method
-    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int],
-                              depth: int, additional_score_dictionary: Union[Dict[int, int], None] = None,
-                              max_number_of_returned_decision_variables: Union[int, None] = 1) -> Union[int, List[int]]:
+    def get_decision_variable(self, cut_set: Set[int], incidence_graph: IncidenceGraph, solver: Solver, assignment_list: List[int], depth: int,
+                              additional_score_dictionary: Union[Dict[int, int], None] = None, max_number_of_returned_decision_variables: Union[int, None] = 1,
+                              return_score: bool = False) -> Union[Union[int, List[int]], Tuple[Union[int, List[int]], Union[int, float, Tuple[int, float]]]]:
         # Returning more decision variables is not supported
         if max_number_of_returned_decision_variables != 1:
             raise h_exception.DecisionHeuristicDoesNotSupportReturningMoreDecisionVariablesException()
 
         preselected_variable_set = self._get_preselected_variables(cut_set, incidence_graph, depth)
+
+        if len(preselected_variable_set) == 1:
+            decision_variable = list(preselected_variable_set)[0]
+            return (decision_variable, 0) if return_score else decision_variable
 
         vsids_score_list = solver.get_vsids_score(d4_version=self.__vsids_d4_version)
 
@@ -83,5 +87,5 @@ class VsadsHeuristic(DecisionHeuristicAbstract):
         # Pick the best one
         decision_variable = max(score_dictionary, key=score_dictionary.get)
 
-        return decision_variable
+        return (decision_variable, score_dictionary[decision_variable]) if return_score else decision_variable
     # endregion

@@ -293,7 +293,8 @@ class Component:
                                                                             assignment_list=self.__assignment_list,
                                                                             depth=depth,
                                                                             additional_score_dictionary=None,
-                                                                            max_number_of_returned_decision_variables=1 if not self.__strong_determinism else self.__strong_determinism_max)
+                                                                            max_number_of_returned_decision_variables=1 if not self.__strong_determinism else self.__strong_determinism_max,
+                                                                            return_score=False)
 
         if isinstance(decision_variable, int):
             decision_variable = [decision_variable]
