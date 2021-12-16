@@ -89,6 +89,10 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_JW_TS_nA_nC_P = "JW-TS (-a, -c, p)"
     BDMC_RH_DLCS_DLIS_nA_C_P_nEXT = "DLCS-DLIS (-a, c, p, -ext)"
     BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = "DLCS-DLIS (-a, -c, p, -ext)"
+    BDMC_RH_VSADS_nA_C_P_nEXT = "VSADS (-a, c, p, -ext)"
+    BDMC_RH_VSADS_nA_nC_P_nEXT = "VSADS (-a, -c, p, -ext)"
+    BDMC_RH_JW_TS_nA_C_P_nEXT = "JW-TS (-a, c, p, -ext)"
+    BDMC_RH_JW_TS_nA_nC_P_nEXT = "JW-TS (-a, -c, p, -ext)"
 
     # BDMC MRH
     BDMC_MRH_D4 = "D4 (BDMC MRH)"
