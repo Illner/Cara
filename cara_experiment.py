@@ -66,8 +66,8 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  decision_heuristic_ignore_binary_clauses=True,
-                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_JEROSLOW_WANG_TWO_SIDED,
+                                  decision_heuristic_ignore_binary_clauses=False,
+                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS,
                                   base_class_enum_set={bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF},
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
