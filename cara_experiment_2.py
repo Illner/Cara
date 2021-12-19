@@ -37,7 +37,9 @@ def main(main_args):
                             directory_path=main_args.directory_path,
                             timeout_experiment=timeout_experiment,
                             log_directory_path=main_args.log_directory_path,
-                            save_circuit=True)
+                            save_circuit=False,
+                            mapping_node_statistics=None,
+                            node_statistics=None)
 
     # Total timeout
     start = datetime.datetime.now()
@@ -64,7 +66,10 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  decision_heuristic_ignore_binary_clauses=True,
+                                  strong_determinism=True,
+                                  strong_determinism_max=None,
+
+                                  decision_heuristic_ignore_binary_clauses=False,
                                   decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS,
                                   base_class_enum_set={bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF},
                                   decision_heuristic_vsids_d4_version=True,
@@ -73,7 +78,7 @@ def main(main_args):
 
                                   decision_heuristic_renamable_horn_use_auxiliary_variables=False,
                                   decision_heuristic_renamable_horn_use_total_number_of_conflict_variables=False,
-                                  decision_heuristic_renamable_horn_use_conflicts=True,
+                                  decision_heuristic_renamable_horn_use_conflicts=False,
                                   decision_heuristic_renamable_horn_prefer_conflict_variables=True,
 
                                   smooth=False,

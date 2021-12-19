@@ -464,6 +464,14 @@ class Component:
 
         decision_variable_list = self.__get_decision_variable_from_cut_set(cut_set=cut_set_restriction,
                                                                            depth=depth)
+
+        # Decision node
+        if len(decision_variable_list) == 1:
+            self.__statistics.component_statistics.decision_node.add_count(1)   # counter
+        # Extended decision node
+        else:
+            self.__statistics.component_statistics.extended_decision_node.add_count(1)  # counter
+
         children_list: List[Tuple[int, Set[int]]] = []
         mask_iterator = itertools.product([+1, -1], repeat=len(decision_variable_list))
 

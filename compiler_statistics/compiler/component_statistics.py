@@ -33,6 +33,8 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     Private StatisticsComponentCounter component_caching_cara_mapping_length
     Private StatisticsComponentCounter component_caching_after_cara_mapping_length
     Private StatisticsComponentCounter split
+    Private StatisticsComponentCounter decision_node
+    Private StatisticsComponentCounter extended_decision_node
     Private StatisticsComponentCounter decision_variable_size
     Private StatisticsComponentCounter recompute_cut_set
     Private StatisticsComponentCounter cut_set_try_cache_hit
@@ -108,6 +110,16 @@ class ComponentStatistics(StatisticsTemplateAbstract):
                                                                               active=active,
                                                                               show_only_number_of_calls=True)
         self._component_list.append(self.__split)
+
+        self.__decision_node: StatisticsComponentCounter = StatisticsComponentCounter(name="decision node",
+                                                                                      active=active,
+                                                                                      show_only_number_of_calls=True)
+        self._component_list.append(self.__decision_node)
+
+        self.__extended_decision_node: StatisticsComponentCounter = StatisticsComponentCounter(name="extended decision node",
+                                                                                               active=active,
+                                                                                               show_only_number_of_calls=True)
+        self._component_list.append(self.__extended_decision_node)
 
         self.__decision_variable_size: StatisticsComponentCounter = StatisticsComponentCounter(name="decision variable - size", active=active)
         self._component_list.append(self.__decision_variable_size)
@@ -226,6 +238,14 @@ class ComponentStatistics(StatisticsTemplateAbstract):
     @property
     def split(self) -> StatisticsComponentCounter:
         return self.__split
+
+    @property
+    def decision_node(self) -> StatisticsComponentCounter:
+        return self.__decision_node
+
+    @property
+    def extended_decision_node(self) -> StatisticsComponentCounter:
+        return self.__extended_decision_node
 
     @property
     def decision_variable_size(self) -> StatisticsComponentCounter:

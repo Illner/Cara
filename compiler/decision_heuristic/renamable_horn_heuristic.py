@@ -81,7 +81,6 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
 
                 for sign in [+1, -1]:
                     literal = sign * variable
-
                     component = literal_component_dictionary[literal]
 
                     if self.__use_total_number_of_conflict_variables:
@@ -91,14 +90,57 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
 
                 additional_score_dictionary[variable] = number_of_conflict_variables
 
-        result = self.__decision_heuristic.get_decision_variable(cut_set=intersection_set,
-                                                                 incidence_graph=incidence_graph,
-                                                                 solver=solver,
-                                                                 assignment_list=assignment_list,
-                                                                 depth=depth,
-                                                                 additional_score_dictionary=additional_score_dictionary,
-                                                                 max_number_of_returned_decision_variables=1,
-                                                                 return_score=return_score)
+        # Only one decision variable is returned
+        if (max_number_of_returned_decision_variables == 1) or \
+           (len(component_number_of_conflict_variables_dictionary) == 1):
+            result = self.__decision_heuristic.get_decision_variable(cut_set=intersection_set,
+                                                                     incidence_graph=incidence_graph,
+                                                                     solver=solver,
+                                                                     assignment_list=assignment_list,
+                                                                     depth=depth,
+                                                                     additional_score_dictionary=additional_score_dictionary,
+                                                                     max_number_of_returned_decision_variables=1,
+                                                                     return_score=return_score)
 
-        return result
+            return result
+
+        # Separate variables into connected components
+        component_variables_dictionary: Dict[int, Set[int]] = dict()
+        for variable in intersection_set:
+            for sign in [+1, -1]:
+                literal = sign * variable
+                component = literal_component_dictionary[literal]
+
+                if component not in component_variables_dictionary:
+                    component_variables_dictionary[component] = set()
+
+                component_variables_dictionary[component].add(variable)
+
+        # Get selected variable from each component
+        selected_variables_dictionary = dict()  # key: variable, value: score
+        for component in component_variables_dictionary:
+            variable_set = component_variables_dictionary[component]
+            selected_variable, score = self.__decision_heuristic.get_decision_variable(cut_set=variable_set,
+                                                                                       incidence_graph=incidence_graph,
+                                                                                       solver=solver,
+                                                                                       assignment_list=assignment_list,
+                                                                                       depth=depth,
+                                                                                       additional_score_dictionary=additional_score_dictionary,
+                                                                                       max_number_of_returned_decision_variables=1,
+                                                                                       return_score=True)
+
+            if selected_variable in selected_variables_dictionary:
+                temp = selected_variables_dictionary[selected_variable]
+                selected_variables_dictionary[selected_variable] = tuple(max(x, y) for x, y in zip(temp, score))
+            else:
+                selected_variables_dictionary[selected_variable] = score
+
+        if (max_number_of_returned_decision_variables is None) or \
+           (len(selected_variables_dictionary) <= max_number_of_returned_decision_variables):
+            decision_variable_list = list(selected_variables_dictionary.keys())
+        else:
+            decision_variable_list = sorted(selected_variables_dictionary, key=selected_variables_dictionary.get, reverse=True)
+            decision_variable_list = decision_variable_list[:max_number_of_returned_decision_variables]
+
+        return (decision_variable_list, 0) if return_score else decision_variable_list
     # endregion
