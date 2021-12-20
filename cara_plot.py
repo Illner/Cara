@@ -252,7 +252,11 @@ class FunctionEnum(str, Enum):
     TOTAL_NUMBER_OF_IMPLIED_LITERALS = "Total number of implied literals"
     AVERAGE_NUMBER_OF_IMPLIED_LITERALS = "Average number of implied literals"
     NUMBER_OF_SPLITS = "Number of splits"
-    NUMBER_OF_DECISION_VARIABLES = "Number of decision variables"
+    TOTAL_NUMBER_OF_DECISION_VARIABLES = "Total number of decision variables"
+    AVERAGE_NUMBER_OF_DECISION_VARIABLES = "Average size of a returned set of decision variables"
+    NUMBER_OF_DECISION_NODES = "Number of decision nodes"
+    NUMBER_OF_EXTENDED_DECISION_NODES = "Number of extended decision nodes"
+    RATIO_EXTENDED_DECISION_NODES_AND_ALL_DECISION_NODES = "Number of extended decision nodes / all decision nodes [%]"
     RECOMPUTATION_CUT_SET = "Recomputation of cut sets [%]"
     RATIO_GENERATE_KEY_COMPONENT_CACHING_TIME_AND_COMPILATION_TIME = "Total time spent on generating all keys for component \n caching / compilation time [%]"
     RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME = "Total time spent on creating all implication \n graphs / compilation time [%]"
@@ -266,7 +270,7 @@ experiment_path: RootPathEnum = RootPathEnum.BDMC_RH_SD
 
 title: str = ""
 plot: PlotEnum = PlotEnum.SCATTER
-function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
+function: FunctionEnum = FunctionEnum.COMPILATION_TIME
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
@@ -293,14 +297,12 @@ use_point_label: bool = False
 ##### BOXPLOT, HISTOGRAM #####
 ##############################
 
-directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_HF,
-                                             ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_2,
-                                             ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_4]
+directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT,
+                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT]
 
 label_prefix: str = ""
-label_list: Union[List[List[str]], None] = [["d-BDMC MRH \n DLCS-DLIS \n (e, c, p, HF)"],
-                                            ["d-BDMC MRH \n DLCS-DLIS \n (e, c, p, RDHF_2)"],
-                                            ["d-BDMC MRH \n DLCS-DLIS \n (e, c, p, RDHF_4)"]]
+label_list: Union[List[List[str]], None] = [["d-BDMC RH SD \n DLCS-DLIS \n (-a, -c, p, -ext)"],
+                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, c, p, -ext)"]]
 # BOXPLOT
 showfliers: bool = False
 
@@ -436,9 +438,31 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
     if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING:
         return statistics.component_statistics.component_caching_after_cara_mapping_length.average_count
 
-    # NUMBER_OF_DECISION_VARIABLES
-    if function == FunctionEnum.NUMBER_OF_DECISION_VARIABLES:
+    # TOTAL_NUMBER_OF_DECISION_VARIABLES
+    if function == FunctionEnum.TOTAL_NUMBER_OF_DECISION_VARIABLES:
         return statistics.component_statistics.decision_variable_size.sum_count
+
+    # AVERAGE_NUMBER_OF_DECISION_VARIABLES
+    if function == FunctionEnum.AVERAGE_NUMBER_OF_DECISION_VARIABLES:
+        return statistics.component_statistics.decision_variable_size.average_count
+
+    # NUMBER_OF_DECISION_NODES
+    if function == FunctionEnum.NUMBER_OF_DECISION_NODES:
+        return statistics.component_statistics.decision_node.sum_count
+
+    # NUMBER_OF_EXTENDED_DECISION_NODES
+    if function == FunctionEnum.NUMBER_OF_EXTENDED_DECISION_NODES:
+        return statistics.component_statistics.extended_decision_node.sum_count
+
+    # RATIO_EXTENDED_DECISION_NODES_AND_ALL_DECISION_NODES
+    if function == FunctionEnum.RATIO_EXTENDED_DECISION_NODES_AND_ALL_DECISION_NODES:
+        decision_nodes = statistics.component_statistics.decision_node.sum_count
+        extended_decision_nodes = statistics.component_statistics.extended_decision_node.sum_count
+
+        if (decision_nodes + extended_decision_nodes) == 0:
+            return 0
+
+        return extended_decision_nodes / (extended_decision_nodes + decision_nodes)
 
     # RECOMPUTATION_CUT_SET
     if function == FunctionEnum.RECOMPUTATION_CUT_SET:
@@ -763,7 +787,8 @@ percent_function_list: List[FunctionEnum] = [FunctionEnum.RH_RECOGNITION, Functi
                                              FunctionEnum.RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME,
                                              FunctionEnum.RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME,
                                              FunctionEnum.RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION,
-                                             FunctionEnum.RATIO_NUMBER_OF_SWITCHED_VARIABLES_AND_NUMBER_OF_VARIABLES_LP_FORMULATION]
+                                             FunctionEnum.RATIO_NUMBER_OF_SWITCHED_VARIABLES_AND_NUMBER_OF_VARIABLES_LP_FORMULATION,
+                                             FunctionEnum.RATIO_EXTENDED_DECISION_NODES_AND_ALL_DECISION_NODES]
 percent = True if function in percent_function_list else False
 
 if plot_name is None:
