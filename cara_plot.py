@@ -25,6 +25,7 @@ file_path = sys.argv[2]
 class RootPathEnum(str, Enum):
     BDMC = fr"{root_path}\BDMC"
     BDMC_RH = fr"{root_path}\BDMC RH"
+    BDMC_RH_SD = fr"{root_path}\BDMC RH SD"
     BDMC_MRH = fr"{root_path}\BDMC MRH"
     HP_CACHE = fr"{root_path}\HP cache"
     CARA_CIRCUIT = fr"{root_path}\CaraCircuit"
@@ -93,6 +94,11 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_VSADS_nA_nC_P_nEXT = "VSADS (-a, -c, p, -ext)"
     BDMC_RH_JW_TS_nA_C_P_nEXT = "JW-TS (-a, c, p, -ext)"
     BDMC_RH_JW_TS_nA_nC_P_nEXT = "JW-TS (-a, -c, p, -ext)"
+
+    # BDMC RH SD
+    BDMC_RH_SD_D4 = "D4 (BDMC RH SD)"
+    BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT = "SD DLCS-DLIS (-a, c, p, -ext)"
+    BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT = "SD DLCS-DLIS (-a, -c, p, -ext)"
 
     # BDMC MRH
     BDMC_MRH_D4 = "D4 (BDMC MRH)"
@@ -256,11 +262,11 @@ class FunctionEnum(str, Enum):
 ##### Configuration #####
 #########################
 
-experiment_path: RootPathEnum = RootPathEnum.BDMC_RH
+experiment_path: RootPathEnum = RootPathEnum.BDMC_RH_SD
 
 title: str = ""
 plot: PlotEnum = PlotEnum.SCATTER
-function: FunctionEnum = FunctionEnum.COMPILATION_TIME
+function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
@@ -273,8 +279,8 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_A_T_nC_P
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_D4
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT
 
 x_label: str = f""
 y_label: str = f""

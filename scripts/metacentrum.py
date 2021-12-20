@@ -4,7 +4,7 @@ from shutil import move
 
 
 from_path = r"C:\Users\illner\Desktop\temp\Results"
-to_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC RH\DLCS-DLIS (-a, -c, p, -ext)"
+to_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Experiments\BDMC RH SD\DLCS-DLIS (-a, -c, p, -ext)"
 
 benchmark_path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\MetaCentrum\Benchmark_one"
 benchmark_type_list = [(file, file_path) for file in os.listdir(benchmark_path) if (os.path.isdir(file_path := os.path.join(benchmark_path, file)))]
