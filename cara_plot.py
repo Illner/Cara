@@ -253,7 +253,8 @@ class FunctionEnum(str, Enum):
     AVERAGE_NUMBER_OF_IMPLIED_LITERALS = "Average number of implied literals"
     NUMBER_OF_SPLITS = "Number of splits"
     TOTAL_NUMBER_OF_DECISION_VARIABLES = "Total number of decision variables"
-    AVERAGE_NUMBER_OF_DECISION_VARIABLES = "Average size of a returned set of decision variables"
+    AVERAGE_NUMBER_OF_DECISION_VARIABLES = "Average size of a set with decision variables"
+    MAX_NUMBER_OF_DECISION_VARIABLES = "Max size of a set with decision variables"
     NUMBER_OF_DECISION_NODES = "Number of decision nodes"
     NUMBER_OF_EXTENDED_DECISION_NODES = "Number of extended decision nodes"
     RATIO_EXTENDED_DECISION_NODES_AND_ALL_DECISION_NODES = "Number of extended decision nodes / all decision nodes [%]"
@@ -445,6 +446,10 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
     # AVERAGE_NUMBER_OF_DECISION_VARIABLES
     if function == FunctionEnum.AVERAGE_NUMBER_OF_DECISION_VARIABLES:
         return statistics.component_statistics.decision_variable_size.average_count
+
+    # MAX_NUMBER_OF_DECISION_VARIABLES
+    if function == FunctionEnum.MAX_NUMBER_OF_DECISION_VARIABLES:
+        return statistics.component_statistics.decision_variable_size.max_count
 
     # NUMBER_OF_DECISION_NODES
     if function == FunctionEnum.NUMBER_OF_DECISION_NODES:
