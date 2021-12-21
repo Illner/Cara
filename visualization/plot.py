@@ -11,7 +11,7 @@ COLOUR_LIST: List[str] = ["deepskyblue", "blue", "lightgreen", "g", "gold", "ora
 
 def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
             x_label: Union[str, None] = None, y_label: Union[str, None] = None, legend: Union[List[str], None] = None,
-            save_path: [str, Path, None] = None, show: bool = True, showfliers: bool = True) -> None:
+            save_path: [str, Path, None] = None, show: bool = True, showfliers: bool = True, showmeans: bool = True) -> None:
     fig, ax = plt.subplots()
 
     try:
@@ -25,7 +25,7 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
                        labels=labels[i],
                        widths=0.5,
                        medianprops={"color": "red"},
-                       showmeans=True,
+                       showmeans=showmeans,
                        meanprops={"marker": ".",
                                   "markerfacecolor": "red",
                                   "markeredgecolor": "black",

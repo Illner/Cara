@@ -15,25 +15,12 @@ import circuit.node.node_type_enum as nt_enum
 import exception.cara_exception as ca_exception
 
 
-root_path = sys.argv[1]
+experiment_path = sys.argv[1]
 plot_path = sys.argv[2]
 file_path = sys.argv[2]
 
 
 # region Enum
-@unique
-class RootPathEnum(str, Enum):
-    BDMC = fr"{root_path}\BDMC"
-    BDMC_RH = fr"{root_path}\BDMC RH"
-    BDMC_RH_SD = fr"{root_path}\BDMC RH SD"
-    BDMC_MRH = fr"{root_path}\BDMC MRH"
-    HP_CACHE = fr"{root_path}\HP cache"
-    CARA_CIRCUIT = fr"{root_path}\CaraCircuit"
-    IMBALANCE_FACTOR = fr"{root_path}\Imbalance factor"
-    DNNF = fr"{root_path}\DNNF"
-    TEMP = fr"C:\Users\illner\Desktop\Temp2"
-
-
 @unique
 class DirectorySetEnum(str, Enum):
     all = None
@@ -50,130 +37,117 @@ class DirectorySetEnum(str, Enum):
 @unique
 class ExperimentEnum(str, Enum):
     # BDMC
-    BDMC_LIMIT_250 = "250"
-    BDMC_LIMIT_500 = "500"
-    BDMC_LIMIT_1000 = "1000"
-    BDMC_LIMIT_1500 = "1500"
-    BDMC_D4 = "D4"
-    BDMC_JW_TS_1_EXTENDED = "JW-TS, extended, 0.1"
-    BDMC_JW_TS_25_EXTENDED = "JW-TS, extended, 0.25"
-    BDMC_JW_TS_25 = "JW-TS, 0.25"
-    BDMC_DLCS_DLIS_1_EXTENDED = "DLCS-DLIS, extended, 0.1"
-    BDMC_DLCS_DLIS_25_EXTENDED = "DLCS-DLIS, extended, 0.25"
-    BDMC_DLCS_DLIS_25 = "DLCS-DLIS, 0.25"
-    BDMC_VSADS_1_EXTENDED = "VSADS, d4, extended, 0.1"
-    BDMC_VSADS_25_EXTENDED = "VSADS, d4, extended, 0.25"
-    BDMC_VSADS_25 = "VSADS, d4, 0.25"
-    BDMC_CLAUSE_REDUCTION_1 = "Clause reduction, 0.1"
-    BDMC_CLAUSE_REDUCTION_25 = "Clause reduction, 0.25"
-    BDMC_CLAUSE_REDUCTION_25_WITHOUT_GAMMA_0 = "Clause reduction, 0.25, without gamma_0"
-    BDMC_WEIGHTED_BINARIES_1 = "Weighted binaries, 0.1"
-    BDMC_WEIGHTED_BINARIES_25 = "Weighted binaries, 0.25"
-    BDMC_WEIGHTED_BINARIES_25_WITHOUT_GAMMA_0 = "Weighted binaries, 0.25, without gamma_0"
+    BDMC_LIMIT_250 = r"BDMC\250"
+    BDMC_LIMIT_500 = r"BDMC\500"
+    BDMC_LIMIT_1000 = r"BDMC\1000"
+    BDMC_LIMIT_1500 = r"BDMC\1500"
+    BDMC_JW_TS_1_EXTENDED = r"BDMC\JW-TS, extended, 0.1"
+    BDMC_JW_TS_25_EXTENDED = r"BDMC\JW-TS, extended, 0.25"
+    BDMC_JW_TS_25 = r"BDMC\JW-TS, 0.25"
+    BDMC_DLCS_DLIS_1_EXTENDED = r"BDMC\DLCS-DLIS, extended, 0.1"
+    BDMC_DLCS_DLIS_25_EXTENDED = r"BDMC\DLCS-DLIS, extended, 0.25"
+    BDMC_DLCS_DLIS_25 = r"BDMC\DLCS-DLIS, 0.25"
+    BDMC_VSADS_1_EXTENDED = r"BDMC\VSADS, d4, extended, 0.1"
+    BDMC_VSADS_25_EXTENDED = r"BDMC\VSADS, d4, extended, 0.25"
+    BDMC_VSADS_25 = r"BDMC\VSADS, d4, 0.25"
+    BDMC_CLAUSE_REDUCTION_1 = r"BDMC\Clause reduction, 0.1"
+    BDMC_CLAUSE_REDUCTION_25 = r"BDMC\Clause reduction, 0.25"
+    BDMC_CLAUSE_REDUCTION_25_WITHOUT_GAMMA_0 = r"BDMC\Clause reduction, 0.25, without gamma_0"
+    BDMC_WEIGHTED_BINARIES_1 = r"BDMC\Weighted binaries, 0.1"
+    BDMC_WEIGHTED_BINARIES_25 = r"BDMC\Weighted binaries, 0.25"
+    BDMC_WEIGHTED_BINARIES_25_WITHOUT_GAMMA_0 = r"BDMC\Weighted binaries, 0.25, without gamma_0"
 
     # BDMC RH
-    BDMC_RH_D4 = "D4 (BDMC RH)"
-    BDMC_RH_VSADS = "VSADS"
-    BDMC_RH_DLCS_DLIS_A_T_C_P = "DLCS-DLIS (a, t, c, p)"
-    BDMC_RH_DLCS_DLIS_A_T_C_nP = "DLCS-DLIS (a, t, c, -p)"
-    BDMC_RH_DLCS_DLIS_A_T_nC_P = "DLCS-DLIS (a, t, -c, p)"
-    BDMC_RH_DLCS_DLIS_A_T_nC_nP = "DLCS-DLIS (a, t, -c, -p)"
-    BDMC_RH_DLCS_DLIS_A_nT_C_P = "DLCS-DLIS (a, -t, c, p)"
-    BDMC_RH_DLCS_DLIS_A_nT_C_nP = "DLCS-DLIS (a, -t, c, -p)"
-    BDMC_RH_DLCS_DLIS_nA_C_P = "DLCS-DLIS (-a, c, p)"
-    BDMC_RH_DLCS_DLIS_nA_C_P_nD = "DLCS-DLIS (-a, c, p, d_d)"
-    BDMC_RH_VSADS_A_T_C_P = "VSADS (a, t, c, p)"
-    BDMC_RH_JW_TS_nA_C_P = "JW-TS (-a, c, p)"
-    BDMC_RH_VSADS_nA_C_P = "VSADS (-a, c, p)"
-    BDMC_RH_DLCS_DLIS_nA_nC_P = "DLCS-DLIS (-a, -c, p)"
-    BDMC_RH_VSADS_nA_nC_P = "VSADS (-a, -c, p)"
-    BDMC_RH_JW_TS_nA_nC_P = "JW-TS (-a, -c, p)"
-    BDMC_RH_DLCS_DLIS_nA_C_P_nEXT = "DLCS-DLIS (-a, c, p, -ext)"
-    BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = "DLCS-DLIS (-a, -c, p, -ext)"
-    BDMC_RH_VSADS_nA_C_P_nEXT = "VSADS (-a, c, p, -ext)"
-    BDMC_RH_VSADS_nA_nC_P_nEXT = "VSADS (-a, -c, p, -ext)"
-    BDMC_RH_JW_TS_nA_C_P_nEXT = "JW-TS (-a, c, p, -ext)"
-    BDMC_RH_JW_TS_nA_nC_P_nEXT = "JW-TS (-a, -c, p, -ext)"
+    BDMC_RH_DLCS_DLIS_A_T_C_P = r"BDMC RH\DLCS-DLIS (a, t, c, p)"
+    BDMC_RH_DLCS_DLIS_A_T_C_nP = r"BDMC RH\DLCS-DLIS (a, t, c, -p)"
+    BDMC_RH_DLCS_DLIS_A_T_nC_P = r"BDMC RH\DLCS-DLIS (a, t, -c, p)"
+    BDMC_RH_DLCS_DLIS_A_T_nC_nP = r"BDMC RH\DLCS-DLIS (a, t, -c, -p)"
+    BDMC_RH_DLCS_DLIS_A_nT_C_P = r"BDMC RH\DLCS-DLIS (a, -t, c, p)"
+    BDMC_RH_DLCS_DLIS_A_nT_C_nP = r"BDMC RH\DLCS-DLIS (a, -t, c, -p)"
+    BDMC_RH_DLCS_DLIS_nA_C_P = r"BDMC RH\DLCS-DLIS (-a, c, p)"
+    BDMC_RH_DLCS_DLIS_nA_C_P_nD = r"BDMC RH\DLCS-DLIS (-a, c, p, d_d)"
+    BDMC_RH_VSADS_A_T_C_P = r"BDMC RH\VSADS (a, t, c, p)"
+    BDMC_RH_JW_TS_nA_C_P = r"BDMC RH\JW-TS (-a, c, p)"
+    BDMC_RH_VSADS_nA_C_P = r"BDMC RH\VSADS (-a, c, p)"
+    BDMC_RH_DLCS_DLIS_nA_nC_P = r"BDMC RH\DLCS-DLIS (-a, -c, p)"
+    BDMC_RH_VSADS_nA_nC_P = r"BDMC RH\VSADS (-a, -c, p)"
+    BDMC_RH_JW_TS_nA_nC_P = r"BDMC RH\JW-TS (-a, -c, p)"
+    BDMC_RH_DLCS_DLIS_nA_C_P_nEXT = r"BDMC RH\DLCS-DLIS (-a, c, p, -ext)"
+    BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = r"BDMC RH\DLCS-DLIS (-a, -c, p, -ext)"
+    BDMC_RH_VSADS_nA_C_P_nEXT = r"BDMC RH\VSADS (-a, c, p, -ext)"
+    BDMC_RH_VSADS_nA_nC_P_nEXT = r"BDMC RH\VSADS (-a, -c, p, -ext)"
+    BDMC_RH_JW_TS_nA_C_P_nEXT = r"BDMC RH\JW-TS (-a, c, p, -ext)"
+    BDMC_RH_JW_TS_nA_nC_P_nEXT = r"BDMC RH\JW-TS (-a, -c, p, -ext)"
 
     # BDMC RH SD
-    BDMC_RH_SD_D4 = "D4 (BDMC RH SD)"
-    BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT = "SD DLCS-DLIS (-a, c, p, -ext)"
-    BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT = "SD DLCS-DLIS (-a, -c, p, -ext)"
+    BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT = r"BDMC RH SD\DLCS-DLIS (-a, c, p, -ext)"
+    BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT = r"BDMC RH SD\DLCS-DLIS (-a, -c, p, -ext)"
+    BDMC_RH_SD_DLCS_DLIS_nA_C_P = r"BDMC RH SD\DLCS-DLIS (-a, c, p)"
+    BDMC_RH_SD_DLCS_DLIS_nA_nC_P = r"BDMC RH SD\DLCS-DLIS (-a, -c, p)"
 
     # BDMC MRH
-    BDMC_MRH_D4 = "D4 (BDMC MRH)"
-    BDMC_MRH_VSADS_nA_C_P = "VSADS (-a, c, p) (BDMC MRH)"
-    BDMC_MRH_DLCS_DLIS_nA_C_P = "DLCS-DLIS (-a, c, p) (BDMC MRH)"
-    BDMC_MRH_VSADS_E_C_P_HF = "VSADS (e, c, p, HF)"
-    BDMC_MRH_VSADS_E_C_P_RDHF_2 = "VSADS (e, c, p, RDHF_2)"
-    BDMC_MRH_VSADS_E_C_P_SLWHF = "VSADS (e, c, p, SLWHF)"
-    BDMC_MRH_VSADS_E_C_P_SILWHF = "VSADS (e, c, p, SILWHF)"
-    BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_2 = "DLCS-DLIS (e, c, p, RDHF_2)"
-    BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_4 = "DLCS-DLIS (e, c, p, RDHF_4)"
-    BDMC_MRH_DLCS_DLIS_E_C_P_LWHF = "DLCS-DLIS (e, c, p, LWHF)"
-    BDMC_MRH_DLCS_DLIS_E_C_P_SLWHF = "DLCS-DLIS (e, c, p, SLWHF)"
-    BDMC_MRH_DLCS_DLIS_E_C_P_ILWHF = "DLCS-DLIS (e, c, p, ILWHF)"
-    BDMC_MRH_DLCS_DLIS_E_C_P_SILWHF = "DLCS-DLIS (e, c, p, SILWHF)"
-    BDMC_MRH_DLCS_DLIS_E_C_P_HF = "DLCS-DLIS (e, c, p, HF)"
-    BDMC_MRH_DLCS_DLIS_E_C_P_VC = "DLCS-DLIS (e, c, p, VC)"
-    BDMC_MRH_DLCS_DLIS_E_C_P_RDVC_2 = "DLCS-DLIS (e, c, p, RDVC_2)"
+    BDMC_MRH_VSADS_E_C_P_HF = r"BDMC MRH\VSADS (e, c, p, HF)"
+    BDMC_MRH_VSADS_E_C_P_RDHF_2 = r"BDMC MRH\VSADS (e, c, p, RDHF_2)"
+    BDMC_MRH_VSADS_E_C_P_SLWHF = r"BDMC MRH\VSADS (e, c, p, SLWHF)"
+    BDMC_MRH_VSADS_E_C_P_SILWHF = r"BDMC MRH\VSADS (e, c, p, SILWHF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_2 = r"BDMC MRH\DLCS-DLIS (e, c, p, RDHF_2)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_RDHF_4 = r"BDMC MRH\DLCS-DLIS (e, c, p, RDHF_4)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_LWHF = r"BDMC MRH\DLCS-DLIS (e, c, p, LWHF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_SLWHF = r"BDMC MRH\DLCS-DLIS (e, c, p, SLWHF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_ILWHF = r"BDMC MRH\DLCS-DLIS (e, c, p, ILWHF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_SILWHF = r"BDMC MRH\DLCS-DLIS (e, c, p, SILWHF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_HF = r"BDMC MRH\DLCS-DLIS (e, c, p, HF)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_VC = r"BDMC MRH\DLCS-DLIS (e, c, p, VC)"
+    BDMC_MRH_DLCS_DLIS_E_C_P_RDVC_2 = r"BDMC MRH\DLCS-DLIS (e, c, p, RDVC_2)"
 
     # HP cache
-    HP_CACHE_NONE = "NONE"
-    HP_CACHE_ISOMORFISM_250 = "ISOMORFISM 250"
-    HP_CACHE_ISOMORFISM_250_NO_MOC = "ISOMORFISM 250 (no moc)"
-    HP_CACHE_ISOMORFISM_500 = "ISOMORFISM 500"
-    HP_CACHE_ISOMORFISM_500_NO_MOC = "ISOMORFISM 500 (no moc)"
-    HP_CACHE_ISOMORFISM_1000 = "ISOMORFISM 1000"
-    HP_CACHE_ISOMORFISM_1000_NO_MOC = "ISOMORFISM 1000 (no moc)"
-    HP_CACHE_ISOMORFISM_1500 = "ISOMORFISM 1500"
-    HP_CACHE_ISOMORFISM_1500_NO_MOC = "ISOMORFISM 1500 (no moc)"
-    HP_CACHE_ISOMORFISM_VARIANCE_250 = "ISOMORFISM_VARIANCE 250"
-    HP_CACHE_ISOMORFISM_VARIANCE_250_NO_MOC = "ISOMORFISM_VARIANCE 250 (no moc)"
-    HP_CACHE_ISOMORFISM_VARIANCE_500 = "ISOMORFISM_VARIANCE 500"
-    HP_CACHE_ISOMORFISM_VARIANCE_500_NO_MOC = "ISOMORFISM_VARIANCE 500 (no moc)"
-    HP_CACHE_ISOMORFISM_VARIANCE_1000 = "ISOMORFISM_VARIANCE 1000"
-    HP_CACHE_ISOMORFISM_VARIANCE_1000_NO_MOC = "ISOMORFISM_VARIANCE 1000 (no moc)"
-    HP_CACHE_ISOMORFISM_VARIANCE_1500 = "ISOMORFISM_VARIANCE 1500"
-    HP_CACHE_ISOMORFISM_VARIANCE_1500_NO_MOC = "ISOMORFISM_VARIANCE 1500 (no moc)"
+    HP_CACHE_NONE = r"HP cache\NONE"
+    HP_CACHE_ISOMORFISM_250 = r"HP cache\ISOMORFISM 250"
+    HP_CACHE_ISOMORFISM_250_NO_MOC = r"HP cache\ISOMORFISM 250 (no moc)"
+    HP_CACHE_ISOMORFISM_500 = r"HP cache\ISOMORFISM 500"
+    HP_CACHE_ISOMORFISM_500_NO_MOC = r"HP cache\ISOMORFISM 500 (no moc)"
+    HP_CACHE_ISOMORFISM_1000 = r"HP cache\ISOMORFISM 1000"
+    HP_CACHE_ISOMORFISM_1000_NO_MOC = r"HP cache\ISOMORFISM 1000 (no moc)"
+    HP_CACHE_ISOMORFISM_1500 = r"HP cache\ISOMORFISM 1500"
+    HP_CACHE_ISOMORFISM_1500_NO_MOC = r"HP cache\ISOMORFISM 1500 (no moc)"
+    HP_CACHE_ISOMORFISM_VARIANCE_250 = r"HP cache\ISOMORFISM_VARIANCE 250"
+    HP_CACHE_ISOMORFISM_VARIANCE_250_NO_MOC = r"HP cache\ISOMORFISM_VARIANCE 250 (no moc)"
+    HP_CACHE_ISOMORFISM_VARIANCE_500 = r"HP cache\ISOMORFISM_VARIANCE 500"
+    HP_CACHE_ISOMORFISM_VARIANCE_500_NO_MOC = r"HP cache\ISOMORFISM_VARIANCE 500 (no moc)"
+    HP_CACHE_ISOMORFISM_VARIANCE_1000 = r"HP cache\ISOMORFISM_VARIANCE 1000"
+    HP_CACHE_ISOMORFISM_VARIANCE_1000_NO_MOC = r"HP cache\ISOMORFISM_VARIANCE 1000 (no moc)"
+    HP_CACHE_ISOMORFISM_VARIANCE_1500 = r"HP cache\ISOMORFISM_VARIANCE 1500"
+    HP_CACHE_ISOMORFISM_VARIANCE_1500_NO_MOC = r"HP cache\ISOMORFISM_VARIANCE 1500 (no moc)"
 
     # CaraCircuit
-    CARA_CIRCUIT_D4 = "D4 (CaraCircuit)"
-    CARA_CIRCUIT_LIMIT_0 = "Limit 0"
-    CARA_CIRCUIT_LIMIT_0_MOC = "Limit 0 (moc)"
-    CARA_CIRCUIT_LIMIT_25 = "Limit 25"
-    CARA_CIRCUIT_LIMIT_50 = "Limit 50"
-    CARA_CIRCUIT_LIMIT_100 = "Limit 100"
-    CARA_CIRCUIT_LIMIT_250 = "Limit 250"
-    CARA_CIRCUIT_LIMIT_500 = "Limit 500"
-    CARA_CIRCUIT_LIMIT_0_1 = "Limit 0 (0.1)"
-    CARA_CIRCUIT_LIMIT_0_MOC_1 = "Limit 0 (moc) (0.1)"
+    CARA_CIRCUIT_LIMIT_0 = r"CaraCircuit\Limit 0"
+    CARA_CIRCUIT_LIMIT_0_MOC = r"CaraCircuit\Limit 0 (moc)"
+    CARA_CIRCUIT_LIMIT_25 = r"CaraCircuit\Limit 25"
+    CARA_CIRCUIT_LIMIT_50 = r"CaraCircuit\Limit 50"
+    CARA_CIRCUIT_LIMIT_100 = r"CaraCircuit\Limit 100"
+    CARA_CIRCUIT_LIMIT_250 = r"CaraCircuit\Limit 250"
+    CARA_CIRCUIT_LIMIT_500 = r"CaraCircuit\Limit 500"
+    CARA_CIRCUIT_LIMIT_0_1 = r"CaraCircuit\Limit 0 (0.1)"
+    CARA_CIRCUIT_LIMIT_0_MOC_1 = r"CaraCircuit\Limit 0 (moc) (0.1)"
 
     # Imbalance factor
-    IMBALANCE_FACTOR_1 = "0.1"
-    IMBALANCE_FACTOR_1_QUALITY = "0.1 PaToH quality"
-    IMBALANCE_FACTOR_1_SPEED = "0.1 PaToH speed"
-    IMBALANCE_FACTOR_25 = "0.25"
-    IMBALANCE_FACTOR_25_QUALITY = "0.25 PaToH quality"
-    IMBALANCE_FACTOR_25_SPEED = "0.25 PaToH speed"
-    IMBALANCE_FACTOR_4 = "0.4"
-    IMBALANCE_FACTOR_4_QUALITY = "0.4 PaToH quality"
-    IMBALANCE_FACTOR_4_SPEED = "0.4 PaToH speed"
+    IMBALANCE_FACTOR_1 = r"Imbalance factor\0.1"
+    IMBALANCE_FACTOR_1_QUALITY = r"Imbalance factor\0.1 PaToH quality"
+    IMBALANCE_FACTOR_1_SPEED = r"Imbalance factor\0.1 PaToH speed"
+    IMBALANCE_FACTOR_25 = r"Imbalance factor\0.25"
+    IMBALANCE_FACTOR_25_QUALITY = r"Imbalance factor\0.25 PaToH quality"
+    IMBALANCE_FACTOR_25_SPEED = r"Imbalance factor\0.25 PaToH speed"
+    IMBALANCE_FACTOR_4 = r"Imbalance factor\0.4"
+    IMBALANCE_FACTOR_4_QUALITY = r"Imbalance factor\0.4 PaToH quality"
+    IMBALANCE_FACTOR_4_SPEED = r"Imbalance factor\0.4 PaToH speed"
 
     # DNNF
-    DNNF_D4 = "D4 (DNNF)"
-    DNNF_COPY = "CaraCircuit (copy)"
-    DNNF_CLAUSE_REDUCTION = "Clause reduction"
-    DNNF_CLAUSE_REDUCTION_EXT = "Clause reduction (ext)"
-    DNNF_WEIGHTED_BINARIES = "Weighted binaries"
-    DNNF_WEIGHTED_BINARIES_EXT = "Weighted binaries (ext)"
-
-    # Temp
-    TEMP_D4 = "D4 (Temp)"
-    TEMP_LIMIT_0 = "Temp limit 0"
-    TEMP_LIMIT_50 = "Temp limit 50"
-    TEMP_LIMIT_100 = "Temp limit 100"
-    TEMP = "Temp"
+    DNNF_D4 = r"DNNF\D4"
+    DNNF_COPY = r"DNNF\CaraCircuit (copy)"
+    DNNF_CLAUSE_REDUCTION = r"DNNF\Clause reduction"
+    DNNF_CLAUSE_REDUCTION_EXT = r"DNNF\Clause reduction (ext)"
+    DNNF_WEIGHTED_BINARIES = r"DNNF\Weighted binaries"
+    DNNF_WEIGHTED_BINARIES_EXT = r"DNNF\Weighted binaries (ext)"
 
 
 @unique
@@ -267,10 +241,8 @@ class FunctionEnum(str, Enum):
 ##### Configuration #####
 #########################
 
-experiment_path: RootPathEnum = RootPathEnum.BDMC_RH_SD
-
 title: str = ""
-plot: PlotEnum = PlotEnum.SCATTER
+plot: PlotEnum = PlotEnum.BOXPLOT
 function: FunctionEnum = FunctionEnum.COMPILATION_TIME
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
@@ -284,7 +256,7 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_D4
+directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_D4
 directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT
 
 x_label: str = f""
@@ -305,6 +277,7 @@ label_prefix: str = ""
 label_list: Union[List[List[str]], None] = [["d-BDMC RH SD \n DLCS-DLIS \n (-a, -c, p, -ext)"],
                                             ["d-BDMC RH SD \n DLCS-DLIS \n (-a, c, p, -ext)"]]
 # BOXPLOT
+showmeans: bool = False
 showfliers: bool = False
 
 # HISTOGRAM
@@ -872,6 +845,7 @@ elif plot == PlotEnum.BOXPLOT:
             labels=directory_name_labels_boxplot_list if label_list is None else label_list,
             title=title,
             showfliers=showfliers,
+            showmeans=showmeans,
             save_path=save_path)
 
 elif plot == PlotEnum.HISTOGRAM:
