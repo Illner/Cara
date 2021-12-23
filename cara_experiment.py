@@ -69,7 +69,7 @@ def main(main_args):
                                   strong_determinism=True,
                                   strong_determinism_max=None,
 
-                                  decision_heuristic_ignore_binary_clauses=True,
+                                  decision_heuristic_ignore_binary_clauses=False,
                                   decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS,
                                   base_class_enum_set={bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF},
                                   decision_heuristic_vsids_d4_version=True,
