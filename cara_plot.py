@@ -242,8 +242,8 @@ class FunctionEnum(str, Enum):
 #########################
 
 title: str = ""
-plot: PlotEnum = PlotEnum.BOXPLOT
-function: FunctionEnum = FunctionEnum.COMPILATION_TIME
+plot: PlotEnum = PlotEnum.SCATTER
+function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
@@ -256,8 +256,8 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_C_P
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P
 
 x_label: str = f""
 y_label: str = f""
@@ -270,12 +270,20 @@ use_point_label: bool = False
 ##### BOXPLOT, HISTOGRAM #####
 ##############################
 
-directory_name_list: List[ExperimentEnum] = [ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT,
-                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT]
+directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.DNNF_D4,
+                                             # ExperimentEnum.BDMC_DLCS_DLIS_25_EXTENDED,
+                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT,
+                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT,
+                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P,
+                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P]
 
 label_prefix: str = ""
-label_list: Union[List[List[str]], None] = [["d-BDMC RH SD \n DLCS-DLIS \n (-a, -c, p, -ext)"],
-                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, c, p, -ext)"]]
+label_list: Union[List[List[str]], None] = [# ["d-DNNF"],
+                                            # ["d-BDMC \n DLCS-DLIS"],
+                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, -c, p, -ext)"],
+                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, c, p, -ext)"],
+                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, -c, p)"],
+                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, c, p)"]]
 # BOXPLOT
 showmeans: bool = False
 showfliers: bool = False
