@@ -222,6 +222,11 @@ class FunctionEnum(str, Enum):
     RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION = "Number of Horn clauses after switching / number of clauses [%] \n (LP formulation)"
     RATIO_NUMBER_OF_SWITCHED_VARIABLES_AND_NUMBER_OF_VARIABLES_LP_FORMULATION = "Number of switched variables / number of variables [%] \n (LP formulation)"
 
+    # SAT solver
+    TOTAL_TIME_SAT_SOLVER = "Total time spent by all SAT calls"
+    AVERAGE_TIME_SAT_SOLVER = "Average time spent by a SAT call"
+    NUMBER_OF_CALLS_SAT_SOLVER = "Number of SAT calls"
+
     # Others
     TOTAL_NUMBER_OF_IMPLIED_LITERALS = "Total number of implied literals"
     AVERAGE_NUMBER_OF_IMPLIED_LITERALS = "Average number of implied literals"
@@ -243,7 +248,7 @@ class FunctionEnum(str, Enum):
 
 title: str = ""
 plot: PlotEnum = PlotEnum.SCATTER
-function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
+function: FunctionEnum = FunctionEnum.COMPILATION_TIME
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
@@ -256,8 +261,8 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_C_P
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_C_P_nEXT
+directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT
 
 x_label: str = f""
 y_label: str = f""
@@ -272,6 +277,7 @@ use_point_label: bool = False
 
 directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.DNNF_D4,
                                              # ExperimentEnum.BDMC_DLCS_DLIS_25_EXTENDED,
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_nC_P,
                                              ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT,
                                              ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT,
                                              ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P,
@@ -280,6 +286,7 @@ directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.DNNF_D4,
 label_prefix: str = ""
 label_list: Union[List[List[str]], None] = [# ["d-DNNF"],
                                             # ["d-BDMC \n DLCS-DLIS"],
+                                            ["d-BDMC RH \n DLCS-DLIS \n (-a, -c, p)"],
                                             ["d-BDMC RH SD \n DLCS-DLIS \n (-a, -c, p, -ext)"],
                                             ["d-BDMC RH SD \n DLCS-DLIS \n (-a, c, p, -ext)"],
                                             ["d-BDMC RH SD \n DLCS-DLIS \n (-a, -c, p)"],
@@ -386,11 +393,11 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
 
     # TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING
     if function == FunctionEnum.TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING:
-        return statistics.hypergraph_partitioning_statistics.generate_key_cache.sum_time
+        return statistics.component_statistics.component_caching_after_generate_key.sum_time
 
     # AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING
     if function == FunctionEnum.AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING:
-        return statistics.hypergraph_partitioning_statistics.generate_key_cache.average_time
+        return statistics.component_statistics.component_caching_after_generate_key.average_time
 
     # TOTAL_NUMBER_OF_IMPLIED_LITERALS
     if function == FunctionEnum.TOTAL_NUMBER_OF_IMPLIED_LITERALS:
@@ -564,6 +571,18 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
     # RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION
     if function == FunctionEnum.RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION:
         return statistics.renamable_horn_formula_lp_formulation_statistics.horn_clauses_after_switching_average.average_count
+
+    # TOTAL_TIME_SAT_SOLVER
+    if function == FunctionEnum.TOTAL_TIME_SAT_SOLVER:
+        return statistics.solver_statistics.is_satisfiable.sum_time
+
+    # AVERAGE_TIME_SAT_SOLVER
+    if function == FunctionEnum.AVERAGE_TIME_SAT_SOLVER:
+        return statistics.solver_statistics.is_satisfiable.average_time
+
+    # NUMBER_OF_CALLS_SAT_SOLVER
+    if function == FunctionEnum.NUMBER_OF_CALLS_SAT_SOLVER:
+        return statistics.solver_statistics.is_satisfiable.number_of_calls
 
     raise ca_exception.FunctionNotImplementedException("get_value_temp",
                                                        f"this type of function ({function.name}) is not implemented")
