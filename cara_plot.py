@@ -84,6 +84,8 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT = r"BDMC RH SD\DLCS-DLIS (-a, -c, p, -ext)"
     BDMC_RH_SD_DLCS_DLIS_nA_C_P = r"BDMC RH SD\DLCS-DLIS (-a, c, p)"
     BDMC_RH_SD_DLCS_DLIS_nA_nC_P = r"BDMC RH SD\DLCS-DLIS (-a, -c, p)"
+    BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT_2 = r"BDMC RH SD\DLCS-DLIS (-a, -c, p, -ext, 2)"
+    BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT_3 = r"BDMC RH SD\DLCS-DLIS (-a, -c, p, -ext, 3)"
 
     # BDMC MRH
     BDMC_MRH_VSADS_E_C_P_HF = r"BDMC MRH\VSADS (e, c, p, HF)"
@@ -248,7 +250,7 @@ class FunctionEnum(str, Enum):
 
 title: str = ""
 plot: PlotEnum = PlotEnum.SCATTER
-function: FunctionEnum = FunctionEnum.COMPILATION_TIME
+function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
@@ -261,7 +263,7 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_C_P_nEXT
+directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P
 directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT
 
 x_label: str = f""
