@@ -155,6 +155,10 @@ class Experiment:
         directory_path_temp: Path = Path(os.path.join(self.__log_directory_path, file_name_temp))
         directory_path_temp.mkdir(exist_ok=True)
 
+        # mapping_node_statistics and node_statistics
+        mapping_node_statistics_temp = None if self.__mapping_node_statistics is None else rf"{directory_path_temp}/{self.__mapping_node_statistics}"
+        node_statistics_temp = None if self.__node_statistics is None else rf"{directory_path_temp}/{self.__node_statistics}"
+
         compiler = Compiler(cnf=file_path,
                             name=file_name,
                             smooth=smooth,
@@ -211,8 +215,8 @@ class Experiment:
                             decision_heuristic_maximum_renamable_horn_weight_for_variables_not_in_cut_set=decision_heuristic_maximum_renamable_horn_weight_for_variables_not_in_cut_set,
                             component_caching_cara_caching_scheme_multi_occurrence=component_caching_cara_caching_scheme_multi_occurrence,
                             component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold,
-                            mapping_node_statistics=None if self.__mapping_node_statistics is None else rf"{directory_path_temp}/{self.__mapping_node_statistics}",
-                            node_statistics=None if self.__node_statistics is None else rf"{directory_path_temp}/{self.__node_statistics}",
+                            mapping_node_statistics=mapping_node_statistics_temp,
+                            node_statistics=node_statistics_temp,
                             disable_sat=disable_sat,
                             disable_decomposition=disable_decomposition,
                             cara_circuit=cara_circuit,
@@ -272,8 +276,8 @@ class Experiment:
             circuit_path_temp = Path(os.path.join(directory_path_temp, "circuit.nnf"))
             with open(circuit_path_temp, "w", encoding="utf-8") as file:
                 experiment_thread.compiler.circuit.save_to_io(source=file,
-                                                              mapping_node_statistics=self.__mapping_node_statistics,
-                                                              node_statistics=self.__node_statistics)
+                                                              mapping_node_statistics=mapping_node_statistics_temp,
+                                                              node_statistics=node_statistics_temp)
 
         del compiler
         gc.collect()
