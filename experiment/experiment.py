@@ -282,6 +282,8 @@ class Experiment:
         del compiler
         gc.collect()
 
+        print("end")
+
         return timeout_exceeded, exception, size, statistics
 
     def pickle_object(self, file_name: str, object_to_save: Union[Dict]) -> None:
