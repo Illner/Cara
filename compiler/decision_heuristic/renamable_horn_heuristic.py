@@ -129,6 +129,9 @@ class RenamableHornHeuristic(DecisionHeuristicAbstract):
                                                                                        max_number_of_returned_decision_variables=1,
                                                                                        return_score=True)
 
+            if isinstance(score, int):
+                score = (score, )
+
             if selected_variable in selected_variables_dictionary:
                 temp = selected_variables_dictionary[selected_variable]
                 selected_variables_dictionary[selected_variable] = tuple(max(x, y) for x, y in zip(temp, score))
