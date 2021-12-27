@@ -38,8 +38,8 @@ def main(main_args):
                             timeout_experiment=timeout_experiment,
                             log_directory_path=main_args.log_directory_path,
                             save_circuit=True,
-                            mapping_node_statistics=r"mapping_node\mapping_node",
-                            node_statistics=r"decision_node\decision_node")
+                            mapping_node_statistics="mapping_node",
+                            node_statistics="decision_node")
 
     # Total timeout
     start = datetime.datetime.now()

@@ -156,8 +156,8 @@ class Experiment:
         directory_path_temp.mkdir(exist_ok=True)
 
         # mapping_node_statistics and node_statistics
-        mapping_node_statistics_temp = None if self.__mapping_node_statistics is None else rf"{directory_path_temp}/{self.__mapping_node_statistics}"
-        node_statistics_temp = None if self.__node_statistics is None else rf"{directory_path_temp}/{self.__node_statistics}"
+        mapping_node_statistics_temp = None if self.__mapping_node_statistics is None else rf"{directory_path_temp}/mapping_node/{self.__mapping_node_statistics}"
+        node_statistics_temp = None if self.__node_statistics is None else rf"{directory_path_temp}/decision_node/{self.__node_statistics}"
 
         compiler = Compiler(cnf=file_path,
                             name=file_name,
