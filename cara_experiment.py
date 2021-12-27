@@ -39,7 +39,7 @@ def main(main_args):
                             log_directory_path=main_args.log_directory_path,
                             save_circuit=True,
                             mapping_node_statistics=rf"{main_args.log_directory_path}/mapping_node",
-                            node_statistics=fr"{main_args.log_directory_path}/node")
+                            node_statistics=fr"{main_args.log_directory_path}/decision_node")
 
     # Total timeout
     start = datetime.datetime.now()
