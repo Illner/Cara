@@ -261,7 +261,6 @@ class Experiment:
                 print(f"Done (time: {str(statistics.compiler_statistics.get_time())}, size: {str(statistics.size)})")
 
         print(f"Time: {datetime.datetime.now()}")
-        print()
 
         # Log - statistics
         statistics_path_temp: Path = Path(os.path.join(directory_path_temp, "statistics.pkl"))
@@ -283,6 +282,7 @@ class Experiment:
         gc.collect()
 
         print("end")
+        print()
 
         return timeout_exceeded, exception, size, statistics
 
