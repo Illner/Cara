@@ -150,6 +150,11 @@ class Experiment:
         else:
             print(f"File name: {file_name}, params: {file_name_extension}")
 
+        # Log - directory
+        file_name_temp = file_name if file_name_extension == "" else f"{file_name}_{file_name_extension}"
+        directory_path_temp: Path = Path(os.path.join(self.__log_directory_path, file_name_temp))
+        directory_path_temp.mkdir(exist_ok=True)
+
         compiler = Compiler(cnf=file_path,
                             name=file_name,
                             smooth=smooth,
@@ -206,8 +211,8 @@ class Experiment:
                             decision_heuristic_maximum_renamable_horn_weight_for_variables_not_in_cut_set=decision_heuristic_maximum_renamable_horn_weight_for_variables_not_in_cut_set,
                             component_caching_cara_caching_scheme_multi_occurrence=component_caching_cara_caching_scheme_multi_occurrence,
                             component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold,
-                            mapping_node_statistics=None if self.__mapping_node_statistics is None else rf"{self.__log_directory_path}/{file_name}/{self.__mapping_node_statistics}",
-                            node_statistics=None if self.__node_statistics is None else rf"{self.__log_directory_path}/{file_name}/{self.__node_statistics}",
+                            mapping_node_statistics=None if self.__mapping_node_statistics is None else rf"{directory_path_temp}/{self.__mapping_node_statistics}",
+                            node_statistics=None if self.__node_statistics is None else rf"{directory_path_temp}/{self.__node_statistics}",
                             disable_sat=disable_sat,
                             disable_decomposition=disable_decomposition,
                             cara_circuit=cara_circuit,
@@ -253,11 +258,6 @@ class Experiment:
 
         print(f"Time: {datetime.datetime.now()}")
         print()
-
-        # Log - directory
-        file_name_temp = file_name if file_name_extension == "" else f"{file_name}_{file_name_extension}"
-        directory_path_temp: Path = Path(os.path.join(self.__log_directory_path, file_name_temp))
-        directory_path_temp.mkdir(exist_ok=True)
 
         # Log - statistics
         statistics_path_temp: Path = Path(os.path.join(directory_path_temp, "statistics.pkl"))
