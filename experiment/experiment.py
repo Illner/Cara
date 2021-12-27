@@ -155,9 +155,21 @@ class Experiment:
         directory_path_temp: Path = Path(os.path.join(self.__log_directory_path, file_name_temp))
         directory_path_temp.mkdir(exist_ok=True)
 
-        # mapping_node_statistics and node_statistics
-        mapping_node_statistics_temp = None if self.__mapping_node_statistics is None else rf"{directory_path_temp}/mapping_node/{self.__mapping_node_statistics}"
-        node_statistics_temp = None if self.__node_statistics is None else rf"{directory_path_temp}/decision_node/{self.__node_statistics}"
+        # mapping_node_statistics
+        mapping_node_statistics_temp = None
+        if self.__mapping_node_statistics is not None:
+            mapping_node_statistics_path: Path = Path(os.path.join(directory_path_temp, "mapping_node"))
+            mapping_node_statistics_path.mkdir(exist_ok=True)
+
+            mapping_node_statistics_temp = rf"{mapping_node_statistics_path}/{self.__mapping_node_statistics}"
+
+        # node_statistics
+        node_statistics_temp = None
+        if self.__node_statistics is not None:
+            node_statistics_path: Path = Path(os.path.join(directory_path_temp, "decision_node"))
+            node_statistics_path.mkdir(exist_ok=True)
+
+            node_statistics_temp = rf"{node_statistics_path}/{self.__node_statistics}"
 
         compiler = Compiler(cnf=file_path,
                             name=file_name,
