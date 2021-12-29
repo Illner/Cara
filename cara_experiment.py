@@ -171,4 +171,4 @@ if __name__ == "__main__":
     # Warning
     warnings.simplefilter('ignore', category=ResourceWarning)
 
-    # main(args)
+    main(args)
