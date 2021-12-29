@@ -86,6 +86,7 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_SD_DLCS_DLIS_nA_nC_P = r"BDMC RH SD\DLCS-DLIS (-a, -c, p)"
     BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT_2 = r"BDMC RH SD\DLCS-DLIS (-a, -c, p, -ext, 2)"
     BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT_3 = r"BDMC RH SD\DLCS-DLIS (-a, -c, p, -ext, 3)"
+    BDMC_RH_SD_DLCS_DLIS_A_T_nC_P_nEXT = r"BDMC RH SD\DLCS-DLIS (a, t, -c, p, -ext)"
 
     # BDMC MRH
     BDMC_MRH_VSADS_E_C_P_HF = r"BDMC MRH\VSADS (e, c, p, HF)"

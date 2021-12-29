@@ -40,7 +40,7 @@ def main(main_args):
                             log_directory_path=main_args.log_directory_path,
                             save_circuit=True,
                             mapping_node_statistics="mapping_node",
-                            node_statistics="decision_node")
+                            node_statistics=None)
 
     # Total timeout
     start = datetime.datetime.now()
@@ -172,4 +172,4 @@ if __name__ == "__main__":
     # Warning
     warnings.simplefilter('ignore', category=ResourceWarning)
 
-    # main(args)
+    main(args)
