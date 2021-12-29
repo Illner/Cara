@@ -28,6 +28,7 @@ import compiler.enum.hypergraph_partitioning.hypergraph_partitioning_variable_si
 
 
 def main(main_args):
+    return
     if main_args.experiment_timeout is None:
         timeout_experiment = None
     else:
