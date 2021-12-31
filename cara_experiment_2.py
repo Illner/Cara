@@ -67,7 +67,7 @@ def main(main_args):
             experiment.experiment(file_name=file_name, file_path=file_path,
 
                                   strong_determinism=True,
-                                  strong_determinism_max=2,
+                                  strong_determinism_max=3,
 
                                   decision_heuristic_ignore_binary_clauses=False,
                                   decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS,
