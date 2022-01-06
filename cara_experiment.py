@@ -66,7 +66,7 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.CLAUSE_REDUCTION,
+                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.WEIGHTED_BINARIES,
                                   decision_heuristic_weight_for_satisfied_clauses=True,
                                   disable_sat=True,
 
