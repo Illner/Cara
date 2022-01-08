@@ -27,7 +27,7 @@ for folder_name, folder_path in dir_list:
 
         stopwatch_time = sys_time.perf_counter_ns()
 
-        subprocess.run([f"sed 's/^M$//' {experiment_path} > {experiment_path}"])
+        subprocess.run(["sed", "s/^M$//", f"{experiment_path} > {experiment_path}"])
 
         output_path_temp = Path(os.path.join(output_path, experiment_name))
         subprocess.run(["./cnfprime", experiment_path, output_path_temp])
