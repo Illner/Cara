@@ -28,7 +28,7 @@ for folder_name, folder_path in dir_list:
         stopwatch_time = sys_time.perf_counter_ns()
 
         output_path_temp = Path(os.path.join(output_path, experiment_name))
-        subprocess.run(["./cnfprime", experiment_path, output_path])
+        subprocess.run(["./cnfprime", experiment_path, output_path_temp])
 
         temp = sys_time.perf_counter_ns()
         time = temp - stopwatch_time
