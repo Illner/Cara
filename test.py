@@ -18,7 +18,7 @@ dir_list = [(file, file_path) for file in os.listdir(benchmark_path) if (os.path
 for folder_name, folder_path in dir_list:
     experiment_list = [(file, file_path) for file in os.listdir(folder_path) if (os.path.isfile(file_path := os.path.join(folder_path, file)))]
 
-    output_path: Path = Path(os.path.join("Benchmark_prime", benchmark_name, folder_name))
+    output_path: Path = Path(os.path.join(benchmark_name, folder_name))
     output_path.mkdir(exist_ok=True, parents=True)
 
     for experiment_name, experiment_path in experiment_list:
