@@ -149,8 +149,12 @@ class ExperimentEnum(str, Enum):
     DNNF_COPY = r"DNNF\CaraCircuit (copy)"
     DNNF_CLAUSE_REDUCTION = r"DNNF\Clause reduction"
     DNNF_CLAUSE_REDUCTION_EXT = r"DNNF\Clause reduction (ext)"
+    DNNF_CLAUSE_REDUCTION_UNSAT = r"DNNF\Clause reduction (unsat)"
+    DNNF_CLAUSE_REDUCTION_EXT_UNSAT = r"DNNF\Clause reduction (ext) (unsat)"
     DNNF_WEIGHTED_BINARIES = r"DNNF\Weighted binaries"
     DNNF_WEIGHTED_BINARIES_EXT = r"DNNF\Weighted binaries (ext)"
+    DNNF_WEIGHTED_BINARIES_UNSAT = r"DNNF\Weighted binaries (unsat)"
+    DNNF_WEIGHTED_BINARIES_EXT_UNSAT = r"DNNF\Weighted binaries (ext) (unsat)"
 
 
 @unique
@@ -172,7 +176,7 @@ class FunctionEnum(str, Enum):
     CIRCUIT_NUMBER_OF_RH_LEAVES = "Number of renamable Horn formulae/leaves"
     CIRCUIT_NUMBER_OF_TWO_CNF_LEAVES = "Number of 2-CNF formulae/leaves"
     CIRCUIT_NUMBER_OF_RH_AND_TWO_CNF_LEAVES = "Number of nontrivial leaves (renamable Horn + 2-CNF)"
-    COMPILATION_TIME = "Compilation time [ms]"
+    COMPILATION_TIME = "Compilation time [ns]"
 
     # Renamable Horn formulae, 2-CNF formulae and implication graph
     RH_RECOGNITION = "Recognition of renamable Horn formulae [%]"
@@ -183,8 +187,8 @@ class FunctionEnum(str, Enum):
     AVERAGE_FORMULA_LENGTH_TWO_CNF = "Average length of a 2-CNF formula"
     TOTAL_FORMULA_LENGTH_RH_AND_TWO_CNF = "Total length of all renamable Horn formulae and 2-CNF formulae"
     AVERAGE_FORMULA_LENGTH_RH_AND_TWO_CNF = "Average length of a renamable Horn formula and 2-CNF formula"
-    TOTAL_TIME_CREATE_IMPLICATION_GRAPH = "Total time spent on creating all implication graphs [ms]"
-    AVERAGE_TIME_CREATE_IMPLICATION_GRAPH = "Average time spent on creating an implication graph [ms]"
+    TOTAL_TIME_CREATE_IMPLICATION_GRAPH = "Total time spent on creating all implication graphs [ns]"
+    AVERAGE_TIME_CREATE_IMPLICATION_GRAPH = "Average time spent on creating an implication graph [ns]"
     TOTAL_NUMBER_OF_CONFLICT_VARIABLES_IMPLICATION_GRAPH = "Total number of conflict variables in all implication graphs"
     AVERAGE_NUMBER_OF_CONFLICT_VARIABLES_IMPLICATION_GRAPH = "Average number of conflict variables in an implication graph"
 
@@ -192,8 +196,8 @@ class FunctionEnum(str, Enum):
     TOTAL_CUT_SET_SIZE = "Total size of all cut sets"
     AVERAGE_CUT_SET_SIZE = "Average size of a cut set"
     HYPERGRAPH_CACHING_HIT = "Hypergraph caching hit [%]"
-    TOTAL_TIME_GET_CUT_SET = "Total time spent on getting all cut sets [ms]"
-    AVERAGE_TIME_GET_CUT_SET = "Average time spent on getting a cut set [ms]"
+    TOTAL_TIME_GET_CUT_SET = "Total time spent on getting all cut sets [ns]"
+    AVERAGE_TIME_GET_CUT_SET = "Average time spent on getting a cut set [ns]"
     TOTAL_NUMBER_OF_HYPEREDGES_HYPERGRAPH = "Total number of hyperedges in all hypergraphs"
     AVERAGE_NUMBER_OF_HYPEREDGES_HYPERGRAPH = "Average number of hyperedges in a hypergraph"
     TOTAL_NUMBER_OF_NODES_HYPERGRAPH = "Total number of nodes in all hypergraphs"
@@ -201,8 +205,8 @@ class FunctionEnum(str, Enum):
     RATIO_LOG_CUT_SET_SIZE_AND_LOG_NUMBER_OF_HYPEREDGES_HYPERGRAPH = "log(size of a cut set) / log(number of hyperedges)"
 
     # Component caching
-    TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING = "Total time spent on generating all keys for component caching [ms]"
-    AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING = "Average time spent on generating a key for component caching [ms]"
+    TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING = "Total time spent on generating all keys for component caching [ns]"
+    AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING = "Average time spent on generating a key for component caching [ns]"
     COMPONENT_CACHING_HIT = "Component caching hit [%]"
     TOTAL_FORMULA_LENGTH_COMPONENT_CACHING = "Total length of all formulae that were cached"
     AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING = "Average length of a formula that was cached"
@@ -217,10 +221,10 @@ class FunctionEnum(str, Enum):
     AVERAGE_FORMULA_LENGTH_COPIED_CIRCUIT = "Average length of a formula for which copying was used"
 
     # LP formulation
-    TOTAL_TIME_CREATE_LP_FORMULATION = "Total time spent on creating all LP formulations [ms] \n (LP formulation)"
-    AVERAGE_TIME_CREATE_LP_FORMULATION = "Average time spent on creating an LP formulation [ms] \n (LP formulation)"
-    TOTAL_TIME_SOLVE_LP_FORMULATION = "Total time spent on solving all LP formulations [ms] \n (LP formulation)"
-    AVERAGE_TIME_SOLVE_LP_FORMULATION = "Average time spent on solving an LP formulation [ms] \n (LP formulation)"
+    TOTAL_TIME_CREATE_LP_FORMULATION = "Total time spent on creating all LP formulations [ns] \n (LP formulation)"
+    AVERAGE_TIME_CREATE_LP_FORMULATION = "Average time spent on creating an LP formulation [ns] \n (LP formulation)"
+    TOTAL_TIME_SOLVE_LP_FORMULATION = "Total time spent on solving all LP formulations [ns] \n (LP formulation)"
+    AVERAGE_TIME_SOLVE_LP_FORMULATION = "Average time spent on solving an LP formulation [ns] \n (LP formulation)"
     HORN_CLAUSE_LENGTH_LP_FORMULATION = "Average length of a Horn clause after switching \n (LP formulation)"
     RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION = "Number of Horn clauses after switching / number of clauses [%] \n (LP formulation)"
     RATIO_NUMBER_OF_SWITCHED_VARIABLES_AND_NUMBER_OF_VARIABLES_LP_FORMULATION = "Number of switched variables / number of variables [%] \n (LP formulation)"
@@ -251,7 +255,7 @@ class FunctionEnum(str, Enum):
 
 title: str = ""
 plot: PlotEnum = PlotEnum.SCATTER
-function: FunctionEnum = FunctionEnum.COMPILATION_TIME
+function: FunctionEnum = FunctionEnum.CIRCUIT_SIZE
 directory_set: DirectorySetEnum = DirectorySetEnum.all
 
 none_value: float = 0   # 10**10
@@ -264,11 +268,11 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_C_P_nEXT
-directory_name_2: ExperimentEnum = ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT
+directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_CLAUSE_REDUCTION_UNSAT
+directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_CLAUSE_REDUCTION_EXT_UNSAT
 
-x_label: str = f""
-y_label: str = f""
+x_label: str = f"d-DNNF UNSAT (clause reduction)"
+y_label: str = f"d-DNNF UNSAT (clause reduction ext)"
 
 log_scale: bool = False
 set_together: bool = False
@@ -280,20 +284,12 @@ use_point_label: bool = False
 
 directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.DNNF_D4,
                                              # ExperimentEnum.BDMC_DLCS_DLIS_25_EXTENDED,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_nC_P,
-                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P_nEXT,
-                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT,
-                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_nC_P,
-                                             ExperimentEnum.BDMC_RH_SD_DLCS_DLIS_nA_C_P]
+                                             ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_HF]
 
 label_prefix: str = ""
 label_list: Union[List[List[str]], None] = [# ["d-DNNF"],
                                             # ["d-BDMC \n DLCS-DLIS"],
-                                            ["d-BDMC RH \n DLCS-DLIS \n (-a, -c, p)"],
-                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, -c, p, -ext)"],
-                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, c, p, -ext)"],
-                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, -c, p)"],
-                                            ["d-BDMC RH SD \n DLCS-DLIS \n (-a, c, p)"]]
+                                            ["d-BDMC MRH \n DLCS-DLIS \n (e, c, p, HF)"]]
 # BOXPLOT
 showmeans: bool = False
 showfliers: bool = False

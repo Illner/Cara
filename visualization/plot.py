@@ -11,7 +11,7 @@ COLOUR_LIST: List[str] = ["deepskyblue", "blue", "lightgreen", "g", "gold", "ora
 
 def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
             x_label: Union[str, None] = None, y_label: Union[str, None] = None, legend: Union[List[str], None] = None,
-            save_path: [str, Path, None] = None, show: bool = True, showfliers: bool = True, showmeans: bool = True) -> None:
+            save_path: [str, Path, None] = None, show: bool = True, showfliers: bool = True, showmeans: bool = True, rotate_x_label: bool = False) -> None:
     fig, ax = plt.subplots()
 
     try:
@@ -35,6 +35,9 @@ def boxplot(data: List[List[List[float]]], labels: List[List[str]], title: str,
                                  "color": "black"}
                        )
             position_temp = end_position_end
+
+        if rotate_x_label:
+            plt.xticks(rotation=90)
 
         # Legend
         if legend is not None:
