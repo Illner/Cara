@@ -156,6 +156,11 @@ class ExperimentEnum(str, Enum):
     DNNF_WEIGHTED_BINARIES_UNSAT = r"DNNF\Weighted binaries (unsat)"
     DNNF_WEIGHTED_BINARIES_EXT_UNSAT = r"DNNF\Weighted binaries (ext) (unsat)"
 
+    # Prime
+    PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = r"Prime\BDMC RH DLCS-DLIS (-a, -c, p, -ext)"
+    PRIME_BDMC_VSADS = r"Prime\BDMC VSADS"
+    PRIME_DNNF_VSADS = r"Prime\DNNF VSADS"
+    PRIME_CARA_CIRCUIT_VSADS = r"Prime\CaraCircuit VSADS"
 
 @unique
 class PlotEnum(IntEnum):
