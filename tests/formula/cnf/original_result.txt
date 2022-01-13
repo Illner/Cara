@@ -28,9 +28,6 @@ original variables: x0_y0-6 y0_x1-7 x0_z0-8 z0_x1-9 x0_x1-10
 fresh variables: 1 2 3 4 5
 The second clause: (-1 2)
 
-empty_invalid.cnf
-DIMACS CNF format is invalid in the file! (the file does not contain any clause)
-
 empty_line_valid.cnf
 Number of clauses: 9
 Real number of clauses: 9

@@ -247,7 +247,10 @@ class Cnf:
 
         # The file does not contain any clause
         if not len(self.__cnf):
-            raise f_exception.InvalidDimacsCnfFormatException("the file does not contain any clause")
+            # raise f_exception.InvalidDimacsCnfFormatException("the file does not contain any clause")
+
+            warning_temp = "The file does not contain any clause!"
+            warnings.warn(warning_temp)
 
         self.__unit_clause_set = self.__clause_size_dictionary[1].copy()  # get unit clauses
         self.__real_number_of_variables = len(self._variable_set)

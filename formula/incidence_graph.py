@@ -737,6 +737,10 @@ class IncidenceGraph(Graph):
 
         self.__statistics.is_connected.start_stopwatch()    # timer (start)
 
+        # The incidence graph is empty
+        if self.number_of_edges() == 0:
+            return True
+
         is_connected = nx.is_connected(self)
 
         self.__statistics.is_connected.stop_stopwatch()     # timer (stop)
