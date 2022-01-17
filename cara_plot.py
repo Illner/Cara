@@ -158,6 +158,7 @@ class ExperimentEnum(str, Enum):
 
     # Prime
     PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = r"Prime\BDMC RH DLCS-DLIS (-a, -c, p, -ext)"
+    PRIME_BDMC_RH_DLCS_DLIS_A_T_nC_P_nEXT = r"Prime\BDMC RH DLCS-DLIS (a, t, -c, p, -ext)"
     PRIME_BDMC_VSADS = r"Prime\BDMC VSADS"
     PRIME_DNNF_VSADS = r"Prime\DNNF VSADS"
     PRIME_CARA_CIRCUIT_VSADS = r"Prime\CaraCircuit VSADS"
@@ -273,11 +274,11 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_CLAUSE_REDUCTION_UNSAT
-directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_CLAUSE_REDUCTION_EXT_UNSAT
+directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_WEIGHTED_BINARIES_UNSAT
+directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_WEIGHTED_BINARIES_EXT_UNSAT
 
-x_label: str = f"d-DNNF UNSAT (clause reduction)"
-y_label: str = f"d-DNNF UNSAT (clause reduction ext)"
+x_label: str = f""
+y_label: str = f""
 
 log_scale: bool = False
 set_together: bool = False
@@ -288,16 +289,17 @@ use_point_label: bool = False
 ##############################
 
 directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.DNNF_D4,
-                                             # ExperimentEnum.BDMC_DLCS_DLIS_25_EXTENDED,
-                                             ExperimentEnum.BDMC_MRH_DLCS_DLIS_E_C_P_HF]
+                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT,
+                                             ExperimentEnum.PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT]
 
 label_prefix: str = ""
 label_list: Union[List[List[str]], None] = [# ["d-DNNF"],
-                                            # ["d-BDMC \n DLCS-DLIS"],
-                                            ["d-BDMC MRH \n DLCS-DLIS \n (e, c, p, HF)"]]
+                                            ["BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT"],
+                                            ["PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT"]]
 # BOXPLOT
 showmeans: bool = False
 showfliers: bool = False
+rotate_x_label: bool = True
 
 # HISTOGRAM
 number_of_bins: int = 10
@@ -877,7 +879,8 @@ elif plot == PlotEnum.BOXPLOT:
             title=title,
             showfliers=showfliers,
             showmeans=showmeans,
-            save_path=save_path)
+            save_path=save_path,
+            rotate_x_label=rotate_x_label)
 
 elif plot == PlotEnum.HISTOGRAM:
     histogram(data=data,
