@@ -155,6 +155,8 @@ class ExperimentEnum(str, Enum):
     DNNF_WEIGHTED_BINARIES_EXT = r"DNNF\Weighted binaries (ext)"
     DNNF_WEIGHTED_BINARIES_UNSAT = r"DNNF\Weighted binaries (unsat)"
     DNNF_WEIGHTED_BINARIES_EXT_UNSAT = r"DNNF\Weighted binaries (ext) (unsat)"
+    DNNF_D4_COMPONENT_CACHING_BEFORE = r"DNNF\D4 (component caching before)"
+    DNNF_D4_COMPONENT_CACHING_BEFORE_AND_AFTER = r"DNNF\D4 (component caching before and after)"
 
     # Prime
     PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = r"Prime\BDMC RH DLCS-DLIS (-a, -c, p, -ext)"

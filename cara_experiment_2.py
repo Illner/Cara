@@ -67,11 +67,7 @@ def main(main_args):
             experiment.experiment(file_name=file_name, file_path=file_path,
 
                                   imbalance_factor=0.1,
-
-                                  component_caching_cara_caching_scheme_multi_occurrence=False,
-                                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=0,
-
-                                  component_caching_enum=cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME,
+                                  component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
 
                                   base_class_enum_set=set(),
                                   decision_heuristic_ignore_binary_clauses=False,
@@ -88,11 +84,11 @@ def main(main_args):
                                   implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
                                   first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                   first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
-                                  component_caching_before_unit_propagation=False,
+                                  component_caching_before_unit_propagation=True,
                                   component_caching_after_unit_propagation=True,
                                   eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.NONE,
                                   eliminating_redundant_clauses_threshold=None,
-                                  hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM,
+                                  hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.NONE,
                                   hp_software_enum=hp_software_enum,
                                   hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                   hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
