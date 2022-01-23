@@ -8,7 +8,7 @@ from datetime import timedelta
 
 
 benchmark_name = sys.argv[1]
-benchmark_path = fr"Benchmark/{benchmark_name}"
+benchmark_path = fr"Benchmark{os.path.sep}{benchmark_name}"
 
 number = 0
 time_directory = dict()

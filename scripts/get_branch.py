@@ -1,10 +1,11 @@
+import sys
 import random
 from circuit.circuit import Circuit
 import circuit.node.node_type_enum as nt_enum
 from circuit.node.node_abstract import NodeAbstract
 from circuit.node.inner_node.inner_node_abstract import InnerNodeAbstract
 
-path = r"D:\Storage\OneDrive\Škola\Vysoká škola\UK\Diplomová práce\Program\CaraCompiler\cnf_formulae\sum.32\sum.32.nnf"
+path = sys.argv[1]
 
 circuit = Circuit(path)
 node_id = circuit.root_id

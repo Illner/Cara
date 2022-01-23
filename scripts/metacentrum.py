@@ -14,7 +14,7 @@ benchmark_type_experiment_name_dictionary = dict()
 experiment_name_benchmark_type_dictionary = dict()
 
 for benchmark_type, _ in benchmark_type_list:
-    path = f"{benchmark_path}/{benchmark_type}"
+    path = f"{benchmark_path}{os.path.sep}{benchmark_type}"
     benchmark_type_experiment_name_dictionary[benchmark_type] = set()
 
     file_list = [(file, file_path) for file in os.listdir(path) if (os.path.isfile(file_path := os.path.join(path, file)))]
@@ -35,7 +35,7 @@ for dir_name, dir_path in dir_list:
 
         benchmark_type = experiment_name_benchmark_type_dictionary[experiment_name]
 
-        path = f"{to_path}/{benchmark_type}/{experiment_name}"
+        path = f"{to_path}{os.path.sep}{benchmark_type}{os.path.sep}{experiment_name}"
 
         move(experiment_path, path)
         print(f"{experiment_name} has been copied ({benchmark_type})")

@@ -1,5 +1,6 @@
 # Import
 import io
+import os
 import sys
 
 # Variables
@@ -52,7 +53,7 @@ with open(circuit_path, "r") as file:
             continue
 
         if rh_io_string is not None:
-            with open(fr"{fold_path}\{file_name}.{rh_name}.cnf", "w") as file:
+            with open(fr"{fold_path}{os.path.sep}{file_name}.{rh_name}.cnf", "w") as file:
                 file.write(rh_io_string.getvalue())
 
             rh_io_string = None
