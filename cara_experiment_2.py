@@ -66,6 +66,8 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
+                                  preprocessing=True,
+
                                   imbalance_factor=0.1,
                                   component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
 
@@ -76,7 +78,6 @@ def main(main_args):
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
                                   smooth=False,
-                                  preprocessing=False,
                                   subsumed_threshold=500,
                                   new_cut_set_threshold=0.1,
                                   sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
@@ -84,7 +85,7 @@ def main(main_args):
                                   implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
                                   first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                   first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
-                                  component_caching_before_unit_propagation=True,
+                                  component_caching_before_unit_propagation=False,
                                   component_caching_after_unit_propagation=True,
                                   eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.NONE,
                                   eliminating_redundant_clauses_threshold=None,
