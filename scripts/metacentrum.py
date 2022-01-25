@@ -5,7 +5,7 @@ from shutil import move
 
 
 from_path = sys.argv[1]
-to_path = sys.argv[2] + r"\DNNF\D4 (component caching before)"
+to_path = sys.argv[2] + r"\DNNF\D4 (component caching before and after)"
 
 benchmark_path = sys.argv[3]
 benchmark_type_list = [(file, file_path) for file in os.listdir(benchmark_path) if (os.path.isdir(file_path := os.path.join(benchmark_path, file)))]
