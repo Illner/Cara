@@ -2,6 +2,7 @@ import os
 from formula.cnf import Cnf
 from compiler.solver import Solver
 from visualization.plot import histogram
+from other.other import listdir_no_hidden
 from compiler.enum.sat_solver_enum import SatSolverEnum
 from compiler.enum.implied_literals_enum import ImpliedLiteralsEnum
 from compiler.preselection_heuristic.none_heuristic import NoneHeuristic
@@ -34,7 +35,7 @@ min_variable_occurrence_two_cnf = []
 
 two_cnf = []
 
-file_list = [(file, file_path) for file in os.listdir(path_directory) if (os.path.isfile(file_path := os.path.join(path_directory, file)))]
+file_list = [(file, file_path) for file in listdir_no_hidden(path_directory) if (os.path.isfile(file_path := os.path.join(path_directory, file)))]
 
 suffix = configuration_name
 

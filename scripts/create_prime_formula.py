@@ -5,6 +5,7 @@ import subprocess
 import time as sys_time
 from pathlib import Path
 from datetime import timedelta
+from other.other import listdir_no_hidden
 
 
 benchmark_name = sys.argv[1]
@@ -13,10 +14,10 @@ benchmark_path = fr"Benchmark{os.path.sep}{benchmark_name}"
 number = 0
 time_directory = dict()
 
-dir_list = [(file, file_path) for file in os.listdir(benchmark_path) if (os.path.isdir(file_path := os.path.join(benchmark_path, file)))]
+dir_list = [(file, file_path) for file in listdir_no_hidden(benchmark_path) if (os.path.isdir(file_path := os.path.join(benchmark_path, file)))]
 
 for folder_name, folder_path in dir_list:
-    experiment_list = [(file, file_path) for file in os.listdir(folder_path) if (os.path.isfile(file_path := os.path.join(folder_path, file)))]
+    experiment_list = [(file, file_path) for file in listdir_no_hidden(folder_path) if (os.path.isfile(file_path := os.path.join(folder_path, file)))]
 
     output_path: Path = Path(os.path.join(benchmark_name, folder_name))
     output_path.mkdir(exist_ok=True, parents=True)

@@ -4,6 +4,7 @@ import sys
 import pickle
 from pathlib import Path
 from enum import Enum, unique, IntEnum
+from other.other import listdir_no_hidden
 from typing import Dict, Tuple, List, Set, Union
 from compiler_statistics.statistics import Statistics
 from visualization.plot import scatter, boxplot, histogram
@@ -215,13 +216,28 @@ class FunctionEnum(str, Enum):
     RATIO_LOG_CUT_SET_SIZE_AND_LOG_NUMBER_OF_HYPEREDGES_HYPERGRAPH = "log(size of a cut set) / log(number of hyperedges)"
 
     # Component caching
-    TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING = "Total time spent on generating all keys for component caching [ns]"
-    AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING = "Average time spent on generating a key for component caching [ns]"
+    COMPONENT_CACHING_NUMBER_OF_CALLS = "Total number of using component caching"
     COMPONENT_CACHING_HIT = "Component caching hit [%]"
     TOTAL_FORMULA_LENGTH_COMPONENT_CACHING = "Total length of all formulae that were cached"
     AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING = "Average length of a formula that was cached"
+    TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING = "Total time spent on generating all keys for component caching [ns]"
+    AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING = "Average time spent on generating a key for component caching [ns]"
     TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING = "Total length of all formulae that were cached \n using a mapping function"
     AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING = "Average length of a formula that was cached \n using a mapping function"
+    COMPONENT_CACHING_BEFORE_HIT = "Component caching (before) hit [%]"
+    TOTAL_FORMULA_LENGTH_COMPONENT_CACHING_BEFORE = "Total length of all formulae that were cached (before)"
+    AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING_BEFORE = "Average length of a formula that was cached (before)"
+    TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING_BEFORE = "Total time spent on generating all keys for component caching (before) [ns]"
+    AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING_BEFORE = "Average time spent on generating a key for component caching (before) [ns]"
+    TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_BEFORE = "Total length of all formulae that were cached (before) \n using a mapping function"
+    AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_BEFORE = "Average length of a formula that was cached (before) \n using a mapping function"
+    COMPONENT_CACHING_AFTER_HIT = "Component caching (after) hit [%]"
+    TOTAL_FORMULA_LENGTH_COMPONENT_CACHING_AFTER = "Total length of all formulae that were cached (after)"
+    AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING_AFTER = "Average length of a formula that was cached (after)"
+    TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING_AFTER = "Total time spent on generating all keys for component caching (after) [ns]"
+    AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING_AFTER = "Average time spent on generating a key for component caching (after) [ns]"
+    TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_AFTER = "Total length of all formulae that were cached (after) \n using a mapping function"
+    AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_AFTER = "Average length of a formula that was cached (after) \n using a mapping function"
 
     # Copy
     RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME = "Total time spent on copying circuits / compilation time [%]"
@@ -278,8 +294,8 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_WEIGHTED_BINARIES_UNSAT
-directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_WEIGHTED_BINARIES_EXT_UNSAT
+directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_D4
+directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_D4_COMPONENT_CACHING_BEFORE
 
 x_label: str = f""
 y_label: str = f""
@@ -292,18 +308,18 @@ use_point_label: bool = False
 ##### BOXPLOT, HISTOGRAM #####
 ##############################
 
-directory_name_list: List[ExperimentEnum] = [# ExperimentEnum.DNNF_D4,
-                                             ExperimentEnum.BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT,
-                                             ExperimentEnum.PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT]
+directory_name_list: List[ExperimentEnum] = [ExperimentEnum.DNNF_D4,
+                                             ExperimentEnum.DNNF_D4_COMPONENT_CACHING_BEFORE,
+                                             ExperimentEnum.DNNF_D4_COMPONENT_CACHING_BEFORE_AND_AFTER]
 
 label_prefix: str = ""
-label_list: Union[List[List[str]], None] = [# ["d-DNNF"],
-                                            ["BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT"],
-                                            ["PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT"]]
+label_list: Union[List[List[str]], None] = [["d-DNNF \n (after)"],
+                                            ["d-DNNF \n (before)"],
+                                            ["d-DNNF \n (before and after)"]]
 # BOXPLOT
 showmeans: bool = False
 showfliers: bool = False
-rotate_x_label: bool = True
+rotate_x_label: bool = False
 
 # HISTOGRAM
 number_of_bins: int = 10
@@ -401,14 +417,6 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
     if function == FunctionEnum.AVERAGE_TIME_GET_CUT_SET:
         return statistics.hypergraph_partitioning_statistics.get_cut_set.average_time
 
-    # TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING
-    if function == FunctionEnum.TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING:
-        return statistics.component_statistics.component_caching_after_generate_key.sum_time
-
-    # AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING
-    if function == FunctionEnum.AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING:
-        return statistics.component_statistics.component_caching_after_generate_key.average_time
-
     # TOTAL_NUMBER_OF_IMPLIED_LITERALS
     if function == FunctionEnum.TOTAL_NUMBER_OF_IMPLIED_LITERALS:
         return statistics.component_statistics.implied_literal.sum_count
@@ -417,25 +425,137 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
     if function == FunctionEnum.AVERAGE_NUMBER_OF_IMPLIED_LITERALS:
         return statistics.component_statistics.implied_literal.average_count
 
+    # COMPONENT_CACHING_NUMBER_OF_CALLS
+    if function == FunctionEnum.COMPONENT_CACHING_NUMBER_OF_CALLS:
+        number_of_calls = statistics.component_statistics.component_caching_generate_key.number_of_calls + \
+            statistics.component_statistics.component_caching_after_generate_key.number_of_calls
+
+        return number_of_calls
+
     # COMPONENT_CACHING_HIT
     if function == FunctionEnum.COMPONENT_CACHING_HIT:
+        number_of_calls = statistics.component_statistics.component_caching_hit.number_of_calls + \
+            statistics.component_statistics.component_caching_after_hit.number_of_calls
+        sum_count = statistics.component_statistics.component_caching_hit.sum_count + \
+            statistics.component_statistics.component_caching_after_hit.sum_count
+
+        if number_of_calls == 0:
+            return None
+
+        return sum_count / number_of_calls
+
+    # COMPONENT_CACHING_BEFORE_HIT
+    if function == FunctionEnum.COMPONENT_CACHING_BEFORE_HIT:
+        return statistics.component_statistics.component_caching_hit.average_count
+
+    # COMPONENT_CACHING_AFTER_HIT
+    if function == FunctionEnum.COMPONENT_CACHING_AFTER_HIT:
         return statistics.component_statistics.component_caching_after_hit.average_count
 
     # TOTAL_FORMULA_LENGTH_COMPONENT_CACHING
     if function == FunctionEnum.TOTAL_FORMULA_LENGTH_COMPONENT_CACHING:
+        sum_count = statistics.component_statistics.component_caching_formula_length.sum_count + \
+            statistics.component_statistics.component_caching_after_formula_length.sum_count
+
+        return sum_count
+
+    # TOTAL_FORMULA_LENGTH_COMPONENT_CACHING_BEFORE
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_COMPONENT_CACHING_BEFORE:
+        return statistics.component_statistics.component_caching_formula_length.sum_count
+
+    # TOTAL_FORMULA_LENGTH_COMPONENT_CACHING_AFTER
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_COMPONENT_CACHING_AFTER:
         return statistics.component_statistics.component_caching_after_formula_length.sum_count
 
     # AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING
     if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING:
+        number_of_calls = statistics.component_statistics.component_caching_formula_length.number_of_calls + \
+            statistics.component_statistics.component_caching_after_formula_length.number_of_calls
+        sum_count = statistics.component_statistics.component_caching_formula_length.sum_count + \
+            statistics.component_statistics.component_caching_after_formula_length.sum_count
+
+        if number_of_calls == 0:
+            return None
+
+        return sum_count / number_of_calls
+
+    # AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING_BEFORE
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING_BEFORE:
+        return statistics.component_statistics.component_caching_formula_length.average_count
+
+    # AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING_AFTER
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_COMPONENT_CACHING_AFTER:
         return statistics.component_statistics.component_caching_after_formula_length.average_count
 
     # TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING
     if function == FunctionEnum.TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING:
+        sum_count = statistics.component_statistics.component_caching_cara_mapping_length.sum_count + \
+            statistics.component_statistics.component_caching_after_cara_mapping_length.sum_count
+
+        return sum_count
+
+    # TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_BEFORE
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_BEFORE:
+        return statistics.component_statistics.component_caching_cara_mapping_length.sum_count
+
+    # TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_AFTER
+    if function == FunctionEnum.TOTAL_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_AFTER:
         return statistics.component_statistics.component_caching_after_cara_mapping_length.sum_count
 
     # AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING
     if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING:
+        number_of_calls = statistics.component_statistics.component_caching_cara_mapping_length.number_of_calls + \
+            statistics.component_statistics.component_caching_after_cara_mapping_length.number_of_calls
+        sum_count = statistics.component_statistics.component_caching_cara_mapping_length.sum_count + \
+            statistics.component_statistics.component_caching_after_cara_mapping_length.sum_count
+
+        if number_of_calls == 0:
+            return None
+
+        return sum_count / number_of_calls
+
+    # AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_BEFORE
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_BEFORE:
+        return statistics.component_statistics.component_caching_cara_mapping_length.average_count
+
+    # AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_AFTER
+    if function == FunctionEnum.AVERAGE_FORMULA_LENGTH_MAPPING_COMPONENT_CACHING_AFTER:
         return statistics.component_statistics.component_caching_after_cara_mapping_length.average_count
+
+    # TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING
+    if function == FunctionEnum.TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING:
+        sum_time = statistics.component_statistics.component_caching_generate_key.sum_time + \
+            statistics.component_statistics.component_caching_after_generate_key.sum_time
+
+        return sum_time
+
+    # TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING_BEFORE
+    if function == FunctionEnum.TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING_BEFORE:
+        return statistics.component_statistics.component_caching_generate_key.sum_time
+
+    # TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING_AFTER
+    if function == FunctionEnum.TOTAL_TIME_GENERATE_KEY_COMPONENT_CACHING_AFTER:
+        return statistics.component_statistics.component_caching_after_generate_key.sum_time
+
+    # AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING
+    if function == FunctionEnum.AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING:
+        number_of_calls = statistics.component_statistics.component_caching_generate_key.number_of_calls + \
+            statistics.component_statistics.component_caching_after_generate_key.number_of_calls
+        sum_time = statistics.component_statistics.component_caching_generate_key.sum_time + \
+            statistics.component_statistics.component_caching_after_generate_key.sum_time
+
+        if number_of_calls == 0:
+            return None
+
+        return sum_time / number_of_calls
+
+    # AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING_BEFORE
+    if function == FunctionEnum.AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING_BEFORE:
+        return statistics.component_statistics.component_caching_generate_key.average_time
+
+    # AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING_AFTER
+    if function == FunctionEnum.AVERAGE_TIME_GENERATE_KEY_COMPONENT_CACHING_AFTER:
+        return statistics.component_statistics.component_caching_after_generate_key.average_time
 
     # TOTAL_NUMBER_OF_DECISION_VARIABLES
     if function == FunctionEnum.TOTAL_NUMBER_OF_DECISION_VARIABLES:
@@ -605,13 +725,13 @@ def get_statistics(directory_name: str) -> Tuple[Dict[str, Dict[str, Statistics]
     uncompiled_dictionary: Dict[str, Set[str]] = dict()
     experiment_dictionary: Dict[str, Dict[str, Statistics]] = dict()
 
-    for set_directory in os.listdir(path):
+    for set_directory in listdir_no_hidden(path):
         path_temp = Path(os.path.join(path, set_directory))
 
         uncompiled_dictionary[set_directory] = set()
         experiment_dictionary[set_directory] = dict()
 
-        for experiment_directory in os.listdir(path_temp):
+        for experiment_directory in listdir_no_hidden(path_temp):
             statistics_path_temp = Path(os.path.join(path_temp, experiment_directory, "statistics.pkl"))
 
             with open(statistics_path_temp, 'rb') as file:
@@ -797,7 +917,8 @@ title = f"{function}" if title == "" else title
 title = title if directory_set == DirectorySetEnum.all else f"{title} \n{directory_set}"
 
 percent_function_list: List[FunctionEnum] = [FunctionEnum.RH_RECOGNITION, FunctionEnum.TWO_CNF_RECOGNITION, FunctionEnum.HYPERGRAPH_CACHING_HIT,
-                                             FunctionEnum.COMPONENT_CACHING_HIT, FunctionEnum.RECOMPUTATION_CUT_SET,
+                                             FunctionEnum.COMPONENT_CACHING_HIT, FunctionEnum.COMPONENT_CACHING_BEFORE_HIT,
+                                             FunctionEnum.COMPONENT_CACHING_AFTER_HIT, FunctionEnum.RECOMPUTATION_CUT_SET,
                                              FunctionEnum.RATIO_GENERATE_KEY_COMPONENT_CACHING_TIME_AND_COMPILATION_TIME,
                                              FunctionEnum.RATIO_IMPLICATION_GRAPH_TIME_AND_COMPILATION_TIME,
                                              FunctionEnum.RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME,
