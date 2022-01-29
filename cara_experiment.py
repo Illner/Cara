@@ -1,6 +1,4 @@
 # Import
-from pip._internal.req.req_file import preprocess
-
 import cara
 import argparse
 import warnings
@@ -70,8 +68,10 @@ def main(main_args):
 
                                   disable_sat=True,
 
-                                  imbalance_factor=0.1,
-                                  component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                                  component_caching_cara_caching_scheme_multi_occurrence=True,
+                                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=0,
+
+                                  component_caching_enum=cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME,
 
                                   base_class_enum_set=set(),
                                   decision_heuristic_ignore_binary_clauses=False,
@@ -79,6 +79,7 @@ def main(main_args):
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
+                                  imbalance_factor=0.1,
                                   smooth=False,
                                   preprocessing=False,
                                   subsumed_threshold=500,

@@ -68,8 +68,10 @@ def main(main_args):
 
                                   preprocessing=True,
 
-                                  imbalance_factor=0.1,
-                                  component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                                  component_caching_cara_caching_scheme_multi_occurrence=True,
+                                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=0,
+
+                                  component_caching_enum=cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME,
 
                                   base_class_enum_set=set(),
                                   decision_heuristic_ignore_binary_clauses=False,
@@ -77,6 +79,7 @@ def main(main_args):
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
+                                  imbalance_factor=0.1,
                                   smooth=False,
                                   subsumed_threshold=500,
                                   new_cut_set_threshold=0.1,
@@ -89,7 +92,7 @@ def main(main_args):
                                   component_caching_after_unit_propagation=True,
                                   eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.NONE,
                                   eliminating_redundant_clauses_threshold=None,
-                                  hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.NONE,
+                                  hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM,
                                   hp_software_enum=hp_software_enum,
                                   hp_node_weight_type_enum=hpwt_enum.HypergraphPartitioningNodeWeightEnum.NONE,
                                   hp_hyperedge_weight_type_enum=hpwt_enum.HypergraphPartitioningHyperedgeWeightEnum.NONE,
