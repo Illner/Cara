@@ -133,6 +133,8 @@ class ExperimentEnum(str, Enum):
     CARA_CIRCUIT_LIMIT_500 = rf"CaraCircuit{os.path.sep}Limit 500"
     CARA_CIRCUIT_LIMIT_0_1 = rf"CaraCircuit{os.path.sep}Limit 0 (0.1)"
     CARA_CIRCUIT_LIMIT_0_MOC_1 = rf"CaraCircuit{os.path.sep}Limit 0 (moc) (0.1)"
+    CARA_CIRCUIT_UNSAT = rf"CaraCircuit{os.path.sep}CaraCircuit (unsat)"
+    CARA_CIRCUIT_PREPROCESSING = rf"CaraCircuit{os.path.sep}CaraCircuit (prep)"
 
     # Imbalance factor
     IMBALANCE_FACTOR_1 = rf"Imbalance factor{os.path.sep}0.1"
@@ -294,8 +296,8 @@ file_name: Union[str, None] = None
 ##### SCATTER #####
 ###################
 
-directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_D4
-directory_name_2: ExperimentEnum = ExperimentEnum.DNNF_D4_COMPONENT_CACHING_BEFORE
+directory_name_1: ExperimentEnum = ExperimentEnum.DNNF_UNSAT
+directory_name_2: ExperimentEnum = ExperimentEnum.CARA_CIRCUIT_UNSAT
 
 x_label: str = f""
 y_label: str = f""
