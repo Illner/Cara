@@ -135,6 +135,7 @@ class ExperimentEnum(str, Enum):
     CARA_CIRCUIT_LIMIT_0_MOC_1 = rf"CaraCircuit{os.path.sep}Limit 0 (moc) (0.1)"
     CARA_CIRCUIT_UNSAT = rf"CaraCircuit{os.path.sep}CaraCircuit (unsat)"
     CARA_CIRCUIT_PREPROCESSING = rf"CaraCircuit{os.path.sep}CaraCircuit (prep)"
+    CARA_CIRCUIT_BCP_INPUT = rf"CaraCircuit{os.path.sep}CaraCircuit (BCP input)"
 
     # Imbalance factor
     IMBALANCE_FACTOR_1 = rf"Imbalance factor{os.path.sep}0.1"
@@ -162,6 +163,7 @@ class ExperimentEnum(str, Enum):
     DNNF_D4_COMPONENT_CACHING_BEFORE_AND_AFTER = rf"DNNF{os.path.sep}D4 (component caching before and after)"
     DNNF_UNSAT = rf"DNNF{os.path.sep}D4 (unsat)"
     DNNF_PREPROCESSING = rf"DNNF{os.path.sep}D4 (prep)"
+    DNNF_BCP_INPUT = rf"DNNF{os.path.sep}D4 (BCP input)"
 
     # Prime
     PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = rf"Prime{os.path.sep}BDMC RH DLCS-DLIS (-a, -c, p, -ext)"

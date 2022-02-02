@@ -6,7 +6,7 @@ from other.other import listdir_no_hidden
 
 
 from_path = sys.argv[1]
-to_path = sys.argv[2] + r"\DNNF\D4 (prep)"
+to_path = sys.argv[2] + r"\DNNF\D4 (BCP input)"
 
 benchmark_path = sys.argv[3]
 benchmark_type_list = [(file, file_path) for file in listdir_no_hidden(benchmark_path) if (os.path.isdir(file_path := os.path.join(benchmark_path, file)))]

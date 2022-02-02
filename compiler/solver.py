@@ -42,7 +42,7 @@ class Solver:
                  first_implied_literals_enum: il_enum.ImpliedLiteralsEnum,
                  clause_id_set: Union[Set[int], None] = None,
                  incidence_graph: Union[IncidenceGraph, None] = None,
-                 propagate_sat_solver_enum: Union[ss_enum.PropagateSatSolverEnum, None] = None,
+                 propagate_sat_solver_enum: Union[ss_enum.PropagateSatSolverEnum, None] = ss_enum.PropagateSatSolverEnum.MiniSAT,
                  statistics: Union[SolverStatistics, None] = None):
         """
         If incidence_graph is given, then cnf (and clause_id_set) will be ignored.
