@@ -66,6 +66,8 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
+                                  preprocessing=True,
+
                                   component_caching_cara_caching_scheme_multi_occurrence=True,
                                   component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=0,
 
@@ -79,7 +81,6 @@ def main(main_args):
                                   decision_heuristic_vsads_q_constant_factor=0.5,
                                   imbalance_factor=0.1,
                                   smooth=False,
-                                  preprocessing=False,
                                   subsumed_threshold=500,
                                   new_cut_set_threshold=0.1,
                                   sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
