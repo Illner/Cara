@@ -79,6 +79,9 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_VSADS_nA_nC_P_nEXT = rf"BDMC RH{os.path.sep}VSADS (-a, -c, p, -ext)"
     BDMC_RH_JW_TS_nA_C_P_nEXT = rf"BDMC RH{os.path.sep}JW-TS (-a, c, p, -ext)"
     BDMC_RH_JW_TS_nA_nC_P_nEXT = rf"BDMC RH{os.path.sep}JW-TS (-a, -c, p, -ext)"
+    BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT_UNSAT = rf"BDMC RH{os.path.sep}DLCS-DLIS (-a, -c, p, -ext) (unsat)"
+    BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT_PREPROCESSING = rf"BDMC RH{os.path.sep}DLCS-DLIS (-a, -c, p, -ext) (prep)"
+    BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT_BCP_INPUT = rf"BDMC RH{os.path.sep}DLCS-DLIS (-a, -c, p, -ext) (BCP input)"
 
     # BDMC RH SD
     BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT = rf"BDMC RH SD{os.path.sep}DLCS-DLIS (-a, c, p, -ext)"
