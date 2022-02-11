@@ -136,6 +136,8 @@ class ExperimentEnum(str, Enum):
     CARA_CIRCUIT_LIMIT_500 = rf"CaraCircuit{os.path.sep}Limit 500"
     CARA_CIRCUIT_LIMIT_0_1 = rf"CaraCircuit{os.path.sep}Limit 0 (0.1)"
     CARA_CIRCUIT_LIMIT_0_MOC_1 = rf"CaraCircuit{os.path.sep}Limit 0 (moc) (0.1)"
+    CARA_CIRCUIT_COMPONENT_CACHING_BEFORE = rf"CaraCircuit{os.path.sep}CaraCircuit (component caching before)"
+    CARA_CIRCUIT_COMPONENT_CACHING_BEFORE_AND_AFTER = rf"CaraCircuit{os.path.sep}CaraCircuit (component caching before and after)"
     CARA_CIRCUIT_UNSAT = rf"CaraCircuit{os.path.sep}CaraCircuit (unsat)"
     CARA_CIRCUIT_PREPROCESSING = rf"CaraCircuit{os.path.sep}CaraCircuit (prep)"
     CARA_CIRCUIT_BCP_INPUT = rf"CaraCircuit{os.path.sep}CaraCircuit (BCP input)"
