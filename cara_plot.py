@@ -271,9 +271,15 @@ class FunctionEnum(str, Enum):
     AVERAGE_TIME_SAT_SOLVER = "Average time spent by a SAT call"
     NUMBER_OF_CALLS_SAT_SOLVER = "Number of SAT calls"
 
-    # Others
+    # Implied literals and backbones
     TOTAL_NUMBER_OF_IMPLIED_LITERALS = "Total number of implied literals"
     AVERAGE_NUMBER_OF_IMPLIED_LITERALS = "Average number of implied literals"
+    TOTAL_TIME_BACKBONE = "Total time spent by all backbone calls"
+    AVERAGE_TIME_BACKBONE = "Average time spent by a backbone call"
+    RATIO_BACKBONE_AND_COMPILATION_TIME = "Total time spent by all backbone calls / compilation time [%]"
+    NUMBER_OF_BACKBONE_CALLS = "Number of backbone calls"
+
+    # Others
     NUMBER_OF_SPLITS = "Number of splits"
     TOTAL_NUMBER_OF_DECISION_VARIABLES = "Total number of decision variables"
     AVERAGE_NUMBER_OF_DECISION_VARIABLES = "Average size of a set with decision variables"
@@ -319,14 +325,12 @@ use_point_label: bool = False
 ##### BOXPLOT, HISTOGRAM #####
 ##############################
 
-directory_name_list: List[ExperimentEnum] = [ExperimentEnum.DNNF_D4,
-                                             ExperimentEnum.DNNF_D4_COMPONENT_CACHING_BEFORE,
-                                             ExperimentEnum.DNNF_D4_COMPONENT_CACHING_BEFORE_AND_AFTER]
+directory_name_list: List[ExperimentEnum] = [ExperimentEnum.DNNF_PREPROCESSING,
+                                             ExperimentEnum.CARA_CIRCUIT_PREPROCESSING]
 
 label_prefix: str = ""
-label_list: Union[List[List[str]], None] = [["d-DNNF \n (after)"],
-                                            ["d-DNNF \n (before)"],
-                                            ["d-DNNF \n (before and after)"]]
+label_list: Union[List[List[str]], None] = [["d-DNNF"],
+                                            ["cd-DNNF"]]
 # BOXPLOT
 showmeans: bool = False
 showfliers: bool = False
@@ -725,6 +729,22 @@ def get_value_temp(statistics: Statistics) -> Union[float, None]:
     if function == FunctionEnum.NUMBER_OF_CALLS_SAT_SOLVER:
         return statistics.solver_statistics.is_satisfiable.number_of_calls
 
+    # TOTAL_TIME_BACKBONE
+    if function == FunctionEnum.TOTAL_TIME_BACKBONE:
+        return statistics.solver_statistics.backbone_literals.sum_time
+
+    # AVERAGE_TIME_BACKBONE
+    if function == FunctionEnum.AVERAGE_TIME_BACKBONE:
+        return statistics.solver_statistics.backbone_literals.average_time
+
+    # RATIO_BACKBONE_AND_COMPILATION_TIME
+    if function == FunctionEnum.RATIO_BACKBONE_AND_COMPILATION_TIME:
+        return statistics.solver_statistics.backbone_literals.sum_time / statistics.compiler_statistics.create_circuit.sum_time
+
+    # NUMBER_OF_BACKBONE_CALLS
+    if function == FunctionEnum.NUMBER_OF_BACKBONE_CALLS:
+        return statistics.solver_statistics.backbone_literals.number_of_calls
+
     raise ca_exception.FunctionNotImplementedException("get_value_temp",
                                                        f"this type of function ({function.name}) is not implemented")
 
@@ -935,7 +955,8 @@ percent_function_list: List[FunctionEnum] = [FunctionEnum.RH_RECOGNITION, Functi
                                              FunctionEnum.RATIO_COPY_CIRCUIT_AND_COMPILATION_TIME,
                                              FunctionEnum.RATIO_NUMBER_OF_HORN_CLAUSES_AND_NUMBER_OF_CLAUSES_LP_FORMULATION,
                                              FunctionEnum.RATIO_NUMBER_OF_SWITCHED_VARIABLES_AND_NUMBER_OF_VARIABLES_LP_FORMULATION,
-                                             FunctionEnum.RATIO_EXTENDED_DECISION_NODES_AND_ALL_DECISION_NODES]
+                                             FunctionEnum.RATIO_EXTENDED_DECISION_NODES_AND_ALL_DECISION_NODES,
+                                             FunctionEnum.RATIO_BACKBONE_AND_COMPILATION_TIME]
 percent = True if function in percent_function_list else False
 
 if plot_name is None:
