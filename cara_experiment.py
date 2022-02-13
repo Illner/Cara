@@ -66,8 +66,8 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  component_caching_before_unit_propagation=True,
-                                  component_caching_after_unit_propagation=False,
+                                  component_caching_before_unit_propagation=False,
+                                  component_caching_after_unit_propagation=True,
 
                                   imbalance_factor=0.1,
 
