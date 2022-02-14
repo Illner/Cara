@@ -66,24 +66,17 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  component_caching_before_unit_propagation=True,
-                                  component_caching_after_unit_propagation=True,
+                                  preprocessing=True,
 
-                                  imbalance_factor=0.1,
-
-                                  component_caching_cara_caching_scheme_multi_occurrence=True,
-                                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=0,
-
-                                  component_caching_enum=cc_enum.ComponentCachingEnum.CARA_CACHING_SCHEME,
-
-                                  base_class_enum_set=set(),
-                                  decision_heuristic_ignore_binary_clauses=False,
+                                  decision_heuristic_ignore_binary_clauses=True,
                                   decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.VSADS,
+                                  base_class_enum_set={bc_enum.BaseClassEnum.RENAMABLE_HORN_CNF},
                                   decision_heuristic_vsids_d4_version=True,
                                   decision_heuristic_vsads_p_constant_factor=1,
                                   decision_heuristic_vsads_q_constant_factor=0.5,
+
                                   smooth=False,
-                                  preprocessing=False,
+                                  imbalance_factor=0.1,
                                   subsumed_threshold=500,
                                   new_cut_set_threshold=0.1,
                                   sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
@@ -91,6 +84,9 @@ def main(main_args):
                                   implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
                                   first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                   first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
+                                  component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
+                                  component_caching_before_unit_propagation=False,
+                                  component_caching_after_unit_propagation=True,
                                   eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.NONE,
                                   eliminating_redundant_clauses_threshold=None,
                                   hp_cache_enum=hpc_enum.HypergraphPartitioningCacheEnum.ISOMORFISM,
@@ -103,7 +99,9 @@ def main(main_args):
                                   hp_limit_number_of_clauses_cache=(None, 500),
                                   hp_limit_number_of_variables_cache=(None, 500),
                                   decision_heuristic_mixed_difference_enum=mdh_enum.MixedDifferenceHeuristicEnum.OK_SOLVER,
-                                  decision_heuristic_weight_for_satisfied_clauses=True)
+                                  decision_heuristic_weight_for_satisfied_clauses=True,
+                                  component_caching_cara_caching_scheme_multi_occurrence=False,
+                                  component_caching_cara_caching_scheme_basic_caching_scheme_number_of_variables_threshold=30)
 
         except (c_exception.CaraException, Exception) as err:
             print(f"An error has occurred! (see log for details)\n{str(err)}")

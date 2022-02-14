@@ -57,6 +57,10 @@ class ExperimentEnum(str, Enum):
     BDMC_WEIGHTED_BINARIES_1 = rf"BDMC{os.path.sep}Weighted binaries, 0.1"
     BDMC_WEIGHTED_BINARIES_25 = rf"BDMC{os.path.sep}Weighted binaries, 0.25"
     BDMC_WEIGHTED_BINARIES_25_WITHOUT_GAMMA_0 = rf"BDMC{os.path.sep}Weighted binaries, 0.25, without gamma_0"
+    BDMC_VSADS_1_EXTENDED_UNSAT = rf"BDMC{os.path.sep}VSADS, d4, extended, 0.1 (unsat)"
+    BDMC_VSADS_1_EXTENDED_PREPROCESSING = rf"BDMC{os.path.sep}VSADS, d4, extended, 0.1 (prep)"
+    BDMC_VSADS_1_EXTENDED_BCP_INPUT = rf"BDMC{os.path.sep}VSADS, d4, extended, 0.1 (BCP input)"
+    BDMC_VSADS_1_EXTENDED_BACKBONE_FIRST_IMPLIED_LITERAL = rf"BDMC{os.path.sep}VSADS, d4, extended, 0.1 (backbone fil)"
 
     # BDMC RH
     BDMC_RH_DLCS_DLIS_A_T_C_P = rf"BDMC RH{os.path.sep}DLCS-DLIS (a, t, c, p)"
@@ -82,6 +86,7 @@ class ExperimentEnum(str, Enum):
     BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT_UNSAT = rf"BDMC RH{os.path.sep}DLCS-DLIS (-a, -c, p, -ext) (unsat)"
     BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT_PREPROCESSING = rf"BDMC RH{os.path.sep}DLCS-DLIS (-a, -c, p, -ext) (prep)"
     BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT_BCP_INPUT = rf"BDMC RH{os.path.sep}DLCS-DLIS (-a, -c, p, -ext) (BCP input)"
+    BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT_BACKBONE_FIRST_IMPLIED_LITERAL = rf"BDMC RH{os.path.sep}DLCS-DLIS (-a, -c, p, -ext) (backbone fil)"
 
     # BDMC RH SD
     BDMC_RH_SD_DLCS_DLIS_nA_C_P_nEXT = rf"BDMC RH SD{os.path.sep}DLCS-DLIS (-a, c, p, -ext)"
@@ -141,7 +146,7 @@ class ExperimentEnum(str, Enum):
     CARA_CIRCUIT_UNSAT = rf"CaraCircuit{os.path.sep}CaraCircuit (unsat)"
     CARA_CIRCUIT_PREPROCESSING = rf"CaraCircuit{os.path.sep}CaraCircuit (prep)"
     CARA_CIRCUIT_BCP_INPUT = rf"CaraCircuit{os.path.sep}CaraCircuit (BCP input)"
-    CARA_CIRCUIT_BACKBONE_IMPLIED_LITERAL = rf"CaraCircuit{os.path.sep}CaraCircuit (backbone fil)"
+    CARA_CIRCUIT_BACKBONE_FIRST_IMPLIED_LITERAL = rf"CaraCircuit{os.path.sep}CaraCircuit (backbone fil)"
 
     # Imbalance factor
     IMBALANCE_FACTOR_1 = rf"Imbalance factor{os.path.sep}0.1"
@@ -170,7 +175,7 @@ class ExperimentEnum(str, Enum):
     DNNF_UNSAT = rf"DNNF{os.path.sep}D4 (unsat)"
     DNNF_PREPROCESSING = rf"DNNF{os.path.sep}D4 (prep)"
     DNNF_BCP_INPUT = rf"DNNF{os.path.sep}D4 (BCP input)"
-    DNNF_BACKBONE_IMPLIED_LITERAL = rf"DNNF{os.path.sep}D4 (backbone fil)"
+    DNNF_BACKBONE_FIRST_IMPLIED_LITERAL = rf"DNNF{os.path.sep}D4 (backbone fil)"
 
     # Prime
     PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = rf"Prime{os.path.sep}BDMC RH DLCS-DLIS (-a, -c, p, -ext)"
