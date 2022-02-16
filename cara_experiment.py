@@ -66,7 +66,8 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  preprocessing=True,
+                                  implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
+                                  first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BACKBONE,
 
                                   decision_heuristic_ignore_binary_clauses=False,
                                   decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.RENAMABLE_HORN_DLCS_DLIS,
@@ -80,14 +81,13 @@ def main(main_args):
                                   decision_heuristic_renamable_horn_use_conflicts=False,
                                   decision_heuristic_renamable_horn_prefer_conflict_variables=True,
 
+                                  preprocessing=False,
                                   smooth=False,
                                   imbalance_factor=0.1,
                                   subsumed_threshold=500,
                                   new_cut_set_threshold=0.1,
                                   sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
-                                  implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                   implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
-                                  first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                   first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
                                   component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
                                   component_caching_before_unit_propagation=False,
