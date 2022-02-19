@@ -6,7 +6,7 @@ from other.other import listdir_no_hidden
 
 
 from_path = sys.argv[1]
-to_path = sys.argv[2] + r"\BDMC\VSADS, d4, extended, 0.1 (prep)"
+to_path = sys.argv[2] + r"\BDMC RH\DLCS-DLIS (-a, -c, p, -ext) (BCP input)"
 
 benchmark_path = sys.argv[3]
 benchmark_type_list = [(file, file_path) for file in listdir_no_hidden(benchmark_path) if (os.path.isdir(file_path := os.path.join(benchmark_path, file)))]
