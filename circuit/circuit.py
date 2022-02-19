@@ -1154,8 +1154,6 @@ class Circuit:
             warnings.warn("The circuit contains 2-CNF or renamable Horn formulae -> time complexity can be exponential!")
 
         Circuit.__check_assumption_set_and_exist_quantification_set(assumption_set, set())
-        self.__check_circuit_type()
-        print(self.__circuit_type)
 
         self.smooth()
         return self.__root.model_counting(assumption_set=assumption_set,
