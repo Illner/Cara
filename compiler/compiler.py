@@ -596,7 +596,7 @@ class Compiler:
                             sat_solver_enum=self.__sat_solver_enum,
                             first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BACKBONE if self.__preprocessing else il_enum.ImpliedLiteralsEnum.IMPLICIT_BCP,
                             incidence_graph=incidence_graph,
-                            propagate_sat_solver_enum=ss_enum.PropagateSatSolverEnum.MiniSAT,    # None if not self.__disable_sat else ss_enum.PropagateSatSolverEnum.MiniSAT,
+                            propagate_sat_solver_enum=None if not self.__disable_sat else ss_enum.PropagateSatSolverEnum.MiniSAT,
                             statistics=self.__statistics.solver_statistics)
 
             component = Component(cnf=self.__cnf,
