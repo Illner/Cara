@@ -37,7 +37,7 @@ def main(main_args):
                             directory_path=main_args.directory_path,
                             timeout_experiment=timeout_experiment,
                             log_directory_path=main_args.log_directory_path,
-                            save_circuit=False,
+                            save_circuit=True,
                             mapping_node_statistics=None,
                             node_statistics=None)
 
