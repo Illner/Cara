@@ -176,6 +176,8 @@ class ExperimentEnum(str, Enum):
     DNNF_PREPROCESSING = rf"DNNF{os.path.sep}D4 (prep)"
     DNNF_BCP_INPUT = rf"DNNF{os.path.sep}D4 (BCP input)"
     DNNF_BACKBONE_FIRST_IMPLIED_LITERAL = rf"DNNF{os.path.sep}D4 (backbone fil)"
+    DNNF_STANDARD = rf"DNNF{os.path.sep}D4 (standard)"
+    DNNF_HYBRID = rf"DNNF{os.path.sep}D4 (hybrid)"
 
     # Prime
     PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = rf"Prime{os.path.sep}BDMC RH DLCS-DLIS (-a, -c, p, -ext)"
