@@ -66,20 +66,20 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  component_caching_enum=cc_enum.ComponentCachingEnum.HYBRID_CACHING_SCHEME,
+                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.JEROSLOW_WANG_TWO_SIDED,
 
                                   smooth=False,
                                   preprocessing=False,
                                   imbalance_factor=None,
                                   subsumed_threshold=500,
                                   new_cut_set_threshold=0.1,
-                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.VSADS,
                                   sat_solver_enum=ss_enum.SatSolverEnum.MiniSAT,
                                   base_class_enum_set=set(),
                                   implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                   implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
                                   first_implied_literals_enum=il_enum.ImpliedLiteralsEnum.BCP,
                                   first_implied_literals_preselection_heuristic_enum=ph_enum.PreselectionHeuristicEnum.NONE,
+                                  component_caching_enum=cc_enum.ComponentCachingEnum.BASIC_CACHING_SCHEME,
                                   component_caching_before_unit_propagation=False,
                                   component_caching_after_unit_propagation=True,
                                   eliminating_redundant_clauses_enum=erc_enum.EliminatingRedundantClausesEnum.NONE,
