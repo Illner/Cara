@@ -178,6 +178,10 @@ class ExperimentEnum(str, Enum):
     DNNF_BACKBONE_FIRST_IMPLIED_LITERAL = rf"DNNF{os.path.sep}D4 (backbone fil)"
     DNNF_STANDARD = rf"DNNF{os.path.sep}D4 (standard)"
     DNNF_HYBRID = rf"DNNF{os.path.sep}D4 (hybrid)"
+    DNNF_JW_OS = rf"DNNF{os.path.sep}D4 (JW-OS)"
+    DNNF_JW_TS = rf"DNNF{os.path.sep}D4 (JW-TS)"
+    DNNF_DLCS_DLIS = rf"DNNF{os.path.sep}D4 (DLCS-DLIS)"
+    DNNF_VSIDS = rf"DNNF{os.path.sep}D4 (VSIDS)"
 
     # Prime
     PRIME_BDMC_RH_DLCS_DLIS_nA_nC_P_nEXT = rf"Prime{os.path.sep}BDMC RH DLCS-DLIS (-a, -c, p, -ext)"

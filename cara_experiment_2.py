@@ -66,7 +66,7 @@ def main(main_args):
         try:
             experiment.experiment(file_name=file_name, file_path=file_path,
 
-                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.JEROSLOW_WANG_TWO_SIDED,
+                                  decision_heuristic_enum=dh_enum.DecisionHeuristicEnum.VSIDS,
 
                                   smooth=False,
                                   preprocessing=False,
