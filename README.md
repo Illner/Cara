@@ -48,5 +48,28 @@ You can install all required packages to central user packages repository using 
 
 **Minimum cardinality** - *cara_query.py -mc -o 1 -2 3 -d 4 5 circuit_file*
 
+    // Overall KaHyPar framework
+    @phdthesis{DBLP:phd/dnb/Schlag20,
+      author    = {Sebastian Schlag},
+      title     = {High-Quality Hypergraph Partitioning},
+      school    = {Karlsruhe Institute of Technology, Germany},
+      year      = {2020}
+    }
+    
+    @article{10.1145/3529090, 
+      author = {Schlag, Sebastian and 
+                Heuer, Tobias and 
+                Gottesb\"{u}ren, Lars and 
+                Akhremtsev, Yaroslav and 
+                Schulz, Christian and 
+                Sanders, Peter}, 
+      title = {High-Quality Hypergraph Partitioning}, 
+      url = {https://doi.org/10.1145/3529090}, 
+      doi = {10.1145/3529090}, 
+      journal = {ACM J. Exp. Algorithmics},
+      year = {2022}, 
+      month = {mar}
+    }
+
 ## Modules
 ![alt text](images/modules.png)
